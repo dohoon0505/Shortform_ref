@@ -91,20 +91,21 @@
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
 
-  --text-display-lg: 800 52px/1.08 var(--font-sans);
-  --text-display-md: 800 40px/1.12 var(--font-sans);
-  --text-display-sm: 700 32px/1.2 var(--font-sans);
-  --text-heading-lg: 700 26px/1.3 var(--font-sans);
-  --text-heading-md: 700 21px/1.35 var(--font-sans);
-  --text-heading-sm: 600 17px/1.4 var(--font-sans);
-  --text-body-lg: 400 17px/1.6 var(--font-sans);
-  --text-body-md: 400 15px/1.65 var(--font-sans);
-  --text-body-sm: 400 13px/1.6 var(--font-sans);
-  --text-label-lg: 600 15px/1.4 var(--font-sans);
-  --text-label-md: 600 13px/1.4 var(--font-sans);
-  --text-label-sm: 600 11px/1.4 var(--font-sans);
-  --text-caption: 500 12px/1.45 var(--font-sans);
-  --text-overline: 700 11px/1.4 var(--font-sans);
+  /* v1.2.0: 가독성 개선 — 전 스케일 한 단계 확대 */
+  --text-display-lg: 800 56px/1.08 var(--font-sans);
+  --text-display-md: 800 44px/1.12 var(--font-sans);
+  --text-display-sm: 700 36px/1.2 var(--font-sans);
+  --text-heading-lg: 700 28px/1.3 var(--font-sans);
+  --text-heading-md: 700 23px/1.35 var(--font-sans);
+  --text-heading-sm: 600 19px/1.4 var(--font-sans);
+  --text-body-lg: 400 18px/1.6 var(--font-sans);
+  --text-body-md: 400 16px/1.65 var(--font-sans);
+  --text-body-sm: 400 14px/1.6 var(--font-sans);
+  --text-label-lg: 600 16px/1.4 var(--font-sans);
+  --text-label-md: 600 14px/1.4 var(--font-sans);
+  --text-label-sm: 600 12px/1.4 var(--font-sans);
+  --text-caption: 500 13px/1.45 var(--font-sans);
+  --text-overline: 700 12px/1.4 var(--font-sans);
 
   /* ─────────── SIZING (4px base) ─────────── */
   --size-50: 2px;   --size-100: 4px;  --size-150: 6px;  --size-200: 8px;
@@ -131,7 +132,7 @@
   /* ─────────── Z-INDEX ─────────── */
   --z-sticky: 200; --z-sidebar: 800; --z-scrim: 850; --z-toast: 1100;
 
-  --sidebar-w: 288px;
+  --sidebar-w: 300px;
 }
 
 /* ─────────── DARK THEME — 의미 기반 재매핑 ─────────── */
@@ -242,12 +243,17 @@ button { font-family: inherit; }
   border-bottom: 1px solid var(--sm-border-subtle);
 }
 .brand-mark {
-  width: 40px; height: 40px; flex-shrink: 0;
+  width: 42px; height: 42px; flex-shrink: 0;
   background: var(--sm-content-primary); color: var(--sm-content-inverse);
   border-radius: var(--radius-md); display: grid; place-items: center;
   font: 800 15px/1 var(--font-sans); letter-spacing: -0.03em;
 }
-.brand-mark.is-brand { background: var(--sm-interactive-brand-default); color: #fff; }
+/* 동영상형 브랜드 프로필 — 세로 영상 프레임 + 재생 버튼 (YouTube Shorts/Reels 계열) */
+.brand-mark.is-brand {
+  background: linear-gradient(135deg, var(--p-indigo-400), var(--p-indigo-600));
+  color: #fff; box-shadow: var(--elevation-1);
+}
+.brand-mark.is-brand svg { width: 26px; height: 26px; display: block; }
 .brand-name { font: var(--text-label-lg); letter-spacing: -0.01em; }
 .brand-ver { font: var(--text-caption); color: var(--sm-content-tertiary); font-variant-numeric: tabular-nums; margin-top: 1px; }
 
@@ -515,7 +521,7 @@ button { font-family: inherit; }
 .prompt-body { display: none; padding: 0 var(--size-400) var(--size-400); }
 .prompt-item.is-open .prompt-body { display: block; }
 .prompt-text {
-  font: 400 13px/1.7 var(--font-mono); color: var(--sm-content-primary);
+  font: 400 14.5px/1.75 var(--font-mono); color: var(--sm-content-primary);
   background: var(--sm-background-subtle); border: 1px solid var(--sm-border-subtle);
   border-radius: var(--radius-md); padding: var(--size-400);
   white-space: pre-wrap; word-break: break-word; max-height: 340px; overflow-y: auto;
@@ -558,7 +564,7 @@ button { font-family: inherit; }
 .doc ol, .doc ul { color: var(--sm-content-secondary); font: var(--text-body-md); padding-left: var(--size-500); margin-bottom: var(--size-400); display: flex; flex-direction: column; gap: var(--size-200); }
 .doc li strong, .doc p strong { color: var(--sm-content-primary); font-weight: 600; }
 .doc code {
-  font: 400 13px/1.5 var(--font-mono); background: var(--sm-background-muted);
+  font: 400 14px/1.5 var(--font-mono); background: var(--sm-background-muted);
   padding: 2px 6px; border-radius: var(--radius-xs); color: var(--sm-content-brand);
 }
 .doc .callout {
@@ -585,7 +591,7 @@ button { font-family: inherit; }
 .step-list span { font: var(--text-body-sm); color: var(--sm-content-secondary); }
 
 pre.code-block {
-  font: 400 12.5px/1.6 var(--font-mono); background: var(--sm-background-inverse);
+  font: 400 13.5px/1.6 var(--font-mono); background: var(--sm-background-inverse);
   color: var(--p-neutral-20); padding: var(--size-500); border-radius: var(--radius-lg);
   overflow-x: auto; margin-bottom: var(--size-500);
 }

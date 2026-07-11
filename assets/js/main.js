@@ -235,6 +235,7 @@ function renderTemplates() {
   document.querySelectorAll('#sidebar-archetypes .sidebar-link').forEach(l => {
     l.classList.toggle('is-active', location.hash.replace(/^#\/?/, '') === 'templates' && l.dataset.filter === activeFilter);
   });
+  if (typeof updateTemplateCrumb === 'function') updateTemplateCrumb();
 }
 
 function setFilter(key) {
@@ -358,18 +359,55 @@ function highlightSidebar(section) {
   });
 }
 
+/* ---- Breadcrumb ----
+   기본: 숏폼 연구소 · <현재 페이지>
+   템플릿 저장공간: 스크롤 위치의 템플릿까지 표시
+   예) 숏폼 연구소 · 템플릿 저장공간 · 후킹 폭발형 해부 */
+let currentRoute = 'home';
+
+function setCrumb(leaf) {
+  const crumb = document.getElementById('crumb');
+  if (!crumb) return;
+  const v = VIEWS[currentRoute];
+  if (currentRoute === 'home') { crumb.innerHTML = '<b>숏폼 연구소</b>'; return; }
+  const parts = ['숏폼 연구소', esc(v.crumb)];
+  if (leaf) parts.push(esc(leaf));
+  const last = parts.pop();
+  crumb.innerHTML = parts.join(' · ') + ` · <b>${last}</b>`;
+}
+
+/* 템플릿 저장공간 스크롤스파이 — 뷰포트 상단 28% 지점을 지나는 카드가 '현재 템플릿' */
+function updateTemplateCrumb() {
+  if (currentRoute !== 'templates') return;
+  const line = window.innerHeight * 0.28;
+  let current = null;
+  document.querySelectorAll('.tpl-card').forEach(c => {
+    const r = c.getBoundingClientRect();
+    if (r.top <= line && r.bottom >= line) current = c;
+  });
+  const t = current ? STORE.byId[current.dataset.tplId] : null;
+  setCrumb(t ? t.title : null);
+}
+let crumbTick = false;
+window.addEventListener('scroll', () => {
+  if (crumbTick) return;
+  crumbTick = true;
+  requestAnimationFrame(() => { crumbTick = false; updateTemplateCrumb(); });
+}, { passive: true });
+
 function route() {
   let key = location.hash.replace(/^#\/?/, '').trim();
   if (!key || !VIEWS[key]) key = 'home';
   const v = VIEWS[key];
+  currentRoute = key;
   document.querySelectorAll('.view').forEach(el => el.classList.remove('is-route-active'));
   const el = document.getElementById(v.el);
   if (el) el.classList.add('is-route-active');
-  const crumb = document.getElementById('crumb');
-  if (crumb) crumb.innerHTML = key === 'home' ? '<b>숏폼 연구소</b>' : `숏폼 연구소 · <b>${esc(v.crumb)}</b>`;
+  setCrumb(null);
   highlightSidebar(v.section);
   if (key === 'templates') renderTemplates();
   try { window.scrollTo(0, 0); } catch (e) {}
+  if (key === 'templates') updateTemplateCrumb();
 }
 window.addEventListener('hashchange', route);
 
