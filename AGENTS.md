@@ -48,7 +48,12 @@
       "cons": ["주의점 ..."],
       "prompts": [                 // 권장: hook·structure·script·edit·remix 순
         { "id": "hook", "label": "후킹 분석", "desc": "...", "text": "그대로 복사해 쓰는 완성형 프롬프트 ..." }
-      ]
+      ],
+      "blueprint": {               // 재현 블루프린트 — 힉스필드 장면 분석 기반 (docs/video-analysis.md 규격)
+        "desc": "한 줄 설명",
+        "source": "Higgsfield 장면 분석 N장면 · 총 M초",
+        "text": "복붙 1회 + [교체 변수] 수정으로 어떤 툴에서도 재현 가능한 제작 명세"
+      }
     }
   ]
 }

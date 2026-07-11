@@ -37,10 +37,11 @@
 1. `templates.json` → `templates[]` 배열 끝에 객체 하나 추가.
    - 필수: `id`(고유, `tpl-kebab-case`) · `title` · `archetype` · `summary` · `reference` · `bestFor` · `pros` · `cons` · `prompts`
    - `prompts`는 `hook · structure · script · edit · remix` 순서 권장, 각 `text`는 **그대로 복사해 쓰는 완성형 프롬프트**.
-2. 새 `archetype`을 도입했다면 `archetypes[]`에도 추가(필터 칩 순서 명시).
-3. `node scripts/validate.mjs` 로 검증.
-4. `npm run serve` 로 브라우저에서 확인.
-5. [CHANGELOG.md](CHANGELOG.md)에 변경 기록 추가.
+2. **기준 영상을 힉스필드 MCP로 장면 분석**하고, 그 결과로 **재현 블루프린트**를 작성해 `blueprint` 필드에 삽입 — 규격은 [docs/video-analysis.md](docs/video-analysis.md)의 "재현 블루프린트" 절. (복붙 1회 + [교체 변수]만 수정 → 캡컷·캔바 등 어떤 툴에서도 재현 가능해야 함)
+3. 새 `archetype`을 도입했다면 `archetypes[]`에도 추가(필터 칩 순서 명시).
+4. `node scripts/validate.mjs` 로 검증.
+5. `npm run serve` 로 브라우저에서 확인.
+6. [CHANGELOG.md](CHANGELOG.md)에 변경 기록 추가.
 
 ### 프롬프트 작성 원칙
 

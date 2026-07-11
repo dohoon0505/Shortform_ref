@@ -58,6 +58,17 @@ for (const [i, t] of (data.templates || []).entries()) {
     else if (t[f].some((x) => !isStr(x))) err(`${at}.${f}: 빈 문자열 항목 포함`);
   }
 
+  // blueprint (재현 블루프린트 — Higgsfield 장면 분석 기반, 권장)
+  if (!t.blueprint) warn(`${at}: blueprint 없음 — 기준 영상을 힉스필드로 분석해 재현 블루프린트를 넣는 것을 권장 (docs/video-analysis.md)`);
+  else {
+    if (!isStr(t.blueprint.desc)) err(`${at}.blueprint: desc 누락/빈값`);
+    if (!isStr(t.blueprint.text)) err(`${at}.blueprint: text 누락/빈값`);
+    else {
+      if (!t.blueprint.text.includes('교체 변수')) warn(`${at}.blueprint: '교체 변수' 섹션 없음 — 복붙 1회 재현 규격 확인 필요`);
+      if (!t.blueprint.text.includes('장면')) warn(`${at}.blueprint: 장면 구성표가 없어 보임`);
+    }
+  }
+
   // prompts
   if (!isArr(t.prompts)) err(`${at}: prompts 배열이 비어 있거나 없음`);
   else {

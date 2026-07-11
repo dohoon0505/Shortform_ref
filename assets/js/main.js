@@ -178,6 +178,36 @@ function listHTML(arr, cls) {
   return `<ul class="meta-list${cls ? ' ' + cls : ''}">${(arr || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
 }
 
+/* 재현 블루프린트 — 힉스필드 장면 분석에서 도출한 복붙 1회용 제작 명세.
+   [교체 변수]만 바꾸면 캡컷·캔바 등 어떤 툴에서도 같은 느낌으로 재현 가능. */
+function blueprintHTML(t) {
+  const b = t.blueprint;
+  if (!b || !b.text) return '';
+  return `
+    <div class="tpl-blueprint">
+      <div class="bp-head">
+        <div class="bp-headtext">
+          <h4>🎬 재현 블루프린트 <span class="bp-badge">${esc(b.source || 'Higgsfield 장면 분석 기반')}</span></h4>
+          <p>${esc(b.desc)}</p>
+        </div>
+        <button class="copy-btn" type="button" data-copybp="${esc(t.id)}">${svg('i-copy')}<span>복사</span></button>
+      </div>
+      <div class="prompt-item bp-item">
+        <button class="prompt-head" type="button" aria-expanded="false">
+          <span class="prompt-idx">📋</span>
+          <span class="prompt-headtext">
+            <span class="prompt-label">블루프린트 전문 보기</span>
+            <span class="prompt-desc">교체 변수 + 장면 구성표 + 촬영·편집 규칙 — 복붙 한 번으로 어떤 툴에서든 제작</span>
+          </span>
+          ${svg('i-chevron-down', 'prompt-chev')}
+        </button>
+        <div class="prompt-body">
+          <div class="prompt-text">${esc(b.text)}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function templateCardHTML(t) {
   return `
     <article class="tpl-card" data-tpl-id="${esc(t.id)}">
@@ -207,6 +237,7 @@ function templateCardHTML(t) {
         </div>
         ${(t.prompts || []).map(promptItemHTML).join('')}
       </div>
+      ${blueprintHTML(t)}
     </article>`;
 }
 
@@ -292,9 +323,9 @@ document.addEventListener('click', async (e) => {
     head.setAttribute('aria-expanded', String(open));
     return;
   }
-  // per-prompt copy
+  // per-prompt copy (블루프린트 복사 버튼은 data-copybp 분기에서 처리)
   const copyBtn = e.target.closest('.copy-btn');
-  if (copyBtn) {
+  if (copyBtn && !copyBtn.dataset.copybp) {
     const body = copyBtn.closest('.prompt-body');
     const textEl = body && body.querySelector('.prompt-text');
     if (!textEl) return;
@@ -304,6 +335,20 @@ document.addEventListener('click', async (e) => {
       copyBtn.querySelector('span').textContent = '복사됨';
       setTimeout(() => { copyBtn.classList.remove('is-copied'); const s = copyBtn.querySelector('span'); if (s) s.textContent = '복사'; }, 1400);
       showToast('프롬프트를 복사했어요');
+    } else { showToast('복사에 실패했어요', false); }
+    return;
+  }
+  // copy blueprint
+  const bpBtn = e.target.closest('[data-copybp]');
+  if (bpBtn) {
+    const t = STORE.byId[bpBtn.dataset.copybp];
+    if (!t || !t.blueprint) return;
+    const ok = await copyText(t.blueprint.text);
+    if (ok) {
+      bpBtn.classList.add('is-copied');
+      const s = bpBtn.querySelector('span'); if (s) s.textContent = '복사됨';
+      setTimeout(() => { bpBtn.classList.remove('is-copied'); if (s) s.textContent = '복사'; }, 1400);
+      showToast('재현 블루프린트를 복사했어요 — [교체 변수]만 바꿔 쓰세요');
     } else { showToast('복사에 실패했어요', false); }
     return;
   }

@@ -549,6 +549,26 @@ button { font-family: inherit; }
 .copyall-btn:hover { border-color: var(--sm-border-strong); }
 .copyall-btn svg { width: 15px; height: 15px; }
 
+/* ================= BLUEPRINT (재현 블루프린트) ================= */
+.tpl-blueprint {
+  margin: 0 var(--size-600) var(--size-600);
+  padding: var(--size-500);
+  background: var(--sm-interactive-brand-subtle);
+  border: 1px solid color-mix(in oklab, var(--sm-border-brand) 32%, transparent);
+  border-radius: var(--radius-lg);
+}
+.bp-head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--size-400); margin-bottom: var(--size-300); flex-wrap: wrap; }
+.bp-headtext h4 { font: var(--text-heading-sm); display: flex; align-items: center; gap: var(--size-200); flex-wrap: wrap; }
+.bp-badge {
+  font: var(--text-label-sm); color: var(--sm-content-brand);
+  background: var(--sm-surface-default); border: 1px solid color-mix(in oklab, var(--sm-border-brand) 36%, transparent);
+  padding: 2px 10px; border-radius: var(--radius-full);
+}
+.bp-headtext p { font: var(--text-body-sm); color: var(--sm-content-secondary); margin-top: var(--size-150); }
+.bp-item { background: var(--sm-surface-default); margin-bottom: 0; }
+.tpl-blueprint .prompt-text { max-height: 460px; }
+@media (max-width: 560px) { .tpl-blueprint { margin: 0 var(--size-400) var(--size-500); } }
+
 /* ================= EMPTY STATE ================= */
 .empty { text-align: center; padding: var(--size-1100) var(--size-500); color: var(--sm-content-tertiary); }
 .empty .empty-ico { font-size: 40px; margin-bottom: var(--size-400); opacity: 0.5; }
