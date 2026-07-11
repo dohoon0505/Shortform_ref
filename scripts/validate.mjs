@@ -1,189 +1,95 @@
-#!/usr/bin/env node
-/**
- * UIUX-DH Design System Validator
- * Usage: node scripts/validate.mjs
- *
- * 검증 항목:
- * 1. 모든 JSON 파일 파싱 성공
- * 2. tokens/semantic.*.json의 ref → primitives.json 존재
- * 3. system.json.components[].schema 파일 존재
- * 4. system.json.components[].id === <schema>.id 일치
- * 5. components/*.schema.json의 usedInDemos → index.html 내 data-uses 일치
- * 6. snippets/patterns.json의 uses → 실제 컴포넌트 id 존재
- *
- * 외부 의존성 없음 (pure Node.js).
- */
-
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { resolve, dirname, join } from 'node:path';
+/* ================================================================
+   숏폼 연구소 · templates.json 무결성 검증
+   의존성 없음. 실행:  node scripts/validate.mjs  (npm run validate)
+   ================================================================ */
+import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
 const warns = [];
-const info = [];
+const err = (m) => errors.push(m);
+const warn = (m) => warns.push(m);
 
-function ok(msg)   { info.push(`✓ ${msg}`); }
-function warn(msg) { warns.push(`⚠ ${msg}`); }
-function fail(msg) { errors.push(`✗ ${msg}`); }
+const PROMPT_ORDER = ['hook', 'structure', 'script', 'edit', 'remix'];
+const isStr = (v) => typeof v === 'string' && v.trim().length > 0;
+const isArr = (v) => Array.isArray(v) && v.length > 0;
 
-function readJSON(relPath) {
-  const full = join(ROOT, relPath);
-  if (!existsSync(full)) { fail(`파일 없음: ${relPath}`); return null; }
-  try { return JSON.parse(readFileSync(full, 'utf-8')); }
-  catch (e) { fail(`JSON 파싱 실패 (${relPath}): ${e.message}`); return null; }
-}
-
-// 1. tokens/primitives.json → 모든 --p-* 수집
-const primitives = readJSON('tokens/primitives.json');
-if (!primitives) process.exit(1);
-
-const primitiveSet = new Set();
-for (const [category, cat] of Object.entries(primitives)) {
-  if (category === '$meta' || !cat.scale) continue;
-  for (const entry of Object.values(cat.scale)) {
-    if (entry.css) primitiveSet.add(entry.css);
-  }
-}
-ok(`primitives.json — ${primitiveSet.size}개 원시 토큰 수집`);
-
-// 2. tokens/semantic.light.json · semantic.dark.json 의 ref 검증
-for (const theme of ['light', 'dark']) {
-  const sem = readJSON(`tokens/semantic.${theme}.json`);
-  if (!sem) continue;
-  let refCount = 0, missing = 0;
-  const walk = (obj) => {
-    for (const [k, v] of Object.entries(obj)) {
-      if (k === '$meta') continue;
-      if (v && typeof v === 'object') {
-        if (v.ref) {
-          refCount++;
-          // rgba() 등 함수형 ref는 스킵
-          if (v.ref.startsWith('--p-') && !primitiveSet.has(v.ref)) {
-            fail(`semantic.${theme}.json: ${v.css || k}의 ref "${v.ref}"가 primitives에 없음`);
-            missing++;
-          }
-        } else {
-          walk(v);
-        }
-      }
-    }
-  };
-  walk(sem);
-  ok(`semantic.${theme}.json — ${refCount}개 참조, ${refCount - missing}개 유효`);
-}
-
-// 3. tokens/theme-map.json 검증
-const themeMap = readJSON('tokens/theme-map.json');
-if (themeMap) {
-  let pairCount = 0;
-  const walk = (obj) => {
-    for (const [k, v] of Object.entries(obj)) {
-      if (k === '$meta') continue;
-      if (v && typeof v === 'object') {
-        if (v.light && v.dark) {
-          pairCount++;
-          if (v.light.startsWith('--p-') && !primitiveSet.has(v.light)) warn(`theme-map: ${k}의 light "${v.light}" 원시토큰 없음`);
-          if (v.dark.startsWith('--p-')  && !primitiveSet.has(v.dark))  warn(`theme-map: ${k}의 dark  "${v.dark}" 원시토큰 없음`);
-        } else {
-          walk(v);
-        }
-      }
-    }
-  };
-  walk(themeMap);
-  ok(`theme-map.json — ${pairCount}개 Light/Dark pair`);
-}
-
-// 4. system.json → components[] 검증
-const system = readJSON('system.json');
-if (!system) process.exit(1);
-
-const componentIds = new Set();
-const schemaIds = new Set();
-for (const comp of system.components) {
-  componentIds.add(comp.id);
-  if (!existsSync(join(ROOT, comp.schema))) {
-    fail(`system.json: ${comp.id}의 schema 파일 없음 — ${comp.schema}`);
-    continue;
-  }
-  const schema = readJSON(comp.schema);
-  if (!schema) continue;
-  schemaIds.add(schema.id);
-  if (schema.id !== comp.id) {
-    fail(`${comp.schema}: id "${schema.id}" !== system.json의 "${comp.id}"`);
-  }
-  if (comp.md && !existsSync(join(ROOT, comp.md))) {
-    warn(`${comp.id}.md 파일 없음 — ${comp.md}`);
-  }
-}
-ok(`system.json — ${system.components.length}개 컴포넌트 등재, 스키마 ${schemaIds.size}개 일치`);
-ok(`demos — ${system.demos.length}개`);
-
-// 5. components/*.schema.json 파일 시스템 vs system.json 등재 교차 확인
+let data;
 try {
-  const fsFiles = readdirSync(join(ROOT, 'components'))
-    .filter(f => f.endsWith('.schema.json'));
-  const registered = new Set(system.components.map(c => c.schema.replace('components/', '')));
-  for (const f of fsFiles) {
-    if (!registered.has(f)) warn(`components/${f} 가 system.json에 미등재`);
-  }
-  ok(`components/ 디렉터리 — ${fsFiles.length}개 .schema.json 파일`);
+  data = JSON.parse(readFileSync(join(ROOT, 'templates.json'), 'utf8'));
 } catch (e) {
-  fail(`components/ 디렉터리 읽기 실패: ${e.message}`);
+  console.error('✗ templates.json 파싱 실패:', e.message);
+  process.exit(1);
 }
 
-// 6. snippets/patterns.json 검증
-const snippets = readJSON('snippets/patterns.json');
-if (snippets && snippets.patterns) {
-  let validPatterns = 0;
-  for (const p of snippets.patterns) {
-    let allValid = true;
-    for (const useId of p.uses || []) {
-      if (!componentIds.has(useId)) {
-        warn(`snippets/patterns.json: pattern "${p.id}"가 미등록 컴포넌트 "${useId}" 사용`);
-        allValid = false;
-      }
+if (!data.meta || !isStr(data.meta.name)) err('meta.name 누락');
+if (!isArr(data.templates)) err('templates 배열이 비어 있거나 없음');
+
+const ids = new Set();
+const archetypesSeen = new Set();
+
+for (const [i, t] of (data.templates || []).entries()) {
+  const at = `templates[${i}]${t && t.id ? ` (${t.id})` : ''}`;
+  for (const f of ['id', 'title', 'archetype', 'summary']) {
+    if (!isStr(t[f])) err(`${at}: ${f} 누락/빈값`);
+  }
+  if (t.id) {
+    if (ids.has(t.id)) err(`${at}: id 중복`);
+    ids.add(t.id);
+    if (!/^tpl-[a-z0-9-]+$/.test(t.id)) warn(`${at}: id 권장 형식(tpl-kebab-case) 아님`);
+  }
+  if (t.archetype) archetypesSeen.add(t.archetype);
+
+  // reference
+  const r = t.reference;
+  if (!r || typeof r !== 'object') err(`${at}: reference 객체 누락`);
+  else {
+    for (const f of ['title', 'platform', 'length', 'why']) {
+      if (!isStr(r[f])) err(`${at}.reference: ${f} 누락/빈값`);
     }
-    if (allValid) validPatterns++;
+    if (typeof r.url !== 'string') err(`${at}.reference.url 은 문자열이어야 함(빈 문자열 허용)`);
   }
-  ok(`snippets/patterns.json — ${snippets.patterns.length}개 패턴 (유효 ${validPatterns})`);
-}
 
-// 7. index.html의 data-uses 속성 vs component.usedInDemos 교차 확인
-if (existsSync(join(ROOT, 'index.html'))) {
-  const html = readFileSync(join(ROOT, 'index.html'), 'utf-8');
-  const demoSections = [...html.matchAll(/<section class="demo-section" id="(demo-[a-z0-9-]+)"[\s\S]*?data-uses="([^"]+)"/g)];
-  const demoUses = {};
-  for (const [_, id, uses] of demoSections) {
-    demoUses[id] = uses.split(',').map(s => s.trim());
+  // meta lists
+  for (const f of ['bestFor', 'pros', 'cons']) {
+    if (!isArr(t[f])) err(`${at}: ${f} 배열이 비어 있거나 없음`);
+    else if (t[f].some((x) => !isStr(x))) err(`${at}.${f}: 빈 문자열 항목 포함`);
   }
-  ok(`index.html — ${demoSections.length}개 demo-section (data-uses 선언)`);
 
-  // 각 component의 usedInDemos 가 실제 data-uses 와 일치하는지
-  let mismatchCount = 0;
-  for (const comp of system.components) {
-    const schema = readJSON(comp.schema);
-    if (!schema || !schema.usedInDemos) continue;
-    for (const demoId of schema.usedInDemos) {
-      const uses = demoUses[demoId];
-      if (!uses) {
-        warn(`${comp.id}.schema.json: "${demoId}" 가 index.html에 없음`);
-        mismatchCount++;
-      } else if (!uses.includes(comp.id)) {
-        warn(`${demoId} 의 data-uses에 "${comp.id}" 누락 (schema에는 있음)`);
-        mismatchCount++;
+  // prompts
+  if (!isArr(t.prompts)) err(`${at}: prompts 배열이 비어 있거나 없음`);
+  else {
+    const pids = t.prompts.map((p) => p && p.id);
+    for (const [j, p] of t.prompts.entries()) {
+      const pa = `${at}.prompts[${j}]`;
+      for (const f of ['id', 'label', 'desc', 'text']) {
+        if (!isStr(p[f])) err(`${pa}: ${f} 누락/빈값`);
       }
+      if (p.text && p.text.length < 40) warn(`${pa}: text 가 너무 짧음(완성형 프롬프트 권장)`);
     }
+    // 권장 순서/구성 체크 (경고만)
+    const missing = PROMPT_ORDER.filter((id) => !pids.includes(id));
+    if (missing.length) warn(`${at}: 권장 프롬프트 항목 누락 [${missing.join(', ')}]`);
   }
-  if (mismatchCount === 0) ok('usedInDemos ↔ data-uses 전수 일치');
-  else warn(`usedInDemos ↔ data-uses 불일치 ${mismatchCount}건 (비치명적, 권장 수정)`);
 }
 
-// 결과 출력
-console.log('\n' + info.join('\n'));
-if (warns.length)  console.log('\n' + warns.join('\n'));
-if (errors.length) console.log('\n' + errors.join('\n'));
+// archetypes 선언과 실제 사용 비교
+if (Array.isArray(data.archetypes)) {
+  for (const a of archetypesSeen) {
+    if (!data.archetypes.includes(a)) warn(`archetypes 목록에 "${a}" 미선언(필터 순서에 영향)`);
+  }
+}
 
-console.log(`\n결과: ${info.length} OK / ${warns.length} warn / ${errors.length} error`);
-process.exit(errors.length ? 1 : 0);
+// 리포트
+if (warns.length) {
+  console.log('⚠ 경고:');
+  warns.forEach((w) => console.log('  - ' + w));
+}
+if (errors.length) {
+  console.error(`\n✗ 검증 실패 — ${errors.length}개 오류`);
+  errors.forEach((e) => console.error('  - ' + e));
+  process.exit(1);
+}
+console.log(`✓ templates.json 검증 통과 — 템플릿 ${ids.size}종 · 아키타입 ${archetypesSeen.size}종${warns.length ? ` (경고 ${warns.length})` : ''}`);

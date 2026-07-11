@@ -1,21 +1,20 @@
 {
-  "name": "uiux-dh-design-system",
-  "version": "0.5.3",
-  "description": "UIUX-DH · Unified Design System. 모바일 중심의 통합 디자인시스템. 사람과 AI 모두에게 1급 시민.",
+  "name": "shortform-lab",
+  "version": "1.1.0",
+  "description": "숏폼 연구소 · 템플릿 저장공간. 기준 숏폼 영상을 항목별로 해부하는 분석 프롬프트를 저장하고 복사해 쓰는 아카이브.",
   "main": "index.html",
   "type": "module",
   "scripts": {
     "validate": "node scripts/validate.mjs",
-    "build:tokens": "node scripts/build-tokens.mjs",
-    "build:docs": "node scripts/gen-docs.mjs",
-    "build": "npm run build:tokens && npm run build:docs",
-    "test": "npm run validate"
+    "test": "npm run validate",
+    "serve": "node scripts/serve.mjs",
+    "dev": "node scripts/serve.mjs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dohoon0505/desgin_system.git"
   },
-  "keywords": ["design-system", "tokens", "components", "ai-friendly", "mobile-first"],
+  "keywords": ["shortform", "prompt-library", "video-analysis", "youtube-shorts", "reels", "tiktok", "templates"],
   "author": "/DH",
   "license": "MIT",
   "bugs": {

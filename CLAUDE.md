@@ -1,188 +1,83 @@
 # CLAUDE.md — AI 에이전트 작업 가이드
 
-> **AI 에이전트가 쿼리만 하려면 → [AGENTS.md](AGENTS.md) 에서 시작하세요.**
-> 이 문서는 **수정·기여 워크플로**를 다룹니다 (사람이 작성, AI가 따르는 가이드).
+> **쿼리만 하려면 → [AGENTS.md](AGENTS.md) 에서 시작하세요.**
+> 이 문서는 **수정·기여 워크플로**(주로 템플릿 추가)를 다룹니다.
 
 ---
 
 ## 저장소의 정체
 
-- **이름**: UIUX-DH · Unified Design System
-- **형태**: 모바일 중심 디자인시스템의 단일 진실의 출처
-- **현재 버전**: v0.5.0 (2026.04.22)
-- **범위**: Foundations(토큰/원칙) + Policy(그라데이션) + UX Writing(7원칙) + Components(25종) + 실제 사용 데모(18종)
-- **핵심 철학 (v0.5 신규)**: *"디자인시스템은 제품, 팀은 고객"* (Toss) → *"AI도 고객"*. JSON canonical + MD 보조.
+- **이름**: 숏폼 연구소 · 템플릿 저장공간 (Shortform Lab)
+- **형태**: 기준 숏폼 영상을 항목별로 해부하는 **분석 프롬프트 아카이브**
+- **현재 버전**: v1.0.0 (2026.07.11)
+- **핵심 철학**: *"잘된 숏폼 하나를, 해부 프롬프트로 저장한다."* — 데이터는 `templates.json` 단일 진본, 화면은 그것을 읽어 렌더링.
+
+> 이 저장소는 v1.0.0에서 **UIUX-DH 디자인시스템**을 전면 대체했습니다. 컴포넌트·토큰·데모·릴리스 등 이전 디자인시스템 자산은 모두 제거되었습니다.
 
 ---
 
-## ⚠️ 가장 중요 · 3단계 작업 원칙 (v0.5.0에서 4→3단계로 축소)
+## 구조 한눈에
 
-**디자인시스템을 수정할 때 다음 3가지 작업을 반드시 함께 수행합니다.**
-
-### 1. 운영 진본 — `index.html` + 바닐라 JS/CSS 구조 수정
-
-실제 브라우저에 렌더링되는 진본.
-
-| 파일 | 수정 대상 |
+| 파일 | 역할 |
 | --- | --- |
-| `index.html` | HTML 구조 · 컴포넌트 마크업 · 섹션 추가/삭제 · `data-uses` 속성 |
-| `assets/css/main.css` | CSS 토큰 · 컴포넌트 스타일 · 레이아웃 · 반응형 |
-| `assets/js/main.js` | 라우터 · 사이드바 · 테마 전환 · `buildDemoMatrix()` |
+| [`templates.json`](templates.json) | ★ **단일 진실의 출처** — 모든 템플릿 데이터 |
+| [`index.html`](index.html) | 앱 셸 — 사이드바 · 뷰 컨테이너 · 아이콘 스프라이트 |
+| [`assets/css/main.css`](assets/css/main.css) | 토큰(라이트/다크) + 전체 스타일 |
+| [`assets/js/main.js`](assets/js/main.js) | 라우터 · 렌더링 · 복사 · 필터/검색 · 테마 |
+| [`scripts/serve.mjs`](scripts/serve.mjs) | 로컬 개발 서버 |
+| [`scripts/validate.mjs`](scripts/validate.mjs) | `templates.json` 무결성 검증 |
+| [`docs/video-analysis.md`](docs/video-analysis.md) | ★ **영상 분석 방법** — 힉스필드 MCP 절차 (분석 작업 전 필독) |
 
-### 2. JSON 스키마 (canonical)
-
-**이 레이어가 단일 진실의 출처.** AI는 여기서 1-read로 쿼리합니다.
-
-| 파일 | 수정 대상 |
-| --- | --- |
-| `system.json` | 루트 매니페스트 — 컴포넌트·토큰·데모 인덱스 |
-| `components/<id>.schema.json` | 컴포넌트 사양 (variants/tokens/html/a11y/usedInDemos) |
-| `tokens/*.json` + `tokens/theme-map.json` | 토큰 정본 (primitives/semantic/theme-map) |
-| `snippets/patterns.json` | 자주 쓰이는 조합 패턴 |
-
-### 3. 서술 문서 — 각 폴더의 `md` 파일 (보조)
-
-| 수정 유형 | 업데이트 대상 |
-| --- | --- |
-| 토큰 값 변경 | 해당 `tokens/*.json` + `foundations/<type>.md` |
-| 컴포넌트 변경 | `components/<id>.md` (JSON과 동기화, `canonical:` 프런트매터) |
-| 원칙/정책 갱신 | `docs/0x-*.md` |
-| 새 릴리스 | `CHANGELOG.md` 항목 추가 (Semantic Versioning) |
+**대부분의 기여는 `templates.json` 한 파일만 수정하면 됩니다.** 화면·사이드바 필터·검색은 데이터에서 자동 생성됩니다.
 
 ---
 
-## ⛓ data-uses 매트릭스로 영향 범위 확인
+## ⭐ 새 템플릿 추가 (가장 흔한 작업)
 
-**컴포넌트·토큰 수정 시, 그것을 쓰는 데모·스키마를 함께 업데이트합니다.**
+1. `templates.json` → `templates[]` 배열 끝에 객체 하나 추가.
+   - 필수: `id`(고유, `tpl-kebab-case`) · `title` · `archetype` · `summary` · `reference` · `bestFor` · `pros` · `cons` · `prompts`
+   - `prompts`는 `hook · structure · script · edit · remix` 순서 권장, 각 `text`는 **그대로 복사해 쓰는 완성형 프롬프트**.
+2. 새 `archetype`을 도입했다면 `archetypes[]`에도 추가(필터 칩 순서 명시).
+3. `node scripts/validate.mjs` 로 검증.
+4. `npm run serve` 로 브라우저에서 확인.
+5. [CHANGELOG.md](CHANGELOG.md)에 변경 기록 추가.
 
-각 데모 섹션은 `data-uses` 속성으로 의존성을 선언:
+### 프롬프트 작성 원칙
 
-```html
-<section class="demo-section" id="demo-shopping"
-         data-uses="button,card,badge,tabs,--sm-interactive-brand-default,--p-indigo-500">
-```
-
-`main.js`의 `buildDemoMatrix()`가 자동 스캔 → `window.demoMatrix` 생성. 수정 전 영향 범위 확인:
-
-```js
-// button 수정 시
-window.demoMatrix.byComponent['button']
-// → ["demo-login", "demo-signup", "demo-pricing", ...]
-
-// 브랜드 색 변경 시
-window.demoMatrix.byToken['--sm-interactive-brand-default']
-// → 영향 데모 리스트
-```
-
-**정적 정보가 필요하면**: `system.json.components[].usedInDemos` 또는 `components/<id>.schema.json.usedInDemos`.
-
-**검증**: `node scripts/validate.mjs` — 모든 JSON·참조 무결성 확인.
+- **완성형·복사 가능**: 사용자가 ChatGPT·Claude에 그대로 붙여넣는 프롬프트. 무엇을·어떤 기준으로·어떤 형식으로 답할지 구체적으로.
+- **한국어**, 자리표시자(`[영상 링크]` · `[영상 스크립트/자막 붙여넣기]` · `[내 주제]`) 포함.
+- **재현(`remix`)** 프롬프트는 분석 결과를 *내 주제의 새 숏폼 기획안*으로 바꾸는 역할.
+- `reference.url`에 URL을 넣으면 카드에 **임베드**됩니다(`.mp4` → `<video>`, 그 외 → `<iframe>`). 영상 파일을 저장소에 커밋하지 마세요. **실존 채널/인물을 지어내지 말 것.**
 
 ---
 
-## 파일 구조
+## ⚠ 영상 분석 규칙 (항상 적용)
 
-```
-UIUX-DH · Unified Design System/
-├── system.json                        ★ 루트 매니페스트 (AI 진입점)
-├── AGENTS.md                          ★ AI 에이전트 결정 트리
-├── CLAUDE.md                          (이 문서 — 기여 워크플로)
-├── README.md
-├── CHANGELOG.md
-│
-├── index.html                         ← 운영 진본 (바닐라 HTML)
-├── assets/
-│   ├── css/main.css                   ← 운영 진본 (전체 스타일)
-│   └── js/main.js                     ← 운영 진본 (buildDemoMatrix 포함)
-│
-├── schemas/                           ★ JSON 메타 스키마
-│   ├── component.schema.json
-│   ├── token.schema.json
-│   ├── demo.schema.json
-│   └── snippet.schema.json
-│
-├── components/
-│   ├── <id>.schema.json              ★ JSON canonical (25개)
-│   ├── <id>.md                       (보조 서술 — 긴 라이팅·원칙)
-│   └── README.md
-│
-├── tokens/                            ← 토큰 정의
-│   ├── primitives.json                (원시 팔레트)
-│   ├── semantic.light.json            (Light 매핑)
-│   ├── semantic.dark.json             (Dark 매핑)
-│   ├── theme-map.json                 ★ Light/Dark pair 집약
-│   ├── typography.json
-│   ├── sizing.json / radius.json / elevation.json / motion.json / z-index.json
-│
-├── snippets/
-│   └── patterns.json                  ★ 자주 쓰는 조합 10종
-│
-├── scripts/
-│   └── validate.mjs                   ★ 무결성 검증 (Node, no deps)
-│
-├── docs/                              ← 개념/정책/원칙 (사람 가독용 md)
-│   ├── 00-overview.md
-│   ├── 01-principles.md
-│   ├── 02-token-architecture.md
-│   ├── 03-naming-conventions.md
-│   ├── 04-gradient-policy.md
-│   └── 05-ux-writing.md
-│
-└── foundations/                       ← 시각 기초 가이드
-    ├── color.md / typography.md / spacing.md / radius.md / elevation.md / motion.md
-```
+**기준 영상을 분석하는 모든 작업은 힉스필드(Higgsfield) MCP로 수행합니다.** 절차·주의사항·프롬프트 결합 방법은 [docs/video-analysis.md](docs/video-analysis.md)에 있으며, 영상 분석 작업을 시작하기 전에 반드시 이 문서를 읽으세요.
 
-> **v0.5.0에서 제거**: `Single HTML/` 폴더 — 드리프트 원천 제거. `index.html`이 유일 진본.
+- 흐름 요약: `media_import_url`(CDN mp4) → `video_analysis_create` → `video_analysis_status` 폴링(30~60초 간격, 보통 3~5분).
+- 분석 전 `video_analysis_jobs`로 **기존 완료 분석 재사용 여부**를 먼저 확인(중복 크레딧 소모 방지).
+- 분석 결과(scenes)는 템플릿 프롬프트의 `[영상 스크립트/자막 붙여넣기]` 자리에 들어가는 입력입니다.
 
 ---
 
-## 컴포넌트 추가·수정 워크플로
+## 코드(HTML/CSS/JS)를 고칠 때
 
-### 새 컴포넌트 추가
-1. `components/<id>.schema.json` 작성 (필수: `id`, `name`, `version`, `category`, `description`, `variants[]`)
-2. `components/<id>.md` 작성 (선택 — 긴 서술 필요 시만)
-3. `index.html` 에 `<section class="component-section" id="<id>">` 추가
-4. `assets/css/main.css` 에 스타일 추가
-5. `system.json.components[]` 배열에 엔트리 추가
-6. 사이드바 (`index.html`) · `assets/js/main.js` CATEGORIES 에 등록
-7. `CHANGELOG.md` 엔트리
-8. `node scripts/validate.mjs` 통과
+데이터가 아니라 앱 동작·모양을 바꿀 때만 해당됩니다.
 
-### 토큰 수정
-1. `window.demoMatrix.byToken['--토큰']` 으로 영향 확인
-2. `tokens/primitives.json` 또는 `semantic.*.json` 값 변경
-3. `tokens/theme-map.json` 의 Light/Dark pair 동기화
-4. `assets/css/main.css` `:root` / `[data-theme="dark"]` 블록 반영
-5. 영향 컴포넌트 `.schema.json.tokens{}` 검토
-6. `CHANGELOG.md` 에 "영향 데모: ..." 명시
-7. `node scripts/validate.mjs` 통과
-
-### 새 데모 추가
-1. `index.html` 에 `<section class="demo-section" id="demo-xxx" data-uses="...">` 추가
-2. `system.json.demos[]` 에 엔트리 추가
-3. 해당 컴포넌트들의 `.schema.json.usedInDemos` 에 demo-xxx 추가
-4. 사이드바 + `CATEGORIES['demo'].items` 등록
-5. `CHANGELOG.md` Added 엔트리
-6. `node scripts/validate.mjs` 통과
+- **뷰 추가/변경**: `index.html`의 `.view` 섹션 + `main.js`의 `VIEWS` 라우터 맵 + 사이드바 링크(`data-section`).
+- **스타일**: 색은 **토큰 이름**으로(`--sm-content-primary`, `--sm-interactive-brand-default`). Hex 하드코딩 금지. 라이트/다크 양쪽(`[data-theme="dark"]`) 의식.
+- **아이콘**: `index.html` 상단 `<svg>` 스프라이트에 `<symbol id="i-...">` 추가 후 `main.js`의 `svg('i-...')` 헬퍼로 사용. 인라인 `<use>` SVG는 CSS로 크기를 지정해야 함(미지정 시 300×150 기본값).
+- **캐시 버스팅**: CSS/JS를 수정해 릴리스하면 `index.html`의 `?v=` 쿼리(`main.css?v=x.y.z` · `main.js?v=x.y.z`)를 새 버전으로 올릴 것. `templates.json`은 `no-store`로 읽어 항상 최신.
 
 ---
 
-## AI가 지켜야 할 규칙
+## 하지 말 것
 
-### 해야 할 것
-- **토큰 이름으로 말하기** — `#4F46E5` 대신 `--sm-interactive-brand-default` 또는 `--p-indigo-500`
-- **Light/Dark 양쪽 의식** — 시맨틱 토큰은 양쪽 값을 가질 수 있음, `tokens/theme-map.json` 참조
-- **변경은 `CHANGELOG.md` 에 기록** — 삭제가 아니라 누적
-- **새 컴포넌트는 자체 `.schema.json`** — 기존 파일에 섞지 말 것
-- **3단계 워크플로 준수** — 운영 진본 + JSON 스키마 + 서술 문서 동시 업데이트
-
-### 하지 말 것
-- 색을 Hex 값으로 부르기 (`#0B0D12`) → `--sm-content-primary`
-- 'Btn', 'Nav' 같은 축약어 (`CTA/URL/SVG/FAQ` 등 업계 관례만 허용)
-- `style="color: #333"` 같은 하드코딩
-- 다크 모드 전용 별도 토큰 이름 만들기 (같은 이름·다른 값)
-- v0.3 이후의 **두-색 그라데이션** (정책 위반, `docs/04-gradient-policy.md`)
-- `Single HTML/` 참조 — **v0.5.0에서 삭제됨**
+- `templates.json` 없이 HTML에 템플릿을 하드코딩하기 (데이터는 JSON 진본으로).
+- `reference`에 검증 안 된 실존 영상 URL·채널명 지어내기.
+- 색을 Hex로 하드코딩(`#4F46E5`) → 토큰(`--sm-interactive-brand-default`) 사용.
+- 인라인 `<use>` SVG를 크기 지정 없이 넣기.
 
 ---
 
@@ -191,11 +86,8 @@ UIUX-DH · Unified Design System/
 | 찾는 것 | 보는 곳 |
 | --- | --- |
 | AI 진입점 | [AGENTS.md](AGENTS.md) |
-| 루트 매니페스트 | [system.json](system.json) |
-| 컴포넌트 스펙 | `components/<id>.schema.json` |
-| 토큰 Light/Dark pair | [tokens/theme-map.json](tokens/theme-map.json) |
-| 자주 쓰는 조합 | [snippets/patterns.json](snippets/patterns.json) |
-| 검증 실행 | `node scripts/validate.mjs` |
-| 원칙 6개 | [docs/01-principles.md](docs/01-principles.md) |
-| UX 라이팅 | [docs/05-ux-writing.md](docs/05-ux-writing.md) |
-| 그라데이션 정책 | [docs/04-gradient-policy.md](docs/04-gradient-policy.md) |
+| 템플릿 데이터 | [templates.json](templates.json) |
+| **영상 분석 방법 (힉스필드 MCP)** | [docs/video-analysis.md](docs/video-analysis.md) |
+| 로컬 실행 | `npm run serve` → http://127.0.0.1:8178 |
+| 검증 | `node scripts/validate.mjs` |
+| 변경 이력 | [CHANGELOG.md](CHANGELOG.md) |
