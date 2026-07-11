@@ -145,16 +145,16 @@ function renderTrendDetail(item) {
     <a class="back-link" href="#/trends">${icon('back')} 트렌드 전체</a>
     <div class="trend-detail-hero" style="--detail-color:${esc(item.accent)}">
       <div>
-        <span class="eyebrow"><i></i> PLATFORM PROFILE</span>
+        <span class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span>플랫폼 프로필</span>
         <h1>${esc(item.name)}</h1>
         <p>${esc(item.summary)}</p>
       </div>
       <span class="platform-mark ${platformClass(item.slug)}">${esc(item.shortName)}</span>
     </div>
     <div class="trend-summary">
-      <div><span>PLATFORM CORE</span><b>${esc(item.focus)}</b></div>
-      <div><span>VIEWER MODE</span><b>${esc(item.viewerMode)}</b></div>
-      <div><span>BEST AD TYPE</span><b>${esc(item.bestAd)}</b></div>
+      <div><span>플랫폼 핵심</span><b>${esc(item.focus)}</b></div>
+      <div><span>주요 시청 방식</span><b>${esc(item.viewerMode)}</b></div>
+      <div><span>효과적인 광고</span><b>${esc(item.bestAd)}</b></div>
     </div>
     <div class="trend-doc-grid">
       <article class="trend-doc-card">
@@ -219,7 +219,7 @@ function renderTemplateGrid() {
         <h2>${esc(item.title)}</h2>
         <p>${esc(item.summary)}</p>
         <footer>
-          <span class="template-platform"><i></i>${esc(item.reference?.platform || '')}</span>
+          <span class="template-platform"><span class="platform-dot" aria-hidden="true"></span>${esc(item.reference?.platform || '')}</span>
           <span>상세 페이지 ${icon('arrow')}</span>
         </footer>
       </a>
@@ -246,22 +246,76 @@ function profileList(items) {
   return `<ul class="profile-list">${(items || []).map(item => `<li>${esc(item)}</li>`).join('')}</ul>`;
 }
 
-function promptHTML(prompt, index) {
-  return `
-    <article class="prompt-item">
-      <button class="prompt-head" type="button" aria-expanded="false">
-        <span class="prompt-index">0${index + 1}</span>
-        <span class="prompt-title"><b>${esc(prompt.label)}</b><small>${esc(prompt.desc)}</small></span>
-        ${icon('chevron', 'prompt-chevron')}
-      </button>
-      <div class="prompt-body"><div class="prompt-body-inner">
-        <div class="prompt-content">
-          <div class="prompt-text">${esc(prompt.text)}</div>
-          <div class="prompt-actions"><button class="copy-button" type="button" data-copy-prompt>${icon('copy')}<span>프롬프트 복사</span></button></div>
-        </div>
-      </div></div>
-    </article>
-  `;
+function blueprintPrompt(item) {
+  const reference = item.reference || {};
+  const sourceBlueprint = item.blueprint?.text || '';
+  return `# 역할
+당신은 숏폼 광고 전략가, 카피라이터, 촬영 감독, 편집 감독을 겸하는 제작 책임자입니다. 아래 기준 영상의 성공 구조를 분석 설명하는 데 그치지 말고, 교체 변수를 반영한 촬영 가능한 완성본을 만들어 주세요.
+
+# 사용자가 교체할 변수
+- [제품·서비스 또는 모델명]:
+- [핵심 타깃]:
+- [타깃이 겪는 문제]:
+- [가장 중요한 효익]:
+- [효익을 증명할 근거·수치·장면]:
+- [브랜드 말투]: 친근한 존댓말 / 전문가형 / 솔직한 UGC 중 선택
+- [반드시 포함할 정보]:
+- [CTA]:
+- [목표 길이]: ${reference.length || '30~45초'}
+
+입력하지 않은 변수는 제품군과 타깃에 맞게 합리적으로 제안하되, 추정한 내용은 '제안'이라고 표시하세요. 기존 기준 영상의 브랜드명, 인물명, 고유 문장을 그대로 재사용하지 마세요.
+
+# 반드시 설계할 내용
+1. 후킹
+- 0~1초 첫 프레임에서 타깃의 문제 또는 원하는 결과가 즉시 보이게 하세요.
+- 1~3초 대사는 문제, 의외성, 구체적 효익 중 최소 두 가지를 포함하세요.
+- 과장된 낚시 문구 대신 본문에서 실제로 증명 가능한 약속만 사용하세요.
+- 서로 다른 접근의 후킹 문장 3개를 먼저 제안하고, 가장 적합한 하나를 선택해 이유를 설명하세요.
+
+2. 구성·전개
+- 후킹 → 문제 공감 → 해결책 등장 → 사용·증명 → 결과 → CTA의 인과관계가 끊기지 않게 설계하세요.
+- 각 구간의 시작·종료 초, 역할, 화면, 행동, 대사, 자막, 사운드를 하나의 장면표에 적으세요.
+- 3~5초마다 새로운 정보·시각 변화·질문 회수 중 하나를 배치해 이탈을 방지하세요.
+- 제품 등장은 기준 구조의 타이밍을 따르되, 정보가 늦어진다면 열린 고리 문장을 추가하세요.
+
+3. 카피·스크립트
+- 실제 사람이 말할 수 있는 짧은 구어체로 작성하고 한 문장에는 한 메시지만 담으세요.
+- 기능을 나열하지 말고 '문제 → 사용 장면 → 눈에 보이는 변화'로 번역하세요.
+- 화면 자막은 대사를 그대로 반복하지 말고 핵심 명사·수치·결과만 12자 안팎으로 압축하세요.
+- 최종 결과에 전체 내레이션 대본과 장면별 자막을 각각 분리해 제공하세요.
+
+4. 편집·비주얼 리듬
+- 각 컷의 길이, 샷 크기, 카메라 움직임, 전환 방식, B롤, 그래픽, 효과음을 구체적으로 지정하세요.
+- 세로 9:16 안전 영역을 지키고, 제품·표정·증거 장면이 자막에 가리지 않게 하세요.
+- 같은 샷 크기가 세 번 이상 연속되지 않도록 변주하고, 중요한 증거는 클로즈업 또는 분할 화면으로 확인시키세요.
+- 배경음악의 분위기와 BPM 범위, 음악이 낮아지는 지점, 효과음이 필요한 지점을 편집표에 표시하세요.
+
+5. 품질 검수
+- 첫 3초 약속이 본문에서 회수되는지, 주장에 시각적 근거가 있는지, CTA가 앞 내용과 자연스럽게 연결되는지 확인하세요.
+- 허위·과장 표현, 근거 없는 최상급, 실제로 촬영할 수 없는 장면은 사용하지 마세요.
+- 저예산 스마트폰 촬영 기준의 대체 장면도 함께 제안하세요.
+
+# 기준 영상 프로필
+- 유형: ${item.archetype}
+- 제목: ${reference.title || item.title}
+- 플랫폼: ${reference.platform || '세로형 숏폼'}
+- 이 구조를 선택한 이유: ${reference.why || item.summary}
+
+# 기준 구조와 장면 규칙
+${sourceBlueprint}
+
+# 최종 출력 형식
+1. 한 줄 콘셉트와 핵심 타깃
+2. 선택한 후킹과 선택 이유
+3. 전체 구성 요약: 구간별 목적과 감정 흐름
+4. 촬영용 장면표: 타임코드 | 컷 길이 | 역할 | 샷·구도 | 행동 | 대사 | 자막 | 사운드·전환
+5. 전체 내레이션 대본
+6. 자막·카피 목록
+7. 편집·비주얼 리듬 시트: 컷 속도, 색감, 조명, 음악, 효과음, 그래픽 규칙
+8. 촬영 준비물과 스마트폰 촬영 대안
+9. 게시 전 품질 검수 체크리스트
+
+설명만 하지 말고 바로 촬영과 편집에 사용할 수 있는 완성본으로 작성하세요.`;
 }
 
 function renderTemplateDetail(item) {
@@ -270,6 +324,7 @@ function renderTemplateDetail(item) {
   const previous = STORE.templates[index - 1];
   const next = STORE.templates[index + 1];
   const reference = item.reference || {};
+  const blueprint = blueprintPrompt(item);
   const hasUrl = String(reference.url || '').trim();
   const sourceLink = hasUrl ? `<a href="${esc(reference.url)}" target="_blank" rel="noopener">원본 열기 ${icon('external')}</a>` : '<span>기준 영상 직접 지정</span>';
   const nav = `
@@ -282,11 +337,11 @@ function renderTemplateDetail(item) {
     <a class="back-link" href="#/templates">${icon('back')} 템플릿 전체</a>
     <header class="template-profile-header">
       <div>
-        <span class="eyebrow"><i></i> VIDEO PROFILE</span>
+        <span class="eyebrow"><span class="eyebrow-line" aria-hidden="true"></span>영상 프로필</span>
         <h1>${esc(item.title)}</h1>
         <p>${esc(item.summary)}</p>
       </div>
-      <button class="button button-secondary profile-copyall" type="button" data-copy-all="${esc(item.slug)}">${icon('copy')} 전체 프롬프트 복사</button>
+      <button class="button button-primary profile-copyall" type="button" data-copy-blueprint="${esc(item.slug)}">${icon('copy')} 블루프린트 복사</button>
     </header>
     <article class="video-profile">
       <div class="profile-video-column">
@@ -295,15 +350,15 @@ function renderTemplateDetail(item) {
       </div>
       <div class="profile-dossier">
         <section class="dossier-intro">
-          <div class="dossier-kicker"><span>REFERENCE FILM</span><span class="profile-badge">${esc(item.archetype)}</span></div>
+          <div class="dossier-kicker"><span>기준 영상</span><span class="profile-badge">${esc(item.archetype)}</span></div>
           <h2>${esc(reference.title)}</h2>
           <p>${esc(reference.why)}</p>
         </section>
         <div class="profile-facts">
-          <div class="profile-fact"><span>Platform</span><b>${esc(reference.platform)}</b></div>
-          <div class="profile-fact"><span>Runtime</span><b>${esc(reference.length)}</b></div>
-          <div class="profile-fact"><span>Reference</span><b>${esc(reference.creator || '기준 영상 직접 지정')}</b></div>
-          <div class="profile-fact"><span>Analysis</span><b>${(item.prompts || []).length}개 프롬프트 · 블루프린트</b></div>
+          <div class="profile-fact"><span>플랫폼</span><b>${esc(reference.platform)}</b></div>
+          <div class="profile-fact"><span>영상 길이</span><b>${esc(reference.length)}</b></div>
+          <div class="profile-fact"><span>레퍼런스</span><b>${esc(reference.creator || '기준 영상 직접 지정')}</b></div>
+          <div class="profile-fact"><span>제작 자료</span><b>완성형 재현 블루프린트 1개</b></div>
         </div>
         <section class="dossier-section">
           <h3>이 영상 프로필이 필요한 순간</h3>
@@ -317,20 +372,18 @@ function renderTemplateDetail(item) {
     </article>
     <section class="analysis-section">
       <div class="analysis-heading">
-        <div><span>PROFILE ANALYSIS</span><h2>영상 해부 노트</h2></div>
-        <p>프로필을 읽듯 항목을 하나씩 펼쳐 보세요. 필요한 프롬프트만 골라 복사할 수 있습니다.</p>
+        <div><span>단일 제작 문서</span><h2>재현 블루프린트</h2></div>
+        <p>후킹, 구성·전개, 카피·스크립트, 편집·비주얼 리듬을 한 번에 설계합니다. 교체 변수만 입력하면 바로 제작할 수 있습니다.</p>
       </div>
-      <div class="prompt-list">${(item.prompts || []).map(promptHTML).join('')}</div>
       ${item.blueprint?.text ? `
-        <article class="blueprint-panel">
+        <article class="blueprint-panel is-open">
           <div class="blueprint-head">
-            <div><span>REPRODUCTION BLUEPRINT</span><h3>재현 블루프린트</h3><p>${esc(item.blueprint.desc)}</p></div>
+            <div><span>복사해서 바로 사용</span><h3>${esc(item.blueprint.desc)}</h3><p>대괄호 변수를 바꾼 뒤 사용하는 단일 완성형 제작 프롬프트입니다.</p></div>
             <div class="blueprint-actions">
-              <button class="copy-button blueprint-toggle" type="button" data-toggle-blueprint>전문 보기</button>
-              <button class="copy-button" type="button" data-copy-blueprint="${esc(item.slug)}">${icon('copy')}<span>복사</span></button>
+              <button class="copy-button" type="button" data-copy-blueprint="${esc(item.slug)}">${icon('copy')}<span>블루프린트 복사</span></button>
             </div>
           </div>
-          <div class="blueprint-body">${esc(item.blueprint.text)}</div>
+          <div class="blueprint-body">${esc(blueprint)}</div>
         </article>` : ''}
     </section>
     ${nav}
@@ -357,11 +410,6 @@ async function copyText(text) {
     textarea.remove();
     return success;
   } catch (_) { return false; }
-}
-
-function allPromptsText(item) {
-  const prompts = (item.prompts || []).map((prompt, index) => `## ${index + 1}. ${prompt.label}\n${prompt.text}`).join('\n\n────────────\n\n');
-  return `${item.title}\n${item.summary}\n\n${prompts}`;
 }
 
 function showToast(message, success = true) {
@@ -448,47 +496,10 @@ function route() {
 
 /* Events */
 document.addEventListener('click', async event => {
-  const promptHead = event.target.closest('.prompt-head');
-  if (promptHead) {
-    const item = promptHead.closest('.prompt-item');
-    const open = item.classList.toggle('is-open');
-    promptHead.setAttribute('aria-expanded', String(open));
-    return;
-  }
-
-  const promptCopy = event.target.closest('[data-copy-prompt]');
-  if (promptCopy) {
-    const text = promptCopy.closest('.prompt-content')?.querySelector('.prompt-text')?.textContent || '';
-    const success = await copyText(text);
-    if (success) {
-      promptCopy.classList.add('is-copied');
-      promptCopy.querySelector('span').textContent = '복사됨';
-      setTimeout(() => { promptCopy.classList.remove('is-copied'); promptCopy.querySelector('span').textContent = '프롬프트 복사'; }, 1300);
-    }
-    showToast(success ? '프롬프트를 복사했어요' : '복사하지 못했어요', success);
-    return;
-  }
-
-  const allCopy = event.target.closest('[data-copy-all]');
-  if (allCopy) {
-    const item = STORE.templateBySlug[allCopy.dataset.copyAll];
-    const success = item ? await copyText(allPromptsText(item)) : false;
-    showToast(success ? '전체 프롬프트를 복사했어요' : '복사하지 못했어요', success);
-    return;
-  }
-
-  const blueprintToggle = event.target.closest('[data-toggle-blueprint]');
-  if (blueprintToggle) {
-    const panel = blueprintToggle.closest('.blueprint-panel');
-    const open = panel.classList.toggle('is-open');
-    blueprintToggle.textContent = open ? '접기' : '전문 보기';
-    return;
-  }
-
   const blueprintCopy = event.target.closest('[data-copy-blueprint]');
   if (blueprintCopy) {
     const item = STORE.templateBySlug[blueprintCopy.dataset.copyBlueprint];
-    const success = item?.blueprint?.text ? await copyText(item.blueprint.text) : false;
+    const success = item?.blueprint?.text ? await copyText(blueprintPrompt(item)) : false;
     showToast(success ? '재현 블루프린트를 복사했어요' : '복사하지 못했어요', success);
     return;
   }
