@@ -27,6 +27,26 @@ try {
 if (!data.meta || !isStr(data.meta.name)) err('meta.name 누락');
 if (!isArr(data.templates)) err('templates 배열이 비어 있거나 없음');
 
+// 플랫폼 트렌드 문서
+if (!isArr(data.trends)) err('trends 배열이 비어 있거나 없음');
+const trendSlugs = new Set();
+for (const [i, trend] of (data.trends || []).entries()) {
+  const at = `trends[${i}]${trend && trend.slug ? ` (${trend.slug})` : ''}`;
+  for (const f of ['slug', 'name', 'shortName', 'tagline', 'summary', 'focus', 'viewerMode', 'bestAd']) {
+    if (!isStr(trend[f])) err(`${at}: ${f} 누락/빈값`);
+  }
+  if (trend.slug) {
+    if (trendSlugs.has(trend.slug)) err(`${at}: slug 중복`);
+    trendSlugs.add(trend.slug);
+  }
+  for (const f of ['character', 'audience', 'adStrategy', 'formula', 'checks', 'sources']) {
+    if (!isArr(trend[f])) err(`${at}: ${f} 배열이 비어 있거나 없음`);
+  }
+  for (const [j, source] of (trend.sources || []).entries()) {
+    if (!isStr(source?.label) || !isStr(source?.url)) err(`${at}.sources[${j}]: label/url 누락`);
+  }
+}
+
 const ids = new Set();
 const archetypesSeen = new Set();
 

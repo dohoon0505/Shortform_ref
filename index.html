@@ -1,280 +1,174 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>숏폼 연구소 · 템플릿 저장공간</title>
-<meta name="description" content="기준 숏폼 영상을 항목별로 해부하는 분석 프롬프트를 저장하고, 언제든 복사해 쓰는 아카이브.">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237968EE'/%3E%3Cstop offset='1' stop-color='%233D34C2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Crect x='19' y='10' width='26' height='44' rx='8' fill='none' stroke='white' stroke-width='4'/%3E%3Cpath d='M28 25v14c0 1.6 1.75 2.55 3.1 1.7l11-7a2 2 0 0 0 0-3.4l-11-7c-1.35-.85-3.1.1-3.1 1.7z' fill='white'/%3E%3C/svg%3E">
-<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
-<!-- ?v= 쿼리: 릴리스마다 버전을 올려 브라우저 캐시를 확실히 갱신한다 -->
-<link rel="stylesheet" href="assets/css/main.css?v=1.3.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="플랫폼 트렌드와 숏폼 분석 프롬프트를 한곳에서 탐색하는 숏폼 연구소.">
+  <title>숏폼 연구소</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%234F46E5'/%3E%3Cpath d='M24 18v28l24-14-24-14z' fill='white'/%3E%3C/svg%3E">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/main.css?v=1.4.0">
 </head>
 <body data-theme="light">
+  <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 10.8 12 3.7l8.5 7.1v9a1 1 0 0 1-1 1h-5v-6h-5v6h-5a1 1 0 0 1-1-1z"/></symbol>
+      <symbol id="i-trend" viewBox="0 0 24 24"><path d="M4 17.5 9 12l3.5 3.5L20 7"/><path d="M14.5 7H20v5.5"/></symbol>
+      <symbol id="i-library" viewBox="0 0 24 24"><path d="M5 4.5h11.5A2.5 2.5 0 0 1 19 7v13H7.5A2.5 2.5 0 0 1 5 17.5z"/><path d="M7.5 15.5H19M8.5 8h7"/></symbol>
+      <symbol id="i-guide" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.6 2.6 0 1 1 3.3 2.5c-.9.3-.9 1.2-.9 2M12 17.6h.01"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.3 4.3"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2"/><path d="M15.5 8.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7.5a2 2 0 0 0 2 2h2.5"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.3 4.3L19.5 6.7"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M14 7l5 5-5 5"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5m5-5-5 5 5 5"/></symbol>
+      <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8"/><path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="m9 6 9 6-9 6z"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    </defs>
+  </svg>
 
-<!-- ============ ICON SPRITE ============ -->
-<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
-  <defs>
-    <symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M8 5.5v13l11-6.5-11-6.5z" fill="currentColor" stroke="none"/></symbol>
-    <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h8"/></symbol>
-    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
-    <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></symbol>
-    <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.5.5l3-3a5 5 0 00-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 00-7.5-.5l-3 3a5 5 0 007 7l1.5-1.5"/></symbol>
-    <symbol id="i-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></symbol>
-  </defs>
-</svg>
+  <button class="sidebar-toggle" type="button" aria-label="메뉴 열기" onclick="toggleSidebar()">
+    <svg><use href="#i-menu"/></svg>
+  </button>
+  <div class="sidebar-scrim" onclick="closeSidebar()"></div>
 
-<!-- ============ MOBILE TOGGLE ============ -->
-<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="메뉴 열기">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-</button>
-<div class="sidebar-scrim" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="sidebar" aria-label="주요 탐색">
+    <a class="sidebar-brand" href="#/home" onclick="closeSidebarMobile()">
+      <span class="brand-mark" aria-hidden="true"><span></span></span>
+      <span class="brand-copy"><b>숏폼 연구소</b><small>Shortform field notes</small></span>
+    </a>
 
-<!-- ============ SIDEBAR ============ -->
-<aside class="sidebar" id="sidebar" aria-label="숏폼 연구소 네비게이션">
-  <a class="sidebar-brand" href="#home" onclick="closeSidebarMobile()">
-    <!-- 동영상형 프로필 — 세로(9:16) 영상 프레임 + 재생 버튼 -->
-    <div class="brand-mark is-brand" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none">
-        <rect x="6.6" y="2.9" width="10.8" height="18.2" rx="3.1" stroke="#fff" stroke-width="1.6"/>
-        <path d="M10.6 9.1v5.8c0 .62.68 1 1.2.67l4.56-2.9a.8.8 0 0 0 0-1.35l-4.56-2.9c-.52-.33-1.2.05-1.2.68z" fill="#fff"/>
-      </svg>
-    </div>
-    <div>
-      <div class="brand-name">숏폼 연구소</div>
-      <div class="brand-ver">v1.3.0 · 2026.07.11</div>
-    </div>
-  </a>
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <p class="nav-label">Workspace</p>
+        <a class="nav-link" href="#/home" data-nav="home">
+          <svg><use href="#i-home"/></svg><span>홈</span>
+        </a>
+      </div>
 
-  <div class="sidebar-group">
-    <div class="sidebar-group-title">숏폼 연구소</div>
-    <ul class="sidebar-nav">
-      <li><a class="sidebar-link" href="#home" data-section="home"><span class="ico">☗</span>홈</a></li>
-      <li><a class="sidebar-link is-external" href="https://github.com/ehgns/desgin_system" target="_blank" rel="noopener"><span class="ico">⎇</span>GitHub 저장소<span class="ext">↗</span></a></li>
-    </ul>
-  </div>
+      <div class="nav-section">
+        <a class="nav-link nav-parent" href="#/trends" data-nav="trends">
+          <svg><use href="#i-trend"/></svg><span>트렌드</span><span class="nav-pill">3</span>
+        </a>
+        <div class="nav-children" id="trend-nav" aria-label="플랫폼별 트렌드"></div>
+      </div>
 
-  <div class="sidebar-group">
-    <div class="sidebar-group-title">템플릿 저장공간</div>
-    <ul class="sidebar-nav">
-      <li><a class="sidebar-link" href="#templates" data-section="templates"><span class="ico">▦</span>전체 템플릿<span class="count" id="sb-total-count">0</span></a></li>
-    </ul>
-    <ul class="sidebar-nav" id="sidebar-archetypes" aria-label="아키타입별 필터">
-      <!-- JS가 아키타입별 링크 주입 -->
-    </ul>
-  </div>
+      <div class="nav-section">
+        <a class="nav-link nav-parent" href="#/templates" data-nav="templates">
+          <svg><use href="#i-library"/></svg><span>템플릿</span><span class="nav-pill" id="template-total">0</span>
+        </a>
+        <div class="nav-children" id="template-nav" aria-label="템플릿 상세 페이지"></div>
+      </div>
 
-  <div class="sidebar-group">
-    <div class="sidebar-group-title">가이드</div>
-    <ul class="sidebar-nav">
-      <li><a class="sidebar-link" href="#guide" data-section="guide"><span class="ico">✎</span>사용법</a></li>
-      <li><a class="sidebar-link" href="#add" data-section="add"><span class="ico">＋</span>템플릿 추가하기</a></li>
-    </ul>
-  </div>
+      <div class="nav-section nav-section-guide">
+        <p class="nav-label">Guide</p>
+        <a class="nav-link" href="#/guide" data-nav="guide">
+          <svg><use href="#i-guide"/></svg><span>사용법</span>
+        </a>
+      </div>
+    </nav>
 
-  <div class="sidebar-group">
-    <div class="sidebar-group-title">운영</div>
-    <ul class="sidebar-nav">
-      <li><a class="sidebar-link" href="#changelog" data-section="changelog"><span class="ico">⎌</span>업데이트 기록</a></li>
-    </ul>
-  </div>
-
-  <div class="sidebar-theme">
-    <div>
-      <div class="sidebar-theme-label">테마</div>
-      <div class="sidebar-theme-sub" id="theme-sub">Light Mode</div>
-    </div>
-    <button class="sidebar-theme-btn" onclick="toggleTheme()" aria-label="테마 전환">
-      <span id="sidebar-theme-icon">☾</span>
-      <span id="sidebar-theme-label">Dark</span>
-    </button>
-  </div>
-</aside>
-
-<!-- ============ APP ============ -->
-<div class="app">
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="crumb" id="crumb"><b>숏폼 연구소</b></div>
-      <div class="spacer"></div>
-      <a class="topbar-link" href="https://github.com/ehgns/desgin_system" target="_blank" rel="noopener">GitHub ↗</a>
-      <button class="theme-toggle" onclick="toggleTheme()">
-        <span id="theme-icon">☾</span><span id="theme-label">Dark</span>
+    <div class="sidebar-footer">
+      <div><b>읽기 좋은 환경</b><span id="theme-description">라이트 모드</span></div>
+      <button class="theme-switch" type="button" onclick="toggleTheme()" aria-label="색상 테마 전환">
+        <span class="theme-switch-dot"></span><span id="theme-label">Dark</span>
       </button>
     </div>
-  </header>
+  </aside>
 
-  <main class="container" id="top">
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="breadcrumb" id="breadcrumb"><span>숏폼 연구소</span></div>
+      <span class="topbar-status"><i></i> 2026 트렌드 노트</span>
+    </header>
 
-    <!-- ================= HOME ================= -->
-    <section class="view" id="view-home">
-      <div class="hero">
-        <div class="hero-meta">
-          <span class="tag">SHORTFORM LAB</span>
-          <span class="dot"></span>
-          <span class="muted">v1.3.0 · 2026.07.11</span>
+    <main class="main" id="main">
+      <section class="view" id="view-home" aria-labelledby="home-title">
+        <div class="home-hero">
+          <div class="hero-copy">
+            <span class="eyebrow"><i></i> SHORTFORM LAB</span>
+            <h1 id="home-title">감으로 넘기던 숏폼을<br><em>근거로 설계하는 곳.</em></h1>
+            <p>플랫폼의 시청 문법을 읽고, 잘된 영상의 구조를 템플릿으로 해부하세요. 트렌드에서 방향을 잡고 템플릿에서 바로 제작으로 이어집니다.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#/trends">플랫폼 트렌드 보기 <svg><use href="#i-arrow"/></svg></a>
+              <a class="button button-secondary" href="#/templates">템플릿 둘러보기</a>
+            </div>
+          </div>
+          <div class="hero-visual" aria-hidden="true">
+            <div class="signal-card signal-card-a"><span>HOOK</span><b>0—3s</b><small>시선을 멈추는 구간</small></div>
+            <div class="phone-frame"><div class="phone-screen"><span class="play-disc"><svg><use href="#i-play"/></svg></span><i></i><i></i><i></i></div></div>
+            <div class="signal-card signal-card-b"><span>RETENTION</span><b>72%</b><small>구조로 지키는 관심</small></div>
+          </div>
         </div>
-        <h1>잘된 숏폼 하나를,<br><span class="accent">해부 프롬프트</span>로 저장하다.</h1>
-        <p class="hero-desc">
-          <strong>숏폼 연구소</strong>는 기준이 될 숏폼 영상 하나를 정하고, 그 영상을 <strong>후킹·구성·카피·편집</strong> 항목별로 뜯어보는 <strong>분석 프롬프트</strong>를 저장해 두는 아카이브입니다. 필요할 때 프롬프트를 <strong>복사해</strong> ChatGPT·Claude에 붙여넣고, <strong>내 주제로 재현</strong>까지 한 흐름으로 이어집니다.
-        </p>
-        <div class="hero-cta">
-          <a class="btn btn-primary" href="#templates"><svg class="ico" width="18" height="18"><use href="#i-layers"/></svg> 템플릿 저장공간 열기</a>
-          <a class="btn btn-ghost" href="#guide">사용법 보기</a>
+
+        <div class="section-heading">
+          <div><span class="section-kicker">START HERE</span><h2>두 갈래로 시작하세요</h2></div>
+          <p>먼저 플랫폼의 문법을 이해하거나, 바로 영상 구조를 해부할 수 있습니다.</p>
         </div>
-      </div>
-
-      <h2 class="section-title">무엇을 할 수 있나요</h2>
-      <div class="home-grid">
-        <a class="home-card" href="#templates">
-          <div class="ico">▦</div>
-          <h3>템플릿 저장공간</h3>
-          <p>아키타입별 분석 프롬프트 묶음. 항목별로 골라 복사해 씁니다.</p>
-          <span class="more" id="home-tpl-count">템플릿 살펴보기 →</span>
-        </a>
-        <a class="home-card" href="#guide">
-          <div class="ico">✎</div>
-          <h3>사용법</h3>
-          <p>기준 영상 정하기 → 항목 프롬프트 복사 → AI에 붙여넣기 → 내 주제로 재현.</p>
-          <span class="more">4단계 흐름 →</span>
-        </a>
-        <a class="home-card" href="#add">
-          <div class="ico">＋</div>
-          <h3>템플릿 추가하기</h3>
-          <p>templates.json 한 파일만 편집하면 새 템플릿이 저장공간에 나타납니다.</p>
-          <span class="more">추가 방법 →</span>
-        </a>
-        <a class="home-card" href="#changelog">
-          <div class="ico">⎌</div>
-          <h3>업데이트 기록</h3>
-          <p>저장공간에 무엇이 언제 추가·변경됐는지 누적 기록합니다.</p>
-          <span class="more">기록 보기 →</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- ================= TEMPLATES ================= -->
-    <section class="view" id="view-templates">
-      <div class="view-head">
-        <h1>템플릿 저장공간</h1>
-        <p>기준 영상을 정하고, 항목별 프롬프트를 복사해 분석하세요. 각 템플릿은 <b>후킹·구성·카피·편집·재현</b> 5개 프롬프트로 이루어집니다.</p>
-      </div>
-      <div class="tpl-toolbar">
-        <div class="search-box">
-          <svg aria-hidden="true"><use href="#i-search"/></svg>
-          <input type="search" id="tpl-search" placeholder="템플릿·아키타입·키워드 검색" aria-label="템플릿 검색">
+        <div class="entry-grid">
+          <a class="entry-card entry-trend" href="#/trends">
+            <div class="entry-number">01</div><div class="entry-icon"><svg><use href="#i-trend"/></svg></div>
+            <h3>플랫폼 트렌드</h3><p>Shorts·Reels·TikTok의 성격, 시청자 행동, 효과적인 광고 포맷을 비교합니다.</p>
+            <span>3개 플랫폼 읽기 <svg><use href="#i-arrow"/></svg></span>
+          </a>
+          <a class="entry-card entry-template" href="#/templates">
+            <div class="entry-number">02</div><div class="entry-icon"><svg><use href="#i-library"/></svg></div>
+            <h3>분석 템플릿</h3><p>후킹·스토리·정보·UGC·밈 유형별 프롬프트로 기준 영상을 역설계합니다.</p>
+            <span><b id="home-template-count">0</b>개 템플릿 열기 <svg><use href="#i-arrow"/></svg></span>
+          </a>
         </div>
-        <div class="filter-chips" id="tpl-chips" role="tablist" aria-label="아키타입 필터"></div>
-        <div class="tpl-count" id="tpl-count"></div>
-      </div>
-      <div class="tpl-list" id="tpl-list" aria-live="polite"></div>
-    </section>
+      </section>
 
-    <!-- ================= GUIDE ================= -->
-    <section class="view" id="view-guide">
-      <div class="view-head"><h1>사용법</h1><p>기준 영상 하나를 정하고, 저장된 프롬프트로 그 영상을 해부한 뒤, 그 공식을 내 콘텐츠로 옮기는 흐름입니다.</p></div>
-      <div class="doc">
-        <div class="callout"><strong>핵심.</strong> 각 프롬프트는 <b>그대로 복사해</b> ChatGPT·Claude 같은 AI에 붙여넣는 완성형입니다. 대괄호 <code>[영상 링크]</code>·<code>[내 주제]</code> 부분만 내 상황으로 바꾸면 됩니다.</div>
-        <ol class="step-list">
-          <li><div><b>기준 영상 정하기</b><span>분석하고 싶은 잘된 숏폼(내 영상이든 벤치마크든)을 하나 고릅니다. 링크와 자막·스크립트를 준비하세요.</span></div></li>
-          <li><div><b>맞는 아키타입 템플릿 열기</b><span>후킹 폭발형·스토리텔링형·정보형·UGC 광고형·밈 트렌드형 중 영상 성격에 맞는 템플릿을 저장공간에서 엽니다.</span></div></li>
-          <li><div><b>항목 프롬프트 복사 → AI에 붙여넣기</b><span>후킹·구성·카피·편집 중 알고 싶은 항목의 <b>복사</b> 버튼을 누르고, AI에 붙여넣은 뒤 영상 링크·스크립트를 채워 실행합니다.</span></div></li>
-          <li><div><b>‘내 주제로 재현’으로 기획안 뽑기</b><span>마지막 <b>재현</b> 프롬프트에 <code>[내 주제]</code>를 넣으면, 분석한 성공 공식이 바로 내 콘텐츠 기획안으로 바뀝니다.</span></div></li>
+      <section class="view" id="view-trends" aria-labelledby="trends-title">
+        <div class="page-intro">
+          <span class="eyebrow"><i></i> PLATFORM NOTES</span>
+          <h1 id="trends-title">트렌드</h1>
+          <p>연령 통계보다 실제 제작에 도움이 되는 <b>시청 행동</b>을 중심으로 정리했습니다. 플랫폼을 고르면 성격·핵심 시청자·효과적인 광고 영상의 차이를 확인할 수 있습니다.</p>
+        </div>
+        <div class="trend-grid" id="trend-grid"></div>
+        <div class="compare-strip">
+          <span>한눈에 고르기</span>
+          <div><b>YouTube Shorts</b><small>설명하고 설득할 때</small></div>
+          <div><b>Instagram Reels</b><small>보여주고 선망을 만들 때</small></div>
+          <div><b>TikTok</b><small>발견시키고 대화에 태울 때</small></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-trend-detail" aria-live="polite"></section>
+
+      <section class="view" id="view-templates" aria-labelledby="templates-title">
+        <div class="page-intro page-intro-split">
+          <div><span class="eyebrow"><i></i> TEMPLATE LIBRARY</span><h1 id="templates-title">템플릿</h1><p>필요한 유형을 고르면 별도의 상세 페이지에서 기준 영상과 분석 프롬프트를 차분하게 살펴볼 수 있습니다.</p></div>
+          <div class="library-stat"><b id="library-count">0</b><span>CURATED<br>TEMPLATES</span></div>
+        </div>
+        <div class="template-toolbar">
+          <label class="search-field"><svg><use href="#i-search"/></svg><input id="template-search" type="search" placeholder="제목이나 유형으로 검색" aria-label="템플릿 검색"></label>
+          <div class="filter-row" id="template-filters"></div>
+        </div>
+        <div class="template-grid" id="template-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="view" id="view-template-detail" aria-live="polite"></section>
+
+      <section class="view" id="view-guide" aria-labelledby="guide-title">
+        <div class="page-intro"><span class="eyebrow"><i></i> HOW TO USE</span><h1 id="guide-title">사용법</h1><p>하나의 기준 영상을 고르고, 필요한 분석 프롬프트를 복사한 뒤 내 주제로 재현하는 네 단계입니다.</p></div>
+        <ol class="guide-steps">
+          <li><span>01</span><div><b>플랫폼 문법 고르기</b><p>트렌드 문서에서 목적과 시청 행동에 맞는 플랫폼을 먼저 고릅니다.</p></div></li>
+          <li><span>02</span><div><b>기준 영상 정하기</b><p>분석하고 싶은 영상 한 편의 링크와 자막 또는 스크립트를 준비합니다.</p></div></li>
+          <li><span>03</span><div><b>프롬프트 복사하기</b><p>영상 유형과 가까운 템플릿을 열고 필요한 분석 항목을 복사해 AI에 붙여넣습니다.</p></div></li>
+          <li><span>04</span><div><b>내 주제로 재현하기</b><p>마지막 재현 프롬프트의 대괄호 변수만 바꿔 실제 제작안으로 전환합니다.</p></div></li>
         </ol>
-        <h3>팁</h3>
-        <ul>
-          <li><strong>순서대로 쓰면 좋아요.</strong> 후킹 → 구성 → 카피 → 편집 순으로 분석하면 맥락이 쌓여 재현 프롬프트의 결과가 좋아집니다.</li>
-          <li><strong>자막·스크립트를 최대한 채우세요.</strong> AI가 영상을 직접 보지 못하므로, 자막이 풍부할수록 분석 정확도가 올라갑니다.</li>
-        </ul>
-      </div>
-    </section>
+        <div class="guide-note"><b>더 정확한 결과를 위한 팁</b><p>영상 링크만 넣기보다 전체 자막과 첫 3초의 화면 설명을 함께 제공하세요. 후킹 → 구성 → 카피 → 편집 순으로 분석하면 맥락이 이어집니다.</p></div>
+      </section>
 
-    <!-- ================= ADD ================= -->
-    <section class="view" id="view-add">
-      <div class="view-head"><h1>템플릿 추가하기</h1><p>저장공간은 <code>templates.json</code> 파일 하나로 관리됩니다. 이 파일에 객체를 추가하면 화면에 자동으로 나타납니다.</p></div>
-      <div class="doc">
-        <div class="callout"><strong>단일 진실의 출처.</strong> 화면은 <code>templates.json</code>을 읽어 렌더링합니다. HTML·JS를 건드릴 필요 없이, JSON에 템플릿 하나를 더하면 끝입니다.</div>
-        <h3>1. templates.json 구조</h3>
-        <p><code>templates</code> 배열에 아래 형태의 객체를 추가하세요. <code>prompts</code>는 <code>hook · structure · script · edit · remix</code> 순서를 권장합니다.</p>
-        <pre class="code-block">{
-  "id": "tpl-my-template",
-  "title": "내 템플릿 이름",
-  "archetype": "후킹 폭발형",
-  "summary": "한 줄 설명",
-  "reference": {
-    "title": "기준 영상 성격",
-    "platform": "YouTube Shorts",
-    "creator": "(기준 영상 직접 지정)",
-    "length": "0:40",
-    "url": "",
-    "why": "왜 이 영상을 기준으로 삼는지"
-  },
-  "bestFor": ["이럴 때 좋아요 …"],
-  "pros": ["장점 …"],
-  "cons": ["주의점 …"],
-  "prompts": [
-    { "id": "hook", "label": "후킹 분석", "desc": "…", "text": "그대로 복사해 쓰는 프롬프트 …" }
-  ]
-}</pre>
-        <h3>2. 반영 확인</h3>
-        <ul>
-          <li><code>archetype</code>이 새 값이면 저장공간 상단과 사이드바에 <strong>필터 칩이 자동 생성</strong>됩니다.</li>
-          <li><code>reference.url</code>을 채우면 카드에 영상이 <strong>임베드</strong>됩니다 — <code>.mp4</code>는 플레이어(<code>&lt;video&gt;</code>), 그 외 URL은 <code>&lt;iframe&gt;</code>. 영상 파일을 저장소에 커밋하지 마세요. 비워 두면 “기준 영상 직접 지정”으로 표시됩니다.</li>
-          <li>기준 영상의 <strong>장면 분석은 힉스필드 MCP</strong>로 수행합니다 — 절차는 <code>docs/video-analysis.md</code> 참고.</li>
-          <li>저장 후 브라우저를 새로고침하면 바로 나타납니다. <code>CHANGELOG</code>에 변경을 남겨 두면 이력이 누적됩니다.</li>
-        </ul>
-      </div>
-    </section>
+      <section class="view" id="view-not-found">
+        <div class="empty-state"><span>404</span><h1>페이지를 찾지 못했어요</h1><p>사이드바에서 다른 문서를 선택해 주세요.</p><a class="button button-primary" href="#/home">홈으로 이동</a></div>
+      </section>
+    </main>
+  </div>
 
-    <!-- ================= CHANGELOG ================= -->
-    <section class="view" id="view-changelog">
-      <div class="view-head"><h1>업데이트 기록</h1><p>저장공간의 변경 이력을 누적 기록합니다. (Semantic Versioning)</p></div>
-      <div class="doc">
-        <div class="cl-entry">
-          <div class="cl-ver"><span class="v">v1.3.0</span><span class="d">2026.07.11</span></div>
-          <ul>
-            <li><strong>재현 블루프린트 5종.</strong> 힉스필드 장면 분석(총 81장면)에서 도출한 복붙 1회용 제작 명세 — [교체 변수]만 바꾸면 캡컷·캔바 등 어떤 툴에서도 기준 영상의 느낌을 재현.</li>
-            <li><strong>기준 영상 실내용 반영.</strong> 분석 결과에 맞춰 기준 영상 설명 갱신, UGC형 ↔ 밈·트렌드형 기준 영상 스왑(블러셔 브러쉬 → UGC형).</li>
-          </ul>
-        </div>
-        <div class="cl-entry">
-          <div class="cl-ver"><span class="v">v1.2.0</span><span class="d">2026.07.11</span></div>
-          <ul>
-            <li><strong>타이포그래피 확대.</strong> 가독성 개선을 위해 전 텍스트 스케일을 한 단계 키움.</li>
-            <li><strong>브레드크럼 뎁스.</strong> 저장공간에서 스크롤 중인 템플릿까지 경로에 표시.</li>
-            <li><strong>동영상형 브랜드 프로필.</strong> 세로 영상 프레임 + 재생 버튼 로고와 파비콘.</li>
-          </ul>
-        </div>
-        <div class="cl-entry">
-          <div class="cl-ver"><span class="v">v1.1.0</span><span class="d">2026.07.11</span></div>
-          <ul>
-            <li><strong>기준 영상 임베드.</strong> 영상을 저장소에 두지 않고 URL로 임베드(.mp4 → video, 그 외 → iframe).</li>
-            <li><strong>시드 5종에 기준 영상 연결.</strong> 실측 길이 반영.</li>
-            <li><strong>영상 분석 방법 문서.</strong> 힉스필드 MCP 절차(docs/video-analysis.md) — 분석 작업의 표준.</li>
-          </ul>
-        </div>
-        <div class="cl-entry">
-          <div class="cl-ver"><span class="v">v1.0.0</span><span class="d">2026.07.11</span></div>
-          <ul>
-            <li><strong>숏폼 연구소로 전환.</strong> 기존 UIUX-DH 디자인시스템 콘텐츠(컴포넌트·토큰·데모·릴리스)를 전부 제거하고, 저장소를 숏폼 영상 분석 프롬프트 아카이브로 재정의했습니다.</li>
-            <li><strong>템플릿 저장공간 신설.</strong> 기준 영상 + 항목별 프롬프트(후킹·구성·카피·편집·재현) + 사용성·장단점 구조.</li>
-            <li><strong>시드 템플릿 5종.</strong> 후킹 폭발형 · 스토리텔링형 · 정보/튜토리얼형 · 리뷰/UGC 광고형 · 밈/트렌드형.</li>
-            <li><strong>복사 중심 UX.</strong> 프롬프트별 복사 + 템플릿 전체 프롬프트 복사, 검색·아키타입 필터, 라이트/다크 테마.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      <span>숏폼 연구소 · 템플릿 저장공간 — 단일 진실의 출처: <a href="templates.json">templates.json</a></span>
-      <span>v1.3.0</span>
-    </footer>
-  </main>
-</div>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<script src="assets/js/main.js?v=1.3.0"></script>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="assets/js/main.js?v=1.4.0"></script>
 </body>
 </html>

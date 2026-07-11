@@ -1,482 +1,539 @@
-/* ================================================================
-   숏폼 연구소 · 템플릿 저장공간
-   - templates.json 을 읽어 저장공간을 렌더링
-   - 프롬프트 복사(항목별 / 전체), 아키타입 필터, 검색, 라이트/다크
-   ================================================================ */
+const STORE = {
+  meta: {},
+  trends: [],
+  templates: [],
+  archetypes: [],
+  trendBySlug: {},
+  templateBySlug: {}
+};
 
-/* ============ THEME ============ */
-function syncThemeUI() {
-  const theme = document.body.getAttribute('data-theme') || 'light';
-  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  // labels/icons describe the action (switch to the OTHER theme)
-  set('theme-icon', theme === 'light' ? '☾' : '☀');
-  set('theme-label', theme === 'light' ? 'Dark' : 'Light');
-  set('sidebar-theme-icon', theme === 'light' ? '☾' : '☀');
-  set('sidebar-theme-label', theme === 'light' ? 'Dark' : 'Light');
-  set('theme-sub', theme === 'light' ? 'Light Mode' : 'Dark Mode');
-}
-function toggleTheme() {
-  const next = document.body.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-  document.body.setAttribute('data-theme', next);
-  syncThemeUI();
-  try { localStorage.setItem('sl-theme', next); } catch (e) {}
-}
-(function initTheme() {
-  let saved = null;
-  try { saved = localStorage.getItem('sl-theme'); } catch (e) {}
-  if (saved === 'light' || saved === 'dark') document.body.setAttribute('data-theme', saved);
-  syncThemeUI();
-})();
+const TEMPLATE_STYLES = [
+  { color: '#7968ee', soft: '#7968ee' },
+  { color: '#ff735f', soft: '#ff735f' },
+  { color: '#4b8cff', soft: '#4b8cff' },
+  { color: '#28a66d', soft: '#28a66d' },
+  { color: '#e6ad1c', soft: '#e6ad1c' }
+];
 
-/* ============ SIDEBAR ============ */
-function toggleSidebar() {
-  const sb = document.getElementById('sidebar');
-  const scrim = document.querySelector('.sidebar-scrim');
-  const open = sb.classList.toggle('is-open');
-  if (scrim) {
-    if (open) { scrim.classList.add('is-open'); requestAnimationFrame(() => scrim.classList.add('is-visible')); document.body.style.overflow = 'hidden'; }
-    else { scrim.classList.remove('is-visible'); setTimeout(() => scrim.classList.remove('is-open'), 200); document.body.style.overflow = ''; }
-  }
-}
-function closeSidebar() {
-  const sb = document.getElementById('sidebar');
-  const scrim = document.querySelector('.sidebar-scrim');
-  sb.classList.remove('is-open');
-  if (scrim) { scrim.classList.remove('is-visible'); setTimeout(() => scrim.classList.remove('is-open'), 200); }
-  document.body.style.overflow = '';
-}
-function closeSidebarMobile() {
-  if (window.matchMedia('(max-width: 1099px)').matches) closeSidebar();
-}
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSidebar(); });
-
-/* ============ STATE ============ */
-const STORE = { meta: {}, archetypes: [], templates: [], byId: {} };
-let activeFilter = 'all';
+let activeFilter = '전체';
 let searchQuery = '';
-let dataLoaded = false;
+let toastTimer;
 
-/* ============ HELPERS ============ */
-function esc(s) {
-  return String(s == null ? '' : s)
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+function esc(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
-const svg = (id, cls) => `<svg${cls ? ` class="${cls}"` : ''} aria-hidden="true"><use href="#${id}"/></svg>`;
 
-/* ============ DATA LOAD ============ */
+function icon(name, className = '') {
+  return `<svg${className ? ` class="${className}"` : ''} aria-hidden="true"><use href="#i-${name}"/></svg>`;
+}
+
+function templateSlug(template, index) {
+  return template.slug || ['hook', 'story', 'tutorial', 'ugc', 'trend'][index] || `item-${index + 1}`;
+}
+
+function platformClass(slug) {
+  if (slug.includes('youtube')) return 'platform-youtube';
+  if (slug.includes('instagram')) return 'platform-instagram';
+  return 'platform-tiktok';
+}
+
 async function loadData() {
-  // no-store: templates.json 편집 후 새로고침 시 항상 최신 데이터를 읽는다
-  const res = await fetch('templates.json', { cache: 'no-store' });
-  if (!res.ok) throw new Error('templates.json ' + res.status);
-  const data = await res.json();
+  const response = await fetch('templates.json', { cache: 'no-store' });
+  if (!response.ok) throw new Error(`데이터 로드 실패: ${response.status}`);
+  const data = await response.json();
   STORE.meta = data.meta || {};
+  STORE.trends = Array.isArray(data.trends) ? data.trends : [];
   STORE.templates = Array.isArray(data.templates) ? data.templates : [];
-  STORE.byId = {};
-  STORE.templates.forEach(t => { STORE.byId[t.id] = t; });
-  // archetypes (respect declared order, else first-seen)
-  const declared = Array.isArray(data.archetypes) ? data.archetypes.slice() : [];
-  STORE.templates.forEach(t => { if (t.archetype && !declared.includes(t.archetype)) declared.push(t.archetype); });
-  STORE.archetypes = declared;
-  dataLoaded = true;
+  STORE.archetypes = Array.isArray(data.archetypes) ? data.archetypes : [];
+  STORE.trendBySlug = Object.fromEntries(STORE.trends.map(item => [item.slug, item]));
+  STORE.templates.forEach((item, index) => {
+    item.slug = templateSlug(item, index);
+    STORE.templateBySlug[item.slug] = item;
+  });
 }
 
-function countByArchetype(a) {
-  return STORE.templates.filter(t => t.archetype === a).length;
+/* Theme */
+function syncTheme() {
+  const dark = document.body.dataset.theme === 'dark';
+  const label = document.getElementById('theme-label');
+  const description = document.getElementById('theme-description');
+  if (label) label.textContent = dark ? 'Light' : 'Dark';
+  if (description) description.textContent = dark ? '다크 모드' : '라이트 모드';
 }
 
-/* ============ BUILD NAV / CHIPS ============ */
-function buildSidebarArchetypes() {
-  const ul = document.getElementById('sidebar-archetypes');
-  const total = document.getElementById('sb-total-count');
-  if (total) total.textContent = STORE.templates.length;
-  if (!ul) return;
-  ul.innerHTML = STORE.archetypes.map(a => `
-    <li><a class="sidebar-link" href="#templates" data-filter="${esc(a)}">
-      <span class="ico">•</span>${esc(a)}<span class="count">${countByArchetype(a)}</span>
-    </a></li>`).join('');
-  const homeCount = document.getElementById('home-tpl-count');
-  if (homeCount) homeCount.textContent = `템플릿 ${STORE.templates.length}종 살펴보기 →`;
+function toggleTheme() {
+  const next = document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+  document.body.dataset.theme = next;
+  try { localStorage.setItem('shortform-theme', next); } catch (_) {}
+  syncTheme();
 }
 
-function buildChips() {
-  const wrap = document.getElementById('tpl-chips');
-  if (!wrap) return;
-  const chip = (key, label, n) =>
-    `<button class="chip${activeFilter === key ? ' is-active' : ''}" data-filter="${esc(key)}" role="tab" aria-selected="${activeFilter === key}">${esc(label)}<span class="chip-count">${n}</span></button>`;
-  wrap.innerHTML =
-    chip('all', '전체', STORE.templates.length) +
-    STORE.archetypes.map(a => chip(a, a, countByArchetype(a))).join('');
+function initTheme() {
+  try {
+    const saved = localStorage.getItem('shortform-theme');
+    if (saved === 'dark' || saved === 'light') document.body.dataset.theme = saved;
+  } catch (_) {}
+  syncTheme();
 }
 
-/* ============ RENDER TEMPLATES ============ */
-function templateMatches(t) {
-  if (activeFilter !== 'all' && t.archetype !== activeFilter) return false;
+/* Sidebar */
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const scrim = document.querySelector('.sidebar-scrim');
+  const open = sidebar.classList.toggle('is-open');
+  scrim.classList.toggle('is-visible', open);
+  document.body.classList.toggle('is-locked', open);
+}
+
+function closeSidebar() {
+  document.getElementById('sidebar')?.classList.remove('is-open');
+  document.querySelector('.sidebar-scrim')?.classList.remove('is-visible');
+  document.body.classList.remove('is-locked');
+}
+
+function closeSidebarMobile() {
+  if (window.matchMedia('(max-width: 920px)').matches) closeSidebar();
+}
+
+function buildSidebar() {
+  const trendNav = document.getElementById('trend-nav');
+  const templateNav = document.getElementById('template-nav');
+  trendNav.innerHTML = STORE.trends.map(item =>
+    `<a class="nav-child" href="#/trends/${esc(item.slug)}" data-trend-nav="${esc(item.slug)}">${esc(item.name)}</a>`
+  ).join('');
+  templateNav.innerHTML = STORE.templates.map(item =>
+    `<a class="nav-child" href="#/templates/${esc(item.slug)}" data-template-nav="${esc(item.slug)}">${esc(item.title)}</a>`
+  ).join('');
+  document.getElementById('template-total').textContent = STORE.templates.length;
+  document.getElementById('home-template-count').textContent = STORE.templates.length;
+  document.getElementById('library-count').textContent = STORE.templates.length;
+}
+
+/* Trend pages */
+function renderTrendCards() {
+  const target = document.getElementById('trend-grid');
+  target.innerHTML = STORE.trends.map((item, index) => `
+    <a class="trend-card" href="#/trends/${esc(item.slug)}">
+      <span class="platform-mark ${platformClass(item.slug)}">${esc(item.shortName)}</span>
+      <span class="card-index">0${index + 1} / 03</span>
+      <h2>${esc(item.name)}</h2>
+      <span class="platform-tagline">${esc(item.tagline)}</span>
+      <p>${esc(item.summary)}</p>
+      <span>플랫폼 노트 읽기 ${icon('arrow')}</span>
+    </a>
+  `).join('');
+}
+
+function insightList(items) {
+  return `<ul class="insight-list">${(items || []).map(item => {
+    const [lead, ...rest] = String(item).split(' — ');
+    return `<li>${rest.length ? `<strong>${esc(lead)}</strong> — ${esc(rest.join(' — '))}` : esc(item)}</li>`;
+  }).join('')}</ul>`;
+}
+
+function renderTrendDetail(item) {
+  const target = document.getElementById('view-trend-detail');
+  const sources = (item.sources || []).map(source =>
+    `<a href="${esc(source.url)}" target="_blank" rel="noopener">${esc(source.label)} ${icon('external')}</a>`
+  ).join('');
+  target.innerHTML = `
+    <a class="back-link" href="#/trends">${icon('back')} 트렌드 전체</a>
+    <div class="trend-detail-hero" style="--detail-color:${esc(item.accent)}">
+      <div>
+        <span class="eyebrow"><i></i> PLATFORM PROFILE</span>
+        <h1>${esc(item.name)}</h1>
+        <p>${esc(item.summary)}</p>
+      </div>
+      <span class="platform-mark ${platformClass(item.slug)}">${esc(item.shortName)}</span>
+    </div>
+    <div class="trend-summary">
+      <div><span>PLATFORM CORE</span><b>${esc(item.focus)}</b></div>
+      <div><span>VIEWER MODE</span><b>${esc(item.viewerMode)}</b></div>
+      <div><span>BEST AD TYPE</span><b>${esc(item.bestAd)}</b></div>
+    </div>
+    <div class="trend-doc-grid">
+      <article class="trend-doc-card">
+        <div class="doc-card-head"><span>01</span><h2>어떤 성격의 플랫폼인가</h2></div>
+        ${insightList(item.character)}
+      </article>
+      <article class="trend-doc-card">
+        <div class="doc-card-head"><span>02</span><h2>어떤 시청자가 많은가</h2></div>
+        ${insightList(item.audience)}
+      </article>
+      <article class="trend-doc-card is-wide">
+        <div class="doc-card-head"><span>03</span><h2>효과적인 광고 영상은 무엇인가</h2></div>
+        <div class="ad-formula">
+          ${(item.formula || []).map((step, index) => `<div><span>0${index + 1}</span><b>${esc(step)}</b></div>`).join('')}
+        </div>
+        ${insightList(item.adStrategy)}
+      </article>
+      <article class="trend-doc-card is-wide">
+        <div class="doc-card-head"><span>04</span><h2>제작 전 체크리스트</h2></div>
+        <div class="check-list">${(item.checks || []).map(check => `<span>${icon('check')} ${esc(check)}</span>`).join('')}</div>
+      </article>
+    </div>
+    <div class="source-box">
+      <b>공식 자료를 바탕으로 정리했습니다</b>
+      <div class="source-links">${sources}</div>
+    </div>
+  `;
+}
+
+/* Template listing */
+function buildFilters() {
+  const target = document.getElementById('template-filters');
+  const filters = ['전체', ...STORE.archetypes];
+  target.innerHTML = filters.map(filter =>
+    `<button class="filter-chip${filter === activeFilter ? ' is-active' : ''}" type="button" data-filter="${esc(filter)}">${esc(filter)}</button>`
+  ).join('');
+}
+
+function templateMatches(item) {
+  if (activeFilter !== '전체' && item.archetype !== activeFilter) return false;
   if (!searchQuery) return true;
-  const blob = [
-    t.title, t.summary, t.archetype, t.id,
-    t.reference && t.reference.title, t.reference && t.reference.why,
-    (t.bestFor || []).join(' '), (t.pros || []).join(' '), (t.cons || []).join(' '),
-    (t.prompts || []).map(p => p.label + ' ' + p.desc).join(' ')
-  ].join(' ').toLowerCase();
-  return blob.includes(searchQuery.toLowerCase());
+  const text = [item.title, item.archetype, item.summary, item.reference?.platform, item.reference?.title].join(' ').toLowerCase();
+  return text.includes(searchQuery.toLowerCase());
 }
 
-function promptItemHTML(p, i) {
-  return `
-    <div class="prompt-item" data-prompt-idx="${i}">
-      <button class="prompt-head" type="button" aria-expanded="false">
-        <span class="prompt-idx">${i + 1}</span>
-        <span class="prompt-headtext">
-          <span class="prompt-label">${esc(p.label)}</span>
-          <span class="prompt-desc">${esc(p.desc)}</span>
-        </span>
-        ${svg('i-chevron-down', 'prompt-chev')}
-      </button>
-      <div class="prompt-body">
-        <div class="prompt-text">${esc(p.text)}</div>
-        <div class="prompt-actions">
-          <button class="copy-btn" type="button" data-copy>${svg('i-copy')}<span>복사</span></button>
-        </div>
-      </div>
-    </div>`;
-}
-
-/* 기준 영상 임베드 — 저장소에 영상을 두지 않고 URL로 임베드한다.
-   .mp4 등 직접 파일 → <video> 네이티브 플레이어 / 그 외(YouTube 등) → <iframe> */
-function refEmbedHTML(url) {
-  const u = String(url).trim();
-  if (/\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(u)) {
-    return `<video class="ref-video" src="${esc(u)}" controls preload="metadata" playsinline></video>`;
-  }
-  return `<iframe class="ref-iframe" src="${esc(u)}" loading="lazy" allowfullscreen
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
-}
-
-function refHTML(r) {
-  if (!r) return '';
-  const hasUrl = r.url && String(r.url).trim();
-  const link = hasUrl
-    ? `<a class="ref-url" href="${esc(r.url)}" target="_blank" rel="noopener">${svg('i-link')}새 탭에서 열기</a>`
-    : `<span class="ref-url is-empty">${svg('i-link')}${esc(r.creator || '기준 영상 직접 지정')}</span>`;
-  return `
-    <div class="tpl-ref${hasUrl ? ' has-embed' : ''}">
-      ${hasUrl ? `<div class="ref-embed">${refEmbedHTML(r.url)}</div>` : `<div class="ref-thumb">${svg('i-play')}</div>`}
-      <div class="ref-body">
-        <div class="ref-line">
-          <span class="ref-platform">${esc(r.platform)}</span>
-          <span class="ref-len">${esc(r.length)}</span>
-        </div>
-        <div class="ref-title">${esc(r.title)}</div>
-        <div class="ref-why">${esc(r.why)}</div>
-        ${link}
-      </div>
-    </div>`;
-}
-
-function listHTML(arr, cls) {
-  return `<ul class="meta-list${cls ? ' ' + cls : ''}">${(arr || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
-}
-
-/* 재현 블루프린트 — 힉스필드 장면 분석에서 도출한 복붙 1회용 제작 명세.
-   [교체 변수]만 바꾸면 캡컷·캔바 등 어떤 툴에서도 같은 느낌으로 재현 가능. */
-function blueprintHTML(t) {
-  const b = t.blueprint;
-  if (!b || !b.text) return '';
-  return `
-    <div class="tpl-blueprint">
-      <div class="bp-head">
-        <div class="bp-headtext">
-          <h4>🎬 재현 블루프린트 <span class="bp-badge">${esc(b.source || 'Higgsfield 장면 분석 기반')}</span></h4>
-          <p>${esc(b.desc)}</p>
-        </div>
-        <button class="copy-btn" type="button" data-copybp="${esc(t.id)}">${svg('i-copy')}<span>복사</span></button>
-      </div>
-      <div class="prompt-item bp-item">
-        <button class="prompt-head" type="button" aria-expanded="false">
-          <span class="prompt-idx">📋</span>
-          <span class="prompt-headtext">
-            <span class="prompt-label">블루프린트 전문 보기</span>
-            <span class="prompt-desc">교체 변수 + 장면 구성표 + 촬영·편집 규칙 — 복붙 한 번으로 어떤 툴에서든 제작</span>
-          </span>
-          ${svg('i-chevron-down', 'prompt-chev')}
-        </button>
-        <div class="prompt-body">
-          <div class="prompt-text">${esc(b.text)}</div>
-        </div>
-      </div>
-    </div>`;
-}
-
-function templateCardHTML(t) {
-  return `
-    <article class="tpl-card" data-tpl-id="${esc(t.id)}">
-      <div class="tpl-card-head">
-        <div class="tpl-badges">
-          <span class="tpl-archetype">${esc(t.archetype)}</span>
-          <span class="tpl-id">${esc(t.id)}</span>
-        </div>
-        <h2 class="tpl-title">${esc(t.title)}</h2>
-        <p class="tpl-summary">${esc(t.summary)}</p>
-      </div>
-      ${refHTML(t.reference)}
-      <div class="tpl-meta">
-        <div class="meta-block">
-          <h4>이럴 때 좋아요</h4>
-          ${listHTML(t.bestFor)}
-        </div>
-        <div class="proscons">
-          <div class="meta-block"><h4>장점</h4>${listHTML(t.pros, 'pros')}</div>
-          <div class="meta-block"><h4>주의점</h4>${listHTML(t.cons, 'cons')}</div>
-        </div>
-      </div>
-      <div class="tpl-prompts">
-        <div class="prompts-head">
-          <h4>분석 프롬프트 ${(t.prompts || []).length}개</h4>
-          <button class="copyall-btn" type="button" data-copyall="${esc(t.id)}">${svg('i-copy')}전체 프롬프트 복사</button>
-        </div>
-        ${(t.prompts || []).map(promptItemHTML).join('')}
-      </div>
-      ${blueprintHTML(t)}
-    </article>`;
-}
-
-function renderTemplates() {
-  const list = document.getElementById('tpl-list');
-  const count = document.getElementById('tpl-count');
-  if (!list) return;
+function renderTemplateGrid() {
+  const target = document.getElementById('template-grid');
   const shown = STORE.templates.filter(templateMatches);
   if (!shown.length) {
-    list.innerHTML = `
-      <div class="empty">
-        <div class="empty-ico">🔍</div>
-        <h3>조건에 맞는 템플릿이 없어요</h3>
-        <p>검색어나 필터를 바꿔 보세요.</p>
-      </div>`;
-  } else {
-    list.innerHTML = shown.map(templateCardHTML).join('');
+    target.innerHTML = `<div class="empty-results"><b>맞는 템플릿이 없어요</b><span>검색어나 유형 필터를 바꿔 보세요.</span></div>`;
+    return;
   }
-  if (count) count.textContent = `${shown.length}개 표시${activeFilter !== 'all' ? ` · ${activeFilter}` : ''}${searchQuery ? ` · “${searchQuery}”` : ''}`;
-  // sync chips + sidebar active state
-  document.querySelectorAll('#tpl-chips .chip').forEach(c => {
-    const on = c.dataset.filter === activeFilter;
-    c.classList.toggle('is-active', on);
-    c.setAttribute('aria-selected', on);
-  });
-  document.querySelectorAll('#sidebar-archetypes .sidebar-link').forEach(l => {
-    l.classList.toggle('is-active', location.hash.replace(/^#\/?/, '') === 'templates' && l.dataset.filter === activeFilter);
-  });
-  if (typeof updateTemplateCrumb === 'function') updateTemplateCrumb();
+  target.innerHTML = shown.map(item => {
+    const originalIndex = STORE.templates.indexOf(item);
+    const style = TEMPLATE_STYLES[originalIndex % TEMPLATE_STYLES.length];
+    return `
+      <a class="template-card" href="#/templates/${esc(item.slug)}" style="--card-color:${style.soft};--card-accent:${style.color}">
+        <div class="template-topline">
+          <span class="template-number">0${originalIndex + 1}</span>
+          <span class="template-type">${esc(item.archetype)}</span>
+        </div>
+        <h2>${esc(item.title)}</h2>
+        <p>${esc(item.summary)}</p>
+        <footer>
+          <span class="template-platform"><i></i>${esc(item.reference?.platform || '')}</span>
+          <span>상세 페이지 ${icon('arrow')}</span>
+        </footer>
+      </a>
+    `;
+  }).join('');
 }
 
-function setFilter(key) {
-  activeFilter = key;
-  renderTemplates();
+function renderTemplateLibrary() {
+  buildFilters();
+  renderTemplateGrid();
 }
 
-/* ============ COPY ============ */
+/* Template profile */
+function refEmbed(reference) {
+  const url = String(reference?.url || '').trim();
+  if (!url) return `<div class="video-placeholder"><span>${icon('play')}</span></div>`;
+  if (/\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(url)) {
+    return `<video src="${esc(url)}" controls preload="metadata" playsinline></video>`;
+  }
+  return `<iframe src="${esc(url)}" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+}
+
+function profileList(items) {
+  return `<ul class="profile-list">${(items || []).map(item => `<li>${esc(item)}</li>`).join('')}</ul>`;
+}
+
+function promptHTML(prompt, index) {
+  return `
+    <article class="prompt-item">
+      <button class="prompt-head" type="button" aria-expanded="false">
+        <span class="prompt-index">0${index + 1}</span>
+        <span class="prompt-title"><b>${esc(prompt.label)}</b><small>${esc(prompt.desc)}</small></span>
+        ${icon('chevron', 'prompt-chevron')}
+      </button>
+      <div class="prompt-body"><div class="prompt-body-inner">
+        <div class="prompt-content">
+          <div class="prompt-text">${esc(prompt.text)}</div>
+          <div class="prompt-actions"><button class="copy-button" type="button" data-copy-prompt>${icon('copy')}<span>프롬프트 복사</span></button></div>
+        </div>
+      </div></div>
+    </article>
+  `;
+}
+
+function renderTemplateDetail(item) {
+  const target = document.getElementById('view-template-detail');
+  const index = STORE.templates.indexOf(item);
+  const previous = STORE.templates[index - 1];
+  const next = STORE.templates[index + 1];
+  const reference = item.reference || {};
+  const hasUrl = String(reference.url || '').trim();
+  const sourceLink = hasUrl ? `<a href="${esc(reference.url)}" target="_blank" rel="noopener">원본 열기 ${icon('external')}</a>` : '<span>기준 영상 직접 지정</span>';
+  const nav = `
+    <div class="template-next">
+      ${previous ? `<a href="#/templates/${esc(previous.slug)}">이전 템플릿<b>← ${esc(previous.title)}</b></a>` : '<span></span>'}
+      ${next ? `<a href="#/templates/${esc(next.slug)}">다음 템플릿<b>${esc(next.title)} →</b></a>` : ''}
+    </div>`;
+
+  target.innerHTML = `
+    <a class="back-link" href="#/templates">${icon('back')} 템플릿 전체</a>
+    <header class="template-profile-header">
+      <div>
+        <span class="eyebrow"><i></i> VIDEO PROFILE</span>
+        <h1>${esc(item.title)}</h1>
+        <p>${esc(item.summary)}</p>
+      </div>
+      <button class="button button-secondary profile-copyall" type="button" data-copy-all="${esc(item.slug)}">${icon('copy')} 전체 프롬프트 복사</button>
+    </header>
+    <article class="video-profile">
+      <div class="profile-video-column">
+        <div class="profile-video">${refEmbed(reference)}</div>
+        <div class="video-caption"><b>${esc(reference.platform)}</b>${sourceLink}</div>
+      </div>
+      <div class="profile-dossier">
+        <section class="dossier-intro">
+          <div class="dossier-kicker"><span>REFERENCE FILM</span><span class="profile-badge">${esc(item.archetype)}</span></div>
+          <h2>${esc(reference.title)}</h2>
+          <p>${esc(reference.why)}</p>
+        </section>
+        <div class="profile-facts">
+          <div class="profile-fact"><span>Platform</span><b>${esc(reference.platform)}</b></div>
+          <div class="profile-fact"><span>Runtime</span><b>${esc(reference.length)}</b></div>
+          <div class="profile-fact"><span>Reference</span><b>${esc(reference.creator || '기준 영상 직접 지정')}</b></div>
+          <div class="profile-fact"><span>Analysis</span><b>${(item.prompts || []).length}개 프롬프트 · 블루프린트</b></div>
+        </div>
+        <section class="dossier-section">
+          <h3>이 영상 프로필이 필요한 순간</h3>
+          ${profileList(item.bestFor)}
+        </section>
+        <section class="dossier-section dossier-columns">
+          <div><h3>강점</h3>${profileList(item.pros)}</div>
+          <div><h3>주의할 점</h3>${profileList(item.cons)}</div>
+        </section>
+      </div>
+    </article>
+    <section class="analysis-section">
+      <div class="analysis-heading">
+        <div><span>PROFILE ANALYSIS</span><h2>영상 해부 노트</h2></div>
+        <p>프로필을 읽듯 항목을 하나씩 펼쳐 보세요. 필요한 프롬프트만 골라 복사할 수 있습니다.</p>
+      </div>
+      <div class="prompt-list">${(item.prompts || []).map(promptHTML).join('')}</div>
+      ${item.blueprint?.text ? `
+        <article class="blueprint-panel">
+          <div class="blueprint-head">
+            <div><span>REPRODUCTION BLUEPRINT</span><h3>재현 블루프린트</h3><p>${esc(item.blueprint.desc)}</p></div>
+            <div class="blueprint-actions">
+              <button class="copy-button blueprint-toggle" type="button" data-toggle-blueprint>전문 보기</button>
+              <button class="copy-button" type="button" data-copy-blueprint="${esc(item.slug)}">${icon('copy')}<span>복사</span></button>
+            </div>
+          </div>
+          <div class="blueprint-body">${esc(item.blueprint.text)}</div>
+        </article>` : ''}
+    </section>
+    ${nav}
+  `;
+}
+
+/* Copy */
 async function copyText(text) {
   try {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
       return true;
     }
-  } catch (e) { /* fall through */ }
-  // fallback for file:// or insecure context
+  } catch (_) {}
   try {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.setAttribute('readonly', '');
-    ta.style.position = 'fixed';
-    ta.style.top = '-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    const ok = document.execCommand('copy');
-    ta.remove();
-    return ok;
-  } catch (e) { return false; }
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.readOnly = true;
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    const success = document.execCommand('copy');
+    textarea.remove();
+    return success;
+  } catch (_) { return false; }
 }
 
-let toastTimer;
-function showToast(msg, ok = true) {
-  const el = document.getElementById('toast');
-  if (!el) return;
-  el.innerHTML = (ok ? svg('i-check') : '') + `<span>${esc(msg)}</span>`;
-  el.classList.add('is-visible');
+function allPromptsText(item) {
+  const prompts = (item.prompts || []).map((prompt, index) => `## ${index + 1}. ${prompt.label}\n${prompt.text}`).join('\n\n────────────\n\n');
+  return `${item.title}\n${item.summary}\n\n${prompts}`;
+}
+
+function showToast(message, success = true) {
+  const toast = document.getElementById('toast');
+  toast.innerHTML = `${success ? icon('check') : ''}<span>${esc(message)}</span>`;
+  toast.classList.add('is-visible');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('is-visible'), 1800);
+  toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 1800);
 }
 
-function buildCopyAllText(t) {
-  const head = `${t.title} · ${t.archetype}\n숏폼 연구소 · 템플릿 저장공간\n${'—'.repeat(24)}\n`;
-  const body = (t.prompts || []).map((p, i) => `## ${i + 1}. ${p.label}\n${p.text}`).join('\n\n' + '—'.repeat(24) + '\n\n');
-  return head + '\n' + body + '\n';
+/* Router */
+function parsedRoute() {
+  const clean = location.hash.replace(/^#\/?/, '').replace(/\/$/, '') || 'home';
+  const [section, slug] = clean.split('/');
+  return { section, slug };
 }
 
-/* ============ EVENT DELEGATION ============ */
-document.addEventListener('click', async (e) => {
-  // prompt accordion
-  const head = e.target.closest('.prompt-head');
-  if (head) {
-    const item = head.parentElement;
-    const open = item.classList.toggle('is-open');
-    head.setAttribute('aria-expanded', String(open));
-    return;
-  }
-  // per-prompt copy (블루프린트 복사 버튼은 data-copybp 분기에서 처리)
-  const copyBtn = e.target.closest('.copy-btn');
-  if (copyBtn && !copyBtn.dataset.copybp) {
-    const body = copyBtn.closest('.prompt-body');
-    const textEl = body && body.querySelector('.prompt-text');
-    if (!textEl) return;
-    const ok = await copyText(textEl.textContent);
-    if (ok) {
-      copyBtn.classList.add('is-copied');
-      copyBtn.querySelector('span').textContent = '복사됨';
-      setTimeout(() => { copyBtn.classList.remove('is-copied'); const s = copyBtn.querySelector('span'); if (s) s.textContent = '복사'; }, 1400);
-      showToast('프롬프트를 복사했어요');
-    } else { showToast('복사에 실패했어요', false); }
-    return;
-  }
-  // copy blueprint
-  const bpBtn = e.target.closest('[data-copybp]');
-  if (bpBtn) {
-    const t = STORE.byId[bpBtn.dataset.copybp];
-    if (!t || !t.blueprint) return;
-    const ok = await copyText(t.blueprint.text);
-    if (ok) {
-      bpBtn.classList.add('is-copied');
-      const s = bpBtn.querySelector('span'); if (s) s.textContent = '복사됨';
-      setTimeout(() => { bpBtn.classList.remove('is-copied'); if (s) s.textContent = '복사'; }, 1400);
-      showToast('재현 블루프린트를 복사했어요 — [교체 변수]만 바꿔 쓰세요');
-    } else { showToast('복사에 실패했어요', false); }
-    return;
-  }
-  // copy all prompts of a template
-  const allBtn = e.target.closest('.copyall-btn');
-  if (allBtn) {
-    const t = STORE.byId[allBtn.dataset.copyall];
-    if (!t) return;
-    const ok = await copyText(buildCopyAllText(t));
-    showToast(ok ? `‘${t.title}’ 프롬프트 ${(t.prompts || []).length}개를 복사했어요` : '복사에 실패했어요', ok);
-    return;
-  }
-  // filter (chips + sidebar)
-  const filterEl = e.target.closest('[data-filter]');
-  if (filterEl) {
-    const key = filterEl.dataset.filter;
-    if (filterEl.classList.contains('sidebar-link')) {
-      activeFilter = key;
-      closeSidebarMobile();
-      if (location.hash.replace(/^#\/?/, '') === 'templates') { renderTemplates(); }
-      // else: href="#templates" navigation triggers route() → renderTemplates()
-      return;
-    }
-    e.preventDefault();
-    setFilter(key);
-    return;
-  }
-  // leaf sidebar links close mobile drawer
-  const sbLink = e.target.closest('.sidebar-link');
-  if (sbLink && !sbLink.classList.contains('is-external')) closeSidebarMobile();
-});
-
-/* search */
-document.addEventListener('input', (e) => {
-  if (e.target && e.target.id === 'tpl-search') {
-    searchQuery = e.target.value.trim();
-    renderTemplates();
-  }
-});
-
-/* ============ ROUTER ============ */
-const VIEWS = {
-  home:      { el: 'view-home',      crumb: '숏폼 연구소', section: 'home' },
-  templates: { el: 'view-templates', crumb: '템플릿 저장공간', section: 'templates' },
-  guide:     { el: 'view-guide',     crumb: '사용법', section: 'guide' },
-  add:       { el: 'view-add',       crumb: '템플릿 추가하기', section: 'add' },
-  changelog: { el: 'view-changelog', crumb: '업데이트 기록', section: 'changelog' },
-};
-
-function highlightSidebar(section) {
-  document.querySelectorAll('.sidebar-link').forEach(l => {
-    if (l.dataset.section) l.classList.toggle('is-active', l.dataset.section === section);
-  });
+function breadcrumbHTML(section, leaf) {
+  const parts = [`<a href="#/home">숏폼 연구소</a>`];
+  if (section === 'trends') parts.push(`<a href="#/trends">트렌드</a>`);
+  if (section === 'templates') parts.push(`<a href="#/templates">템플릿</a>`);
+  if (section === 'guide') parts.push('<b>사용법</b>');
+  if (leaf) {
+    if (parts.length > 1) parts[parts.length - 1] = parts[parts.length - 1].replace('<a ', '<a ');
+    parts.push(`<b>${esc(leaf)}</b>`);
+  } else if (section === 'trends') parts[parts.length - 1] = '<b>트렌드</b>';
+  else if (section === 'templates') parts[parts.length - 1] = '<b>템플릿</b>';
+  return parts.join('<span>·</span>');
 }
 
-/* ---- Breadcrumb ----
-   기본: 숏폼 연구소 · <현재 페이지>
-   템플릿 저장공간: 스크롤 위치의 템플릿까지 표시
-   예) 숏폼 연구소 · 템플릿 저장공간 · 후킹 폭발형 해부 */
-let currentRoute = 'home';
-
-function setCrumb(leaf) {
-  const crumb = document.getElementById('crumb');
-  if (!crumb) return;
-  const v = VIEWS[currentRoute];
-  if (currentRoute === 'home') { crumb.innerHTML = '<b>숏폼 연구소</b>'; return; }
-  const parts = ['숏폼 연구소', esc(v.crumb)];
-  if (leaf) parts.push(esc(leaf));
-  const last = parts.pop();
-  crumb.innerHTML = parts.join(' · ') + ` · <b>${last}</b>`;
+function highlightNavigation(section, slug) {
+  document.querySelectorAll('[data-nav]').forEach(link => link.classList.toggle('is-active', link.dataset.nav === section));
+  document.querySelectorAll('[data-trend-nav]').forEach(link => link.classList.toggle('is-active', section === 'trends' && link.dataset.trendNav === slug));
+  document.querySelectorAll('[data-template-nav]').forEach(link => link.classList.toggle('is-active', section === 'templates' && link.dataset.templateNav === slug));
 }
 
-/* 템플릿 저장공간 스크롤스파이 — 뷰포트 상단 28% 지점을 지나는 카드가 '현재 템플릿' */
-function updateTemplateCrumb() {
-  if (currentRoute !== 'templates') return;
-  const line = window.innerHeight * 0.28;
-  let current = null;
-  document.querySelectorAll('.tpl-card').forEach(c => {
-    const r = c.getBoundingClientRect();
-    if (r.top <= line && r.bottom >= line) current = c;
-  });
-  const t = current ? STORE.byId[current.dataset.tplId] : null;
-  setCrumb(t ? t.title : null);
+function showView(id) {
+  document.querySelectorAll('.view').forEach(view => view.classList.remove('is-active'));
+  document.getElementById(id)?.classList.add('is-active');
 }
-let crumbTick = false;
-window.addEventListener('scroll', () => {
-  if (crumbTick) return;
-  crumbTick = true;
-  requestAnimationFrame(() => { crumbTick = false; updateTemplateCrumb(); });
-}, { passive: true });
 
 function route() {
-  let key = location.hash.replace(/^#\/?/, '').trim();
-  if (!key || !VIEWS[key]) key = 'home';
-  const v = VIEWS[key];
-  currentRoute = key;
-  document.querySelectorAll('.view').forEach(el => el.classList.remove('is-route-active'));
-  const el = document.getElementById(v.el);
-  if (el) el.classList.add('is-route-active');
-  setCrumb(null);
-  highlightSidebar(v.section);
-  if (key === 'templates') renderTemplates();
-  try { window.scrollTo(0, 0); } catch (e) {}
-  if (key === 'templates') updateTemplateCrumb();
+  const { section, slug } = parsedRoute();
+  let leaf = '';
+  let title = '숏폼 연구소';
+  let validSection = section;
+
+  if (section === 'home') {
+    showView('view-home');
+  } else if (section === 'trends' && !slug) {
+    showView('view-trends');
+    title = '트렌드 · 숏폼 연구소';
+  } else if (section === 'trends' && STORE.trendBySlug[slug]) {
+    const item = STORE.trendBySlug[slug];
+    renderTrendDetail(item);
+    showView('view-trend-detail');
+    leaf = item.name;
+    title = `${item.name} 트렌드 · 숏폼 연구소`;
+  } else if (section === 'templates' && !slug) {
+    renderTemplateLibrary();
+    showView('view-templates');
+    title = '템플릿 · 숏폼 연구소';
+  } else if (section === 'templates' && STORE.templateBySlug[slug]) {
+    const item = STORE.templateBySlug[slug];
+    renderTemplateDetail(item);
+    showView('view-template-detail');
+    leaf = item.title;
+    title = `${item.title} · 숏폼 연구소`;
+  } else if (section === 'guide') {
+    showView('view-guide');
+    title = '사용법 · 숏폼 연구소';
+  } else {
+    showView('view-not-found');
+    validSection = '';
+    title = '페이지를 찾지 못했습니다 · 숏폼 연구소';
+  }
+
+  document.getElementById('breadcrumb').innerHTML = breadcrumbHTML(validSection, leaf);
+  document.title = title;
+  highlightNavigation(validSection, slug);
+  closeSidebarMobile();
+  window.scrollTo({ top: 0, behavior: 'instant' });
 }
+
+/* Events */
+document.addEventListener('click', async event => {
+  const promptHead = event.target.closest('.prompt-head');
+  if (promptHead) {
+    const item = promptHead.closest('.prompt-item');
+    const open = item.classList.toggle('is-open');
+    promptHead.setAttribute('aria-expanded', String(open));
+    return;
+  }
+
+  const promptCopy = event.target.closest('[data-copy-prompt]');
+  if (promptCopy) {
+    const text = promptCopy.closest('.prompt-content')?.querySelector('.prompt-text')?.textContent || '';
+    const success = await copyText(text);
+    if (success) {
+      promptCopy.classList.add('is-copied');
+      promptCopy.querySelector('span').textContent = '복사됨';
+      setTimeout(() => { promptCopy.classList.remove('is-copied'); promptCopy.querySelector('span').textContent = '프롬프트 복사'; }, 1300);
+    }
+    showToast(success ? '프롬프트를 복사했어요' : '복사하지 못했어요', success);
+    return;
+  }
+
+  const allCopy = event.target.closest('[data-copy-all]');
+  if (allCopy) {
+    const item = STORE.templateBySlug[allCopy.dataset.copyAll];
+    const success = item ? await copyText(allPromptsText(item)) : false;
+    showToast(success ? '전체 프롬프트를 복사했어요' : '복사하지 못했어요', success);
+    return;
+  }
+
+  const blueprintToggle = event.target.closest('[data-toggle-blueprint]');
+  if (blueprintToggle) {
+    const panel = blueprintToggle.closest('.blueprint-panel');
+    const open = panel.classList.toggle('is-open');
+    blueprintToggle.textContent = open ? '접기' : '전문 보기';
+    return;
+  }
+
+  const blueprintCopy = event.target.closest('[data-copy-blueprint]');
+  if (blueprintCopy) {
+    const item = STORE.templateBySlug[blueprintCopy.dataset.copyBlueprint];
+    const success = item?.blueprint?.text ? await copyText(item.blueprint.text) : false;
+    showToast(success ? '재현 블루프린트를 복사했어요' : '복사하지 못했어요', success);
+    return;
+  }
+
+  const filter = event.target.closest('[data-filter]');
+  if (filter) {
+    activeFilter = filter.dataset.filter;
+    buildFilters();
+    renderTemplateGrid();
+    return;
+  }
+
+  if (event.target.closest('a[href^="#/"]')) closeSidebarMobile();
+});
+
+document.addEventListener('input', event => {
+  if (event.target.id === 'template-search') {
+    searchQuery = event.target.value.trim();
+    renderTemplateGrid();
+  }
+});
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeSidebar();
+});
+
 window.addEventListener('hashchange', route);
 
-/* ============ INIT ============ */
 async function init() {
+  initTheme();
   try {
     await loadData();
-    buildSidebarArchetypes();
-    buildChips();
-  } catch (err) {
-    console.error('[숏폼 연구소] templates.json 로드 실패:', err);
-    const list = document.getElementById('tpl-list');
-    if (list) list.innerHTML = `
-      <div class="empty">
-        <div class="empty-ico">⚠️</div>
-        <h3>템플릿을 불러오지 못했어요</h3>
-        <p>로컬 파일을 직접 열면 브라우저 보안 정책으로 templates.json 로드가 막힐 수 있어요.<br>간이 서버(예: <code>npx serve</code> 또는 <code>python -m http.server</code>)로 열어 주세요.</p>
-      </div>`;
+    buildSidebar();
+    renderTrendCards();
+    renderTemplateLibrary();
+    route();
+  } catch (error) {
+    console.error('[숏폼 연구소]', error);
+    document.querySelector('.main').innerHTML = `
+      <section class="view is-active"><div class="empty-state"><span>LOAD ERROR</span><h1>콘텐츠를 불러오지 못했어요</h1><p>로컬 서버로 열었는지 확인해 주세요.</p></div></section>`;
   }
-  route();
 }
 
 if (document.readyState === 'loading') {
-  window.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('DOMContentLoaded', init);
 } else {
   init();
 }
