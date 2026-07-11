@@ -118,10 +118,9 @@ function buildSidebar() {
 /* Trend pages */
 function renderTrendCards() {
   const target = document.getElementById('trend-grid');
-  target.innerHTML = STORE.trends.map((item, index) => `
+  target.innerHTML = STORE.trends.map(item => `
     <a class="trend-card" href="#/trends/${esc(item.slug)}">
       <span class="platform-mark ${platformClass(item.slug)}">${esc(item.shortName)}</span>
-      <span class="card-index">0${index + 1} / 03</span>
       <h2>${esc(item.name)}</h2>
       <span class="platform-tagline">${esc(item.tagline)}</span>
       <p>${esc(item.summary)}</p>
@@ -144,7 +143,7 @@ function renderTrendDetail(item) {
   ).join('');
   target.innerHTML = `
     <a class="back-link" href="#/trends">${icon('back')} 트렌드 전체</a>
-    <div class="trend-detail-hero" style="--detail-color:${esc(item.accent)}">
+    <div class="trend-detail-hero">
       <div>
         <h1>${esc(item.name)}</h1>
         <p>${esc(item.summary)}</p>
@@ -246,37 +245,25 @@ function profileList(items) {
   return `<ul class="profile-list">${(items || []).map(item => `<li>${esc(item)}</li>`).join('')}</ul>`;
 }
 
-/* 프롬프트 제작 가이드 — 변수 입력 필드 정의.
-   사용자가 입력한 값이 최종 프롬프트의 해당 변수 줄에 실시간으로 반영된다. */
-const BUILDER_FIELDS = [
-  { key: 'product', label: '제품·서비스 또는 모델명', placeholder: '예: 피카소 225 롱 블러셔 브러쉬', required: true },
-  { key: 'target', label: '핵심 타깃', placeholder: '예: 발색 조절이 어려운 20대 메이크업 입문자' },
-  { key: 'problem', label: '타깃이 겪는 문제', placeholder: '예: 도구를 잘못 골라 발색이 뭉치고 과해짐' },
-  { key: 'benefit', label: '가장 중요한 효익', placeholder: '예: 한 번에 맑고 자연스러운 발색' },
-  { key: 'proof', label: '효익을 증명할 근거·수치·장면', placeholder: '예: 팔레트 스와치, 전후 비교, 5g 초경량' },
-  { key: 'tone', label: '브랜드 말투', placeholder: '친근한 존댓말 / 전문가형 / 솔직한 UGC' },
-  { key: 'must', label: '반드시 포함할 정보', placeholder: '예: 공식몰 단독 구성, 가격대, 이벤트 기간' },
-  { key: 'cta', label: 'CTA', placeholder: '예: 프로필 링크에서 체험분 신청하세요' },
-  { key: 'length', label: '목표 길이', placeholder: '예: 30~45초' },
-];
+/* 프롬프트 제작 가이드 — 영상 유형마다 필요한 요소가 다르므로,
+   질문(필드) 목록은 templates.json의 builder.fields 가 정본이다. */
+function builderFields(item) {
+  return item.builder?.fields || [];
+}
 
 function blueprintPrompt(item, values = {}) {
   const reference = item.reference || {};
   const sourceBlueprint = item.blueprint?.text || '';
   const v = key => String(values[key] || '').trim();
+  const varLines = builderFields(item)
+    .map(field => `- [${field.var || field.question}]: ${v(field.key)}`)
+    .join('\n');
   return `# 역할
 당신은 숏폼 광고 전략가, 카피라이터, 촬영 감독, 편집 감독을 겸하는 제작 책임자입니다. 아래 기준 영상의 성공 구조를 분석 설명하는 데 그치지 말고, 교체 변수를 반영한 촬영 가능한 완성본을 만들어 주세요.
 
 # 사용자가 교체할 변수
-- [제품·서비스 또는 모델명]: ${v('product')}
-- [핵심 타깃]: ${v('target')}
-- [타깃이 겪는 문제]: ${v('problem')}
-- [가장 중요한 효익]: ${v('benefit')}
-- [효익을 증명할 근거·수치·장면]: ${v('proof')}
-- [브랜드 말투]: ${v('tone') || '친근한 존댓말 / 전문가형 / 솔직한 UGC 중 선택'}
-- [반드시 포함할 정보]: ${v('must')}
-- [CTA]: ${v('cta')}
-- [목표 길이]: ${v('length') || reference.length || '30~45초'}
+${varLines}
+- [목표 길이]: ${reference.length || '30~45초'}
 
 입력하지 않은 변수는 제품군과 타깃에 맞게 합리적으로 제안하되, 추정한 내용은 '제안'이라고 표시하세요. 기존 기준 영상의 브랜드명, 인물명, 고유 문장을 그대로 재사용하지 마세요.
 
@@ -364,34 +351,74 @@ function reportHTML(item) {
     </section>`;
 }
 
-function builderHTML(item) {
-  if (!item.blueprint?.text) return '';
-  const reference = item.reference || {};
-  const fields = BUILDER_FIELDS.map(field => `
-    <label class="builder-field">
-      <span>${esc(field.label)}${field.required ? ' <em>*</em>' : ''}</span>
-      <input type="text" data-builder-key="${esc(field.key)}" placeholder="${esc(field.key === 'length' ? `예: ${reference.length || '30~45초'}` : field.placeholder)}" autocomplete="off">
-    </label>`).join('');
+function builderFieldHTML(field) {
+  if (field.type === 'chips') {
+    const chips = (field.options || []).map(option =>
+      `<button class="builder-chip" type="button" data-chip-value="${esc(option)}">${esc(option)}</button>`
+    ).join('');
+    return `
+      <div class="builder-field" data-builder-key="${esc(field.key)}" data-chip-group data-chip-multi="${field.multi ? '1' : ''}">
+        <span class="builder-question">${esc(field.question)}${field.required ? ' <em>*</em>' : ''}</span>
+        <div class="builder-chips">${chips}</div>
+      </div>`;
+  }
   return `
-    <section class="analysis-section">
+    <label class="builder-field">
+      <span class="builder-question">${esc(field.question)}${field.required ? ' <em>*</em>' : ''}</span>
+      <input type="text" data-builder-key="${esc(field.key)}" placeholder="${esc(field.placeholder || '')}" autocomplete="off">
+    </label>`;
+}
+
+function builderHTML(item) {
+  const fields = builderFields(item);
+  if (!item.blueprint?.text || !fields.length) return '';
+  return `
+    <section class="analysis-section" id="builder-section">
       <div class="analysis-heading">
-        <div><span>프롬프트 제작 가이드</span><h2>변수를 입력하면 최종 프롬프트가 완성됩니다</h2></div>
-        <p>입력한 값이 아래 최종 프롬프트에 실시간으로 반영됩니다. 비워 둔 변수는 AI가 맥락에 맞게 '제안'으로 채웁니다.</p>
+        <div><span>프롬프트 제작 가이드</span><h2>몇 가지만 답하면 프롬프트가 완성됩니다</h2></div>
+        <p>영상 유형마다 필요한 요소가 다릅니다. 이 영상 구조에 맞는 질문에 답한 뒤 프롬프트 제작하기를 누르면, 복사해서 AI에 바로 전달할 수 있는 상세 프롬프트가 만들어집니다.</p>
       </div>
       <div class="builder" data-builder="${esc(item.slug)}">
-        <form class="builder-form" autocomplete="off" onsubmit="return false">${fields}</form>
-        <article class="builder-output-panel">
+        <form class="builder-form" autocomplete="off" onsubmit="return false">
+          ${fields.map(builderFieldHTML).join('')}
+          <button class="button button-primary builder-generate" type="button" data-generate="${esc(item.slug)}">프롬프트 제작하기</button>
+          <p class="builder-note">비워 둔 항목은 AI가 상품과 타겟에 맞게 '제안'으로 채웁니다.</p>
+        </form>
+        <article class="builder-output-panel is-empty" id="builder-result">
           <div class="builder-output-head">
-            <div><span>최종 프롬프트 · 자동 작성</span><b id="builder-status">변수를 입력하면 즉시 반영됩니다</b></div>
-            <button class="copy-button" type="button" data-copy-blueprint="${esc(item.slug)}">${icon('copy')}<span>최종 프롬프트 복사</span></button>
+            <div><span>최종 프롬프트</span><b id="builder-status">질문에 답하고 프롬프트 제작하기를 눌러 주세요</b></div>
+            <button class="copy-button" type="button" data-copy-blueprint="${esc(item.slug)}" disabled>${icon('copy')}<span>복사</span></button>
           </div>
-          <pre class="builder-output" id="builder-output">${esc(blueprintPrompt(item))}</pre>
+          <pre class="builder-output" id="builder-output">아직 제작된 프롬프트가 없습니다.
+왼쪽 질문에 답한 뒤 [프롬프트 제작하기]를 누르면
+대본·장면표·편집 지시가 포함된 상세 프롬프트가 여기에 나타납니다.</pre>
         </article>
       </div>
     </section>`;
 }
 
+/* 영상 제작의 흐름 — 기준 영상의 단계별 제작 순서 (templates.json flow) */
+function flowHTML(item) {
+  const flow = item.flow || [];
+  if (!flow.length) return '';
+  return `
+    <section class="dossier-section">
+      <h3>영상 제작의 흐름</h3>
+      <ol class="flow-list">
+        ${flow.map((step, index) => `
+          <li>
+            <span class="flow-num">${index + 1}</span>
+            <div class="flow-body">
+              <b>${esc(step.label)}</b>
+              <p>${esc(step.desc)}${step.note ? ` <small>· ${esc(step.note)}</small>` : ''}</p>
+            </div>
+          </li>`).join('')}
+      </ol>
+    </section>`;
+}
+
 function renderTemplateDetail(item) {
+  builderGenerated = false;
   const target = document.getElementById('view-template-detail');
   const index = STORE.templates.indexOf(item);
   const previous = STORE.templates[index - 1];
@@ -412,7 +439,7 @@ function renderTemplateDetail(item) {
         <h1>${esc(item.title)}</h1>
         <p>${esc(item.summary)}</p>
       </div>
-      <button class="button button-primary profile-copyall" type="button" data-copy-blueprint="${esc(item.slug)}">${icon('copy')} 최종 프롬프트 복사</button>
+      <button class="button button-primary profile-copyall" type="button" data-scroll-builder>프롬프트 제작하기</button>
     </header>
     <article class="video-profile">
       <div class="profile-video-column">
@@ -428,13 +455,10 @@ function renderTemplateDetail(item) {
         <div class="profile-facts">
           <div class="profile-fact"><span>플랫폼</span><b>${esc(reference.platform)}</b></div>
           <div class="profile-fact"><span>영상 길이</span><b>${esc(reference.length)}</b></div>
-          <div class="profile-fact"><span>레퍼런스</span><b>${esc(reference.creator || '기준 영상 직접 지정')}</b></div>
-          <div class="profile-fact"><span>제작 자료</span><b>분석 리포트 5항목 · 제작 프롬프트 1개</b></div>
+          <div class="profile-fact"><span>판매상품</span><b>${esc(item.product || '-')}</b></div>
+          <div class="profile-fact"><span>제작 난이도</span><b>${esc(item.difficulty || '-')}</b></div>
         </div>
-        <section class="dossier-section">
-          <h3>이 영상 프로필이 필요한 순간</h3>
-          ${profileList(item.bestFor)}
-        </section>
+        ${flowHTML(item)}
         <section class="dossier-section dossier-columns">
           <div><h3>강점</h3>${profileList(item.pros)}</div>
           <div><h3>주의할 점</h3>${profileList(item.cons)}</div>
@@ -551,34 +575,77 @@ function route() {
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
-/* Builder — 입력 변수 수집 + 최종 프롬프트 실시간 갱신 */
+/* Builder — 답변 수집(텍스트 + 칩) → [프롬프트 제작하기]로 최종 프롬프트 생성 */
+let builderGenerated = false;
+
 function collectBuilderValues() {
   const values = {};
-  document.querySelectorAll('[data-builder-key]').forEach(input => {
-    values[input.dataset.builderKey] = input.value.trim();
+  document.querySelectorAll('[data-builder-key]').forEach(node => {
+    const key = node.dataset.builderKey;
+    if (node.hasAttribute('data-chip-group')) {
+      const picked = [...node.querySelectorAll('.builder-chip.is-on')].map(chip => chip.dataset.chipValue);
+      values[key] = picked.join(', ');
+    } else {
+      values[key] = node.value.trim();
+    }
   });
   return values;
 }
 
-function updateBuilderOutput() {
+function generateBuilderOutput({ silent = false } = {}) {
   const wrap = document.querySelector('[data-builder]');
   if (!wrap) return;
   const item = STORE.templateBySlug[wrap.dataset.builder];
   if (!item) return;
   const values = collectBuilderValues();
   const output = document.getElementById('builder-output');
+  const result = document.getElementById('builder-result');
+  const copyButton = result?.querySelector('[data-copy-blueprint]');
   if (output) output.textContent = blueprintPrompt(item, values);
+  if (result) result.classList.remove('is-empty');
+  if (copyButton) copyButton.disabled = false;
+  builderGenerated = true;
   const filled = Object.values(values).filter(Boolean).length;
   const status = document.getElementById('builder-status');
-  if (status) status.textContent = filled
-    ? `입력한 변수 ${filled}개가 반영됐습니다 · 비워 둔 변수는 AI가 제안으로 채웁니다`
-    : '변수를 입력하면 즉시 반영됩니다';
+  if (status) status.textContent = `답변 ${filled}개 반영 완료 · 복사해서 AI에 바로 전달하세요`;
+  if (!silent) {
+    showToast('프롬프트가 완성됐어요 — 복사해서 AI에 붙여넣으세요');
+    result?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
 }
 
 /* Events */
 document.addEventListener('click', async event => {
+  // 칩(중복/단일 선택) 토글
+  const chip = event.target.closest('.builder-chip');
+  if (chip) {
+    const group = chip.closest('[data-chip-group]');
+    const multi = group?.dataset.chipMulti === '1';
+    if (!multi) {
+      group.querySelectorAll('.builder-chip.is-on').forEach(other => { if (other !== chip) other.classList.remove('is-on'); });
+    }
+    chip.classList.toggle('is-on');
+    if (builderGenerated) generateBuilderOutput({ silent: true });
+    return;
+  }
+
+  // [프롬프트 제작하기]
+  const generate = event.target.closest('[data-generate]');
+  if (generate) {
+    generateBuilderOutput();
+    return;
+  }
+
+  // 상단 버튼 — 제작 가이드로 이동
+  const scrollToBuilder = event.target.closest('[data-scroll-builder]');
+  if (scrollToBuilder) {
+    document.getElementById('builder-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
   const blueprintCopy = event.target.closest('[data-copy-blueprint]');
   if (blueprintCopy) {
+    if (!builderGenerated) generateBuilderOutput({ silent: true });
     const item = STORE.templateBySlug[blueprintCopy.dataset.copyBlueprint];
     const success = item?.blueprint?.text ? await copyText(blueprintPrompt(item, collectBuilderValues())) : false;
     showToast(success ? '최종 프롬프트를 복사했어요' : '복사하지 못했어요', success);
@@ -598,7 +665,8 @@ document.addEventListener('click', async event => {
 
 document.addEventListener('input', event => {
   if (event.target.matches('[data-builder-key]')) {
-    updateBuilderOutput();
+    // 이미 제작된 프롬프트가 있으면 입력에 따라 조용히 갱신
+    if (builderGenerated) generateBuilderOutput({ silent: true });
     return;
   }
   if (event.target.id === 'template-search') {

@@ -93,6 +93,23 @@ for (const [i, t] of (data.templates || []).entries()) {
   // 용어 정책: '해부' 금지 → '분석'
   if (JSON.stringify(t).includes('해부')) err(`${at}: '해부' 단어 사용 금지 — '분석'으로 치환`);
 
+  // product(판매상품) · difficulty(제작 난이도) · flow(영상 제작의 흐름)
+  if (!isStr(t.product)) warn(`${at}: product(판매상품) 없음`);
+  if (!isStr(t.difficulty)) warn(`${at}: difficulty(제작 난이도) 없음`);
+  if (!isArr(t.flow)) warn(`${at}: flow(영상 제작의 흐름) 없음`);
+  else for (const [j, s] of t.flow.entries()) {
+    if (!isStr(s?.label) || !isStr(s?.desc)) err(`${at}.flow[${j}]: label/desc 누락`);
+  }
+
+  // builder(프롬프트 제작 가이드) — 영상 유형별 질문 필드
+  if (!t.builder || !isArr(t.builder.fields)) warn(`${at}: builder.fields 없음 — 프롬프트 제작 가이드가 비어 보임`);
+  else for (const [j, f] of t.builder.fields.entries()) {
+    const fa = `${at}.builder.fields[${j}]`;
+    if (!isStr(f?.key) || !isStr(f?.question)) err(`${fa}: key/question 누락`);
+    if (f?.type === 'chips' && !isArr(f.options)) err(`${fa}: chips 타입인데 options 없음`);
+    if (!isStr(f?.var)) warn(`${fa}: var(프롬프트 변수 라벨) 없음 — question이 대신 사용됨`);
+  }
+
   // blueprint (재현 블루프린트 — Higgsfield 장면 분석 기반, 권장)
   if (!t.blueprint) warn(`${at}: blueprint 없음 — 기준 영상을 힉스필드로 분석해 재현 블루프린트를 넣는 것을 권장 (docs/video-analysis.md)`);
   else {

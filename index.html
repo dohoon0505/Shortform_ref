@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="플랫폼 트렌드와 바로 제작에 쓰는 숏폼 재현 블루프린트를 탐색하는 숏폼 연구소.">
-  <title>숏폼 연구소</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%234F46E5'/%3E%3Cpath d='M24 18v28l24-14-24-14z' fill='white'/%3E%3C/svg%3E">
+  <meta name="description" content="매체별·상품별·유형별 VA를 분석해 연구일지를 작성하는 숏폼광고 영상제작 연구소. 유튜브 숏츠·인스타 릴스·틱톡 기반 KPI·ROAS 연구.">
+  <title>숏폼광고 영상제작 연구소</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23E35F83'/%3E%3Cpath d='M24 18v28l24-14-24-14z' fill='white'/%3E%3C/svg%3E">
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/main.css?v=1.6.0">
+  <link rel="stylesheet" href="assets/css/main.css?v=1.7.0">
 </head>
 <body data-theme="light">
   <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -36,12 +36,11 @@
   <aside class="sidebar" id="sidebar" aria-label="주요 탐색">
     <a class="sidebar-brand" href="#/home" onclick="closeSidebarMobile()">
       <span class="brand-mark" aria-hidden="true"><img src="assets/images/shortform-profile.svg" alt=""></span>
-      <span class="brand-copy"><b>숏폼 연구소</b><small>Shortform field notes</small></span>
+      <span class="brand-copy"><b>숏폼 연구소</b><small>숏폼광고 영상제작 연구일지</small></span>
     </a>
 
     <nav class="sidebar-nav">
       <div class="nav-section">
-        <p class="nav-label">Workspace</p>
         <a class="nav-link" href="#/home" data-nav="home">
           <svg><use href="#i-home"/></svg><span>홈</span>
         </a>
@@ -62,7 +61,6 @@
       </div>
 
       <div class="nav-section nav-section-guide">
-        <p class="nav-label">Guide</p>
         <a class="nav-link" href="#/guide" data-nav="guide">
           <svg><use href="#i-guide"/></svg><span>사용법</span>
         </a>
@@ -80,42 +78,46 @@
   <div class="app-shell">
     <header class="topbar">
       <div class="breadcrumb" id="breadcrumb"><span>숏폼 연구소</span></div>
-      <span class="topbar-status"><span class="status-dot" aria-hidden="true"></span>2026 트렌드 노트</span>
     </header>
 
     <main class="main" id="main">
       <section class="view" id="view-home" aria-labelledby="home-title">
         <div class="home-hero">
+          <div class="home-badges" aria-label="연구 매체">
+            <span>유튜브 숏츠</span><span>인스타 릴스</span><span>틱톡</span>
+          </div>
           <div class="hero-copy">
-            
-            <h1 id="home-title">감으로 넘기던 숏폼을<br><em>근거로 설계하는 곳.</em></h1>
-            <p>플랫폼의 시청 문법을 읽고, 잘된 영상의 구조를 템플릿으로 분석하세요. 트렌드에서 방향을 잡고 템플릿에서 바로 제작으로 이어집니다.</p>
+            <h1 id="home-title">숏폼광고 영상제작 연구소</h1>
+            <p>매체별·상품별·유형별 <b>VA(Video Ad)를 분석해 연구일지를 작성</b>하는 연구소입니다. 숏폼의 대표 매체인 유튜브 숏츠, 인스타 릴스, 틱톡 — 세 매체에서 사용되는 <b>모바일 피드형 동영상</b>을 매개체로, <b>KPI 달성과 높은 ROAS 확보</b>를 위한 연구를 기반으로 합니다.</p>
+            <div class="hero-goal">
+              <p>조회수가 많고 반응이 폭발적인 영상을 그대로 복제하는 것이 아니라, <b>각각의 요소를 부분적으로 끌어와 완전히 새로운 VA 패러다임을 형성</b>하는 것을 목표로 합니다.</p>
+            </div>
             <div class="hero-actions">
               <a class="button button-primary" href="#/trends">플랫폼 트렌드 보기 <svg><use href="#i-arrow"/></svg></a>
-              <a class="button button-secondary" href="#/templates">템플릿 둘러보기</a>
+              <a class="button button-secondary" href="#/templates">연구일지 둘러보기</a>
             </div>
-          </div>
-          <div class="hero-visual" aria-hidden="true">
-            <div class="signal-card signal-card-a"><span>HOOK</span><b>0—3s</b><small>시선을 멈추는 구간</small></div>
-            <div class="phone-frame"><div class="phone-screen"><span class="play-disc"><svg><use href="#i-play"/></svg></span><span class="screen-line"></span><span class="screen-line"></span><span class="screen-line"></span></div></div>
-            <div class="signal-card signal-card-b"><span>RETENTION</span><b>72%</b><small>구조로 지키는 관심</small></div>
+            <div class="hero-stats">
+              <div><b>3</b><span>연구 매체</span></div>
+              <div><b id="home-template-count">5</b><span>분석 연구일지</span></div>
+              <div><b>81</b><span>분석 장면</span></div>
+            </div>
           </div>
         </div>
 
         <div class="section-heading">
           <div><span class="section-kicker">시작하기</span><h2>두 갈래로 시작하세요</h2></div>
-          <p>먼저 플랫폼의 문법을 이해하거나, 바로 영상 구조를 분석할 수 있습니다.</p>
+          <p>먼저 매체의 시청 문법을 이해하거나, 바로 기준 영상의 구조를 분석할 수 있습니다.</p>
         </div>
         <div class="entry-grid">
           <a class="entry-card entry-trend" href="#/trends">
-            <div class="entry-number">01</div><div class="entry-icon"><svg><use href="#i-trend"/></svg></div>
-            <h3>플랫폼 트렌드</h3><p>Shorts·Reels·TikTok의 성격, 시청자 행동, 효과적인 광고 포맷을 비교합니다.</p>
-            <span>3개 플랫폼 읽기 <svg><use href="#i-arrow"/></svg></span>
+            <div class="entry-icon"><svg><use href="#i-trend"/></svg></div>
+            <h3>플랫폼 트렌드</h3><p>숏츠·릴스·틱톡의 성격, 핵심 시청자, 효과적인 광고 영상 공식을 비교합니다.</p>
+            <span>3개 매체 읽기 <svg><use href="#i-arrow"/></svg></span>
           </a>
           <a class="entry-card entry-template" href="#/templates">
-            <div class="entry-number">02</div><div class="entry-icon"><svg><use href="#i-library"/></svg></div>
-            <h3>재현 템플릿</h3><p>후킹·스토리·정보·UGC·밈 유형별 블루프린트로 기준 영상의 제작 문법을 재현합니다.</p>
-            <span><b id="home-template-count">0</b>개 템플릿 열기 <svg><use href="#i-arrow"/></svg></span>
+            <div class="entry-icon"><svg><use href="#i-library"/></svg></div>
+            <h3>분석 연구일지</h3><p>기준 영상의 분석 리포트를 읽고, 질문에 답해 제작 프롬프트를 만듭니다.</p>
+            <span>연구일지 열기 <svg><use href="#i-arrow"/></svg></span>
           </a>
         </div>
       </section>
@@ -140,7 +142,7 @@
       <section class="view" id="view-templates" aria-labelledby="templates-title">
         <div class="page-intro page-intro-split">
           <div><h1 id="templates-title">템플릿</h1><p>필요한 유형을 고르면 별도의 상세 페이지에서 기준 영상과 영상 분석 리포트, 프롬프트 제작 가이드를 차분하게 살펴볼 수 있습니다.</p></div>
-          <div class="library-stat"><b id="library-count">0</b><span>CURATED<br>TEMPLATES</span></div>
+          <div class="library-stat"><b id="library-count">0</b><span>분석<br>연구일지</span></div>
         </div>
         <div class="template-toolbar">
           <label class="search-field"><svg><use href="#i-search"/></svg><input id="template-search" type="search" placeholder="제목이나 유형으로 검색" aria-label="템플릿 검색"></label>
@@ -169,6 +171,6 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="assets/js/main.js?v=1.6.0"></script>
+  <script src="assets/js/main.js?v=1.7.0"></script>
 </body>
 </html>
