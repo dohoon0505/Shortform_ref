@@ -78,6 +78,21 @@ for (const [i, t] of (data.templates || []).entries()) {
     else if (t[f].some((x) => !isStr(x))) err(`${at}.${f}: 빈 문자열 항목 포함`);
   }
 
+  // navLabel — 사이드바 nav-child에 표기하는 동영상 유형 짧은 표현 (예: 블러셔 문제제기 반전)
+  if (!isStr(t.navLabel)) warn(`${at}: navLabel 없음 — 사이드바에 제목이 대신 노출됨`);
+
+  // report — 영상 분석 리포트 5항목 (힉스필드 분석 기반 실제 내용)
+  const REPORT_KEYS = ['hook', 'structure', 'script', 'edit', 'quality'];
+  if (!t.report || typeof t.report !== 'object') warn(`${at}: report 없음 — 영상 분석 리포트 5항목 권장`);
+  else {
+    for (const k of REPORT_KEYS) {
+      if (!isArr(t.report[k])) err(`${at}.report.${k}: 배열이 비어 있거나 없음`);
+    }
+  }
+
+  // 용어 정책: '해부' 금지 → '분석'
+  if (JSON.stringify(t).includes('해부')) err(`${at}: '해부' 단어 사용 금지 — '분석'으로 치환`);
+
   // blueprint (재현 블루프린트 — Higgsfield 장면 분석 기반, 권장)
   if (!t.blueprint) warn(`${at}: blueprint 없음 — 기준 영상을 힉스필드로 분석해 재현 블루프린트를 넣는 것을 권장 (docs/video-analysis.md)`);
   else {

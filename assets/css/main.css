@@ -150,8 +150,6 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 @keyframes view-in { from { opacity: 0; transform: translateY(8px); } }
 
 /* Shared */
-.eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--brand); font-size: 14px; font-weight: 700; letter-spacing: 0; }
-.eyebrow-line { width: 18px; height: 2px; background: currentColor; }
 .button { min-height: 44px; padding: 10px 17px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 11px; text-decoration: none; border: 1px solid transparent; font-size: 13px; font-weight: 700; transition: transform .18s, background .18s, border-color .18s; }
 .button:hover { transform: translateY(-2px); }
 .button svg { width: 16px; height: 16px; }
@@ -242,7 +240,6 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 /* Trend detail */
 .trend-detail-hero { padding: 42px 46px; display: grid; grid-template-columns: 1fr auto; gap: 30px; border-radius: 26px; color: #fff; background: #171923; position: relative; overflow: hidden; }
 .trend-detail-hero::after { content: ""; position: absolute; right: -80px; bottom: -130px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, var(--detail-color, var(--brand)) 0, transparent 67%); opacity: .48; }
-.trend-detail-hero .eyebrow { color: rgba(255,255,255,.65); }
 .trend-detail-hero h1 { margin: 15px 0 12px; font-size: clamp(40px, 5vw, 60px); line-height: 1.08; letter-spacing: -.01em; }
 .trend-detail-hero p { max-width: 680px; color: rgba(255,255,255,.7); font-size: 16px; }
 .trend-detail-hero .platform-mark { z-index: 2; width: 78px; height: 78px; border-radius: 22px; font-size: 23px; }
@@ -306,7 +303,6 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 
 /* Template video profile detail */
 .template-profile-header { margin-bottom: 23px; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; }
-.template-profile-header .eyebrow { margin-bottom: 12px; }
 .template-profile-header h1 { font-size: clamp(36px, 4.5vw, 54px); line-height: 1.1; letter-spacing: -.01em; }
 .template-profile-header p { max-width: 620px; margin-top: 13px; color: var(--content-secondary); font-size: 16px; }
 .profile-copyall { flex: none; cursor: pointer; }
@@ -354,14 +350,26 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .copy-button:hover { opacity: .86; }
 .copy-button.is-copied { background: var(--p-green); }
 .copy-button svg { width: 14px; height: 14px; }
-.blueprint-panel { margin-top: 18px; padding: 30px; border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-border); }
-.blueprint-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
-.blueprint-head span { color: var(--brand); font-size: 13px; font-weight: 700; letter-spacing: 0; }
-.blueprint-head h3 { max-width: 720px; margin: 8px 0 6px; font-size: 21px; line-height: 1.45; letter-spacing: -.01em; }
-.blueprint-head p { color: var(--content-secondary); font-size: 15px; }
-.blueprint-body { display: block; margin-top: 24px; padding: 26px; white-space: pre-wrap; word-break: keep-all; border-radius: 14px; background: var(--surface-soft); color: var(--content-secondary); font: 400 15px/1.85 var(--font); }
-.blueprint-actions { display: flex; gap: 7px; }
-.blueprint-toggle { background: var(--surface); color: var(--content); border: 1px solid var(--border); }
+/* 영상 분석 리포트 — 다섯 항목 카드 */
+.report-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.report-card { padding: 28px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); }
+.report-card:last-child:nth-child(odd) { grid-column: 1/-1; }
+.report-card h3 { font-size: 17px; letter-spacing: -.01em; }
+
+/* 프롬프트 제작 가이드 — 변수 입력 → 최종 프롬프트 자동 작성 */
+.builder { display: grid; grid-template-columns: minmax(300px, 380px) 1fr; gap: 18px; align-items: start; }
+.builder-form { padding: 26px; display: flex; flex-direction: column; gap: 16px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); position: sticky; top: 76px; }
+.builder-field { display: flex; flex-direction: column; gap: 7px; }
+.builder-field span { color: var(--content-secondary); font-size: 13px; font-weight: 650; }
+.builder-field em { color: var(--p-coral); font-style: normal; }
+.builder-field input { min-height: 44px; padding: 10px 13px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-soft); color: var(--content); font-size: 14px; transition: border-color .15s, box-shadow .15s; }
+.builder-field input::placeholder { color: var(--content-tertiary); }
+.builder-field input:focus { outline: none; border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-soft); background: var(--surface); }
+.builder-output-panel { border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); overflow: hidden; }
+.builder-output-head { padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--border); }
+.builder-output-head span { display: block; color: var(--brand); font-size: 13px; font-weight: 700; }
+.builder-output-head b { display: block; margin-top: 5px; font-size: 14px; font-weight: 650; color: var(--content-secondary); }
+.builder-output { margin: 0; padding: 26px; max-height: 640px; overflow-y: auto; white-space: pre-wrap; word-break: keep-all; background: var(--surface-soft); color: var(--content-secondary); font: 400 14px/1.85 var(--font); }
 .template-next { margin-top: 42px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; gap: 18px; }
 .template-next a { min-height: 44px; max-width: 49%; text-decoration: none; color: var(--content-secondary); font-size: 13px; }
 .template-next a:last-child { text-align: right; margin-left: auto; }
@@ -448,7 +456,11 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
   .analysis-heading { align-items: flex-start; flex-direction: column; }
   .analysis-heading p { text-align: left; }
   .prompt-content { margin-left: 20px; }
-  .blueprint-head { flex-direction: column; }
+  .report-grid { grid-template-columns: 1fr; }
+  .builder { grid-template-columns: 1fr; }
+  .builder-form { position: static; }
+  .builder-output-head { align-items: flex-start; flex-direction: column; }
+  .builder-output-head .copy-button { width: 100%; justify-content: center; }
 }
 
 @media (max-width: 450px) {
@@ -463,8 +475,8 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
   .prompt-head { padding: 14px; gap: 11px; }
   .prompt-title small { max-width: 190px; }
   .prompt-content { margin: 0 14px 14px; padding: 16px; }
-  .blueprint-actions { width: 100%; }
-  .blueprint-actions .copy-button { flex: 1; justify-content: center; }
+  .report-card, .builder-form { padding: 22px 18px; }
+  .builder-output { padding: 18px 15px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
