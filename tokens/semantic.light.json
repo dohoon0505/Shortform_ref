@@ -1,0 +1,56 @@
+{
+  "$meta": {
+    "tier": 2,
+    "name": "Semantic Tokens · Light Theme",
+    "description": "UI가 실제로 참조하는 이름. 목적 기반. Dark와 토큰 이름이 동일합니다 — 다른 원시값을 가리킬 뿐.",
+    "prefix": "--sm-",
+    "theme": "light",
+    "version": "0.3.0",
+    "sourceHtml": "UIUX-DH-design-system.html#L69-L114"
+  },
+  "background": {
+    "default":  { "css": "--sm-background-default",  "ref": "--p-neutral-0",   "value": "#FFFFFF" },
+    "subtle":   { "css": "--sm-background-subtle",   "ref": "--p-neutral-10",  "value": "#F8F9FB" },
+    "muted":    { "css": "--sm-background-muted",    "ref": "--p-neutral-20",  "value": "#F1F3F7" },
+    "elevated": { "css": "--sm-background-elevated", "ref": "--p-neutral-0",   "value": "#FFFFFF" },
+    "inverse":  { "css": "--sm-background-inverse",  "ref": "--p-neutral-100", "value": "#0B0D12" }
+  },
+  "content": {
+    "primary":   { "css": "--sm-content-primary",   "ref": "--p-neutral-100", "value": "#0B0D12" },
+    "secondary": { "css": "--sm-content-secondary", "ref": "--p-neutral-70",  "value": "#5A5F6E" },
+    "tertiary":  { "css": "--sm-content-tertiary",  "ref": "--p-neutral-60",  "value": "#818797" },
+    "disabled":  { "css": "--sm-content-disabled",  "ref": "--p-neutral-50",  "value": "#B1B6C4" },
+    "inverse":   { "css": "--sm-content-inverse",   "ref": "--p-neutral-0",   "value": "#FFFFFF" },
+    "brand":     { "css": "--sm-content-brand",     "ref": "--p-indigo-500",  "value": "#4F46E5" },
+    "onBrand":   { "css": "--sm-content-onBrand",   "ref": "--p-neutral-0",   "value": "#FFFFFF" }
+  },
+  "border": {
+    "subtle":  { "css": "--sm-border-subtle",  "ref": "--p-neutral-30", "value": "#E6E9F0" },
+    "default": { "css": "--sm-border-default", "ref": "--p-neutral-40", "value": "#D4D8E2" },
+    "strong":  { "css": "--sm-border-strong",  "ref": "--p-neutral-80", "value": "#3C404B" },
+    "brand":   { "css": "--sm-border-brand",   "ref": "--p-indigo-500", "value": "#4F46E5" },
+    "focus":   { "css": "--sm-border-focus",   "ref": "--p-indigo-400", "value": "#7968EE" }
+  },
+  "surface": {
+    "default": { "css": "--sm-surface-default", "ref": "--p-neutral-0",  "value": "#FFFFFF" },
+    "raised":  { "css": "--sm-surface-raised",  "ref": "--p-neutral-0",  "value": "#FFFFFF" },
+    "sunken":  { "css": "--sm-surface-sunken",  "ref": "--p-neutral-10", "value": "#F8F9FB" }
+  },
+  "interactive": {
+    "brand": {
+      "default": { "css": "--sm-interactive-brand-default", "ref": "--p-indigo-500", "value": "#4F46E5" },
+      "hover":   { "css": "--sm-interactive-brand-hover",   "ref": "--p-indigo-600", "value": "#3D34C2" },
+      "active":  { "css": "--sm-interactive-brand-active",  "ref": "--p-indigo-700", "value": "#2E2896" },
+      "subtle":  { "css": "--sm-interactive-brand-subtle",  "ref": "--p-indigo-50",  "value": "#EEEDFD" }
+    }
+  },
+  "status": {
+    "success": { "css": "--sm-status-success", "ref": "--p-green-500", "value": "#16A34A" },
+    "warning": { "css": "--sm-status-warning", "ref": "--p-amber-500", "value": "#EAB700" },
+    "error":   { "css": "--sm-status-error",   "ref": "--p-red-500",   "value": "#EF4444" },
+    "info":    { "css": "--sm-status-info",    "ref": "--p-blue-500",  "value": "#2563EB" }
+  },
+  "signal": {
+    "highlight": { "css": "--sm-signal-highlight", "ref": "--p-amber-400", "value": "#FFD60A", "note": "한정적 강조(뱃지, 신규 표시)에만 사용." }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "../schemas/token.schema.json",
+  "$meta": {
+    "name": "Theme Map (Light / Dark pairs)",
+    "description": "시맨틱 토큰의 Light/Dark 매핑을 한 파일에. AI가 단일 토큰의 양쪽 값을 한 번의 read로 해결하도록 집약. 값의 정본은 여전히 semantic.light.json + semantic.dark.json — 이 파일은 조회 편의용 요약.",
+    "version": "0.5.0",
+    "source": {
+      "light": "tokens/semantic.light.json",
+      "dark":  "tokens/semantic.dark.json"
+    }
+  },
+  "background": {
+    "--sm-background-default":  { "light": "--p-neutral-0",   "dark": "--p-neutral-100", "lightValue": "#FFFFFF", "darkValue": "#0B0D12" },
+    "--sm-background-subtle":   { "light": "--p-neutral-10",  "dark": "--p-neutral-95",  "lightValue": "#F8F9FB", "darkValue": "#111319" },
+    "--sm-background-muted":    { "light": "--p-neutral-20",  "dark": "--p-neutral-90",  "lightValue": "#F1F3F7", "darkValue": "#1B1D24" },
+    "--sm-background-elevated": { "light": "--p-neutral-0",   "dark": "--p-neutral-90",  "lightValue": "#FFFFFF", "darkValue": "#1B1D24" },
+    "--sm-background-inverse":  { "light": "--p-neutral-100", "dark": "--p-neutral-0",   "lightValue": "#0B0D12", "darkValue": "#FFFFFF" }
+  },
+  "content": {
+    "--sm-content-primary":   { "light": "--p-neutral-100", "dark": "--p-neutral-0",   "lightValue": "#0B0D12", "darkValue": "#FFFFFF" },
+    "--sm-content-secondary": { "light": "--p-neutral-70",  "dark": "--p-neutral-40",  "lightValue": "#5A5F6E", "darkValue": "#D4D8E2" },
+    "--sm-content-tertiary":  { "light": "--p-neutral-60",  "dark": "--p-neutral-50",  "lightValue": "#818797", "darkValue": "#B1B6C4" },
+    "--sm-content-disabled":  { "light": "--p-neutral-50",  "dark": "--p-neutral-70",  "lightValue": "#B1B6C4", "darkValue": "#5A5F6E" },
+    "--sm-content-inverse":   { "light": "--p-neutral-0",   "dark": "--p-neutral-100", "lightValue": "#FFFFFF", "darkValue": "#0B0D12" },
+    "--sm-content-brand":     { "light": "--p-indigo-500",  "dark": "--p-indigo-300",  "lightValue": "#4F46E5", "darkValue": "#9A8CF2" },
+    "--sm-content-onBrand":   { "light": "--p-neutral-0",   "dark": "--p-neutral-0",   "lightValue": "#FFFFFF", "darkValue": "#FFFFFF" }
+  },
+  "border": {
+    "--sm-border-subtle":  { "light": "--p-neutral-30", "dark": "--p-neutral-85", "lightValue": "#E6E9F0", "darkValue": "#2A2D36" },
+    "--sm-border-default": { "light": "--p-neutral-40", "dark": "--p-neutral-80", "lightValue": "#D4D8E2", "darkValue": "#3C404B" },
+    "--sm-border-strong":  { "light": "--p-neutral-80", "dark": "--p-neutral-40", "lightValue": "#3C404B", "darkValue": "#D4D8E2" },
+    "--sm-border-brand":   { "light": "--p-indigo-500", "dark": "--p-indigo-400", "lightValue": "#4F46E5", "darkValue": "#7968EE" },
+    "--sm-border-focus":   { "light": "--p-indigo-400", "dark": "--p-indigo-300", "lightValue": "#7968EE", "darkValue": "#9A8CF2" }
+  },
+  "surface": {
+    "--sm-surface-default": { "light": "--p-neutral-0",  "dark": "--p-neutral-90", "lightValue": "#FFFFFF", "darkValue": "#1B1D24" },
+    "--sm-surface-raised":  { "light": "--p-neutral-0",  "dark": "--p-neutral-85", "lightValue": "#FFFFFF", "darkValue": "#2A2D36" },
+    "--sm-surface-sunken":  { "light": "--p-neutral-10", "dark": "--p-neutral-95", "lightValue": "#F8F9FB", "darkValue": "#111319" }
+  },
+  "interactive": {
+    "--sm-interactive-brand-default": { "light": "--p-indigo-500", "dark": "--p-indigo-400", "lightValue": "#4F46E5", "darkValue": "#7968EE" },
+    "--sm-interactive-brand-hover":   { "light": "--p-indigo-600", "dark": "--p-indigo-300", "lightValue": "#3D34C2", "darkValue": "#9A8CF2" },
+    "--sm-interactive-brand-active":  { "light": "--p-indigo-700", "dark": "--p-indigo-200", "lightValue": "#2E2896", "darkValue": "#BCB4F7" },
+    "--sm-interactive-brand-subtle":  { "light": "--p-indigo-50",  "dark": "rgba(121, 104, 238, 0.14)", "lightValue": "#EEEDFD", "darkValue": "rgba(121, 104, 238, 0.14)" }
+  },
+  "status": {
+    "--sm-status-success": { "light": "--p-green-500", "dark": "--p-green-400", "lightValue": "#16A34A", "darkValue": "#22C55E" },
+    "--sm-status-warning": { "light": "--p-amber-500", "dark": "--p-amber-400", "lightValue": "#EAB700", "darkValue": "#FFD60A" },
+    "--sm-status-error":   { "light": "--p-red-500",   "dark": "--p-red-400",   "lightValue": "#EF4444", "darkValue": "#F87171" },
+    "--sm-status-info":    { "light": "--p-blue-500",  "dark": "--p-blue-400",  "lightValue": "#2563EB", "darkValue": "#3B82F6" }
+  },
+  "signal": {
+    "--sm-signal-highlight": { "light": "--p-amber-400", "dark": "--p-amber-400", "lightValue": "#FFD60A", "darkValue": "#FFD60A", "note": "한정적 강조(뱃지, 신규 표시)에만 사용" }
+  }
+}

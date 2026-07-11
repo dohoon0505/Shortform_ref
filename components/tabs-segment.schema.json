@@ -1,0 +1,59 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "tabs",
+  "name": "Tabs · Segment",
+  "version": "0.2.0",
+  "category": "navigation",
+  "description": "Tabs는 콘텐츠 전환 (패널 교체), Segment는 뷰 전환 (같은 데이터의 다른 표시).",
+  "variants": [
+    {
+      "id": "tabs-underline",
+      "label": "Tabs · Underline",
+      "description": "가장 흔한 탭. 하단 밑줄로 활성 표시",
+      "html": "<div class=\"tabs-underline\">\n  <div class=\"tab is-active\">전체</div>\n  <div class=\"tab\">진행</div>\n  <div class=\"tab\">완료</div>\n</div>"
+    },
+    {
+      "id": "tabs-pill",
+      "label": "Tabs · Pill",
+      "description": "칩 형태 탭",
+      "html": "<div class=\"tabs-pill\">\n  <span class=\"tab-pill is-active\">전체 5</span>\n  <span class=\"tab-pill\">진행 2</span>\n</div>"
+    },
+    {
+      "id": "segment-2",
+      "label": "Segment · 2",
+      "description": "이원 선택 (월간/연간)",
+      "html": "<div class=\"segment\">\n  <div class=\"seg\">월간</div>\n  <div class=\"seg is-active\">연간</div>\n</div>",
+      "tokens": { "bg": "--sm-background-muted", "activeBg": "--sm-background-default" }
+    },
+    {
+      "id": "segment-3",
+      "label": "Segment · 3",
+      "html": "<div class=\"segment\">...</div>"
+    },
+    {
+      "id": "text-switch",
+      "label": "Text Switch",
+      "description": "밑줄·박스 없는 굵기만 차이 (헤더형)",
+      "html": "<div class=\"text-switch\">\n  <div class=\"ts-item is-active\">자사은행</div>\n  <div class=\"ts-item\">다른 금융</div>\n</div>"
+    }
+  ],
+  "states": ["rest", "hover", "active", "focus", "disabled"],
+  "tokens": {
+    "activeFg":       "--sm-content-primary",
+    "inactiveFg":     "--sm-content-tertiary",
+    "underline":      "--sm-interactive-brand-default",
+    "segmentBg":      "--sm-background-muted",
+    "segmentActive":  "--sm-background-default",
+    "segmentShadow":  "0 1px 3px rgba(0,0,0,0.06)"
+  },
+  "accessibility": {
+    "role": "tablist + tab + tabpanel (Tabs), radiogroup + radio (Segment)",
+    "keyboardSupport": ["Arrow Left/Right", "Home/End", "Tab (패널로 포커스 이동)"],
+    "ariaNotes": ["aria-selected, aria-controls=panelId, panel의 role=tabpanel"]
+  },
+  "whenToUse": ["Tabs: 여러 콘텐츠 영역 전환", "Segment: 같은 데이터의 뷰 전환 (리스트/카드, 월간/연간)"],
+  "whenNotToUse": ["4개 초과 세그먼트 → Tabs 또는 Select", "페이지 전환 → Top App Bar 또는 Drawer"],
+  "uxWriting": ["짧은 명사 (전체, 진행, 완료)", "숫자 병기 가능 (전체 5, 진행 2)"],
+  "usedInDemos": ["demo-signup", "demo-pricing", "demo-store", "demo-todo", "demo-booking", "demo-foodorder", "demo-shopping", "demo-banking"],
+  "relatedDocs": { "md": "components/tabs-segment.md", "sourceHtml": "index.html#tabs" }
+}

@@ -1,0 +1,56 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "list",
+  "name": "List Item",
+  "version": "0.2.0",
+  "category": "container",
+  "description": "리스트의 한 행. Leading(아이콘·아바타) + 본문(제목·설명) + Trailing(메타·chevron·체크) 3단 구조.",
+  "variants": [
+    {
+      "id": "single",
+      "label": "Single line",
+      "html": "<div class=\"list-item\">\n  <div class=\"list-body\"><div class=\"title\">설정</div></div>\n  <svg class=\"ico ico-sm trailing\"><use href=\"#i-chevron-right\"/></svg>\n</div>"
+    },
+    {
+      "id": "two-line",
+      "label": "Two line",
+      "html": "<div class=\"list-item\">\n  <div class=\"list-leading\"><svg class=\"ico\"><use href=\"#i-bell\"/></svg></div>\n  <div class=\"list-body\">\n    <div class=\"title\">알림</div>\n    <div class=\"sub\">3 new</div>\n  </div>\n  <svg class=\"ico ico-sm trailing\"><use href=\"#i-chevron-right\"/></svg>\n</div>"
+    },
+    {
+      "id": "avatar-row",
+      "label": "Avatar row",
+      "description": "아바타 + 이름 + 부가정보",
+      "html": "<div class=\"list-item\">\n  <div class=\"avatar sz-md\">DH</div>\n  <div class=\"list-body\"><div class=\"title\">김도훈</div><div class=\"sub\">2시간 전 · 디자인</div></div>\n</div>"
+    },
+    {
+      "id": "selectable",
+      "label": "Selectable",
+      "description": "체크박스/라디오 내장",
+      "html": "<label class=\"list-item list-selectable\">\n  <input type=\"checkbox\">\n  <div class=\"list-body\"><div class=\"title\">옵션</div></div>\n</label>"
+    }
+  ],
+  "states": ["rest", "hover", "active", "selected", "disabled"],
+  "subParts": {
+    "list-leading":  "좌측 아이콘/아바타 영역",
+    "list-body":     "제목·설명 영역",
+    "list-body .title": "제목",
+    "list-body .sub":   "보조 설명",
+    "list-trailing": "우측 메타 (chevron, badge, 스위치 등)"
+  },
+  "tokens": {
+    "bg":       "--sm-surface-default",
+    "hover":    "--sm-background-subtle",
+    "border":   "--sm-border-subtle",
+    "padding":  "var(--size-400) var(--size-500)"
+  },
+  "accessibility": {
+    "role": "listitem (부모 ul/ol 아래) 또는 button/link",
+    "keyboardSupport": ["Tab", "Enter (액션)"],
+    "minTouchTarget": 44
+  },
+  "whenToUse": ["설정 메뉴", "연락처 리스트", "메시지 미리보기", "옵션 선택"],
+  "whenNotToUse": ["카드 그룹 → Card", "긴 에디터블 폼 → Text Field"],
+  "uxWriting": ["제목은 명사 (알림, 결제 수단)", "sub는 메타 (시간·수량·상태)"],
+  "usedInDemos": ["demo-foodorder", "demo-mypage", "demo-chat", "demo-notify", "demo-banking"],
+  "relatedDocs": { "md": "components/list-item.md", "sourceHtml": "index.html#list" }
+}

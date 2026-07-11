@@ -1,0 +1,50 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "popover",
+  "name": "Popover · Tooltip",
+  "version": "0.3.0",
+  "category": "overlay",
+  "description": "Tooltip은 설명(hover/focus, 상호작용 없음), Popover는 상호작용 가능한 팝업(클릭 열림, 메뉴·폼 포함).",
+  "variants": [
+    {
+      "id": "tooltip",
+      "label": "Tooltip",
+      "description": "짧은 설명. hover/focus 시 표시",
+      "html": "<button class=\"btn btn-icon\" aria-describedby=\"tt1\"><svg class=\"ico\"><use href=\"#i-info\"/></svg></button>\n<div id=\"tt1\" role=\"tooltip\" class=\"tooltip\">더 알아보기</div>"
+    },
+    {
+      "id": "popover",
+      "label": "Popover",
+      "description": "클릭으로 열고 외부 클릭으로 닫힘",
+      "html": "<div class=\"popover\">\n  <div class=\"popover-header\">공유</div>\n  <ul class=\"action-list\"><li>링크 복사</li><li>이메일</li></ul>\n</div>"
+    },
+    {
+      "id": "date-picker",
+      "label": "Date Picker (Popover variant)",
+      "description": "달력 기반 날짜 선택",
+      "html": "<div class=\"popover popover-datepicker\">...</div>"
+    }
+  ],
+  "placements": ["top", "right", "bottom", "left", "top-start", "top-end", "bottom-start", "bottom-end"],
+  "states": ["closed", "opening", "open", "closing"],
+  "tokens": {
+    "bg":        "--sm-background-default",
+    "border":    "--sm-border-subtle",
+    "shadow":    "--elevation-4",
+    "radius":    "--radius-md"
+  },
+  "accessibility": {
+    "role": "tooltip (Tooltip) · dialog (Popover)",
+    "keyboardSupport": ["Esc (닫기)", "Tab (내부 포커스 이동 — Popover)"],
+    "ariaNotes": [
+      "Tooltip: aria-describedby (트리거에서 연결)",
+      "Popover: aria-haspopup=dialog, aria-expanded, aria-controls",
+      "Tooltip에 상호작용 요소 금지"
+    ]
+  },
+  "whenToUse": ["Tooltip: 아이콘·축약 설명", "Popover: 빠른 액션 메뉴, 옵션, 필터"],
+  "whenNotToUse": ["긴 폼 → Dialog 또는 별도 페이지", "모바일 주 액션 → Bottom Sheet"],
+  "uxWriting": ["Tooltip: 6자 이내 명사구", "Popover: 간결한 액션 리스트"],
+  "usedInDemos": ["demo-map"],
+  "relatedDocs": { "md": "components/popover-tooltip.md", "sourceHtml": "index.html#popover" }
+}

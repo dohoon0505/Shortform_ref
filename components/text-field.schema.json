@@ -1,0 +1,70 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "textfield",
+  "name": "Text Field",
+  "version": "0.2.0",
+  "category": "interactive",
+  "description": "텍스트 입력 필드. 레이블은 필드 위, 도움말은 아래, 에러는 즉시.",
+  "variants": [
+    {
+      "id": "default",
+      "label": "Default",
+      "html": "<div class=\"m-field\">\n  <label>이메일</label>\n  <input class=\"m-input\" type=\"email\" placeholder=\"you@example.com\">\n</div>"
+    },
+    {
+      "id": "affix",
+      "label": "Affix (prefix/suffix)",
+      "description": "좌·우에 심볼/아이콘 부착",
+      "html": "<div class=\"field field-affix\"><span class=\"affix\">@</span><input class=\"input\" type=\"text\"></div>"
+    },
+    {
+      "id": "amount",
+      "label": "Amount",
+      "description": "숫자 입력, 통화 심볼, tabular-nums",
+      "html": "<div class=\"field field-amount\"><input class=\"input\" inputmode=\"numeric\" style=\"font-variant-numeric:tabular-nums;\"><span class=\"affix\">원</span></div>"
+    },
+    {
+      "id": "search",
+      "label": "Search",
+      "description": "검색 아이콘 내장, 라운드 풀",
+      "html": "<div class=\"field field-search\"><svg class=\"ico ico-sm\"><use href=\"#i-search\"/></svg><input class=\"input\" placeholder=\"검색\"></div>"
+    },
+    {
+      "id": "textarea",
+      "label": "Textarea",
+      "description": "다행 입력",
+      "html": "<textarea class=\"m-input\" rows=\"4\"></textarea>"
+    }
+  ],
+  "states": ["rest", "hover", "focus", "filled", "disabled", "error"],
+  "tokens": {
+    "bg":          "--sm-background-default",
+    "border":      "--sm-border-default",
+    "borderFocus": "--sm-border-focus",
+    "borderError": "--sm-status-error",
+    "fg":          "--sm-content-primary",
+    "placeholder": "--sm-content-tertiary",
+    "radius":      "--radius-md"
+  },
+  "accessibility": {
+    "role": "textbox (기본)",
+    "keyboardSupport": ["Tab", "Shift+Tab"],
+    "minTouchTarget": 44,
+    "focusRing": "--sm-border-focus",
+    "ariaNotes": [
+      "label 연결: <label for=\"id\"> 또는 aria-label",
+      "에러 메시지: aria-describedby 연결, aria-invalid=true",
+      "필수 필드: required + aria-required=true"
+    ]
+  },
+  "whenToUse": ["사용자 입력 수집", "검색", "폼"],
+  "whenNotToUse": ["선택지가 유한하면 Select/Radio", "파일 업로드는 별도"],
+  "uxWriting": [
+    "Label: 한 단어 또는 짧은 명사구 (이메일, 전화번호)",
+    "Placeholder: 예시 형식 (you@example.com, 010-0000-0000)",
+    "Helper: 제약 조건 (8자 이상, 숫자·특수문자 포함)",
+    "Error: 해결 방법 제시 (\"이메일 형식이 아니에요\" + 올바른 예시)"
+  ],
+  "usedInDemos": ["demo-login", "demo-signup", "demo-store", "demo-booking", "demo-foodorder", "demo-map", "demo-chat"],
+  "relatedDocs": { "md": "components/text-field.md", "sourceHtml": "index.html#textfield" }
+}

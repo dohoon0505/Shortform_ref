@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uiux-dh.example/schemas/snippet.schema.json",
+  "title": "UIUX-DH Snippet Pattern",
+  "description": "자주 쓰이는 컴포넌트 조합 패턴. snippets/patterns.json의 엔트리 구조.",
+  "type": "object",
+  "required": ["id", "title", "html", "uses"],
+  "additionalProperties": false,
+  "properties": {
+    "id":          { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "title":       { "type": "string" },
+    "description": { "type": "string" },
+    "category":    { "enum": ["form", "card", "banner", "list", "dialog", "empty", "feedback", "nav"] },
+    "html":        { "type": "string", "description": "복사·붙여넣기 가능한 HTML. 여러 컴포넌트의 조합" },
+    "uses":        { "type": "array", "items": { "type": "string" }, "description": "포함된 컴포넌트 id 목록" },
+    "tokens":      { "type": "array", "items": { "type": "string" }, "description": "참조하는 CSS 변수 목록" },
+    "notes":       { "type": "array", "items": { "type": "string" } }
+  }
+}

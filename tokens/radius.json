@@ -1,0 +1,19 @@
+{
+  "$meta": {
+    "name": "Radius Tokens",
+    "description": "라운드는 컨테이너의 역할을 결정합니다.",
+    "steps": 8,
+    "version": "0.3.0",
+    "sourceHtml": "UIUX-DH-design-system.html#L155-L163"
+  },
+  "scale": {
+    "none": { "css": "--radius-none", "value": "0",      "use": "전체 화면·엣지투엣지" },
+    "xs":   { "css": "--radius-xs",   "value": "4px",    "use": "태그, 작은 뱃지" },
+    "sm":   { "css": "--radius-sm",   "value": "6px",    "use": "인라인 요소" },
+    "md":   { "css": "--radius-md",   "value": "10px",   "use": "버튼, 입력" },
+    "lg":   { "css": "--radius-lg",   "value": "14px",   "use": "카드 기본" },
+    "xl":   { "css": "--radius-xl",   "value": "20px",   "use": "피처 카드" },
+    "2xl":  { "css": "--radius-2xl",  "value": "28px",   "use": "바텀시트, 모달" },
+    "full": { "css": "--radius-full", "value": "9999px", "use": "칩, 필, 아바타" }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "chip",
+  "name": "Chip",
+  "version": "0.2.0",
+  "category": "interactive",
+  "description": "필터·카테고리·태그를 토글·제거 가능한 작은 상호작용 요소. Badge와 달리 상호작용 가능.",
+  "variants": [
+    {
+      "id": "filter",
+      "label": "Filter",
+      "description": "토글 가능한 필터",
+      "html": "<span class=\"chip chip-filter\">디자인</span>"
+    },
+    {
+      "id": "filter-active",
+      "label": "Filter · Active",
+      "description": "선택된 상태",
+      "html": "<span class=\"chip chip-filter is-active\">디자인</span>",
+      "tokens": { "bg": "--sm-interactive-brand-default", "fg": "--sm-content-onBrand" }
+    },
+    {
+      "id": "removable",
+      "label": "Removable",
+      "description": "X 버튼 포함, 제거 가능",
+      "html": "<span class=\"chip chip-removable\">UX <button class=\"chip-remove\">×</button></span>"
+    },
+    {
+      "id": "with-avatar",
+      "label": "With Avatar",
+      "description": "좌측 아바타 + 이름",
+      "html": "<span class=\"chip chip-avatar\"><span class=\"avatar sz-xs\">DH</span>김도훈</span>"
+    },
+    {
+      "id": "with-icon",
+      "label": "With Icon",
+      "description": "좌측 아이콘",
+      "html": "<span class=\"chip\"><svg class=\"ico ico-sm\"><use href=\"#i-filter\"/></svg> 필터</span>"
+    }
+  ],
+  "sizes": [
+    { "id": "chip-sm", "height": 24, "fontSize": 11 },
+    { "id": "chip-md", "height": 28, "fontSize": 12 },
+    { "id": "chip-lg", "height": 32, "fontSize": 13 }
+  ],
+  "states": ["rest", "hover", "active", "focus", "disabled"],
+  "tokens": {
+    "bg":       "--sm-background-muted",
+    "fg":       "--sm-content-primary",
+    "activeBg": "--sm-interactive-brand-default",
+    "activeFg": "--sm-content-onBrand",
+    "radius":   "--radius-full"
+  },
+  "accessibility": {
+    "role": "button (토글) 또는 listitem (필터 그룹 내)",
+    "keyboardSupport": ["Enter", "Space", "Delete (제거 시)"],
+    "ariaNotes": ["토글: aria-pressed", "제거 버튼은 별도 aria-label (예: '제거: UX')"]
+  },
+  "whenToUse": ["필터 선택", "태그 입력", "카테고리 표시"],
+  "whenNotToUse": ["단순 상태 표시 → Badge", "주요 액션 → Button"],
+  "uxWriting": ["1-2 단어", "대문자 지양 (태그는 자연어)"],
+  "usedInDemos": ["demo-community", "demo-todo", "demo-booking", "demo-map", "demo-notify"],
+  "relatedDocs": { "md": "components/chip.md", "sourceHtml": "index.html#chip" }
+}

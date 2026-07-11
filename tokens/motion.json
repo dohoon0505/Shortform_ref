@@ -1,0 +1,38 @@
+{
+  "$meta": {
+    "name": "Motion Tokens",
+    "description": "duration과 easing은 장식이 아니라 언어입니다. 각 토큰은 '어떤 상황에 써야 하는가'라는 역할로 정의됩니다.",
+    "version": "0.3.0",
+    "sourceHtml": "UIUX-DH-design-system.html#L172-L181"
+  },
+  "duration": {
+    "instant": { "css": "--motion-instant", "value": "0ms",   "use": "즉시 · 피드백 없이" },
+    "fast":    { "css": "--motion-fast",    "value": "120ms", "use": "버튼 hover · 포커스 링 · 의식하지 못하는 즉각 반응" },
+    "base":    { "css": "--motion-base",    "value": "200ms", "use": "기본값 · 모달 오픈 · 토스트 등장 · 상태 전환" },
+    "slow":    { "css": "--motion-slow",    "value": "320ms", "use": "페이지 전환 · 바텀시트 · 큰 요소 이동" },
+    "slower":  { "css": "--motion-slower",  "value": "480ms", "use": "특수 목적 · 매우 큰 전환" }
+  },
+  "easing": {
+    "standard": {
+      "css": "--ease-standard",
+      "value": "cubic-bezier(0.2, 0, 0, 1)",
+      "use": "대부분의 UI 전환. 기본값."
+    },
+    "emphasized": {
+      "css": "--ease-emphasized",
+      "value": "cubic-bezier(0.3, 0, 0, 1)",
+      "use": "중요한 등장 — 바텀시트, 성공 메시지."
+    },
+    "decelerate": {
+      "css": "--ease-decelerate",
+      "value": "cubic-bezier(0, 0, 0, 1)",
+      "use": "요소 등장 전용. 빠르게 시작해 부드럽게 도착."
+    },
+    "accelerate": {
+      "css": "--ease-accelerate",
+      "value": "cubic-bezier(0.3, 0, 1, 1)",
+      "use": "요소 퇴장 전용. 천천히 시작해 빠르게 사라짐."
+    }
+  },
+  "principle": "모션은 장식이 아니라 피드백입니다. 상태 변화·진입/이탈·성공 같은 순간에만 사용합니다. 짧고, 부드럽고, 예측 가능하게."
+}

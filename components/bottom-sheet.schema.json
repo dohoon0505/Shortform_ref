@@ -1,0 +1,54 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "sheet",
+  "name": "Bottom Sheet",
+  "version": "0.3.0",
+  "category": "overlay",
+  "description": "모바일에서 Dialog 대체. 하단에서 슬라이드업. 드래그로 크기 조절 가능 (modal/non-modal).",
+  "variants": [
+    {
+      "id": "modal",
+      "label": "Modal Sheet",
+      "description": "배경 scrim 있음, 닫을 때까지 뒤 상호작용 불가",
+      "html": "<div class=\"sheet sheet-modal\">\n  <div class=\"sheet-handle\"></div>\n  <h4>옵션 선택</h4>\n  <ul class=\"list\">\n    <li class=\"list-item\">보관함 이동</li>\n    <li class=\"list-item\">공유</li>\n  </ul>\n</div>"
+    },
+    {
+      "id": "non-modal",
+      "label": "Non-modal (Peek)",
+      "description": "하단에 피크, 스크롤로 확장. 뒤 상호작용 유지",
+      "html": "<div class=\"sheet sheet-peek\">\n  <div class=\"sheet-handle\"></div>\n  <div class=\"sheet-preview\"><!-- 카드 프리뷰 --></div>\n</div>"
+    },
+    {
+      "id": "action-list",
+      "label": "Action List",
+      "description": "액션 메뉴 (공유, 삭제 등)",
+      "html": "<div class=\"sheet\"><ul class=\"action-list\"><li>공유</li><li>저장</li><li class=\"is-danger\">삭제</li><li class=\"is-cancel\">취소</li></ul></div>"
+    }
+  ],
+  "states": ["closed", "peek", "half", "expanded", "dragging"],
+  "subParts": {
+    "sheet-handle":  "상단 드래그 핸들 (4px 높이, border-radius:full)",
+    "sheet-preview": "피크 모드의 미리보기 영역"
+  },
+  "tokens": {
+    "bg":          "--sm-background-default",
+    "handle":      "--sm-border-default",
+    "scrim":       "--sm-background-overlay",
+    "radius":      "20px (상단만)",
+    "elevation":   "--elevation-5"
+  },
+  "accessibility": {
+    "role": "dialog",
+    "keyboardSupport": ["Esc (닫기)", "Arrow Up/Down (드래그 대체)"],
+    "ariaNotes": [
+      "modal: aria-modal=true + 포커스 트랩",
+      "non-modal: role=region 고려",
+      "드래그 핸들에 aria-label=\"크기 조절\""
+    ]
+  },
+  "whenToUse": ["모바일 액션 메뉴", "필터 설정", "지도에서 선택된 POI 상세"],
+  "whenNotToUse": ["데스크톱 우선 UI → Dialog", "긴 폼 → 별도 페이지"],
+  "uxWriting": ["제목은 명사구", "취소는 맨 아래 (모바일 iOS 패턴)"],
+  "usedInDemos": ["demo-map"],
+  "relatedDocs": { "md": "components/bottom-sheet.md", "sourceHtml": "index.html#sheet" }
+}

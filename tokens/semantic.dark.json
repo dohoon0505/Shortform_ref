@@ -1,0 +1,57 @@
+{
+  "$meta": {
+    "tier": 2,
+    "name": "Semantic Tokens · Dark Theme",
+    "description": "의미 기반 재매핑. 토큰 이름은 Light와 동일, 가리키는 원시값만 다릅니다. 다크는 순수 검정이 아닌 '쿨톤 블랙'으로 브랜드 인디고의 잔향을 담습니다.",
+    "prefix": "--sm-",
+    "theme": "dark",
+    "version": "0.3.0",
+    "selector": "[data-theme=\"dark\"]",
+    "sourceHtml": "UIUX-DH-design-system.html#L192-L233"
+  },
+  "background": {
+    "default":  { "css": "--sm-background-default",  "ref": "--p-neutral-100", "value": "#0B0D12" },
+    "subtle":   { "css": "--sm-background-subtle",   "ref": "--p-neutral-95",  "value": "#111319" },
+    "muted":    { "css": "--sm-background-muted",    "ref": "--p-neutral-90",  "value": "#1B1D24" },
+    "elevated": { "css": "--sm-background-elevated", "ref": "--p-neutral-90",  "value": "#1B1D24" },
+    "inverse":  { "css": "--sm-background-inverse",  "ref": "--p-neutral-0",   "value": "#FFFFFF" }
+  },
+  "content": {
+    "primary":   { "css": "--sm-content-primary",   "ref": "--p-neutral-0",   "value": "#FFFFFF" },
+    "secondary": { "css": "--sm-content-secondary", "ref": "--p-neutral-40",  "value": "#D4D8E2" },
+    "tertiary":  { "css": "--sm-content-tertiary",  "ref": "--p-neutral-50",  "value": "#B1B6C4" },
+    "disabled":  { "css": "--sm-content-disabled",  "ref": "--p-neutral-70",  "value": "#5A5F6E" },
+    "inverse":   { "css": "--sm-content-inverse",   "ref": "--p-neutral-100", "value": "#0B0D12" },
+    "brand":     { "css": "--sm-content-brand",     "ref": "--p-indigo-300",  "value": "#9A8CF2" },
+    "onBrand":   { "css": "--sm-content-onBrand",   "ref": "--p-neutral-0",   "value": "#FFFFFF" }
+  },
+  "border": {
+    "subtle":  { "css": "--sm-border-subtle",  "ref": "--p-neutral-85", "value": "#2A2D36" },
+    "default": { "css": "--sm-border-default", "ref": "--p-neutral-80", "value": "#3C404B" },
+    "strong":  { "css": "--sm-border-strong",  "ref": "--p-neutral-40", "value": "#D4D8E2" },
+    "brand":   { "css": "--sm-border-brand",   "ref": "--p-indigo-400", "value": "#7968EE" },
+    "focus":   { "css": "--sm-border-focus",   "ref": "--p-indigo-300", "value": "#9A8CF2" }
+  },
+  "surface": {
+    "default": { "css": "--sm-surface-default", "ref": "--p-neutral-90", "value": "#1B1D24" },
+    "raised":  { "css": "--sm-surface-raised",  "ref": "--p-neutral-85", "value": "#2A2D36" },
+    "sunken":  { "css": "--sm-surface-sunken",  "ref": "--p-neutral-95", "value": "#111319" }
+  },
+  "interactive": {
+    "brand": {
+      "default": { "css": "--sm-interactive-brand-default", "ref": "--p-indigo-400", "value": "#7968EE" },
+      "hover":   { "css": "--sm-interactive-brand-hover",   "ref": "--p-indigo-300", "value": "#9A8CF2" },
+      "active":  { "css": "--sm-interactive-brand-active",  "ref": "--p-indigo-200", "value": "#BCB4F7" },
+      "subtle":  { "css": "--sm-interactive-brand-subtle",  "ref": "rgba(121, 104, 238, 0.14)", "value": "rgba(121, 104, 238, 0.14)" }
+    }
+  },
+  "status": {
+    "success": { "css": "--sm-status-success", "ref": "--p-green-400", "value": "#22C55E" },
+    "warning": { "css": "--sm-status-warning", "ref": "--p-amber-400", "value": "#FFD60A" },
+    "error":   { "css": "--sm-status-error",   "ref": "--p-red-400",   "value": "#F87171" },
+    "info":    { "css": "--sm-status-info",    "ref": "--p-blue-400",  "value": "#3B82F6" }
+  },
+  "signal": {
+    "highlight": { "css": "--sm-signal-highlight", "ref": "--p-amber-400", "value": "#FFD60A" }
+  }
+}

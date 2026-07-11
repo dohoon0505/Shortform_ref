@@ -1,0 +1,66 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "table",
+  "name": "Data Table",
+  "version": "0.3.0",
+  "category": "density",
+  "description": "정렬 가능한 행·열 구조로 많은 데이터를 비교. 상태 칩·진행률·뱃지·액션을 셀에 임베드.",
+  "variants": [
+    {
+      "id": "basic",
+      "label": "Basic",
+      "html": "<table class=\"table\">\n  <thead><tr><th>이름</th><th>상태</th><th>진행</th></tr></thead>\n  <tbody><tr><td>프로젝트 A</td><td><span class=\"badge badge-success\">완료</span></td><td><div class=\"progress\"><div class=\"progress-fill\" style=\"width:80%;\"></div></div></td></tr></tbody>\n</table>"
+    },
+    {
+      "id": "sortable",
+      "label": "Sortable",
+      "description": "컬럼 헤더 클릭 시 정렬. aria-sort로 상태 표시",
+      "html": "<th aria-sort=\"ascending\">이름 ↑</th>"
+    },
+    {
+      "id": "selectable-rows",
+      "label": "Selectable Rows",
+      "description": "체크박스로 행 다중 선택",
+      "html": "<tr class=\"is-selected\">...</tr>"
+    },
+    {
+      "id": "sticky-header",
+      "label": "Sticky Header",
+      "description": "스크롤 시 헤더 고정",
+      "html": "<table class=\"table table-sticky\">...</table>"
+    },
+    {
+      "id": "density",
+      "label": "Density variants",
+      "description": "compact / default / comfortable (행 높이)"
+    }
+  ],
+  "states": ["rest", "hover-row", "selected-row", "sorted"],
+  "tokens": {
+    "headerBg":    "--sm-background-muted",
+    "headerFg":    "--sm-content-secondary",
+    "rowBorder":   "--sm-border-subtle",
+    "rowHover":    "--sm-background-subtle",
+    "selectedBg":  "--sm-interactive-brand-subtle",
+    "cellPadX":    "var(--size-500)",
+    "cellPadY":    "12px (compact) / 16px / 20px"
+  },
+  "accessibility": {
+    "role": "table (native HTML table)",
+    "keyboardSupport": ["Tab (포커스 이동)", "Arrow (셀 간 이동 — optional)"],
+    "ariaNotes": [
+      "정렬: aria-sort=\"ascending|descending|none\"",
+      "선택 행: aria-selected=true",
+      "캡션: <caption> 또는 aria-labelledby"
+    ]
+  },
+  "whenToUse": ["숫자·상태 비교", "관리 도구 (대시보드)", "긴 항목 리스트"],
+  "whenNotToUse": [
+    "모바일 좁은 화면 → 카드 리스트로 전환",
+    "2-3개 항목 → List Item",
+    "시각화가 주목적 → Chart"
+  ],
+  "uxWriting": ["컬럼명 짧게 (이름, 상태, 진행)", "숫자는 tabular-nums"],
+  "usedInDemos": [],
+  "relatedDocs": { "md": "components/data-table.md", "sourceHtml": "index.html#table" }
+}

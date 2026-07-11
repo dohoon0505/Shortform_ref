@@ -1,0 +1,74 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "alert",
+  "name": "Alert · Toast",
+  "version": "0.2.0",
+  "category": "feedback",
+  "description": "Alert은 머무는 알림 (컨텍스트 내 지속), Toast는 잠시 나타났다 사라지는 알림 (3-5초).",
+  "variants": [
+    {
+      "id": "alert-info",
+      "label": "Alert · Info",
+      "html": "<div class=\"alert alert-info\"><svg class=\"ico\"><use href=\"#i-info\"/></svg><div><strong>안내</strong> 이전 주문의 배송이 완료됐어요.</div></div>",
+      "tokens": { "bg": "--sm-status-info-subtle", "fg": "--sm-status-info" }
+    },
+    {
+      "id": "alert-success",
+      "label": "Alert · Success",
+      "html": "<div class=\"alert alert-success\"><svg class=\"ico\"><use href=\"#i-check-circle\"/></svg>저장되었어요</div>"
+    },
+    {
+      "id": "alert-warning",
+      "label": "Alert · Warning",
+      "html": "<div class=\"alert alert-warning\"><svg class=\"ico\"><use href=\"#i-alert\"/></svg>세션이 곧 만료돼요</div>"
+    },
+    {
+      "id": "alert-error",
+      "label": "Alert · Error",
+      "html": "<div class=\"alert alert-error\"><svg class=\"ico\"><use href=\"#i-x-circle\"/></svg>결제에 실패했어요. 다른 카드를 시도해보세요.</div>"
+    },
+    {
+      "id": "toast-top",
+      "label": "Toast · Top",
+      "description": "화면 상단에서 3-5초 표시 후 자동 소멸",
+      "html": "<div class=\"toast toast-top toast-success\">링크가 복사됐어요</div>"
+    },
+    {
+      "id": "toast-bottom",
+      "label": "Toast · Bottom",
+      "description": "화면 하단 (모바일 표준)",
+      "html": "<div class=\"toast toast-bottom toast-error\">네트워크를 확인해주세요</div>"
+    }
+  ],
+  "states": ["rest", "entering", "leaving"],
+  "tokens": {
+    "bg":     "--sm-status-{variant}-subtle",
+    "fg":     "--sm-status-{variant}",
+    "border": "--sm-status-{variant}",
+    "radius": "--radius-md"
+  },
+  "accessibility": {
+    "role": "alert (긴급) 또는 status (일반)",
+    "ariaNotes": [
+      "role=alert: 스크린리더 즉시 읽음",
+      "role=status: aria-live=polite와 유사, 끼어들지 않음",
+      "Toast: 자동 소멸 전 포커스 가능한 닫기 버튼 권장"
+    ]
+  },
+  "whenToUse": [
+    "Alert: 지속적 상태 안내 (세션 만료, 입력 오류 요약)",
+    "Toast: 즉시 피드백 (저장·복사·전송 완료)"
+  ],
+  "whenNotToUse": [
+    "사용자 결정 필요 → Dialog",
+    "긴 설명 → 카드·섹션",
+    "Toast에 중요 액션 버튼 배치 금지 (자동 소멸 위험)"
+  ],
+  "uxWriting": [
+    "Alert 제목은 명사구, 본문은 해결 방법",
+    "Toast는 한 문장, 동사 (저장됐어요, 전송됐어요)",
+    "Error: 실패 이유 + 해결 방법 (\"만료된 카드예요. 다른 카드로 결제해보세요\")"
+  ],
+  "usedInDemos": ["demo-notify", "demo-checkout"],
+  "relatedDocs": { "md": "components/alert-toast.md", "sourceHtml": "index.html#alert" }
+}

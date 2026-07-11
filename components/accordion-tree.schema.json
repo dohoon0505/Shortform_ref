@@ -1,0 +1,59 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "accordion",
+  "name": "Accordion · Tree",
+  "version": "0.3.0",
+  "category": "density",
+  "description": "Accordion은 FAQ·폼 섹션의 접힘(단일 레벨), Tree는 계층 구조(중첩 레벨).",
+  "variants": [
+    {
+      "id": "accordion-single",
+      "label": "Accordion · Single open",
+      "description": "한 번에 하나만 펼침",
+      "html": "<div class=\"accordion\" data-mode=\"single\">\n  <div class=\"acc-item\">\n    <button class=\"acc-trigger\" aria-expanded=\"true\">배송 정책<svg class=\"ico ico-sm\"><use href=\"#i-chevron-down\"/></svg></button>\n    <div class=\"acc-panel\">본문…</div>\n  </div>\n</div>"
+    },
+    {
+      "id": "accordion-multi",
+      "label": "Accordion · Multi open",
+      "description": "여러 항목 동시에 펼침 가능",
+      "html": "<div class=\"accordion\" data-mode=\"multi\">...</div>"
+    },
+    {
+      "id": "tree",
+      "label": "Tree",
+      "description": "파일·폴더 구조. 들여쓰기로 계층 표현",
+      "html": "<ul class=\"tree\">\n  <li><button class=\"tree-node\" aria-expanded=\"true\">components/</button>\n    <ul>\n      <li><button class=\"tree-leaf\">button.md</button></li>\n      <li><button class=\"tree-leaf\">banner.md</button></li>\n    </ul>\n  </li>\n</ul>"
+    }
+  ],
+  "states": ["collapsed", "expanded", "focus"],
+  "tokens": {
+    "triggerBg":   "--sm-background-default",
+    "triggerFg":   "--sm-content-primary",
+    "panelBg":     "--sm-background-subtle",
+    "border":      "--sm-border-subtle",
+    "chevronTransform": "rotate(180deg) when expanded"
+  },
+  "accessibility": {
+    "keyboardSupport": ["Enter/Space (토글)", "Arrow Down/Up (항목 이동)", "Home/End"],
+    "ariaNotes": [
+      "트리거: aria-expanded + aria-controls=panelId",
+      "패널: role=region + aria-labelledby=triggerId",
+      "Tree: role=tree + treeitem, aria-level, aria-expanded"
+    ]
+  },
+  "whenToUse": [
+    "Accordion: FAQ, 긴 폼의 섹션 접기, 설정 그룹",
+    "Tree: 파일 브라우저, 조직도, 카테고리 네비"
+  ],
+  "whenNotToUse": [
+    "탭 전환 성격 → Tabs",
+    "2-3 항목 → 단순 섹션 헤더",
+    "계층 없는 리스트 → List Item"
+  ],
+  "uxWriting": [
+    "Accordion 트리거: 질문 또는 섹션 제목 (배송 정책, 환불 정책)",
+    "Tree 노드: 파일·폴더명 그대로"
+  ],
+  "usedInDemos": [],
+  "relatedDocs": { "md": "components/accordion-tree.md", "sourceHtml": "index.html#accordion" }
+}

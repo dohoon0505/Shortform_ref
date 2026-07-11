@@ -1,0 +1,65 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "avatar",
+  "name": "Avatar",
+  "version": "0.3.0",
+  "category": "data",
+  "description": "사용자·조직·브랜드를 시각적으로 식별. 이미지·이니셜·아이콘 지원, 상태 링·스택 변형.",
+  "variants": [
+    {
+      "id": "image",
+      "label": "Image",
+      "html": "<div class=\"avatar av-image sz-md\"><img src=\"...\" alt=\"김도훈\"></div>"
+    },
+    {
+      "id": "initials",
+      "label": "Initials",
+      "html": "<div class=\"avatar av-solid sz-md a1\">DH</div>",
+      "description": "이미지가 없을 때. 2글자, 배경색은 a1~a6 palette 중 결정성 매핑"
+    },
+    {
+      "id": "icon",
+      "label": "Icon",
+      "html": "<div class=\"avatar av-icon sz-md\"><svg class=\"ico\"><use href=\"#i-user\"/></svg></div>"
+    },
+    {
+      "id": "with-status",
+      "label": "With Status Ring",
+      "description": "온라인 상태 인디케이터 (초록 점 on border)",
+      "html": "<div class=\"avatar av-solid sz-md\">DH<span class=\"status-ring\"></span></div>"
+    },
+    {
+      "id": "stack",
+      "label": "Stack",
+      "description": "겹친 아바타 그룹 + '+N' 더보기",
+      "html": "<div class=\"avatar-stack\">\n  <div class=\"avatar sz-md\">DH</div>\n  <div class=\"avatar sz-md\">JK</div>\n  <div class=\"avatar sz-md more\">+19</div>\n</div>"
+    }
+  ],
+  "sizes": [
+    { "id": "sz-xs", "px": 24 },
+    { "id": "sz-sm", "px": 32 },
+    { "id": "sz-md", "px": 40 },
+    { "id": "sz-lg", "px": 56 },
+    { "id": "sz-xl", "px": 80 }
+  ],
+  "states": ["rest", "hover (clickable)"],
+  "palette": ["a1", "a2", "a3", "a4", "a5", "a6"],
+  "tokens": {
+    "bg":        "--cm-avatar-bg",
+    "fg":        "--cm-avatar-fg",
+    "radius":    "50%",
+    "statusRing":"--sm-status-success"
+  },
+  "accessibility": {
+    "ariaNotes": [
+      "img variant: alt 필수 (사용자 이름)",
+      "initials/icon variant: aria-label로 전체 이름 제공",
+      "status-ring은 장식용 — 의미(온라인/오프라인)는 텍스트나 aria-label로 중복 제공"
+    ]
+  },
+  "whenToUse": ["프로필 식별", "팀 멤버 표시", "아바타 스택", "리스트 아이템 leading"],
+  "whenNotToUse": ["단순 아이콘 → SVG 심볼", "로고 → 별도 이미지"],
+  "uxWriting": ["이니셜: 2글자 고정 (한글도 가능)", "alt는 전체 이름 ('김도훈 아바타' 금지, 그냥 '김도훈')"],
+  "usedInDemos": ["demo-community", "demo-mypage", "demo-chat"],
+  "relatedDocs": { "md": "components/avatar.md", "sourceHtml": "index.html#avatar" }
+}

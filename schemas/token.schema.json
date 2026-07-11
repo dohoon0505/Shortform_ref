@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uiux-dh.example/schemas/token.schema.json",
+  "title": "UIUX-DH Token Entry",
+  "description": "단일 토큰(Primitive/Semantic/Component)의 구조 정의. tokens/theme-map.json의 엔트리 구조도 정의.",
+  "oneOf": [
+    {
+      "title": "Primitive Token",
+      "type": "object",
+      "required": ["value", "css"],
+      "properties": {
+        "value": { "type": "string", "description": "16진수 또는 rgba 값" },
+        "css":   { "type": "string", "pattern": "^--p-[a-z0-9-]+$" }
+      }
+    },
+    {
+      "title": "Semantic Token",
+      "type": "object",
+      "required": ["css", "ref"],
+      "properties": {
+        "css":   { "type": "string", "pattern": "^--sm-[a-z0-9-]+$" },
+        "ref":   { "type": "string", "pattern": "^--p-[a-z0-9-]+$" },
+        "value": { "type": "string", "description": "resolved value, 편의 캐싱" }
+      }
+    },
+    {
+      "title": "Component Token",
+      "type": "object",
+      "required": ["css"],
+      "properties": {
+        "css": { "type": "string", "pattern": "^--cm-[a-z0-9-]+$" },
+        "ref": { "type": "string", "pattern": "^(--sm-|--p-)" }
+      }
+    },
+    {
+      "title": "Theme-Map Entry",
+      "type": "object",
+      "required": ["light", "dark"],
+      "properties": {
+        "light": { "type": "string", "description": "Light 모드에서 가리키는 primitive 토큰" },
+        "dark":  { "type": "string", "description": "Dark 모드에서 가리키는 primitive 토큰" },
+        "lightValue": { "type": "string" },
+        "darkValue":  { "type": "string" }
+      }
+    }
+  ]
+}

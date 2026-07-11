@@ -1,0 +1,59 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "empty",
+  "name": "Empty State",
+  "version": "0.3.0",
+  "category": "state",
+  "description": "비어 있음을 초대로. 일러스트·제목·설명·액션의 조합. 3가지 시나리오: first use / search / error.",
+  "variants": [
+    {
+      "id": "first-use",
+      "label": "First use",
+      "description": "아직 데이터가 없음. 첫 액션 유도",
+      "html": "<div class=\"empty\">\n  <div class=\"empty-illust\"><!-- 일러스트 --></div>\n  <h3>첫 프로젝트를 만들어보세요</h3>\n  <p>몇 분이면 됩니다. 템플릿으로 빠르게 시작하거나 처음부터 만들 수 있어요.</p>\n  <button class=\"btn btn-primary\">프로젝트 만들기</button>\n</div>"
+    },
+    {
+      "id": "search",
+      "label": "No search results",
+      "html": "<div class=\"empty\">\n  <div class=\"empty-illust empty-illust-search\"></div>\n  <h3>'UIUX-DH'와 일치하는 결과가 없어요</h3>\n  <p>다른 키워드로 다시 검색해보세요.</p>\n  <button class=\"btn btn-outline\">검색 초기화</button>\n</div>"
+    },
+    {
+      "id": "error",
+      "label": "Error",
+      "description": "네트워크 오류, 권한 없음 등",
+      "html": "<div class=\"empty\">\n  <div class=\"empty-illust empty-illust-error\"></div>\n  <h3>연결에 실패했어요</h3>\n  <p>네트워크를 확인하고 다시 시도해주세요.</p>\n  <button class=\"btn btn-primary\">다시 시도</button>\n</div>"
+    }
+  ],
+  "states": ["rest"],
+  "tokens": {
+    "illustTint":   "--sm-content-tertiary (또는 브랜드 subtle)",
+    "titleFg":      "--sm-content-primary",
+    "descFg":       "--sm-content-secondary",
+    "maxWidth":     "360px",
+    "padding":      "var(--size-800) var(--size-600)"
+  },
+  "accessibility": {
+    "role": "region",
+    "ariaNotes": [
+      "aria-labelledby=titleId",
+      "에러 variant: aria-live=polite (동적 표시 시)"
+    ]
+  },
+  "whenToUse": [
+    "first use: 아무 데이터도 없는 신규 상태",
+    "search: 결과 0건",
+    "error: 실패 후 복구 가능 상태"
+  ],
+  "whenNotToUse": [
+    "영구 오류 → 별도 페이지",
+    "잠시 로딩 중 → Skeleton"
+  ],
+  "uxWriting": [
+    "제목: 상황 설명 + 방향 제시",
+    "설명: 1-2문장, 구체적 해결 방법",
+    "CTA: 동사로 끝 + 구체적 결과 (프로젝트 만들기, 다시 시도, 검색 초기화)",
+    "'비어 있음' / '데이터 없음' 같은 기계적 문구 금지"
+  ],
+  "usedInDemos": ["demo-notify"],
+  "relatedDocs": { "md": "components/empty-state.md", "sourceHtml": "index.html#empty" }
+}

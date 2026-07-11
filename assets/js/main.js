@@ -1,1112 +1,605 @@
-(function () {
-  'use strict';
+function toggleTheme() {
+  const body = document.body;
+  const current = body.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  body.setAttribute('data-theme', next);
+  // Topbar toggle
+  const topIcon = document.getElementById('theme-icon');
+  const topLabel = document.getElementById('theme-label');
+  if (topIcon) topIcon.textContent = next === 'light' ? '☾' : '☀';
+  if (topLabel) topLabel.textContent = next === 'light' ? 'Dark' : 'Light';
+  // Sidebar toggle sync
+  const sbIcon = document.getElementById('sidebar-theme-icon');
+  const sbLabel = document.getElementById('sidebar-theme-label');
+  const sbSub = document.getElementById('theme-sub');
+  if (sbIcon) sbIcon.textContent = next === 'light' ? '☾' : '☀';
+  if (sbLabel) sbLabel.textContent = next === 'light' ? 'Dark' : 'Light';
+  if (sbSub) sbSub.textContent = next === 'light' ? 'Light Mode' : 'Dark Mode';
+}
 
-  /* ============ UTILITIES ============ */
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
-    // textNode.innerHTML escapes <, >, & but NOT " or '
-    // Without escaping these, attribute values (data-html="...") break when content contains "
-    return div.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-  }
-
-  var blockIdCounter = 0;
-  function uid() { return 'blk-' + (++blockIdCounter); }
-
-  /* ============ THEME ============ */
-  function toggleTheme() {
-    var body = document.body;
-    var current = body.getAttribute('data-theme');
-    var next = current === 'light' ? 'dark' : 'light';
-    body.setAttribute('data-theme', next);
-    var icon = next === 'light' ? '☾' : '☀';
-    var label = next === 'light' ? 'Dark' : 'Light';
-    var sub = next === 'light' ? 'Light Mode' : 'Dark Mode';
-    ['theme-icon', 'sidebar-theme-icon'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = icon;
-    });
-    ['theme-label', 'sidebar-theme-label'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = label;
-    });
-    var sbSub = document.getElementById('theme-sub');
-    if (sbSub) sbSub.textContent = sub;
-  }
-  window.toggleTheme = toggleTheme;
-
-  /* ============ SIDEBAR (mobile) ============ */
-  function toggleSidebar() {
-    var sb = document.getElementById('sidebar');
-    var scrim = document.querySelector('.sidebar-scrim');
-    var isOpen = sb.classList.toggle('is-open');
-    if (scrim) {
-      if (isOpen) {
-        scrim.classList.add('is-open');
-        requestAnimationFrame(function () { scrim.classList.add('is-visible'); });
-        document.body.style.overflow = 'hidden';
-      } else {
-        scrim.classList.remove('is-visible');
-        setTimeout(function () { scrim.classList.remove('is-open'); }, 200);
-        document.body.style.overflow = '';
-      }
-    }
-  }
-  window.toggleSidebar = toggleSidebar;
-
-  function closeSidebar() {
-    var sb = document.getElementById('sidebar');
-    var scrim = document.querySelector('.sidebar-scrim');
-    sb.classList.remove('is-open');
-    if (scrim) {
+/* ============ SIDEBAR ============ */
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const scrim = document.querySelector('.sidebar-scrim');
+  const isOpen = sb.classList.toggle('is-open');
+  if (scrim) {
+    if (isOpen) {
+      scrim.classList.add('is-open');
+      requestAnimationFrame(() => scrim.classList.add('is-visible'));
+      document.body.style.overflow = 'hidden';
+    } else {
       scrim.classList.remove('is-visible');
-      setTimeout(function () { scrim.classList.remove('is-open'); }, 200);
+      setTimeout(() => scrim.classList.remove('is-open'), 200);
+      document.body.style.overflow = '';
     }
-    document.body.style.overflow = '';
   }
-  window.closeSidebar = closeSidebar;
-
-  function closeSidebarMobile() {
-    if (window.matchMedia('(max-width: 1099px)').matches) closeSidebar();
+}
+function closeSidebar() {
+  const sb = document.getElementById('sidebar');
+  const scrim = document.querySelector('.sidebar-scrim');
+  sb.classList.remove('is-open');
+  if (scrim) {
+    scrim.classList.remove('is-visible');
+    setTimeout(() => scrim.classList.remove('is-open'), 200);
   }
+  document.body.style.overflow = '';
+}
+function closeSidebarMobile() {
+  if (window.matchMedia('(max-width: 1099px)').matches) closeSidebar();
+}
 
-  /* ============ SIDEBAR COLLAPSE (desktop) ============ */
-  function toggleSidebarCollapse() {
-    var body = document.body;
-    var collapsed = body.classList.toggle('sidebar-collapsed');
-    try { localStorage.setItem('sidebar-collapsed', collapsed ? '1' : '0'); } catch(e) {}
-    var btn = document.querySelector('.sidebar-collapse');
-    if (btn) btn.setAttribute('aria-label', collapsed ? '사이드바 펴기' : '사이드바 접기');
+/* ============ SPA ROUTER ============ */
+
+// Activate SPA mode
+document.body.classList.add('spa-mode');
+
+// Category definitions — for landing pages when a category is clicked
+const CATEGORIES = {
+  'getting-started': {
+    title: 'Part 01 · 시작하기',
+    desc: '시스템이 어떻게 동작하는지, 어떤 원칙을 따르는지, 토큰은 어떻게 구조화되는지. 컴포넌트를 만들기 전에 알아야 할 모든 것.',
+    items: [
+      { id:'about',      ico:'✦', title:'디자인시스템이란',  desc:'4가지 구성요소가 하나로 돌아가는 생산 체계' },
+      { id:'principles', ico:'※', title:'6가지 원칙',         desc:'의미가 값보다 먼저 · 공유 이름 · 축약어 금지 등' },
+      { id:'tokens',     ico:'◎', title:'토큰 아키텍처',       desc:'Primitive → Semantic → Component 3단계 구조' },
+      { id:'naming',     ico:'≈', title:'네이밍 컨벤션',       desc:'이름은 팀 간의 계약. 약어는 대부분 금지' },
+      { id:'policy',     ico:'◉', title:'그라데이션 정책',     desc:'v0.3부터 솔리드가 기본. 두-색 그라데이션 금지' },
+      { id:'writing',    ico:'✎', title:'UX Writing 7원칙',    desc:'해요체 · 능동 · 긍정 · 잡초 제거 · 에러는 안내' },
+    ]
+  },
+  'foundations': {
+    title: 'Part 02 · Foundations',
+    desc: '보이는 것의 기초 — 색 · 타이포 · 크기 · 반경 · 모션. 시스템의 모든 시각 토큰이 여기서 정의됩니다.',
+    items: [
+      { id:'color',            ico:'◐', title:'Color',            desc:'Primitive 34개 + Semantic Light/Dark 29개' },
+      { id:'typography',       ico:'Aa', title:'Typography',      desc:'Pretendard Variable · display → overline 14단계' },
+      { id:'sizing',           ico:'▭', title:'Sizing',           desc:'4px 기반 그리드 · size-50 → size-1200' },
+      { id:'radius',           ico:'◖', title:'Radius',           desc:'none → full 8단계 반경 토큰' },
+      { id:'motion',           ico:'➤', title:'Motion',           desc:'5개 duration · 4개 easing · 의미를 담은 움직임' },
+      { id:'component-tokens', ico:'◇', title:'Component Tokens', desc:'Component 내부에서만 쓰는 예외 흡수층' },
+    ]
+  },
+  'components': {
+    title: 'Part 03 · Components',
+    desc: '토큰과 원칙 위에 올라가는 실제 UI 단위. 각 컴포넌트는 자신만의 컴포넌트 토큰을 가지며, 시맨틱 토큰을 참조해 Light/Dark를 횡단합니다.',
+    items: [
+      { id:'asset',     ico:'◉', title:'Asset · Icon',             desc:'아이콘 세트 · 일러스트 스타일' },
+      { id:'badge',     ico:'◆', title:'Badge',                    desc:'상태 · 카운트 · 뱃지 변형' },
+      { id:'chart',     ico:'▥', title:'Bar Chart',                desc:'세로 / 가로 / 누적 · 데이터 시각화' },
+      { id:'border',    ico:'│', title:'Border · Divider',         desc:'테두리 · 구분선 · 장식 요소' },
+      { id:'button',    ico:'▢', title:'Button',                   desc:'7변형 × 5크기 × 6상태' },
+      { id:'chip',      ico:'◎', title:'Chip',                     desc:'필터 · 태그 · 칩 상호작용' },
+      { id:'textfield', ico:'▭', title:'Text Field',               desc:'입력 필드 · 유효성 · 포커스' },
+      { id:'avatar',    ico:'○', title:'Avatar',                   desc:'이니셜 · 이미지 · 상태 오버레이' },
+      { id:'control',   ico:'☑', title:'Checkbox · Radio · Toggle',desc:'선택 컨트롤 3종' },
+      { id:'list',      ico:'≡', title:'List Item',                desc:'리스트 행 · leading/trailing' },
+      { id:'alert',     ico:'!', title:'Alert · Toast',            desc:'인라인 경고 · 일시적 피드백' },
+      { id:'progress',  ico:'▰', title:'Progress · Slider',        desc:'진행률 · 범위 선택' },
+      { id:'tabs',      ico:'⧉', title:'Tabs · Segment',           desc:'콘텐츠 전환 · 모드 선택' },
+      { id:'others',    ico:'▤', title:'Card',                     desc:'카드 컨테이너 · 조합 패턴' },
+      { id:'banner',    ico:'▥', title:'Banner',                   desc:'이미지+텍스트 프로모션 · 6변형' },
+    ]
+  },
+  'overlays': {
+    title: 'Part 04 · Overlays · Navigation',
+    desc: '페이지 위에 띄우는 표면과 앱 전체를 연결하는 네비게이션.',
+    items: [
+      { id:'dialog',  ico:'◫', title:'Dialog',              desc:'중단 필수 · 사용자의 결정이 필요한 순간' },
+      { id:'sheet',   ico:'⌆', title:'Bottom Sheet',        desc:'모바일에서 Dialog 대체 · 하단 슬라이드' },
+      { id:'popover', ico:'◈', title:'Popover · Tooltip',   desc:'짧은 설명 · 컨텍스트 메뉴 · Date Picker' },
+      { id:'appbar',  ico:'▬', title:'Top App Bar',         desc:'모바일 상단 고정 헤더' },
+      { id:'tabbar',  ico:'▬', title:'Tab Bar',             desc:'모바일 하단 고정 · 주요 섹션 3~5개' },
+      { id:'drawer',  ico:'◧', title:'Drawer · Breadcrumb', desc:'주 메뉴 패널 · 계층 경로' },
+    ]
+  },
+  'states': {
+    title: 'Part 05 · States',
+    desc: '로딩과 비어 있음 — 사용자가 "기다린다"는 순간을 어떻게 디자인할 것인가.',
+    items: [
+      { id:'skeleton', ico:'▨', title:'Skeleton Loader', desc:'500ms 이상 로딩의 그림자' },
+      { id:'empty',    ico:'◌', title:'Empty State',     desc:'First use · Search · Error 3가지 유형' },
+    ]
+  },
+  'density': {
+    title: 'Part 06 · Density',
+    desc: '많은 정보를 한 화면에 — 정렬과 접힘으로 밀도를 올립니다.',
+    items: [
+      { id:'table',     ico:'⊞', title:'Data Table',        desc:'정렬 · 비교 · 상태 칩 · 진행률' },
+      { id:'accordion', ico:'⌄', title:'Accordion · Tree',  desc:'FAQ · 폼 섹션 · 폴더 구조' },
+    ]
+  },
+  'demo': {
+    title: 'Part 07 · 실제 사용 데모',
+    desc: '디자인시스템만으로 만들 수 있는 실제 서비스 화면들. 스플래시부터 결제 완료까지, 같은 토큰·같은 컴포넌트로 어떻게 다른 맥락을 빚어내는지.',
+    items: [
+      { id:'demo-splash',    ico:'🚀', title:'Splash',       desc:'앱이 켜지는 1.5초 · 브랜드 인각' },
+      { id:'demo-login',     ico:'🔑', title:'로그인',        desc:'소셜 로그인 · 이메일/패스워드' },
+      { id:'demo-signup',    ico:'✍', title:'회원가입',      desc:'단계 표시 · 약관 동의 · 필수 검증' },
+      { id:'demo-community', ico:'💬', title:'커뮤니티',      desc:'피드 · 카드 · 아바타 · FAB' },
+      { id:'demo-store',     ico:'🛍', title:'스토어',        desc:'상품 그리드 · 할인 뱃지 · 장바구니' },
+      { id:'demo-pricing',   ico:'💎', title:'요금제',        desc:'Segment · 플랜 카드 · Sticky CTA' },
+      { id:'demo-calendar',  ico:'📅', title:'달력',          desc:'월 그리드 · 이벤트 도트 · 일정 상세' },
+      { id:'demo-todo',      ico:'✓',  title:'To-do List',    desc:'진행률 · 우선순위 · 체크박스' },
+      { id:'demo-booking',   ico:'🍽', title:'맛집 예약',      desc:'위치 필터 · 섹션별 BEST · 가격대 탭' },
+      { id:'demo-foodorder', ico:'🛵', title:'배달',          desc:'쿠폰 배너 · 5-way 탭 · 카테고리 그리드 · 무료배달 파트너' },
+      { id:'demo-shopping',  ico:'🛒', title:'쇼핑몰 홈',      desc:'브랜드 헤더 · 캐러셀 · 쿠폰 뱃지 상품' },
+      { id:'demo-social',    ico:'👥', title:'소셜 모임',      desc:'히어로 배너 · 이중 CTA · 모임 카드' },
+      { id:'demo-banking',   ico:'💳', title:'뱅킹 홈',        desc:'계좌 카드 · 퀵 액션 · 거래 내역' },
+      { id:'demo-map',       ico:'📍', title:'지도 탐색',      desc:'검색 오버레이 · POI 핀 · 바텀 시트' },
+      { id:'demo-mypage',    ico:'👤', title:'마이페이지',     desc:'아바타 · 통계 · 메뉴 리스트' },
+      { id:'demo-chat',      ico:'💭', title:'채팅 리스트',    desc:'대화방 · 안 읽음 뱃지 · 검색' },
+      { id:'demo-checkout',  ico:'✅', title:'결제 완료',      desc:'성공 피드백 · 주문 요약 · 영수증' },
+      { id:'demo-notify',    ico:'🔔', title:'알림 센터',      desc:'그룹 리스트 · 타입 아이콘 · 읽음 표시' },
+    ]
+  },
+};
+
+// Home page content (shown when no hash)
+const HOME = {
+  title: 'UIUX-DH · Unified Design System',
+  desc: '토큰부터 문장까지. 하나의 시스템, 누적되는 기록. 아래 카테고리를 클릭해 탐색을 시작하세요.',
+  items: [
+    { id:'getting-started', ico:'✦', title:'시작하기',              desc:'원칙 · 토큰 · 네이밍 · 정책 · UX Writing' },
+    { id:'foundations',     ico:'◐', title:'Foundations',           desc:'Color · Typography · Sizing · Radius · Motion' },
+    { id:'components',      ico:'▢', title:'Components',            desc:'기본 컴포넌트 15종' },
+    { id:'overlays',        ico:'◫', title:'Overlays · Navigation', desc:'Dialog · Sheet · Popover · App Bar · Tab Bar · Drawer' },
+    { id:'states',          ico:'▨', title:'States',                desc:'Skeleton · Empty State' },
+    { id:'density',         ico:'⊞', title:'Density',               desc:'Data Table · Accordion · Tree' },
+    { id:'demo',            ico:'◉', title:'실제 사용 데모',         desc:'18개 모바일 화면 데모' },
+    { id:'changelog',       ico:'⎌', title:'Release & Governance',  desc:'버전 기록 · 거버넌스' },
+  ]
+};
+
+// Section ids that represent categories (part-headers)
+const CATEGORY_IDS = ['getting-started', 'foundations', 'components', 'overlays', 'states', 'density', 'demo'];
+
+// Container for dynamic category view
+let categoryView;
+function ensureCategoryView() {
+  if (categoryView) return categoryView;
+  categoryView = document.createElement('div');
+  categoryView.className = 'category-view';
+  categoryView.id = 'category-view';
+  const container = document.querySelector('.container');
+  const hero = container.querySelector('.hero');
+  hero.parentNode.insertBefore(categoryView, hero.nextSibling);
+  return categoryView;
+}
+
+function renderCategoryView(catKey) {
+  const cat = catKey === 'home' ? HOME : CATEGORIES[catKey];
+  if (!cat) return false;
+  ensureCategoryView();
+  const breadcrumbHTML = catKey === 'home' ? '' :
+    `<div class="category-breadcrumb"><a href="#">홈</a> › <span>${cat.title.split(' · ').pop() || cat.title}</span></div>`;
+  const itemsHTML = cat.items.map(item => `
+    <a class="cat-card" href="#${item.id === 'home' ? '' : item.id}">
+      <div class="cat-card-ico">${item.ico}</div>
+      <h3>${item.title}</h3>
+      <p>${item.desc}</p>
+      <div class="cat-card-meta">자세히 보기 →</div>
+    </a>
+  `).join('');
+  categoryView.innerHTML = `
+    ${breadcrumbHTML}
+    <h1 class="category-title">${cat.title}</h1>
+    <p class="category-desc">${cat.desc}</p>
+    <div class="category-grid">${itemsHTML}</div>
+  `;
+  categoryView.classList.add('is-active');
+  return true;
+}
+
+function hideCategoryView() {
+  if (categoryView) categoryView.classList.remove('is-active');
+}
+
+function hideAllSections() {
+  document.querySelectorAll('.is-route-active').forEach(el => el.classList.remove('is-route-active'));
+  hideCategoryView();
+}
+
+function showHome() {
+  hideAllSections();
+  renderCategoryView('home');
+}
+
+function showSection(id) {
+  hideAllSections();
+  const el = document.getElementById(id);
+  if (!el) return showHome();
+  el.classList.add('is-route-active');
+  try { window.scrollTo(0, 0); } catch(e) {}
+}
+
+function highlightSidebar(id) {
+  document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('is-active'));
+  const link = document.querySelector(`.sidebar-link[data-section="${id}"]`);
+  if (!link) return;
+  link.classList.add('is-active');
+  // Auto-expand parent expandable ONLY when the active link is a sub-item.
+  // For category links themselves, defer to manual user toggle (handler below)
+  // so the user can collapse the category they are currently viewing.
+  const sub = link.closest('.sidebar-sub');
+  if (sub) {
+    const exp = sub.closest('.sidebar-expandable');
+    if (exp) exp.classList.add('is-open');
   }
-  window.toggleSidebarCollapse = toggleSidebarCollapse;
+}
 
-  // Restore collapsed state on load
-  (function restoreSidebarCollapsed() {
-    try {
-      if (localStorage.getItem('sidebar-collapsed') === '1') {
-        document.body.classList.add('sidebar-collapsed');
-      }
-    } catch(e) {}
-  })();
-
-  /* ============ STATE ============ */
-  var systemData = null;
-  var analysisCache = {};
-  var sectionDefs = [];
-
-  /* Get section definitions for a specific reference.
-     Each reference can define its own `sections` array (custom per site);
-     otherwise we fall back to the global analysisSections. */
-  function getSectionDefs(refId) {
-    if (systemData && systemData.references) {
-      for (var i = 0; i < systemData.references.length; i++) {
-        var r = systemData.references[i];
-        if (r.id === refId && Array.isArray(r.sections) && r.sections.length > 0) {
-          return r.sections;
-        }
-      }
-    }
-    return sectionDefs;
-  }
-
-  var homeHero = document.getElementById('home-hero');
-  var homeSections = document.querySelectorAll('.home-section, .home-empty');
-  var reportView = document.getElementById('report-view');
-  var refNavList = document.getElementById('ref-nav-list');
-
-  /* ============ DATA LOADING ============ */
-  // Cache-bust JSON fetches so that GitHub Pages CDN (max-age=600) doesn't serve
-  // a stale system.json or analysis.json after a fresh deploy.
-  function fetchJSON(url) {
-    var sep = url.indexOf('?') >= 0 ? '&' : '?';
-    var bust = url + sep + 'v=' + Date.now();
-    return fetch(bust, { cache: 'no-store' }).then(function (r) {
-      if (!r.ok) throw new Error(r.status);
-      return r.json();
-    });
-  }
-
-  function loadSystem() {
-    return fetchJSON('system.json').then(function (data) {
-      systemData = data;
-      sectionDefs = data.analysisSections || [];
-      buildSidebar(data.references || []);
-      return data;
-    });
-  }
-
-  function loadAnalysis(refId) {
-    if (analysisCache[refId]) return Promise.resolve(analysisCache[refId]);
-    return fetchJSON('analyses/' + refId + '/analysis.json').then(function (data) {
-      analysisCache[refId] = data;
-      return data;
-    });
-  }
-
-  /* ============ SIDEBAR BUILDING ============ */
-  function renderRefItem(ref) {
-    var pinned = (ref.flowMode || ref.categoryMode) && Array.isArray(ref.sections) && ref.sections.length > 0;
-    var liClass = pinned ? ' class="sidebar-cat-item"' : '';
-    var liAttr = pinned ? ' data-ref="' + escapeHtml(ref.id) + '"' : '';
-    var html = '<li' + liClass + liAttr + '>';
-    html += '<a class="sidebar-link' + (pinned ? ' sidebar-cat-link' : '') + '" href="#ref/' + escapeHtml(ref.id) + '" data-section="ref/' + escapeHtml(ref.id) + '">';
-    html += '<svg class="ico"><use href="#i-link"/></svg>';
-    html += '<span class="sidebar-cat-title">' + escapeHtml(ref.title) + '</span>';
-    if (pinned) {
-      html += '<svg class="sidebar-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>';
-    }
-    html += '</a>';
-    // flowMode / categoryMode references expose every section as a sidebar child link.
-    if (pinned) {
-      html += '<ul class="sidebar-sublist">';
-      ref.sections.forEach(function (sec) {
-        var subKey = 'ref/' + ref.id + '/' + sec.id;
-        html += '<li>';
-        html += '<a class="sidebar-link sidebar-sub-link" href="#' + escapeHtml(subKey) + '" data-section="' + escapeHtml(subKey) + '">';
-        if (sec.num) html += '<span class="sidebar-sub-num">' + escapeHtml(sec.num) + '</span>';
-        html += '<span class="sidebar-sub-title">' + escapeHtml(sec.title) + '</span>';
-        html += '</a>';
-        html += '</li>';
-      });
-      html += '</ul>';
-    }
-    html += '</li>';
-    return html;
-  }
-
-  // 카탈로그 그룹(인터랙션 카탈로그 / 인터랙티브 웹)을 beforeEl 위에 주입·갱신한다.
-  // type 비의존 — items만 다르면 같은 메커니즘으로 재사용. 반환값은 생성된 그룹 엘리먼트.
-  function injectCatalogGroup(groupId, title, listId, items, beforeEl) {
-    var grp = document.getElementById(groupId);
-    if (items.length > 0) {
-      if (!grp) {
-        grp = document.createElement('div');
-        grp.id = groupId;
-        grp.className = 'sidebar-group';
-        grp.innerHTML = ''
-          + '<div class="sidebar-group-title">' + title + '</div>'
-          + '<ul class="sidebar-nav" id="' + listId + '"></ul>';
-        beforeEl.parentNode.insertBefore(grp, beforeEl);
-      }
-      grp.querySelector('#' + listId).innerHTML = items.map(renderRefItem).join('');
-      return grp;
-    }
-    if (grp) grp.parentNode.removeChild(grp);
-    return null;
-  }
-
-  function buildSidebar(refs) {
-    if (!refNavList) return;
-    var webs = refs.filter(function (r) { return r.type === 'web'; });
-    var categories = refs.filter(function (r) { return r.type === 'category'; });
-    var sites = refs.filter(function (r) { return r.type !== 'category' && r.type !== 'web'; });
-
-    var groupEl = document.getElementById('sidebar-references');
-    if (!groupEl) return;
-
-    // Update group title for the existing block (sites)
-    var titleEl = groupEl.querySelector('.sidebar-group-title');
-    if (titleEl) titleEl.textContent = '레퍼런스 보고서';
-
-    if (sites.length === 0) {
-      // 사이트 분석(레퍼런스 보고서)이 없으면 빈 그룹 자체를 숨긴다 — 현재는 카탈로그만 운영
-      groupEl.style.display = 'none';
-    } else {
-      groupEl.style.display = '';
-      refNavList.innerHTML = sites.map(renderRefItem).join('');
-    }
-
-    // 그룹 순서(위→아래): 인터랙티브 웹 → 인터랙션 카탈로그 → 레퍼런스 보고서.
-    // 인터랙션 카탈로그를 먼저 sites 그룹 위에 주입한 뒤, 인터랙티브 웹을 그 위에 주입한다.
-    var catGroup = injectCatalogGroup('sidebar-categories', '인터랙션 카탈로그', 'cat-nav-list', categories, groupEl);
-    injectCatalogGroup('sidebar-webs', '인터랙티브 웹', 'web-nav-list', webs, catGroup || groupEl);
-  }
-
-  /* ============ VIEWS ============ */
-  function showHome() {
-    if (homeHero) homeHero.style.display = '';
-    homeSections.forEach(function (s) { s.style.display = ''; });
-    if (reportView) reportView.style.display = 'none';
+function route() {
+  const hash = location.hash.replace(/^#\/?/, '').trim();
+  if (!hash) {
+    showHome();
     highlightSidebar('home');
+    return;
+  }
+  // Category?
+  if (CATEGORY_IDS.includes(hash)) {
+    hideAllSections();
+    renderCategoryView(hash);
+    highlightSidebar(hash);
     window.scrollTo({ top: 0, behavior: 'instant' });
+    return;
   }
+  // Leaf section
+  showSection(hash);
+  highlightSidebar(hash);
+}
 
-  function hideHome() {
-    if (homeHero) homeHero.style.display = 'none';
-    homeSections.forEach(function (s) { s.style.display = 'none'; });
-  }
+window.addEventListener('hashchange', route);
+window.addEventListener('DOMContentLoaded', route);
+// Initial route if DOMContentLoaded already passed
+if (document.readyState !== 'loading') route();
 
-  function showReport(html) {
-    hideHome();
-    if (reportView) {
-      reportView.innerHTML = html;
-      reportView.style.display = '';
-      activateComponents();
-      activateDownloadButtons();
-    }
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }
+/* ============ SIDEBAR INTERACTIONS ============ */
 
-  /* ============ BLOCK RENDERERS ============ */
-
-  function renderBlock(block) {
-    switch (block.type) {
-      case 'heading':  return renderHeading(block);
-      case 'text':     return renderText(block);
-      case 'note':     return renderNote(block);
-      case 'kv':       return renderKV(block);
-      case 'stats':    return renderStats(block);
-      case 'sitemap':  return renderSitemap(block);
-      case 'structure': return renderStructure(block);
-      case 'palette':  return renderPalette(block);
-      case 'typo':     return renderTypo(block);
-      case 'component': return renderComponent(block);
-      case 'code':     return renderCode(block);
-      case 'spacingScale': return renderSpacingScale(block);
-      case 'radiusScale':  return renderRadiusScale(block);
-      default: return '';
-    }
-  }
-
-  function renderCode(block) {
-    var h = '<div class="blk-code-wrap">';
-    if (block.title) {
-      h += '<div class="blk-code-title"><span class="blk-code-lang">' + escapeHtml(block.lang || 'CODE') + '</span>' + escapeHtml(block.title) + '</div>';
-    }
-    h += '<pre class="blk-code"><code>' + escapeHtml(block.value || '') + '</code></pre>';
-    h += '</div>';
-    return h;
-  }
-
-  function renderHeading(block) {
-    return '<h2 class="blk-heading">' + escapeHtml(block.value) + '</h2>';
-  }
-
-  function renderText(block) {
-    return '<p class="blk-text">' + escapeHtml(block.value) + '</p>';
-  }
-
-  function renderNote(block) {
-    return '<div class="blk-note"><div class="blk-note-icon">i</div><p>' + escapeHtml(block.value) + '</p></div>';
-  }
-
-  function renderKV(block) {
-    var cols = block.columns || 1;
-    var h = '';
-    if (block.title) {
-      h += '<div class="blk-kv-title">' + escapeHtml(block.title) + '</div>';
-    }
-    h += '<div class="blk-kv blk-kv--col' + cols + '">';
-    (block.items || []).forEach(function (item) {
-      h += '<div class="blk-kv-item">';
-      h += '<dt>' + escapeHtml(item.label) + '</dt>';
-      h += '<dd>' + escapeHtml(item.value) + '</dd>';
-      h += '</div>';
-    });
-    h += '</div>';
-    return h;
-  }
-
-  function renderStats(block) {
-    var h = '<div class="blk-stats">';
-    (block.items || []).forEach(function (item) {
-      h += '<div class="blk-stat">';
-      h += '<div class="blk-stat-number">' + escapeHtml(String(item.number)) + '</div>';
-      if (item.suffix) h += '<div class="blk-stat-suffix">' + escapeHtml(item.suffix) + '</div>';
-      h += '<div class="blk-stat-label">' + escapeHtml(item.label) + '</div>';
-      h += '</div>';
-    });
-    h += '</div>';
-    return h;
-  }
-
-  function renderSitemap(block) {
-    var h = '<div class="blk-sitemap">';
-    (block.items || []).forEach(function (item) {
-      h += '<div class="blk-sitemap-group">';
-      h += '<div class="blk-sitemap-parent">' + escapeHtml(item.label) + '</div>';
-      h += '<div class="blk-sitemap-children">';
-      (item.children || []).forEach(function (child) {
-        h += '<span class="blk-sitemap-child">' + escapeHtml(child) + '</span>';
-      });
-      h += '</div></div>';
-    });
-    h += '</div>';
-    return h;
-  }
-
-  function renderStructure(block) {
-    var h = '<div class="blk-structure">';
-    (block.items || []).forEach(function (item, i) {
-      h += '<div class="blk-structure-row">';
-      h += '<div class="blk-structure-index">' + (i + 1) + '</div>';
-      h += '<div class="blk-structure-body">';
-      h += '<div class="blk-structure-label">' + escapeHtml(item.label);
-      if (item.tag) h += '<span class="blk-structure-tag">' + escapeHtml(item.tag) + '</span>';
-      h += '</div>';
-      h += '<div class="blk-structure-desc">' + escapeHtml(item.desc) + '</div>';
-      h += '</div></div>';
-    });
-    h += '</div>';
-    return h;
-  }
-
-  function renderPalette(block) {
-    var h = '';
-    if (block.title) {
-      h += '<div class="blk-palette-title">' + escapeHtml(block.title) + '</div>';
-    }
-    h += '<div class="blk-palette">';
-    (block.colors || []).forEach(function (c) {
-      var light = isLightColor(c.hex);
-      h += '<div class="blk-swatch">';
-      h += '<div class="blk-swatch-color' + (light ? ' blk-swatch--light' : '') + '" style="background:' + escapeHtml(c.hex) + '">';
-      h += '<span>' + escapeHtml(c.hex) + '</span>';
-      h += '</div>';
-      h += '<div class="blk-swatch-info">';
-      h += '<div class="blk-swatch-name">' + escapeHtml(c.name) + '</div>';
-      h += '<div class="blk-swatch-usage">' + escapeHtml(c.usage) + '</div>';
-      h += '</div></div>';
-    });
-    h += '</div>';
-    return h;
-  }
-
-  function isLightColor(hex) {
-    hex = hex.replace('#', '');
-    if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
-    var r = parseInt(hex.substring(0,2), 16);
-    var g = parseInt(hex.substring(2,4), 16);
-    var b = parseInt(hex.substring(4,6), 16);
-    return (r * 299 + g * 587 + b * 114) / 1000 > 180;
-  }
-
-  function renderTypo(block) {
-    var h = '<div class="blk-typo">';
-    (block.items || []).forEach(function (item) {
-      var style = 'font-size:' + escapeHtml(item.size) + ';font-weight:' + item.weight;
-      if (item.tracking) style += ';letter-spacing:' + escapeHtml(item.tracking);
-      h += '<div class="blk-typo-row">';
-      h += '<div class="blk-typo-meta">';
-      h += '<span class="blk-typo-label">' + escapeHtml(item.label) + '</span>';
-      h += '<span class="blk-typo-spec">' + escapeHtml(item.size) + ' · ' + item.weight;
-      if (item.tracking) h += ' · ' + escapeHtml(item.tracking);
-      h += '</span>';
-      h += '</div>';
-      h += '<div class="blk-typo-sample" style="' + style + '">' + escapeHtml(item.sample) + '</div>';
-      h += '</div>';
-    });
-    h += '</div>';
-    return h;
-  }
-
-  function renderComponent(block) {
-    var id = uid();
-    var full = block.fullWidth ? ' blk-component--full' : '';
-    var h = '<div class="blk-component' + full + '">';
-    if (block.title) {
-      h += '<div class="blk-component-title">' + escapeHtml(block.title) + '</div>';
-    }
-
-    // Embed mode: inline iframe (Framer marketplace style). Dark card + iframe.
-    if (block.embed) {
-      var emH = block.embedHeight || 640;
-      h += '<div class="blk-iframe-card">';
-      h += '  <div class="blk-iframe-bar">';
-      h += '    <div class="blk-iframe-pill"><span class="blk-iframe-pill-dot"></span>LIVE DEMO</div>';
-      if (block.embedLabel) {
-        h += '    <div class="blk-iframe-label">' + escapeHtml(block.embedLabel) + '</div>';
-      }
-      h += '    <a class="blk-iframe-open" href="' + escapeHtml(block.embed) + '" target="_blank" rel="noopener noreferrer" title="새 탭에서 열기">';
-      h += '      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
-      h += '      <span>새 탭</span>';
-      h += '    </a>';
-      h += '  </div>';
-      h += '  <div class="blk-iframe-viewport" style="height:' + emH + 'px">';
-      h += '    <iframe class="blk-iframe-frame" src="' + escapeHtml(block.embed) + '" loading="lazy" title="' + escapeHtml(block.title || 'Live demo') + '"></iframe>';
-      h += '  </div>';
-      h += '</div>';
-      h += '</div>';
-      return h;
-    }
-
-    // Preview-button mode: when block.preview URL is set, render a thumbnail card + [프리뷰] button
-    // that opens a Figma-style modal with the live preview page (matching KT&G tech stack).
-    if (block.preview) {
-      var thumbBg = block.thumbBg ? ' style="background:' + escapeHtml(block.thumbBg) + '"' : '';
-      var thumbLabel = block.thumbLabel || block.title || 'Preview';
-      h += '<div class="blk-preview-card">';
-      h += '  <div class="blk-preview-thumb"' + thumbBg + '>';
-      h += '    <div class="blk-preview-thumb-label">' + escapeHtml(thumbLabel) + '</div>';
-      h += '    <div class="blk-preview-thumb-meta">' + escapeHtml(block.preview) + '</div>';
-      h += '  </div>';
-      h += '  <button class="blk-preview-btn" data-preview-url="' + escapeHtml(block.preview) + '" data-preview-title="' + escapeHtml(block.title || '') + '">';
-      h += '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
-      h += '    <span>프리뷰 열기</span>';
-      h += '  </button>';
-      h += '</div>';
-      h += '</div>';
-      return h;
-    }
-
-    // Legacy inline preview mode (existing component blocks with inline HTML/CSS/JS)
-    var previewCls = 'blk-component-preview' + (block.fullWidth ? ' blk-component-preview--full' : '');
-    h += '<div class="' + previewCls + '" id="' + id + '"';
-    h += ' data-html="' + escapeHtml(block.html || '') + '"';
-    h += ' data-css="' + escapeHtml(block.css || '') + '"';
-    if (block.js) h += ' data-js="' + escapeHtml(block.js) + '"';
-    h += '></div></div>';
-    return h;
-  }
-
-  function renderSpacingScale(block) {
-    var h = '<div class="blk-spacing-scale">';
-    (block.items || []).forEach(function (item) {
-      h += '<div class="blk-spacing-row">';
-      h += '<div class="blk-spacing-label">' + escapeHtml(item.label) + '</div>';
-      h += '<div class="blk-spacing-bar-wrap">';
-      h += '<div class="blk-spacing-bar" style="width:' + Math.min(item.px, 200) + 'px"></div>';
-      h += '</div>';
-      h += '<div class="blk-spacing-px">' + item.px + 'px</div>';
-      h += '</div>';
-    });
-    h += '</div>';
-    return h;
-  }
-
-  function renderRadiusScale(block) {
-    var h = '<div class="blk-radius-scale">';
-    (block.items || []).forEach(function (item) {
-      var r = item.px >= 99 ? '50%' : item.px + 'px';
-      h += '<div class="blk-radius-item">';
-      h += '<div class="blk-radius-box" style="border-radius:' + r + '"></div>';
-      h += '<div class="blk-radius-info">';
-      h += '<div class="blk-radius-name">' + escapeHtml(item.label) + '</div>';
-      h += '<div class="blk-radius-val">' + (item.px >= 99 ? '50% (full)' : item.px + 'px') + '</div>';
-      if (item.usage) h += '<div class="blk-radius-usage">' + escapeHtml(item.usage) + '</div>';
-      h += '</div></div>';
-    });
-    h += '</div>';
-    return h;
-  }
-
-  /* ============ COMPONENT ACTIVATION ============ */
-  function activateComponents() {
-    var previews = document.querySelectorAll('.blk-component-preview');
-    previews.forEach(function (el) {
-      var rawHtml = el.getAttribute('data-html');
-      var rawCss = el.getAttribute('data-css');
-      var rawJs = el.getAttribute('data-js');
-      if (!rawHtml) return;
-
-      var styleTag = rawCss ? '<style>' + rawCss + '</style>' : '';
-      el.innerHTML = styleTag + rawHtml;
-
-      if (rawJs) {
-        var ioObserver = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting && !el.dataset.animated) {
-              el.dataset.animated = '1';
-              try { new Function(rawJs)(); } catch (e) { /* silent */ }
-              ioObserver.unobserve(el);
-            }
-          });
-        }, { threshold: 0.15 });
-        ioObserver.observe(el);
-      }
-    });
-
-    // Wire up [프리뷰 열기] buttons → open modal with the preview page
-    var previewBtns = document.querySelectorAll('.blk-preview-btn');
-    previewBtns.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var url = btn.getAttribute('data-preview-url');
-        var title = btn.getAttribute('data-preview-title') || '';
-        openPreviewModal(url, title);
-      });
-    });
-  }
-
-  /* ============ PREVIEW MODAL (Figma-style overlay) ============ */
-  function ensurePreviewModal() {
-    var modal = document.getElementById('preview-modal');
-    if (modal) return modal;
-    modal = document.createElement('div');
-    modal.id = 'preview-modal';
-    modal.className = 'preview-modal';
-    modal.setAttribute('aria-hidden', 'true');
-    modal.setAttribute('role', 'dialog');
-    modal.innerHTML = ''
-      + '<div class="preview-modal__backdrop" data-close></div>'
-      + '<div class="preview-modal__panel">'
-      +   '<header class="preview-modal__header">'
-      +     '<div class="preview-modal__title-wrap">'
-      +       '<span class="preview-modal__badge">PREVIEW</span>'
-      +       '<span class="preview-modal__title"></span>'
-      +     '</div>'
-      +     '<div class="preview-modal__controls">'
-      +       '<a class="preview-modal__open-tab" target="_blank" rel="noopener noreferrer" title="새 탭에서 열기">'
-      +         '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'
-      +       '</a>'
-      +       '<button class="preview-modal__close" data-close title="닫기 (ESC)" aria-label="닫기">'
-      +         '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
-      +       '</button>'
-      +     '</div>'
-      +   '</header>'
-      +   '<div class="preview-modal__viewport">'
-      +     '<iframe class="preview-modal__frame" title="Preview" loading="lazy"></iframe>'
-      +   '</div>'
-      + '</div>';
-    document.body.appendChild(modal);
-
-    // Close handlers
-    modal.querySelectorAll('[data-close]').forEach(function (el) {
-      el.addEventListener('click', closePreviewModal);
-    });
-    // ESC key
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && modal.classList.contains('is-open')) closePreviewModal();
-    });
-    return modal;
-  }
-
-  function openPreviewModal(url, title) {
-    var modal = ensurePreviewModal();
-    var frame = modal.querySelector('.preview-modal__frame');
-    var titleEl = modal.querySelector('.preview-modal__title');
-    var openTab = modal.querySelector('.preview-modal__open-tab');
-    titleEl.textContent = title || 'Preview';
-    openTab.setAttribute('href', url);
-    frame.setAttribute('src', url);
-    modal.classList.add('is-open');
-    modal.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closePreviewModal() {
-    var modal = document.getElementById('preview-modal');
-    if (!modal) return;
-    modal.classList.remove('is-open');
-    modal.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-    // Clear iframe src to stop video/audio
-    setTimeout(function () {
-      var frame = modal.querySelector('.preview-modal__frame');
-      if (frame) frame.setAttribute('src', 'about:blank');
-    }, 220);
-  }
-
-  /* ============ MARKDOWN EXPORT ============ */
-  function blockToMd(block) {
-    switch (block.type) {
-      case 'heading':
-        return '## ' + (block.value || '');
-      case 'text':
-        return block.value || '';
-      case 'note':
-        return '> ℹ️ ' + (block.value || '');
-      case 'kv': {
-        var lines = [];
-        if (block.title) lines.push('**' + block.title + '**');
-        (block.items || []).forEach(function (i) {
-          lines.push('- **' + i.label + '** — ' + i.value);
-        });
-        return lines.join('\n');
-      }
-      case 'structure': {
-        return (block.items || []).map(function (i, n) {
-          var line = (n + 1) + '. **' + i.label + '**';
-          if (i.tag) line += ' `' + i.tag + '`';
-          if (i.desc) line += '\n   ' + i.desc;
-          return line;
-        }).join('\n');
-      }
-      case 'stats': {
-        return (block.items || []).map(function (i) {
-          return '- **' + i.number + (i.suffix || '') + '** — ' + i.label;
-        }).join('\n');
-      }
-      case 'code': {
-        var lang = (block.lang || '').toLowerCase();
-        if (lang === 'js' || lang === 'javascript') lang = 'js';
-        var head = block.title ? '**' + block.title + '**\n\n' : '';
-        return head + '```' + lang + '\n' + (block.value || '') + '\n```';
-      }
-      case 'component': {
-        if (block.embed) {
-          var label = block.embedLabel || block.title || '라이브 데모';
-          var lines = ['**🎬 라이브 데모** — ' + label + ' (스크롤 진행률에 매핑)'];
-          lines.push('');
-          // demoHTMLMap (closure-injected via second arg of blockToMd) holds fetched standalone HTML.
-          // If absent (e.g. fetch failed), fall back to a relative reference.
-          var fullHTML = block._embedHTML;
-          if (fullHTML && fullHTML.length > 0) {
-            var savename = (block.embed || '').split('/').pop() || 'demo.html';
-            lines.push('아래 standalone HTML 코드를 `' + savename + '` 같은 파일로 저장한 뒤 브라우저로 열면 동일한 데모를 로컬에서 재현할 수 있습니다 (외부 의존성: Pretendard CDN 1개).');
-            lines.push('');
-            lines.push('```html');
-            lines.push(fullHTML);
-            lines.push('```');
-          } else {
-            lines.push('iframe 경로: `' + block.embed + '`');
-          }
-          return lines.join('\n');
-        }
-        if (block.title) return '**' + block.title + '**';
-        return '';
-      }
-      case 'palette': {
-        var lines = [];
-        if (block.title) lines.push('**' + block.title + '**');
-        (block.colors || []).forEach(function (c) {
-          lines.push('- `' + c.hex + '` — **' + c.name + '** · ' + (c.usage || ''));
-        });
-        return lines.join('\n');
-      }
-      default:
-        return '';
-    }
-  }
-
-  function sectionToMd(sec, sectionId, num) {
-    var lines = [];
-    var heading = num ? num + '. ' + (sec.title || sectionId) : (sec.title || sectionId);
-    // sec.title may already start with "01. ..." so avoid double-numbering
-    lines.push('## ' + (sec.title || sectionId));
-    lines.push('');
-    (sec.blocks || []).forEach(function (b) {
-      var md = blockToMd(b);
-      if (md) { lines.push(md); lines.push(''); }
-    });
-    if (sec.note) { lines.push('> ℹ️ ' + sec.note); lines.push(''); }
-    return lines.join('\n');
-  }
-
-  function buildCategoryMarkdown(analysis) {
-    var lines = [];
-    lines.push('# ' + analysis.title + (analysis.type === 'web' ? ' — 인터랙티브 웹' : ' — 인터랙션 카탈로그'));
-    lines.push('');
-    lines.push('| 항목 | 값 |');
-    lines.push('|------|------|');
-    lines.push('| 카테고리 ID | `' + analysis.id + '` |');
-    lines.push('| 작성일 | ' + analysis.date + ' |');
-    if (analysis.patternCount) lines.push('| 패턴 수 | ' + analysis.patternCount + ' |');
-    if (analysis.url) lines.push('| 참고 자료 | ' + analysis.url + ' |');
-    lines.push('');
-    if (analysis.summary) {
-      lines.push(analysis.summary);
-      lines.push('');
-    }
-    lines.push('---');
-    lines.push('');
-
-    var defs = getSectionDefs(analysis.id);
-    var sectionIds = defs.length > 0 ? defs.map(function (d) { return d.id; })
-                                     : Object.keys(analysis.sections);
-    sectionIds.forEach(function (sid) {
-      var sec = analysis.sections[sid];
-      if (!sec) return;
-      lines.push(sectionToMd(sec, sid));
-      lines.push('---');
-      lines.push('');
-    });
-
-    lines.push('');
-    lines.push('_Generated by Interaction Lab — ' + new Date().toISOString().slice(0, 10) + '_');
-    return lines.join('\n');
-  }
-
-  function buildPatternMarkdown(analysis, sectionId) {
-    var sec = analysis.sections[sectionId];
-    if (!sec) return '';
-    var lines = [];
-    lines.push('# ' + analysis.title + ' — ' + (sec.title || sectionId));
-    lines.push('');
-    lines.push('| 항목 | 값 |');
-    lines.push('|------|------|');
-    lines.push('| 카테고리 | ' + analysis.title + ' (`' + analysis.id + '`) |');
-    lines.push('| 패턴 ID | `' + sectionId + '` |');
-    lines.push('| 작성일 | ' + analysis.date + ' |');
-    if (analysis.url) lines.push('| 참고 자료 | ' + analysis.url + ' |');
-    lines.push('');
-    lines.push('---');
-    lines.push('');
-    (sec.blocks || []).forEach(function (b) {
-      var md = blockToMd(b);
-      if (md) { lines.push(md); lines.push(''); }
-    });
-    if (sec.note) { lines.push('> ℹ️ ' + sec.note); lines.push(''); }
-    lines.push('---');
-    lines.push('');
-    lines.push('_Generated by Interaction Lab — ' + new Date().toISOString().slice(0, 10) + '_');
-    return lines.join('\n');
-  }
-
-  function downloadMarkdown(filename, content) {
-    var blob = new Blob([content], { type: 'text/markdown;charset=utf-8' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function () {
-      try { document.body.removeChild(a); } catch (e) {}
-      URL.revokeObjectURL(url);
-    }, 200);
-  }
-
-  function downloadButtonHTML(opts) {
-    // opts: { kind: 'category'|'pattern', refId, sectionId?, label, meta }
-    var attrs = ' data-download-kind="' + escapeHtml(opts.kind) + '"';
-    attrs += ' data-download-ref="' + escapeHtml(opts.refId) + '"';
-    if (opts.sectionId) attrs += ' data-download-section="' + escapeHtml(opts.sectionId) + '"';
-    var h = '<button type="button" class="report-download"' + attrs + '>';
-    h += '  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
-    h += '    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>';
-    h += '    <polyline points="7 10 12 15 17 10"/>';
-    h += '    <line x1="12" y1="15" x2="12" y2="3"/>';
-    h += '  </svg>';
-    h += '  <span class="report-download-label">' + escapeHtml(opts.label) + '</span>';
-    if (opts.meta) h += '  <span class="report-download-meta">' + escapeHtml(opts.meta) + '</span>';
-    h += '</button>';
-    return h;
-  }
-
-  function activateDownloadButtons() {
-    document.querySelectorAll('.report-download').forEach(function (btn) {
-      if (btn.dataset.bound) return;
-      btn.dataset.bound = '1';
-      btn.addEventListener('click', function () {
-        var kind = btn.dataset.downloadKind;
-        var refId = btn.dataset.downloadRef;
-        var sectionId = btn.dataset.downloadSection;
-        // Disable button briefly to show busy state
-        if (btn.dataset.busy === '1') return;
-        btn.dataset.busy = '1';
-        btn.classList.add('is-busy');
-        var labelEl = btn.querySelector('.report-download-label');
-        var origLabel = labelEl ? labelEl.textContent : null;
-        if (labelEl) labelEl.textContent = '준비 중…';
-
-        var done = function () {
-          btn.dataset.busy = '';
-          btn.classList.remove('is-busy');
-          if (labelEl && origLabel != null) labelEl.textContent = origLabel;
-        };
-
-        var analysisPromise = analysisCache[refId]
-          ? Promise.resolve(analysisCache[refId])
-          : loadAnalysis(refId);
-
-        analysisPromise
-          .then(function (a) { return runDownload(kind, a, sectionId); })
-          .then(done, function (err) { console.error(err); done(); });
-      });
-    });
-  }
-
-  // Fetch all embedded demo HTML files referenced by the given sections (in parallel)
-  // and inject the raw HTML into the matching component block as `_embedHTML`,
-  // so blockToMd can render it as a fenced ```html``` code block.
-  function hydrateEmbeds(sections, onlySectionId) {
-    var jobs = [];
-    Object.keys(sections).forEach(function (sid) {
-      if (onlySectionId && sid !== onlySectionId) return;
-      (sections[sid].blocks || []).forEach(function (b) {
-        if (b.type !== 'component' || !b.embed) return;
-        var sep = b.embed.indexOf('?') >= 0 ? '&' : '?';
-        var url = b.embed + sep + 'mdbust=' + Date.now();
-        jobs.push(
-          fetch(url, { cache: 'no-store' })
-            .then(function (r) { return r.ok ? r.text() : ''; })
-            .then(function (t) { b._embedHTML = t; })
-            .catch(function () { b._embedHTML = ''; })
-        );
-      });
-    });
-    return Promise.all(jobs);
-  }
-
-  function runDownload(kind, analysis, sectionId) {
-    var onlyId = (kind === 'pattern' && sectionId) ? sectionId : null;
-    return hydrateEmbeds(analysis.sections, onlyId).then(function () {
-      if (kind === 'pattern' && sectionId) {
-        var md = buildPatternMarkdown(analysis, sectionId);
-        var sec = analysis.sections[sectionId];
-        var safeTitle = (sec && sec.title ? sec.title : sectionId).replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, '-');
-        downloadMarkdown(analysis.id + '-' + sectionId + '-' + safeTitle + '.md', md);
-      } else {
-        var md2 = buildCategoryMarkdown(analysis);
-        var fileSuffix = analysis.type === 'web' ? '-인터랙티브-웹.md' : '-카탈로그.md';
-        downloadMarkdown(analysis.id + fileSuffix, md2);
-      }
-    });
-  }
-
-  /* ============ REPORT RENDERING ============ */
-  function renderRefOverview(analysis) {
-    var h = '';
-    h += '<div class="report-header">';
-    h += '<a class="report-back" href="#">← 홈으로</a>';
-    h += '<div class="report-meta">';
-    var groupTag = analysis.type === 'web' ? '인터랙티브 웹' : '인터랙션 카탈로그';
-    h += '<span class="tag">' + groupTag + '</span>';
-    h += '<span class="report-date">' + escapeHtml(analysis.date) + '</span>';
-    h += '</div>';
-    var titleSuffix = analysis.type === 'web' ? '' : ' 카탈로그';
-    h += '<h1 class="report-title">' + escapeHtml(analysis.title) + titleSuffix + '</h1>';
-    var metaLabel = analysis.patternCount
-      ? (analysis.patternCount + ' 패턴 · 가이드라인 + 코드 스니펫 포함 .md')
-      : '가이드라인 + 코드 스니펫 포함 .md';
-    h += downloadButtonHTML({
-      kind: 'category',
-      refId: analysis.id,
-      label: '인터랙티브 다운로드',
-      meta: metaLabel
-    });
-    h += '</div>';
-
-    // Render ALL sections inline below the header (no separate navigation)
-    var defs = getSectionDefs(analysis.id);
-    var sectionIds = defs.length > 0 ? defs.map(function (d) { return d.id; })
-                                     : Object.keys(analysis.sections);
-    sectionIds.forEach(function (sid) {
-      var sec = analysis.sections[sid];
-      if (!sec) return;
-      var def = defs.find ? defs.find(function (d) { return d.id === sid; }) : null;
-      var num = def && def.num ? def.num : '';
-      h += '<section class="report-inline-section" id="sec-' + escapeHtml(sid) + '">';
-      h += '<div class="report-section-header">';
-      if (num) h += '<span class="report-section-header-num">' + escapeHtml(num) + '</span>';
-      h += '<h2 class="report-section-title">' + escapeHtml(sec.title) + '</h2>';
-      h += '</div>';
-      h += '<div class="report-blocks">';
-      if (sec.blocks && sec.blocks.length > 0) {
-        sec.blocks.forEach(function (block) {
-          h += renderBlock(block);
-        });
-      } else if (sec.items && sec.items.length > 0) {
-        h += '<div class="report-findings">';
-        sec.items.forEach(function (item) {
-          h += '<div class="finding-row">';
-          h += '<div class="finding-label">' + escapeHtml(item.label) + '</div>';
-          h += '<div class="finding-value">' + escapeHtml(item.value) + '</div>';
-          h += '</div>';
-        });
-        h += '</div>';
-      }
-      h += '</div>';
-      if (sec.note) {
-        h += '<div class="blk-note"><div class="blk-note-icon">i</div><p>' + escapeHtml(sec.note) + '</p></div>';
-      }
-      h += '</section>';
-    });
-
-    return h;
-  }
-
-  function renderSection(analysis, sectionId) {
-    var sec = analysis.sections[sectionId];
-    if (!sec) return '<p>섹션을 찾을 수 없습니다.</p>';
-    var defs = getSectionDefs(analysis.id);
-    var def = null;
-    defs.forEach(function (d) { if (d.id === sectionId) def = d; });
-    var num = def ? def.num : '';
-
-    var h = '';
-    h += '<div class="report-header">';
-    h += '<a class="report-back" href="#ref/' + escapeHtml(analysis.id) + '">← ' + escapeHtml(analysis.title) + ' 보고서</a>';
-    h += '<div class="report-meta">';
-    h += '<span class="tag">' + escapeHtml(analysis.title) + '</span>';
-    h += '<span class="report-date">' + escapeHtml(analysis.date) + '</span>';
-    h += '</div>';
-    h += '<div class="report-section-header">';
-    h += '<span class="report-section-header-num">' + escapeHtml(num) + '</span>';
-    h += '<h1 class="report-title">' + escapeHtml(sec.title) + '</h1>';
-    h += '</div>';
-    h += downloadButtonHTML({
-      kind: 'pattern',
-      refId: analysis.id,
-      sectionId: sectionId,
-      label: '인터랙티브 다운로드',
-      meta: '이 패턴의 가이드 + 코드 스니펫 .md'
-    });
-    h += '</div>';
-
-    h += '<div class="report-blocks">';
-    if (sec.blocks && sec.blocks.length > 0) {
-      sec.blocks.forEach(function (block) {
-        h += renderBlock(block);
-      });
-    } else if (sec.items && sec.items.length > 0) {
-      h += '<div class="report-findings">';
-      sec.items.forEach(function (item) {
-        h += '<div class="finding-row">';
-        h += '<div class="finding-label">' + escapeHtml(item.label) + '</div>';
-        h += '<div class="finding-value">' + escapeHtml(item.value) + '</div>';
-        h += '</div>';
-      });
-      h += '</div>';
-    }
-    h += '</div>';
-
-    if (sec.note) {
-      h += '<div class="blk-note"><div class="blk-note-icon">i</div><p>' + escapeHtml(sec.note) + '</p></div>';
-    }
-
-    var prevDef = null;
-    var nextDef = null;
-    for (var i = 0; i < defs.length; i++) {
-      if (defs[i].id === sectionId) {
-        if (i > 0) prevDef = defs[i - 1];
-        if (i < defs.length - 1) nextDef = defs[i + 1];
-        break;
-      }
-    }
-    h += '<div class="report-nav">';
-    if (prevDef) {
-      h += '<a class="report-nav-link" href="#ref/' + analysis.id + '/' + prevDef.id + '">';
-      h += '<span class="report-nav-dir">← 이전</span>';
-      h += '<span class="report-nav-label">' + escapeHtml(prevDef.num) + ' ' + escapeHtml(prevDef.title) + '</span>';
-      h += '</a>';
+/* Expandable group toggle:
+   - Same hash (already on this category) → toggle open/close
+   - Different hash → ensure open, then let navigation proceed */
+document.querySelectorAll('.sidebar-expandable > .sidebar-link').forEach(trig => {
+  trig.addEventListener('click', (e) => {
+    const parent = trig.parentElement;
+    const targetHash = trig.getAttribute('href') || '';
+    const currentHash = location.hash || '';
+    if (targetHash === currentHash) {
+      // Same destination — manual toggle (open ↔ close)
+      parent.classList.toggle('is-open');
     } else {
-      h += '<span></span>';
+      // Different destination — open and let href navigate
+      parent.classList.add('is-open');
     }
-    if (nextDef) {
-      h += '<a class="report-nav-link report-nav-next" href="#ref/' + analysis.id + '/' + nextDef.id + '">';
-      h += '<span class="report-nav-dir">다음 →</span>';
-      h += '<span class="report-nav-label">' + escapeHtml(nextDef.num) + ' ' + escapeHtml(nextDef.title) + '</span>';
-      h += '</a>';
-    }
-    h += '</div>';
-
-    return h;
-  }
-
-  /* ============ SIDEBAR HIGHLIGHT ============ */
-  function highlightSidebar(id) {
-    document.querySelectorAll('.sidebar-link').forEach(function (l) {
-      l.classList.remove('is-active');
-    });
-    var link = document.querySelector('.sidebar-link[data-section="' + id + '"]');
-    if (link) link.classList.add('is-active');
-
-    // Accordion: 현재 활성 카탈로그(ref ID)만 펼치고 나머지는 닫는다.
-    var activeRef = null;
-    if (typeof id === 'string' && id.indexOf('ref/') === 0) {
-      activeRef = id.split('/')[1];
-    }
-    document.querySelectorAll('.sidebar-cat-item').forEach(function (li) {
-      li.classList.toggle('is-expanded', li.dataset.ref === activeRef);
-    });
-  }
-
-  // Toggle behaviour: 사용자가 펼친 카탈로그를 다시 클릭하면 닫히도록 + 접힌 카탈로그를 클릭하면 펼침
-  // (URL은 그대로 바뀌고 route()가 highlightSidebar로 동기화하지만, 같은 ID를 다시 클릭하는 경우엔
-  // hashchange가 발생하지 않으므로 클릭 시점에 직접 토글 처리한다.)
-  document.addEventListener('click', function (e) {
-    var catLink = e.target.closest('.sidebar-cat-link');
-    if (!catLink) return;
-    var li = catLink.closest('.sidebar-cat-item');
-    if (!li) return;
-    var refId = li.dataset.ref;
-    var currentHash = location.hash.replace(/^#\/?/, '');
-    var goingToSameRef = currentHash === 'ref/' + refId;
-    if (goingToSameRef) {
-      // 같은 카탈로그 메인 페이지에서 다시 클릭 → toggle expand only (URL은 그대로)
-      e.preventDefault();
-      var wasExpanded = li.classList.contains('is-expanded');
-      document.querySelectorAll('.sidebar-cat-item').forEach(function (other) {
-        if (other !== li) other.classList.remove('is-expanded');
-      });
-      li.classList.toggle('is-expanded', !wasExpanded);
-    }
-    // 다른 카탈로그로 이동하는 경우엔 href에 의한 라우팅이 일어나고
-    // route() → highlightSidebar()가 expand 상태를 동기화한다.
+    // Mobile: don't auto-close sidebar when toggling category header
+    // (user might want to click a sub-item next)
   });
+});
 
-  /* ============ ROUTING ============ */
-  function route() {
-    var hash = location.hash.replace(/^#\/?/, '').trim();
-
-    if (!hash) {
-      showHome();
-      return;
-    }
-
-    var parts = hash.split('/');
-    if (parts[0] !== 'ref' || !parts[1]) {
-      showHome();
-      return;
-    }
-
-    var refId = parts[1];
-
-    // Section URL: flowMode references render only that single page-section
-    if (parts[2]) {
-      var sectionId = parts[2];
-      highlightSidebar('ref/' + refId + '/' + sectionId);
-      loadAnalysis(refId).then(function (analysis) {
-        showReport(renderSection(analysis, sectionId));
-      }).catch(function () {
-        showReport('<div class="report-header"><a class="report-back" href="#">← 홈으로</a><h1 class="report-title">분석 데이터를 불러올 수 없습니다</h1></div>');
-      });
-      return;
-    }
-
-    highlightSidebar('ref/' + refId);
-
-    loadAnalysis(refId).then(function (analysis) {
-      showReport(renderRefOverview(analysis));
-    }).catch(function () {
-      showReport('<div class="report-header"><a class="report-back" href="#">← 홈으로</a><h1 class="report-title">분석 데이터를 불러올 수 없습니다</h1></div>');
-    });
+/* Close sidebar on mobile when clicking a leaf link */
+document.querySelectorAll('.sidebar-sub .sidebar-link').forEach(link => {
+  link.addEventListener('click', () => closeSidebarMobile());
+});
+document.querySelectorAll('.sidebar-group > .sidebar-nav > li > a.sidebar-link:not(.is-external)').forEach(link => {
+  // Non-expandable top-level leaf links
+  if (!link.parentElement.classList.contains('sidebar-expandable')) {
+    link.addEventListener('click', () => closeSidebarMobile());
   }
+});
 
-  /* ============ SIDEBAR INTERACTIONS ============ */
-  document.addEventListener('click', function (e) {
-    var link = e.target.closest('.sidebar-link');
-    if (!link) return;
-    closeSidebarMobile();
-  });
+/* ESC key closes sidebar on mobile */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeSidebar();
+});
 
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeSidebar();
-  });
+/* ============ DEMO DEPENDENCY MATRIX ============
+   Each demo section declares its design-system dependencies via `data-uses`.
+   On load, we:
+   1. Build a matrix: which component/token → which demos use it.
+   2. Validate referenced CSS variables (--sm-*, --p-*, --cm-*) exist at runtime.
+   3. Expose `window.demoMatrix` for introspection / future governance.
 
-  /* ============ SCROLL FADE-IN ============ */
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
+   ⚠ When a component or token is modified, `demoMatrix.byComponent[<name>]`
+   tells you exactly which demos must be re-verified.
+*/
+function buildDemoMatrix() {
+  const sections = document.querySelectorAll('.demo-section[data-uses]');
+  const byDemo = {};
+  const byComponent = {};
+  const byToken = {};
+  const missingTokens = [];
+  const rootStyles = getComputedStyle(document.documentElement);
+
+  sections.forEach(sec => {
+    const id = sec.id;
+    const raw = (sec.getAttribute('data-uses') || '').trim();
+    if (!raw) return;
+    const parts = raw.split(',').map(s => s.trim()).filter(Boolean);
+    const comps = [];
+    const toks = [];
+    parts.forEach(part => {
+      if (part.startsWith('--')) {
+        toks.push(part);
+        if (!rootStyles.getPropertyValue(part).trim()) {
+          missingTokens.push({ demo: id, token: part });
+        }
+        (byToken[part] = byToken[part] || []).push(id);
+      } else {
+        comps.push(part);
+        (byComponent[part] = byComponent[part] || []).push(id);
       }
     });
-  }, { threshold: 0.05 });
-
-  document.querySelectorAll('.analysis-card').forEach(function (card) {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(16px)';
-    card.style.transition = 'opacity 500ms cubic-bezier(0.2,0,0,1), transform 500ms cubic-bezier(0.2,0,0,1)';
-    observer.observe(card);
+    byDemo[id] = { components: comps, tokens: toks };
   });
 
-  /* ============ INIT ============ */
-  window.addEventListener('hashchange', route);
-
-  function init() {
-    loadSystem().then(function () {
-      route();
-    }).catch(function () {
-      route();
-    });
+  const matrix = { byDemo, byComponent, byToken, missingTokens };
+  window.demoMatrix = matrix;
+  if (missingTokens.length) {
+    console.warn('[demoMatrix] Referenced CSS tokens not found at runtime:', missingTokens);
   }
+  return matrix;
+}
+window.addEventListener('DOMContentLoaded', buildDemoMatrix);
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+/* ============ DEMO: Calendar grid generation ============ */
+function renderCalendarGrid() {
+  const grid = document.getElementById('calendar-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  // April 2026: starts on Wednesday (day 3), has 30 days
+  const firstDay = 3; // 0 = Sun
+  const daysInMonth = 30;
+  const today = 22;
+  const eventDays = new Set([3, 8, 15, 22, 25, 28]);
+
+  // Leading blanks
+  for (let i = 0; i < firstDay; i++) {
+    const blank = document.createElement('div');
+    blank.style.aspectRatio = '1';
+    grid.appendChild(blank);
   }
-})();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const cell = document.createElement('div');
+    const dayOfWeek = (firstDay + d - 1) % 7;
+    const isToday = d === today;
+    const isSunday = dayOfWeek === 0;
+    const hasEvent = eventDays.has(d);
+    cell.style.cssText = `
+      aspect-ratio:1; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:3px;
+      border-radius:10px; cursor:pointer;
+      font:${isToday ? '700' : '500'} 14px/1 var(--font-sans);
+      color:${isToday ? '#fff' : (isSunday ? 'var(--sm-status-error)' : 'var(--sm-content-primary)')};
+      background:${isToday ? 'var(--sm-interactive-brand-default)' : 'transparent'};
+    `;
+    cell.innerHTML = `
+      <span>${d}</span>
+      ${hasEvent ? `<span style="width:4px;height:4px;border-radius:50%;background:${isToday ? '#fff' : 'var(--sm-interactive-brand-default)'};"></span>` : '<span style="width:4px;height:4px;"></span>'}
+    `;
+    grid.appendChild(cell);
+  }
+}
+// Render calendar grid whenever user navigates to demo-calendar
+function maybeRenderCalendar() {
+  if (location.hash.replace(/^#\/?/, '') === 'demo-calendar') {
+    setTimeout(renderCalendarGrid, 10);
+  }
+}
+window.addEventListener('hashchange', maybeRenderCalendar);
+maybeRenderCalendar();
+
+function toggleAccordion(trigger) {
+  const item = trigger.parentElement;
+  item.classList.toggle('open');
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.05 });
+
+document.querySelectorAll('section.section, section.component-section, .part-header').forEach(sec => {
+  sec.style.opacity = '0';
+  sec.style.transform = 'translateY(16px)';
+  sec.style.transition = 'opacity 500ms cubic-bezier(0.2, 0, 0, 1), transform 500ms cubic-bezier(0.2, 0, 0, 1)';
+  observer.observe(sec);
+});
+
+const chartObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const bars = entry.target.querySelectorAll('.hbar-fill, .progress-fill, .slider-fill, .stack-seg');
+      bars.forEach((bar, i) => {
+        const original = bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => { bar.style.width = original; }, 100 + i * 60);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('#chart, #progress').forEach(s => chartObserver.observe(s));
+
+// ─────────────────────────────────────────
+// Markdown Download Buttons (per-section)
+// 각 #페이지 헤더 우상단에 'Markdown' 버튼 주입.
+// 클릭 시 ${name} Design Guide.md 파일로 다운로드.
+// ─────────────────────────────────────────
+const MD_DOWNLOAD_ICON_SVG = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>';
+
+// docs/ + foundations/ 매핑 (id ↔ 표시명 ↔ md 경로)
+// CATEGORIES의 섹션 id를 실제 .md 파일 경로로 흡수.
+const STATIC_DOC_MAP = {
+  // docs/
+  'about':       { name: '디자인시스템이란', md: 'docs/00-overview.md' },
+  'principles':  { name: '6가지 원칙',       md: 'docs/01-principles.md' },
+  'tokens':      { name: '토큰 아키텍처',     md: 'docs/02-token-architecture.md' },
+  'naming':      { name: '네이밍 컨벤션',     md: 'docs/03-naming-conventions.md' },
+  'policy':      { name: '그라데이션 정책',   md: 'docs/04-gradient-policy.md' },
+  'writing':     { name: 'UX Writing 7원칙',  md: 'docs/05-ux-writing.md' },
+  // foundations/
+  'color':       { name: 'Color',            md: 'foundations/color.md' },
+  'typography':  { name: 'Typography',       md: 'foundations/typography.md' },
+  'sizing':      { name: 'Sizing',           md: 'foundations/spacing.md' },
+  'radius':      { name: 'Radius',           md: 'foundations/radius.md' },
+  'motion':      { name: 'Motion',           md: 'foundations/motion.md' },
+};
+
+let mdMappingCache = null;
+
+async function loadMdMapping() {
+  if (mdMappingCache) return mdMappingCache;
+  const map = new Map();
+  // 1) Docs/Foundations 정적 매핑
+  for (const [id, info] of Object.entries(STATIC_DOC_MAP)) {
+    map.set(id, { name: info.name, md: info.md, kind: 'static' });
+  }
+  // 2) Components + Demos: system.json
+  try {
+    const res = await fetch('system.json', { cache: 'force-cache' });
+    if (res.ok) {
+      const data = await res.json();
+      for (const c of (data.components || [])) {
+        if (c && c.id && c.md) {
+          map.set(c.id, { name: c.name || c.id, md: c.md, kind: 'static' });
+        }
+      }
+      for (const d of (data.demos || [])) {
+        if (d && d.id) {
+          map.set(d.id, { name: d.title || d.id, md: null, kind: 'demo' });
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('[md-download] system.json load failed:', e);
+  }
+  mdMappingCache = map;
+  return map;
+}
+
+function buildMdButton(id, entry) {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn btn-sm btn-ghost md-download-btn';
+  btn.dataset.mdId = id;
+  btn.dataset.mdName = entry.name;
+  btn.dataset.mdKind = entry.kind;
+  if (entry.md) btn.dataset.mdPath = entry.md;
+  btn.setAttribute('aria-label', entry.name + ' Design Guide 마크다운 다운로드');
+  btn.setAttribute('title', entry.name + ' Design Guide.md 다운로드');
+  btn.innerHTML = MD_DOWNLOAD_ICON_SVG + '<span>Markdown</span>';
+  return btn;
+}
+
+async function initMarkdownDownloadButtons() {
+  const map = await loadMdMapping();
+  const sections = document.querySelectorAll(
+    'section.component-section, section.demo-section, section.section'
+  );
+  sections.forEach(section => {
+    const id = section.id;
+    if (!id) return;
+    const entry = map.get(id);
+    if (!entry) return;
+    if (section.querySelector(':scope > .section-head > .md-download-btn, :scope > .demo-header > .md-download-btn, :scope > .section-header > .md-download-btn')) return;
+    const head = section.querySelector(':scope > .section-head, :scope > .demo-header, :scope > .section-header');
+    if (!head) return;
+    head.appendChild(buildMdButton(id, entry));
+  });
+}
+
+function triggerDownload(filename, text) {
+  const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function generateDemoMarkdown(demoId, title) {
+  const sec = document.getElementById(demoId);
+  const desc = sec && sec.querySelector('.demo-header p') ? sec.querySelector('.demo-header p').textContent.trim() : '';
+  const label = sec && sec.querySelector('.demo-header .demo-label') ? sec.querySelector('.demo-header .demo-label').textContent.trim() : '';
+  const usesAttr = sec ? (sec.dataset.uses || '') : '';
+  const uses = usesAttr.split(',').map(s => s.trim()).filter(Boolean);
+  const components = uses.filter(u => !u.startsWith('--'));
+  const tokens = uses.filter(u => u.startsWith('--'));
+  const lines = [
+    '---',
+    'demo: ' + title,
+    'id: ' + demoId,
+    'sourceHtml: "index.html#' + demoId + '"',
+    'generated: true',
+    '---',
+    '',
+    '# ' + title + ' Design Guide',
+    '',
+  ];
+  if (label) { lines.push('> ' + label, ''); }
+  if (desc)  { lines.push(desc, ''); }
+  lines.push('## 사용 컴포넌트');
+  lines.push(components.length ? components.map(c => '- `' + c + '`').join('\n') : '_없음_');
+  lines.push('', '## 사용 토큰');
+  lines.push(tokens.length ? tokens.map(t => '- `' + t + '`').join('\n') : '_없음_');
+  lines.push('', '---', '_이 문서는 `data-uses` 속성에서 자동 생성되었습니다._');
+  return lines.join('\n');
+}
+
+async function handleMdDownloadClick(e) {
+  const btn = e.target.closest('.md-download-btn');
+  if (!btn) return;
+  e.preventDefault();
+  if (btn.disabled) return;
+  btn.disabled = true;
+  const { mdId, mdName, mdKind, mdPath } = btn.dataset;
+  try {
+    let text;
+    if (mdKind === 'demo') {
+      text = generateDemoMarkdown(mdId, mdName);
+    } else if (mdPath) {
+      const res = await fetch(mdPath);
+      if (!res.ok) throw new Error(mdPath + ' → ' + res.status);
+      text = await res.text();
+    } else {
+      throw new Error('no md path');
+    }
+    triggerDownload(mdName + ' Design Guide.md', text);
+  } catch (err) {
+    console.error('[md-download]', err);
+    alert('마크다운을 불러오지 못했습니다: ' + mdName);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+document.addEventListener('click', handleMdDownloadClick);
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', initMarkdownDownloadButtons);
+} else {
+  initMarkdownDownloadButtons();
+}

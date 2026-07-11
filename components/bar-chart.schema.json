@@ -1,0 +1,30 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "chart",
+  "name": "Bar Chart",
+  "version": "0.2.0",
+  "category": "data",
+  "description": "데이터 시각화. vertical / horizontal / stacked 3타입.",
+  "variants": [
+    { "id": "vertical",   "label": "Vertical",          "description": "시간 비교 (월/주/일)" },
+    { "id": "horizontal", "label": "Horizontal",        "description": "카테고리 비교 (라벨 긴 경우)" },
+    { "id": "stacked",    "label": "Stacked",           "description": "구성 비율 + 전체량" }
+  ],
+  "states": ["rest", "hover (단일 bar 강조)", "loading"],
+  "tokens": {
+    "primary":    "--sm-interactive-brand-default",
+    "secondary":  "--sm-background-muted",
+    "gridline":   "--sm-border-subtle",
+    "label":      "--sm-content-tertiary"
+  },
+  "accessibility": {
+    "ariaNotes": [
+      "복합 차트는 table 대체 제공 권장 (aria-describedby → 데이터 표)",
+      "색상에만 의존하지 말 것 — 텍스트·패턴 병용"
+    ]
+  },
+  "whenToUse": ["수치 비교", "시간 추이", "구성 비율"],
+  "whenNotToUse": ["카테고리 3개 이하 → 단순 리스트", "연속 데이터 → Line Chart"],
+  "usedInDemos": [],
+  "relatedDocs": { "md": "components/bar-chart.md", "sourceHtml": "index.html#chart" }
+}

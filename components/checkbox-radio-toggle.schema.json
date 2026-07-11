@@ -1,0 +1,67 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "control",
+  "name": "Checkbox · Radio · Toggle",
+  "version": "0.2.0",
+  "category": "interactive",
+  "description": "Checkbox는 독립 다중 선택, Radio는 배타적 단일 선택, Toggle은 즉시 적용되는 on/off.",
+  "variants": [
+    {
+      "id": "checkbox",
+      "label": "Checkbox",
+      "html": "<label class=\"checkbox\"><input type=\"checkbox\"><span class=\"check-box\"><svg><use href=\"#i-check\"/></svg></span>동의합니다</label>"
+    },
+    {
+      "id": "checkbox-indeterminate",
+      "label": "Checkbox · Indeterminate",
+      "description": "일부 자식만 선택된 상태 (전체선택 부모)",
+      "html": "<label class=\"checkbox\"><input type=\"checkbox\" indeterminate><span class=\"check-box is-indeterminate\"></span>모두 동의</label>"
+    },
+    {
+      "id": "radio",
+      "label": "Radio",
+      "html": "<label class=\"radio\"><input type=\"radio\" name=\"plan\"><span class=\"radio-dot\"></span>월간 결제</label>"
+    },
+    {
+      "id": "toggle",
+      "label": "Toggle (Switch)",
+      "description": "상태 즉시 반영. on=iOS-style 우측 이동",
+      "html": "<label class=\"toggle\"><input type=\"checkbox\"><span class=\"toggle-track\"><span class=\"toggle-thumb\"></span></span>알림</label>"
+    }
+  ],
+  "states": ["unchecked", "checked", "indeterminate", "disabled", "focus", "hover"],
+  "tokens": {
+    "border":          "--sm-border-default",
+    "checkedBg":       "--sm-interactive-brand-default",
+    "checkedIconFg":   "#fff",
+    "toggleTrackOff":  "--sm-background-muted",
+    "toggleTrackOn":   "--sm-interactive-brand-default",
+    "radius":          "--radius-xs (checkbox), 50% (radio/toggle)"
+  },
+  "accessibility": {
+    "role": "checkbox / radio / switch (네이티브 input + CSS)",
+    "keyboardSupport": ["Space (toggle)", "Arrow Up/Down (radio group)", "Tab"],
+    "minTouchTarget": 44,
+    "ariaNotes": [
+      "label 연결: <label> 감싸기 또는 for/id",
+      "radio group: <fieldset> + <legend> 권장",
+      "toggle: role=switch + aria-checked (네이티브 checkbox 사용 시 자동)"
+    ]
+  },
+  "whenToUse": [
+    "Checkbox: 독립 항목의 다중 선택 (약관 동의, 필터)",
+    "Radio: 배타적 단일 선택 (결제 방법, 배송 옵션)",
+    "Toggle: 즉시 반영되는 설정 (알림 on/off, 다크 모드)"
+  ],
+  "whenNotToUse": [
+    "Toggle에 저장 버튼 붙이지 말 것 — Toggle은 즉시 적용",
+    "2-3개 선택지는 Segment로 대체 고려"
+  ],
+  "uxWriting": [
+    "Checkbox: 평서문 (이메일 수신 동의)",
+    "Radio: 명사구 (신용카드, 간편결제)",
+    "Toggle: 상태 레이블 (알림, 다크 모드) — On/Off 표시 중복 금지"
+  ],
+  "usedInDemos": ["demo-signup", "demo-todo", "demo-banking"],
+  "relatedDocs": { "md": "components/checkbox-radio-toggle.md", "sourceHtml": "index.html#control" }
+}

@@ -1,0 +1,16 @@
+{
+  "$meta": {
+    "name": "Z-Index Tokens",
+    "description": "쌓임 순서. 숫자가 아닌 역할로 참조합니다.",
+    "version": "0.3.0",
+    "sourceHtml": "UIUX-DH-design-system.html#L183-L189"
+  },
+  "scale": {
+    "base":           { "css": "--z-base",           "value": 0,    "use": "기본 콘텐츠" },
+    "dropdown":       { "css": "--z-dropdown",       "value": 100,  "use": "셀렉트·메뉴" },
+    "sticky":         { "css": "--z-sticky",         "value": 200,  "use": "Top App Bar · 고정 요소" },
+    "modal-backdrop": { "css": "--z-modal-backdrop", "value": 900,  "use": "모달 배경 스크림" },
+    "modal":          { "css": "--z-modal",          "value": 1000, "use": "모달·바텀시트" },
+    "toast":          { "css": "--z-toast",          "value": 1100, "use": "토스트 (모달 위)" }
+  }
+}

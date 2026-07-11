@@ -1,0 +1,55 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "drawer",
+  "name": "Drawer · Breadcrumb",
+  "version": "0.3.0",
+  "category": "navigation",
+  "description": "Drawer는 측면 슬라이드 메뉴 패널(주 메뉴), Breadcrumb은 계층 경로 표시.",
+  "variants": [
+    {
+      "id": "drawer-left",
+      "label": "Drawer · Left",
+      "description": "좌측 슬라이드 (주 메뉴)",
+      "html": "<aside class=\"drawer drawer-left\">\n  <nav class=\"drawer-nav\">\n    <a class=\"drawer-link is-active\">홈</a>\n    <a class=\"drawer-link\">설정</a>\n  </nav>\n</aside>"
+    },
+    {
+      "id": "drawer-right",
+      "label": "Drawer · Right",
+      "description": "우측 슬라이드 (필터·상세)",
+      "html": "<aside class=\"drawer drawer-right\">...</aside>"
+    },
+    {
+      "id": "breadcrumb",
+      "label": "Breadcrumb",
+      "html": "<nav class=\"breadcrumb\" aria-label=\"경로\">\n  <a>홈</a><span class=\"separator\">/</span>\n  <a>상품</a><span class=\"separator\">/</span>\n  <span aria-current=\"page\">의류</span>\n</nav>"
+    }
+  ],
+  "states": ["closed", "opening", "open", "closing"],
+  "tokens": {
+    "drawerBg":       "--sm-background-default",
+    "drawerShadow":   "--elevation-5",
+    "drawerWidth":    "288px",
+    "scrim":          "--sm-background-overlay",
+    "breadcrumbFg":   "--sm-content-tertiary",
+    "breadcrumbActive": "--sm-content-primary"
+  },
+  "accessibility": {
+    "role": "navigation (Drawer, Breadcrumb)",
+    "keyboardSupport": ["Esc (Drawer 닫기)", "Tab (포커스 트랩 — Drawer)"],
+    "ariaNotes": [
+      "Drawer: aria-label=\"주 메뉴\" + 열릴 때 aria-expanded",
+      "Breadcrumb: aria-label=\"경로\", 마지막 항목에 aria-current=page"
+    ]
+  },
+  "whenToUse": [
+    "Drawer: 10개 이상 메뉴 (Tab Bar로 불가능한 경우), 임시 필터 패널",
+    "Breadcrumb: 깊은 계층 탐색 (상품 카테고리, 파일 경로)"
+  ],
+  "whenNotToUse": [
+    "주 이동 3–5개 → Tab Bar",
+    "얕은 구조 (2depth) → Breadcrumb 불필요"
+  ],
+  "uxWriting": ["Drawer 항목: 간결한 명사", "Breadcrumb: 각 항목 2-4자"],
+  "usedInDemos": [],
+  "relatedDocs": { "md": "components/drawer-breadcrumb.md", "sourceHtml": "index.html#drawer" }
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "border",
+  "name": "Border · Divider",
+  "version": "0.2.0",
+  "category": "container",
+  "description": "Border는 요소의 경계(4강도), Divider는 섹션 구분선(3패턴).",
+  "variants": [
+    { "id": "border-subtle",  "label": "Border · Subtle",  "tokens": { "color": "--sm-border-subtle" } },
+    { "id": "border-default", "label": "Border · Default", "tokens": { "color": "--sm-border-default" } },
+    { "id": "border-strong",  "label": "Border · Strong",  "tokens": { "color": "--sm-border-strong" } },
+    { "id": "border-brand",   "label": "Border · Brand",   "tokens": { "color": "--sm-border-brand" } },
+    { "id": "divider-solid",  "label": "Divider · Solid",  "html": "<hr class=\"divider\">" },
+    { "id": "divider-dashed", "label": "Divider · Dashed", "html": "<hr class=\"divider divider-dashed\">" },
+    { "id": "divider-with-label", "label": "Divider · With label", "html": "<div class=\"m-divider\">또는</div>" }
+  ],
+  "states": ["rest"],
+  "tokens": { "color": "--sm-border-{strength}", "width": "1px" },
+  "whenToUse": ["영역 경계", "섹션 분리", "대체 인풋 구분 (OR)"],
+  "whenNotToUse": ["시각적 충분한 공백으로 분리 가능하면 생략"],
+  "usedInDemos": ["demo-login", "demo-signup", "demo-pricing", "demo-store"],
+  "relatedDocs": { "md": "components/border-divider.md", "sourceHtml": "index.html#border" }
+}

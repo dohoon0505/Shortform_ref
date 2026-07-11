@@ -1,0 +1,75 @@
+{
+  "$meta": {
+    "tier": 1,
+    "name": "Primitive Tokens",
+    "description": "원시 토큰. 팔레트의 원재료. UI에 직접 사용하지 않습니다. 모든 시맨틱 토큰의 출처.",
+    "prefix": "--p-",
+    "version": "0.3.0",
+    "sourceHtml": "UIUX-DH-design-system.html#L27-L68"
+  },
+  "neutral": {
+    "description": "쿨톤 그레이. 약간의 브랜드 틴트가 들어간 중립 스케일.",
+    "scale": {
+      "0":   { "value": "#FFFFFF", "css": "--p-neutral-0" },
+      "10":  { "value": "#F8F9FB", "css": "--p-neutral-10" },
+      "20":  { "value": "#F1F3F7", "css": "--p-neutral-20" },
+      "30":  { "value": "#E6E9F0", "css": "--p-neutral-30" },
+      "40":  { "value": "#D4D8E2", "css": "--p-neutral-40" },
+      "50":  { "value": "#B1B6C4", "css": "--p-neutral-50" },
+      "60":  { "value": "#818797", "css": "--p-neutral-60" },
+      "70":  { "value": "#5A5F6E", "css": "--p-neutral-70" },
+      "80":  { "value": "#3C404B", "css": "--p-neutral-80" },
+      "85":  { "value": "#2A2D36", "css": "--p-neutral-85" },
+      "90":  { "value": "#1B1D24", "css": "--p-neutral-90" },
+      "95":  { "value": "#111319", "css": "--p-neutral-95" },
+      "100": { "value": "#0B0D12", "css": "--p-neutral-100" }
+    }
+  },
+  "indigo": {
+    "description": "브랜드 프라이머리. 500이 시그니처.",
+    "brandSignature": "--p-indigo-500",
+    "scale": {
+      "50":  { "value": "#EEEDFD", "css": "--p-indigo-50" },
+      "100": { "value": "#DDDAFB", "css": "--p-indigo-100" },
+      "200": { "value": "#BCB4F7", "css": "--p-indigo-200" },
+      "300": { "value": "#9A8CF2", "css": "--p-indigo-300" },
+      "400": { "value": "#7968EE", "css": "--p-indigo-400" },
+      "500": { "value": "#4F46E5", "css": "--p-indigo-500" },
+      "600": { "value": "#3D34C2", "css": "--p-indigo-600" },
+      "700": { "value": "#2E2896", "css": "--p-indigo-700" },
+      "800": { "value": "#211C6F", "css": "--p-indigo-800" },
+      "900": { "value": "#16134A", "css": "--p-indigo-900" }
+    }
+  },
+  "amber": {
+    "description": "Signal/Accent. 제한적으로만 사용. 주의·강조.",
+    "scale": {
+      "300": { "value": "#FFE066", "css": "--p-amber-300" },
+      "400": { "value": "#FFD60A", "css": "--p-amber-400" },
+      "500": { "value": "#EAB700", "css": "--p-amber-500" },
+      "600": { "value": "#B68B00", "css": "--p-amber-600" }
+    }
+  },
+  "green": {
+    "description": "Success primitives.",
+    "scale": {
+      "400": { "value": "#22C55E", "css": "--p-green-400" },
+      "500": { "value": "#16A34A", "css": "--p-green-500" }
+    }
+  },
+  "red": {
+    "description": "Error/Danger primitives.",
+    "scale": {
+      "400": { "value": "#F87171", "css": "--p-red-400" },
+      "500": { "value": "#EF4444", "css": "--p-red-500" },
+      "600": { "value": "#DC2626", "css": "--p-red-600" }
+    }
+  },
+  "blue": {
+    "description": "Info primitives.",
+    "scale": {
+      "400": { "value": "#3B82F6", "css": "--p-blue-400" },
+      "500": { "value": "#2563EB", "css": "--p-blue-500" }
+    }
+  }
+}

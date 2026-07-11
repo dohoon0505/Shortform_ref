@@ -1,0 +1,64 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "asset",
+  "name": "Asset · Icon",
+  "version": "0.3.2",
+  "category": "data",
+  "description": "UIUX-DH Icon Package v1. SVG 심볼 스프라이트(40+ 심볼). 24×24 viewBox · 1.7 stroke · round linecap/linejoin · currentColor.",
+  "variants": [
+    {
+      "id": "nav-pair",
+      "label": "Navigation pair (outline + fill)",
+      "description": "탭바 액티브/인액티브 쌍",
+      "html": "<svg class=\"ico\"><use href=\"#i-home\"/></svg>\n<svg class=\"ico\"><use href=\"#i-home-fill\"/></svg>"
+    },
+    {
+      "id": "action",
+      "label": "Action",
+      "description": "back/close/plus/minus/chevron 등",
+      "html": "<svg class=\"ico\"><use href=\"#i-arrow-left\"/></svg>"
+    },
+    {
+      "id": "common",
+      "label": "Common",
+      "description": "search/bell/heart/settings/map-pin 등",
+      "html": "<svg class=\"ico\"><use href=\"#i-bell\"/></svg>"
+    },
+    {
+      "id": "status",
+      "label": "Status",
+      "html": "<svg class=\"ico\" style=\"color:var(--sm-status-success);\"><use href=\"#i-check-circle\"/></svg>"
+    }
+  ],
+  "sizes": [
+    { "id": "ico-sm", "px": 16 },
+    { "id": "ico",    "px": 20 },
+    { "id": "ico-md", "px": 24 },
+    { "id": "ico-lg", "px": 32 },
+    { "id": "ico-xl", "px": 40 }
+  ],
+  "states": ["rest"],
+  "tokens": { "color": "currentColor (부모 color 상속)" },
+  "catalog": [
+    "i-home", "i-home-fill", "i-calendar", "i-calendar-fill", "i-diary", "i-diary-fill",
+    "i-cart", "i-cart-fill", "i-user", "i-chat", "i-chat-fill", "i-users", "i-users-fill",
+    "i-arrow-left", "i-arrow-right", "i-chevron-left", "i-chevron-right", "i-chevron-up", "i-chevron-down",
+    "i-close", "i-check", "i-plus", "i-minus", "i-more-h", "i-more-v", "i-menu",
+    "i-search", "i-bell", "i-heart", "i-heart-fill", "i-star", "i-star-fill",
+    "i-settings", "i-edit", "i-trash", "i-share", "i-filter", "i-link",
+    "i-eye", "i-eye-off", "i-mail", "i-clock", "i-map-pin", "i-camera", "i-image",
+    "i-info", "i-alert", "i-check-circle", "i-x-circle",
+    "i-receipt", "i-coffee", "i-chart"
+  ],
+  "accessibility": {
+    "ariaNotes": [
+      "장식용 아이콘: aria-hidden=true",
+      "의미 있는 아이콘: aria-label 또는 <title> 제공",
+      "이모지 사용 금지 (원칙)"
+    ]
+  },
+  "whenToUse": ["탭바 / 액션 버튼 / 상태 표시 / 메타 아이콘"],
+  "whenNotToUse": ["복잡한 일러스트 → 별도 SVG/IMG"],
+  "usedInDemos": ["demo-login", "demo-signup", "demo-community", "demo-store", "demo-calendar", "demo-todo", "demo-booking", "demo-foodorder", "demo-shopping", "demo-social", "demo-banking", "demo-map", "demo-mypage", "demo-chat", "demo-checkout", "demo-notify"],
+  "relatedDocs": { "md": "components/asset-icon.md", "sourceHtml": "index.html#asset" }
+}

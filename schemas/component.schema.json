@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://uiux-dh.example/schemas/component.schema.json",
+  "title": "UIUX-DH Component Specification",
+  "description": "디자인시스템 컴포넌트 1종에 대한 기계 판독용 사양. components/<id>.schema.json 파일 구조를 정의.",
+  "type": "object",
+  "required": ["id", "name", "version", "category", "description"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema":     { "type": "string" },
+    "id":          { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "kebab-case. system.json의 components[].id와 일치" },
+    "name":        { "type": "string", "description": "사람이 읽는 이름. 예: 'Button'" },
+    "version":     { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "category":    { "enum": ["interactive", "container", "feedback", "data", "navigation", "overlay", "state", "density"] },
+    "description": { "type": "string", "description": "한 줄 요약" },
+    "variants": {
+      "type": "array",
+      "description": "변형(대표적 형태) 목록. 각 variant는 독립적인 시각적·기능적 변화.",
+      "items": {
+        "type": "object",
+        "required": ["id", "label"],
+        "properties": {
+          "id":          { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "label":       { "type": "string" },
+          "description": { "type": "string" },
+          "html":        { "type": "string", "description": "복사·붙여넣기 가능한 HTML snippet" },
+          "tokens":      { "type": "object", "description": "이 variant에서 사용되는 컴포넌트 토큰 매핑" },
+          "classes":     { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "sizes":  { "type": "array", "items": { "type": "object", "required": ["id"] } },
+    "states": { "type": "array", "items": { "type": "string", "enum": ["rest","hover","active","focus","disabled","loading","selected","expanded","collapsed"] } },
+    "tokens": { "type": "object", "description": "컴포넌트 레벨 토큰 목록. 키는 역할, 값은 CSS 변수명" },
+    "accessibility": {
+      "type": "object",
+      "properties": {
+        "role":            { "type": "string" },
+        "keyboardSupport": { "type": "array", "items": { "type": "string" } },
+        "minTouchTarget":  { "type": "integer", "minimum": 24 },
+        "focusRing":       { "type": "string" },
+        "ariaNotes":       { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "whenToUse":    { "type": "array", "items": { "type": "string" } },
+    "whenNotToUse": { "type": "array", "items": { "type": "string" } },
+    "uxWriting":    { "type": "array", "items": { "type": "string" }, "description": "해당 컴포넌트의 라이팅 규칙" },
+    "usedInDemos":  { "type": "array", "items": { "type": "string", "pattern": "^demo-[a-z][a-z0-9-]*$" }, "description": "data-uses 매트릭스에서 자동 역추출 가능" },
+    "relatedDocs":  {
+      "type": "object",
+      "properties": {
+        "md":         { "type": "string", "description": "보조 서술용 MD 경로" },
+        "sourceHtml": { "type": "string", "description": "index.html 내 섹션 id 또는 라인 앵커" }
+      }
+    }
+  }
+}

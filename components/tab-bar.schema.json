@@ -1,0 +1,65 @@
+{
+  "$schema": "../schemas/component.schema.json",
+  "id": "tabbar",
+  "name": "Tab Bar",
+  "version": "0.3.2",
+  "category": "navigation",
+  "description": "모바일 하단 고정. 앱 전체 최상위 이동 (3–5탭). 활성 탭은 fill 아이콘 + 브랜드 색.",
+  "variants": [
+    {
+      "id": "four-tabs",
+      "label": "4 Tabs",
+      "html": "<div class=\"m-tabbar\">\n  <div class=\"m-tabbar-item active\"><svg class=\"ico\"><use href=\"#i-home-fill\"/></svg>홈</div>\n  <div class=\"m-tabbar-item\"><svg class=\"ico\"><use href=\"#i-search\"/></svg>탐색</div>\n  <div class=\"m-tabbar-item\"><svg class=\"ico\"><use href=\"#i-heart\"/></svg>찜</div>\n  <div class=\"m-tabbar-item\"><svg class=\"ico\"><use href=\"#i-user\"/></svg>내 정보</div>\n</div>"
+    },
+    {
+      "id": "five-tabs",
+      "label": "5 Tabs (standard)",
+      "description": "디자인시스템 표준 — 홈 · 탐색 · 중앙액션 · 알림 · 프로필",
+      "html": "<div class=\"m-tabbar\">\n  <div class=\"m-tabbar-item active\">홈</div>\n  <div class=\"m-tabbar-item\">검색</div>\n  <div class=\"m-tabbar-item\">주문</div>\n  <div class=\"m-tabbar-item\">찜</div>\n  <div class=\"m-tabbar-item\">내 정보</div>\n</div>"
+    },
+    {
+      "id": "with-badge",
+      "label": "With Badge",
+      "description": "안읽음 카운트 표시",
+      "html": "<div class=\"m-tabbar-item\" style=\"position:relative;\">\n  <svg class=\"ico\"><use href=\"#i-chat\"/></svg>\n  <span class=\"tabbar-badge\">3</span>\n  채팅\n</div>"
+    }
+  ],
+  "iconPairs": [
+    { "inactive": "i-home",     "active": "i-home-fill" },
+    { "inactive": "i-diary",    "active": "i-diary-fill" },
+    { "inactive": "i-calendar", "active": "i-calendar-fill" },
+    { "inactive": "i-cart",     "active": "i-cart-fill" },
+    { "inactive": "i-heart",    "active": "i-heart-fill" },
+    { "inactive": "i-chat",     "active": "i-chat-fill" },
+    { "inactive": "i-users",    "active": "i-users-fill" },
+    { "inactive": "i-star",     "active": "i-star-fill" }
+  ],
+  "states": ["rest", "active", "disabled"],
+  "tokens": {
+    "bg":          "--sm-background-default",
+    "border":      "--sm-border-subtle",
+    "inactiveFg":  "--sm-content-tertiary",
+    "activeFg":    "--sm-content-brand",
+    "badgeBg":     "--sm-status-error",
+    "height":      "68px",
+    "paddingBottom":"16px (safe-area)"
+  },
+  "accessibility": {
+    "role": "navigation",
+    "ariaNotes": [
+      "aria-label=\"주요 메뉴\"",
+      "각 탭: role=link + aria-current=page (활성)",
+      "탭 간 이동은 Tab 키 (Arrow 선택)"
+    ],
+    "minTouchTarget": 44
+  },
+  "whenToUse": ["앱 전체 주요 영역 간 이동 (3–5개)"],
+  "whenNotToUse": [
+    "같은 화면 내 콘텐츠 전환 → Tabs · Segment",
+    "6개 이상 → Drawer 또는 Bottom Sheet 메뉴",
+    "웹 데스크톱 → Top Nav"
+  ],
+  "uxWriting": ["각 탭 2자 권장 (홈, 검색, 찜, 내 정보)", "활성 탭은 bold + 브랜드 색"],
+  "usedInDemos": ["demo-community", "demo-store", "demo-booking", "demo-foodorder", "demo-shopping", "demo-social", "demo-banking", "demo-map", "demo-mypage", "demo-chat", "demo-notify"],
+  "relatedDocs": { "md": "components/tab-bar.md", "sourceHtml": "index.html#tabbar" }
+}

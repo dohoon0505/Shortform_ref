@@ -1,0 +1,98 @@
+{
+  "$schema": "../schemas/snippet.schema.json",
+  "$meta": {
+    "name": "Common Patterns Library",
+    "description": "자주 쓰이는 컴포넌트 조합 패턴. 여러 컴포넌트를 엮은 검증된 레시피. AI가 '로그인 폼 만들어줘' 같은 요청에 1-read로 답할 수 있도록.",
+    "version": "0.5.0"
+  },
+  "patterns": [
+    {
+      "id": "login-form",
+      "title": "로그인 폼",
+      "description": "이메일·비밀번호 + 소셜 로그인. 하단 CTA + 회원가입 링크.",
+      "category": "form",
+      "uses": ["textfield", "button", "border"],
+      "tokens": ["--sm-interactive-brand-default", "--sm-content-brand", "--sm-border-subtle"],
+      "html": "<div class=\"m-body\">\n  <h1 class=\"m-title\">다시 만나 반가워요</h1>\n  <p class=\"m-sub\">계정으로 로그인하고 이어서 진행하세요.</p>\n  <div class=\"m-field\"><label>이메일</label><input class=\"m-input\" type=\"email\" placeholder=\"you@example.com\"></div>\n  <div class=\"m-field\"><label>비밀번호</label><input class=\"m-input\" type=\"password\" placeholder=\"8자 이상\"></div>\n  <button class=\"m-btn-primary\">로그인</button>\n  <div class=\"m-divider\">또는</div>\n  <div class=\"m-social-row\">\n    <div class=\"m-social\">💬</div><div class=\"m-social\">N</div><div class=\"m-social\">G</div>\n  </div>\n  <p style=\"text-align:center;margin-top:32px;font:400 13px/1.4 var(--font-sans);color:var(--sm-content-secondary);\">처음이신가요? <a class=\"m-link\">회원가입</a></p>\n</div>"
+    },
+    {
+      "id": "signup-step",
+      "title": "회원가입 단계",
+      "description": "진행률 바 + 입력 필드 + 약관 체크박스 + 다음 버튼",
+      "category": "form",
+      "uses": ["progress", "textfield", "control", "button"],
+      "tokens": ["--sm-interactive-brand-default", "--sm-status-error"],
+      "html": "<div style=\"padding:0 20px;margin:12px 0 20px;\">\n  <div style=\"height:4px;background:var(--sm-background-muted);border-radius:99px;overflow:hidden;\">\n    <div style=\"height:100%;width:50%;background:var(--sm-interactive-brand-default);\"></div>\n  </div>\n</div>\n<h1 class=\"m-title\">기본 정보</h1>\n<div class=\"m-field\"><label>이름 <span style=\"color:var(--sm-status-error);\">*</span></label><input class=\"m-input\"></div>\n<label class=\"checkbox\"><input type=\"checkbox\"><span class=\"check-box\"></span>이용약관 · 개인정보 수집 동의</label>\n<button class=\"m-btn-primary\">다음</button>"
+    },
+    {
+      "id": "pricing-card",
+      "title": "가격 플랜 카드",
+      "description": "추천 뱃지 + 가격 + 기능 리스트 + CTA. brand 보더로 강조.",
+      "category": "card",
+      "uses": ["others", "badge", "button"],
+      "tokens": ["--sm-interactive-brand-default", "--sm-interactive-brand-subtle"],
+      "html": "<div style=\"border:2px solid var(--sm-interactive-brand-default);border-radius:16px;padding:20px;background:var(--sm-interactive-brand-subtle);position:relative;\">\n  <span style=\"position:absolute;top:-10px;right:16px;padding:4px 10px;background:var(--sm-interactive-brand-default);color:#fff;border-radius:99px;font:700 10px/1 var(--font-mono);\">RECOMMENDED</span>\n  <div style=\"font:700 14px/1 var(--font-mono);color:var(--sm-content-brand);text-transform:uppercase;\">PRO</div>\n  <div style=\"font:800 32px/1 var(--font-sans);letter-spacing:-0.02em;\">15,200원<span style=\"font:500 12px/1;color:var(--sm-content-tertiary);\">/월</span></div>\n  <p>실무에 필요한 모든 기능과 우선 지원.</p>\n  <div>✓ 무제한 프로젝트<br>✓ 팀원 최대 10명<br>✓ 분석 대시보드</div>\n  <button class=\"m-btn-primary\">Pro 플랜으로 시작</button>\n</div>"
+    },
+    {
+      "id": "product-card-badge",
+      "title": "상품 카드 + 할인 뱃지",
+      "description": "썸네일 + 할인율 뱃지 + 브랜드 + 상품명 + 가격",
+      "category": "card",
+      "uses": ["others", "badge"],
+      "tokens": ["--sm-status-error"],
+      "html": "<div>\n  <div style=\"aspect-ratio:1;background:linear-gradient(135deg,#F59E0B,#D97706);border-radius:12px;position:relative;\">\n    <span style=\"position:absolute;top:8px;left:8px;padding:3px 6px;background:var(--sm-status-error);color:#fff;border-radius:4px;font:700 9px/1 var(--font-mono);\">-30%</span>\n  </div>\n  <div style=\"font:400 11px/1.2 var(--font-sans);color:var(--sm-content-tertiary);margin:8px 0 2px;\">UIUX-DH</div>\n  <div style=\"font:500 13px/1.3 var(--font-sans);color:var(--sm-content-primary);\">캔버스 크로스백</div>\n  <div style=\"display:flex;gap:6px;align-items:baseline;margin-top:4px;\">\n    <div style=\"font:700 14px/1;color:var(--sm-status-error);\">62,000원</div>\n    <div style=\"font:400 11px/1;color:var(--sm-content-tertiary);text-decoration:line-through;\">89,000원</div>\n  </div>\n</div>"
+    },
+    {
+      "id": "promo-banner-compact",
+      "title": "프로모션 배너 (Compact)",
+      "description": "리본 뱃지 + 아이콘 + 제목 + 가격",
+      "category": "banner",
+      "uses": ["banner"],
+      "tokens": ["--sm-content-brand"],
+      "html": "<div class=\"banner banner-compact banner-rose\">\n  <div class=\"banner-ribbon\">배짱할인</div>\n  <div class=\"banner-image\"><!-- thumbnail --></div>\n  <div class=\"banner-content\">\n    <div class=\"banner-eyebrow\">버거 파트너</div>\n    <h3 class=\"banner-title\">최소 3,000원 할인부터</h3>\n  </div>\n</div>"
+    },
+    {
+      "id": "stat-card",
+      "title": "통계 카드 (숫자 + 트렌드)",
+      "description": "큰 숫자 + 트렌드 뱃지 + 진행률. tabular-nums 필수.",
+      "category": "card",
+      "uses": ["others", "badge", "progress"],
+      "tokens": ["--sm-status-success-subtle"],
+      "html": "<div class=\"card-demo\">\n  <div class=\"card-demo-head\">\n    <div><h4>이번 주 지출</h4><div class=\"sub\">2026.04.15 — 04.21</div></div>\n    <span class=\"badge badge-success\">-12%</span>\n  </div>\n  <div style=\"font:700 32px/1.1 var(--font-sans);letter-spacing:-0.03em;font-variant-numeric:tabular-nums;\">₩482,000</div>\n  <div class=\"progress\"><div class=\"progress-fill\" style=\"width:48%;\"></div></div>\n  <div style=\"display:flex;justify-content:space-between;margin-top:12px;font:500 12px/1;color:var(--sm-content-tertiary);\">\n    <span>예산의 48%</span><span>목표 ₩1,000,000</span>\n  </div>\n</div>"
+    },
+    {
+      "id": "empty-search",
+      "title": "검색 결과 없음",
+      "description": "Empty State · search variant. 키워드 + 재시도 버튼.",
+      "category": "empty",
+      "uses": ["empty", "button"],
+      "html": "<div class=\"empty\">\n  <div class=\"empty-illust empty-illust-search\"></div>\n  <h3>'UIUX-DH'와 일치하는 결과가 없어요</h3>\n  <p>다른 키워드로 다시 검색해보세요.</p>\n  <button class=\"btn btn-outline\">검색 초기화</button>\n</div>"
+    },
+    {
+      "id": "confirm-dialog",
+      "title": "확인 대화상자 (Destructive)",
+      "description": "되돌릴 수 없는 액션. 위험한 버튼은 오른쪽.",
+      "category": "dialog",
+      "uses": ["dialog", "button"],
+      "tokens": ["--sm-status-error"],
+      "html": "<div class=\"dialog\">\n  <h4>삭제한 프로젝트는 복구할 수 없어요</h4>\n  <p>'디자인시스템 v0.3' 프로젝트와 포함된 12개의 파일이 함께 삭제돼요.</p>\n  <div class=\"dialog-actions\">\n    <button class=\"btn btn-secondary\">닫기</button>\n    <button class=\"btn btn-danger\">삭제하기</button>\n  </div>\n</div>"
+    },
+    {
+      "id": "toast-success",
+      "title": "성공 토스트",
+      "description": "3-5초 자동 소멸. 즉시 피드백.",
+      "category": "feedback",
+      "uses": ["alert"],
+      "tokens": ["--sm-status-success"],
+      "html": "<div class=\"toast toast-bottom toast-success\">\n  <svg class=\"ico ico-sm\"><use href=\"#i-check-circle\"/></svg>\n  링크가 복사됐어요\n</div>"
+    },
+    {
+      "id": "list-row-avatar",
+      "title": "아바타 리스트 행",
+      "description": "Leading 아바타 + 이름 + 시간 + 우측 chevron",
+      "category": "list",
+      "uses": ["list", "avatar"],
+      "html": "<div class=\"list-item\">\n  <div class=\"avatar sz-md a1\">DH<span class=\"status-ring\"></span></div>\n  <div class=\"list-body\">\n    <div class=\"title\">김도훈</div>\n    <div class=\"sub\">2시간 전 · 디자인</div>\n  </div>\n  <svg class=\"ico ico-sm trailing\"><use href=\"#i-chevron-right\"/></svg>\n</div>"
+    }
+  ]
+}
