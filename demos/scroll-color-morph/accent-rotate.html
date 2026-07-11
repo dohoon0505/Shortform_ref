@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06. 액센트 로테이트 — Scroll Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #000; color: #fff;
+      font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      will-change: background-color;
+    }
+    .demo-controls {
+      position: fixed; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      z-index: 20;
+    }
+    .demo-reset {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.72);
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 8px 14px; cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: color 160ms, background 160ms, border-color 160ms;
+    }
+    .demo-reset:hover {
+      color: #fff; background: rgba(0,0,0,0.55); border-color: rgba(255,255,255,0.32);
+    }
+    .demo-label {
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.14em; text-transform: uppercase;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    }
+    .demo-hint {
+      position: fixed; right: 16px; bottom: 24px;
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      z-index: 20;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      animation: demo-hint-bounce 1.6s ease-in-out infinite;
+    }
+    @keyframes demo-hint-bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.45; }
+      50%       { transform: translateY(4px); opacity: 0.8; }
+    }
+    .demo-progress {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 2px; background: rgba(127,127,127,0.18);
+      z-index: 20;
+    }
+    .demo-progress > div {
+      height: 100%; background: #fff; width: 0;
+      mix-blend-mode: difference;
+      transition: width 60ms linear;
+    }
+    .scroll-track { min-height: 240vh; position: relative; }
+    .sticky-stage {
+      position: sticky; top: 0;
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 8vw 60px;
+      overflow: hidden;
+    }
+    /* 패턴별 CSS */
+    .acc-wrap { text-align: center; max-width: 780px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    .acc-hud { font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.22em; padding: 8px 14px; border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; color: rgba(255,255,255,0.6); }
+    .acc-head { font: 800 56px/1.2 "Pretendard Variable","Pretendard",system-ui; letter-spacing: -0.02em; margin: 0; color: #fff; }
+    .acc-bar { width: 88px; height: 6px; border-radius: 3px; background: hsl(220, 88%, 62%); }
+    .acc-sub { font: 400 18px/1.7 "Pretendard Variable","Pretendard",system-ui; color: rgba(255,255,255,0.62); margin: 0; }
+    .acc-link { font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
+    .acc-btn { border: none; border-radius: 999px; padding: 14px 30px; font: 700 16px/1 "Pretendard Variable","Pretendard",system-ui; color: #0a0a0c; background: hsl(220, 88%, 62%); cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">06 · 액센트 로테이트</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <div class="acc-wrap">
+        <span class="acc-hud">HUE 220°</span>
+        <h1 class="acc-head">배경은 그대로,<br><span class="acc">액센트만</span> 돕니다.</h1>
+        <div class="acc-bar"></div>
+        <p class="acc-sub">버튼·링크·하이라이트가 같은 hue 토큰을 공유합니다. <a class="acc acc-link" href="#" onclick="return false;">자세히 보기</a></p>
+        <button class="acc-btn" type="button">시작하기</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var track = document.querySelector(".scroll-track");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+
+      // 공용 색 보간 헬퍼
+      function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+      function lerp(a, b, t){ return a + (b - a) * t; }
+      function mixArr(a, b, t){
+        return [Math.round(lerp(a[0], b[0], t)), Math.round(lerp(a[1], b[1], t)), Math.round(lerp(a[2], b[2], t))];
+      }
+      function lerpRGB(a, b, t){
+        var c = mixArr(a, b, t);
+        return "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+      }
+      function pick3Arr(stops, p){
+        var seg = p < 0.5 ? 0 : 1;
+        var t = clamp01(seg === 0 ? p / 0.5 : (p - 0.5) / 0.5);
+        return mixArr(stops[seg], stops[seg + 1], t);
+      }
+      function pick3(stops, p){
+        var c = pick3Arr(stops, p);
+        return "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+      }
+
+      // 패턴별 init + applyReveal 정의
+      var accEls = document.querySelectorAll(".acc");
+      var btnEl = document.querySelector(".acc-btn");
+      var barEl = document.querySelector(".acc-bar");
+      var hudEl = document.querySelector(".acc-hud");
+      function applyReveal(p){
+        var hue = Math.round(220 + 180 * p) % 360;
+        var accent = "hsl(" + hue + ", 88%, 62%)";
+        accEls.forEach(function(el){ el.style.color = accent; });
+        btnEl.style.backgroundColor = accent;
+        barEl.style.backgroundColor = accent;
+        hudEl.textContent = "HUE " + hue + "°";
+      }
+
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

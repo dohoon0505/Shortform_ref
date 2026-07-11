@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>09. 멀티 카드 글로우 — Cursor Spotlight Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #050505; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      position: relative; width: 100%; height: 100vh; overflow: hidden;
+      cursor: crosshair;
+      --x: 50%; --y: 50%;
+    }
+    
+    .mc-grid { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 56px 28px 28px; align-content: center; max-width: 860px; margin: 0 auto; }
+    .mc-card { position: relative; border-radius: 14px; min-height: 130px;
+      background: linear-gradient(180deg, #121217, #0c0c10); border: 1px solid rgba(255,255,255,0.06);
+      padding: 18px 16px; --x: -300px; --y: -300px;
+    }
+    .mc-card::before { content: ""; position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(220px circle at var(--x) var(--y), rgba(255,255,255,0.08), transparent 62%);
+      opacity: 0; transition: opacity 0.25s ease; pointer-events: none;
+    }
+    .mc-card::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+      background: radial-gradient(240px circle at var(--x) var(--y), rgba(124,108,255,0.8), transparent 70%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      opacity: 0; transition: opacity 0.25s ease; pointer-events: none;
+    }
+    .stage:hover .mc-card::before, .stage:hover .mc-card::after { opacity: 1; }
+    .mc-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #a89dff; background: rgba(124,108,255,0.14); }
+    .mc-title { margin: 12px 0 5px; font-size: 14px; font-weight: 700; }
+    .mc-desc { margin: 0; font-size: 11.5px; line-height: 1.55; color: rgba(255,255,255,0.45); word-break: keep-all; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">09 · 멀티 카드 글로우</span>
+  </div>
+  <div class="demo-hint">마우스를 움직여보세요 ✦</div>
+
+  <div class="stage">
+    <div class="mc-grid">
+      <div class="mc-card"><div class="mc-icon">◆</div><h3 class="mc-title">이슈 트래킹</h3><p class="mc-desc">커서가 닿는 카드부터 보더가 깨어납니다.</p></div>
+      <div class="mc-card"><div class="mc-icon">◐</div><h3 class="mc-title">사이클</h3><p class="mc-desc">옆 카드도 커서를 향한 모서리가 빛납니다.</p></div>
+      <div class="mc-card"><div class="mc-icon">▲</div><h3 class="mc-title">로드맵</h3><p class="mc-desc">발광 중심은 카드 밖 좌표도 허용됩니다.</p></div>
+      <div class="mc-card"><div class="mc-icon">●</div><h3 class="mc-title">인사이트</h3><p class="mc-desc">mousemove 1회가 6장의 변수를 갱신합니다.</p></div>
+      <div class="mc-card"><div class="mc-icon">■</div><h3 class="mc-title">자동화</h3><p class="mc-desc">표면광과 보더광이 같은 좌표를 공유합니다.</p></div>
+      <div class="mc-card"><div class="mc-icon">✦</div><h3 class="mc-title">연동</h3><p class="mc-desc">그리드 전체가 하나의 조명을 나눠 씁니다.</p></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      var cards = document.querySelectorAll(".mc-card");
+      stage.addEventListener("mousemove", function(e){
+        for (var i = 0; i < cards.length; i++) {
+          var r = cards[i].getBoundingClientRect();
+          cards[i].style.setProperty("--x", (e.clientX - r.left) + "px");
+          cards[i].style.setProperty("--y", (e.clientY - r.top) + "px");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

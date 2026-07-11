@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Miracell — Header (실측 80px Fixed)</title>
+<link rel="stylesheet" href="../../miracell-app/styles/globals.css">
+<style>
+/* Header — 라이브 실측 80px fixed z-index:9999 */
+.mr-stage { min-height: 600px; background: #000; position: relative; overflow: hidden; }
+.mr-stage::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 70% 50%, rgba(221,0,49,.4) 0%, rgba(221,0,49,.05) 40%, transparent 70%);
+}
+.mr-stage::after {
+  content: 'SCROLL DOWN ↓'; position: absolute; bottom: 30px; left: 60px;
+  font-family: var(--font-family2); font-size: 12px; letter-spacing: .25em; color: rgba(255,255,255,.6);
+}
+
+#header {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--header-height); z-index: 9999;
+  background: transparent;
+  transition: var(--transition-custom);
+}
+#headerInner {
+  max-width: var(--area-wide-width);
+  margin: 0 auto; padding: 0 var(--area-padding);
+  height: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+/* Logo (151×39 실측 듀얼 - 흰/검정 fade) */
+.logo {
+  margin: 0; height: 39px;
+}
+.logo a { display: block; height: 100%; position: relative; }
+.logo img {
+  height: 39px; width: auto; display: block;
+  transition: opacity .4s ease-in-out;
+}
+.logo .logo-w { opacity: 1; }
+.logo .logo-b {
+  position: absolute; top: 0; left: 0;
+  opacity: 0;
+}
+
+/* GNB Center (Outfit 폰트) */
+#gnb { flex: 1; display: flex; justify-content: center; }
+#gnb ul {
+  display: flex; gap: 50px;
+  font-family: var(--font-family2);
+}
+#gnb a {
+  color: #fff; font-size: 17px; font-weight: 500;
+  letter-spacing: .01em;
+  display: block; padding: 4px 0;
+  transition: color .3s;
+}
+#gnb a:hover { color: var(--main-color); }
+
+/* Header Util Box (KR/EN/CN + Profile + OPEN) */
+.header-util-box {
+  display: flex; align-items: center; gap: 24px;
+}
+.header-lang-list ul {
+  display: flex; gap: 6px;
+  font-family: var(--font-family2); font-size: 14px;
+}
+.header-lang-list a {
+  color: rgba(255,255,255,.55);
+  padding: 4px 6px;
+  letter-spacing: .04em;
+}
+.header-lang-list li.cur a {
+  color: #fff; font-weight: 600;
+  border-bottom: 1px solid #fff;
+}
+.header-member-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px;
+  color: #fff;
+}
+.header-member-btn svg { width: 22px; height: 22px; }
+
+.sitemap-line-btn {
+  width: 36px; height: 36px;
+  position: relative;
+}
+.sitemap-line-btn .line {
+  position: absolute; left: 7px;
+  width: 22px; height: 2px; background: #fff;
+  transition: var(--transition-custom);
+}
+.sitemap-line-btn .line1 { top: 14px; }
+.sitemap-line-btn .line2 { top: 22px; width: 14px; right: 7px; left: auto; }
+</style>
+</head>
+<body>
+<div class="mr-stage">
+  <header id="header">
+    <div id="headerInner">
+      <h1 class="logo">
+        <a href="https://miracell.co.kr/kr/" title="to home">
+          <img src="https://miracell.co.kr/images/common/logo.png?ver=260212" class="logo-w" alt="미라셀 - 줄기세포 전문기업">
+          <img src="https://miracell.co.kr/images/common/logo_black.png?ver=260212" class="logo-b" alt="미라셀 - 줄기세포 전문기업">
+        </a>
+      </h1>
+      <nav id="gnb">
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Product</a></li>
+          <li><a href="#">Service</a></li>
+          <li><a href="#">R&amp;D</a></li>
+          <li><a href="#">Newsroom</a></li>
+          <li><a href="#">Customer Support</a></li>
+        </ul>
+      </nav>
+      <div class="header-util-box">
+        <div class="header-lang-list">
+          <ul>
+            <li class="cur"><a href="#">KR</a></li>
+            <li><a href="#">EN</a></li>
+            <li><a href="#">CN</a></li>
+          </ul>
+        </div>
+        <a href="#" class="header-member-btn" title="Member">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M4 21c0-4 4-7 8-7s8 3 8 7"/>
+          </svg>
+        </a>
+        <button class="sitemap-line-btn" title="Open the sitemap">
+          <span class="line line1"></span>
+          <span class="line line2"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+</div>
+</body>
+</html>

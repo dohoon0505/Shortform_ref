@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06. 줌 렌즈 — Cursor Spotlight Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #050505; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      position: relative; width: 100%; height: 100vh; overflow: hidden;
+      cursor: crosshair;
+      --x: 50%; --y: 50%;
+    }
+    
+    .stage { --x: 50vw; --y: 50vh; --sw: 700px; --sh: 480px; }
+    .zoom-art { position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.07) 0 0.4%, transparent 0.4% 3.2%),
+        radial-gradient(circle at 24% 34%, #f472b6 0%, transparent 34%),
+        radial-gradient(circle at 76% 26%, #38bdf8 0%, transparent 38%),
+        radial-gradient(circle at 56% 78%, #a3e635 0%, transparent 34%),
+        linear-gradient(140deg, #131a2e, #221643);
+    }
+    .lens { position: absolute; left: var(--x); top: var(--y); width: 180px; height: 180px;
+      transform: translate(-50%, -50%); border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.6);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.6), inset 0 0 30px rgba(0,0,0,0.35);
+      background:
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.07) 0 0.4%, transparent 0.4% 3.2%),
+        radial-gradient(circle at 24% 34%, #f472b6 0%, transparent 34%),
+        radial-gradient(circle at 76% 26%, #38bdf8 0%, transparent 38%),
+        radial-gradient(circle at 56% 78%, #a3e635 0%, transparent 34%),
+        linear-gradient(140deg, #131a2e, #221643);
+      background-size: calc(var(--sw) * 2) calc(var(--sh) * 2);
+      background-position: calc(90px - var(--x) * 2) calc(90px - var(--y) * 2);
+      background-repeat: no-repeat;
+      background-color: #131a2e;
+      pointer-events: none;
+    }
+    .lens-badge { position: absolute; left: var(--x); top: calc(var(--y) + 106px);
+      transform: translate(-50%, 0); font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.75); background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px; padding: 4px 10px; pointer-events: none;
+    }
+    .zl-caption { position: absolute; left: 24px; bottom: 24px; font-size: 12px; letter-spacing: 0.06em; color: rgba(255,255,255,0.55); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">06 · 줌 렌즈</span>
+  </div>
+  <div class="demo-hint">마우스를 움직여보세요 ✦</div>
+
+  <div class="stage">
+    <div class="zoom-art"></div>
+    <div class="lens" aria-hidden="true"></div>
+    <div class="lens-badge">ZOOM ×2</div>
+    <div class="zl-caption">커서 아래 지점이 렌즈 중앙에 2배로 맺힙니다</div>
+  </div>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      function measure(){
+        stage.style.setProperty("--sw", stage.clientWidth + "px");
+        stage.style.setProperty("--sh", stage.clientHeight + "px");
+      }
+      function setPoint(x, y){
+        stage.style.setProperty("--x", x + "px");
+        stage.style.setProperty("--y", y + "px");
+      }
+      function toCenter(){
+        setPoint(stage.clientWidth / 2, stage.clientHeight / 2);
+      }
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        setPoint(e.clientX - r.left, e.clientY - r.top);
+      });
+      window.addEventListener("resize", function(){ measure(); toCenter(); });
+      measure();
+      toCenter();
+    })();
+  </script>
+</body>
+</html>

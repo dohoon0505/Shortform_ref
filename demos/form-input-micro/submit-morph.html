@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10. 제출 버튼 모핑 — Form Input Micro Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+    .demo-reset:hover { background: rgba(255,255,255,0.16); color: #fff; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 64px 20px 48px;
+    }
+    .form-card {
+      width: 100%; max-width: 380px;
+      background: #0d0d0d; border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 18px; padding: 32px 28px 28px;
+      box-shadow: 0 24px 60px -30px rgba(0,0,0,0.85);
+    }
+    .form-title { margin: 0 0 6px; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+    .form-desc { margin: 0 0 24px; font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.45); }
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: rgba(255,255,255,0.55); }
+    .text-input {
+      width: 100%; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.16); border-radius: 10px;
+      padding: 13px 14px; font: 500 15px/1.4 "Pretendard Variable","Pretendard",sans-serif;
+      color: #fff; outline: none; caret-color: #3b82f6;
+      transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+    }
+    .text-input::placeholder { color: rgba(255,255,255,0.28); }
+    .text-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.18); }
+    
+    .sb-btn { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 52px; margin-top: 6px; border: 0; border-radius: 26px; background: #3b82f6; color: #fff; font: 600 15px/1 "Pretendard Variable","Pretendard",sans-serif; cursor: pointer; overflow: hidden; transition: width 0.3s cubic-bezier(0.25,0.46,0.45,0.94), background 0.25s ease-out, transform 0.15s ease-out; }
+    .sb-btn:hover { background: #2563eb; }
+    .sb-btn:active { transform: scale(0.985); }
+    .sb-btn[data-state="loading"], .sb-btn[data-state="done"] { pointer-events: none; }
+    .sb-btn[data-state="done"] { background: #22c55e; }
+    .sb-label { white-space: nowrap; transition: opacity 0.15s ease-out; }
+    .sb-btn[data-state="loading"] .sb-label { opacity: 0; position: absolute; }
+    .sb-spinner { position: absolute; inset: 0; margin: auto; width: 22px; height: 22px; border: 2.5px solid rgba(255,255,255,0.35); border-top-color: #fff; border-radius: 50%; opacity: 0; transition: opacity 0.15s ease-out; }
+    .sb-btn[data-state="loading"] .sb-spinner { opacity: 1; animation: sb-spin 0.7s linear infinite; }
+    @keyframes sb-spin { to { transform: rotate(360deg); } }
+    .sb-check { display: none; width: 20px; height: 20px; }
+    .sb-btn[data-state="done"] .sb-check { display: block; }
+    .sb-check path { stroke-dasharray: 21; stroke-dashoffset: 21; }
+    .sb-btn[data-state="done"] .sb-check path { animation: sb-draw 0.35s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s forwards; }
+    @keyframes sb-draw { to { stroke-dashoffset: 0; } }
+    .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">10 · 제출 버튼 모핑</span>
+  </div>
+  <div class="demo-hint">제출 버튼을 눌러 보세요</div>
+
+  <main class="stage">
+    <div class="form-card">
+      <h2 class="form-title">문의 보내기</h2>
+      <p class="form-desc">제출 버튼이 원형으로 수축해 스피너가 돌고, 완료되면 체크와 함께 다시 펼쳐집니다.</p>
+      <div class="field">
+        <label class="field-label" for="sb-email">회신 받을 이메일</label>
+        <input class="text-input" id="sb-email" type="email" placeholder="you@example.com" autocomplete="off">
+      </div>
+      <button class="sb-btn" id="sb-btn" type="button" data-state="idle">
+        <span class="sb-spinner" aria-hidden="true"></span>
+        <svg class="sb-check" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="sb-label" id="sb-label">제출하기</span>
+      </button>
+      <p class="sr-only" id="sb-status" aria-live="polite"></p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var btn = document.getElementById("sb-btn");
+      var label = document.getElementById("sb-label");
+      var status = document.getElementById("sb-status");
+      var doneTimer = null;
+      btn.addEventListener("click", function(){
+        if (btn.getAttribute("data-state") !== "idle") return;
+        var w = btn.offsetWidth;
+        btn.style.width = w + "px";
+        void btn.offsetWidth;
+        btn.setAttribute("data-state", "loading");
+        btn.setAttribute("aria-busy", "true");
+        status.textContent = "전송 중";
+        btn.style.width = "52px";
+        doneTimer = setTimeout(function(){
+          btn.setAttribute("data-state", "done");
+          btn.removeAttribute("aria-busy");
+          btn.style.width = w + "px";
+          label.textContent = "전송 완료";
+          status.textContent = "전송 완료";
+        }, 1500);
+      });
+      window.__resetDemo = function(){
+        clearTimeout(doneTimer);
+        btn.setAttribute("data-state", "idle");
+        btn.removeAttribute("aria-busy");
+        btn.style.width = "";
+        label.textContent = "제출하기";
+        status.textContent = "";
+      };
+      window.__reset = function(){
+        document.querySelectorAll("input, textarea").forEach(function(el){
+          el.value = "";
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.blur();
+        });
+        if (window.__resetDemo) window.__resetDemo();
+      };
+    })();
+  </script>
+</body>
+</html>

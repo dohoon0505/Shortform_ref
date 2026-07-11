@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>07. OTP 셀 — Form Input Micro Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+    .demo-reset:hover { background: rgba(255,255,255,0.16); color: #fff; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 64px 20px 48px;
+    }
+    .form-card {
+      width: 100%; max-width: 380px;
+      background: #0d0d0d; border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 18px; padding: 32px 28px 28px;
+      box-shadow: 0 24px 60px -30px rgba(0,0,0,0.85);
+    }
+    .form-title { margin: 0 0 6px; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+    .form-desc { margin: 0 0 24px; font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.45); }
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: rgba(255,255,255,0.55); }
+    .text-input {
+      width: 100%; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.16); border-radius: 10px;
+      padding: 13px 14px; font: 500 15px/1.4 "Pretendard Variable","Pretendard",sans-serif;
+      color: #fff; outline: none; caret-color: #3b82f6;
+      transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+    }
+    .text-input::placeholder { color: rgba(255,255,255,0.28); }
+    .text-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.18); }
+    
+    .otp-row { display: flex; gap: 8px; justify-content: center; }
+    .otp-cell { width: 44px; height: 54px; text-align: center; font: 700 22px/1 "Pretendard Variable","Pretendard",sans-serif; color: #fff; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.16); border-radius: 10px; outline: none; caret-color: #3b82f6; transition: border-color 0.18s ease-out, box-shadow 0.18s ease-out; }
+    .otp-cell:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.18); }
+    .otp-cell.is-filled { border-color: rgba(59,130,246,0.55); animation: otp-pop 0.22s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes otp-pop { 0% { transform: scale(0.9); } 55% { transform: scale(1.07); } 100% { transform: scale(1); } }
+    .otp-row.is-complete .otp-cell { border-color: #22c55e; }
+    .otp-status { margin: 14px 0 0; font-size: 12px; text-align: center; color: rgba(255,255,255,0.4); transition: color 0.2s ease-out; }
+    .otp-status.is-complete { color: #4ade80; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">07 · OTP 셀</span>
+  </div>
+  <div class="demo-hint">숫자를 연속으로 입력해 보세요</div>
+
+  <main class="stage">
+    <div class="form-card">
+      <h2 class="form-title">인증 코드 입력</h2>
+      <p class="form-desc">문자로 받은 6자리 코드를 입력해 주세요. 입력하면 자동으로 다음 칸으로 넘어갑니다.</p>
+      <div class="otp-row" id="otp-row">
+        <input class="otp-cell" type="text" inputmode="numeric" autocomplete="one-time-code" aria-label="인증번호 1번째 자리">
+        <input class="otp-cell" type="text" inputmode="numeric" aria-label="인증번호 2번째 자리">
+        <input class="otp-cell" type="text" inputmode="numeric" aria-label="인증번호 3번째 자리">
+        <input class="otp-cell" type="text" inputmode="numeric" aria-label="인증번호 4번째 자리">
+        <input class="otp-cell" type="text" inputmode="numeric" aria-label="인증번호 5번째 자리">
+        <input class="otp-cell" type="text" inputmode="numeric" aria-label="인증번호 6번째 자리">
+      </div>
+      <p class="otp-status" id="otp-status" aria-live="polite">6자리 중 0자리 입력됨</p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var row = document.getElementById("otp-row");
+      var status = document.getElementById("otp-status");
+      var cells = Array.prototype.slice.call(row.querySelectorAll(".otp-cell"));
+      function refresh(){
+        var filled = cells.filter(function(c){ return c.value; }).length;
+        var done = filled === cells.length;
+        row.classList.toggle("is-complete", done);
+        status.classList.toggle("is-complete", done);
+        status.textContent = done ? "인증 코드 확인 완료" : "6자리 중 " + filled + "자리 입력됨";
+      }
+      cells.forEach(function(cell, i){
+        cell.addEventListener("input", function(){
+          cell.value = cell.value.replace(/\D/g, "").slice(-1);
+          cell.classList.remove("is-filled");
+          if (cell.value) {
+            void cell.offsetWidth;
+            cell.classList.add("is-filled");
+            if (i < cells.length - 1) cells[i + 1].focus();
+          }
+          refresh();
+        });
+        cell.addEventListener("keydown", function(e){
+          if (e.key === "Backspace" && !cell.value && i > 0) {
+            e.preventDefault();
+            cells[i - 1].value = "";
+            cells[i - 1].classList.remove("is-filled");
+            cells[i - 1].focus();
+            refresh();
+          } else if (e.key === "ArrowLeft" && i > 0) {
+            cells[i - 1].focus();
+          } else if (e.key === "ArrowRight" && i < cells.length - 1) {
+            cells[i + 1].focus();
+          }
+        });
+      });
+      row.addEventListener("paste", function(e){
+        e.preventDefault();
+        var digits = (e.clipboardData.getData("text") || "").replace(/\D/g, "").slice(0, cells.length).split("");
+        cells.forEach(function(c, j){
+          c.value = digits[j] || "";
+          c.classList.toggle("is-filled", !!c.value);
+        });
+        if (digits.length) cells[Math.min(digits.length, cells.length) - 1].focus();
+        refresh();
+      });
+      window.__reset = function(){
+        document.querySelectorAll("input, textarea").forEach(function(el){
+          el.value = "";
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.blur();
+        });
+        if (window.__resetDemo) window.__resetDemo();
+      };
+    })();
+  </script>
+</body>
+</html>

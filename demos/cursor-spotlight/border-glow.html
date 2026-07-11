@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04. 보더 글로우 카드 (Linear) — Cursor Spotlight Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #050505; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      position: relative; width: 100%; height: 100vh; overflow: hidden;
+      cursor: crosshair;
+      --x: 50%; --y: 50%;
+    }
+    
+    .stage { display: flex; align-items: center; justify-content: center; }
+    .glow-card { position: relative; width: 430px; max-width: 86vw; border-radius: 18px; padding: 26px 28px;
+      background: linear-gradient(180deg, #121217, #0b0b0f); border: 1px solid rgba(255,255,255,0.07);
+      --x: 50%; --y: 50%;
+    }
+    .glow-card::before { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+      background: radial-gradient(260px circle at var(--x) var(--y), rgba(124,108,255,0.95), rgba(124,108,255,0.2) 45%, transparent 72%);
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite: exclude;
+      opacity: 0; transition: opacity 0.25s ease; pointer-events: none;
+    }
+    .glow-card::after { content: ""; position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(320px circle at var(--x) var(--y), rgba(124,108,255,0.08), transparent 70%);
+      opacity: 0; transition: opacity 0.25s ease; pointer-events: none;
+    }
+    .stage:hover .glow-card::before, .stage:hover .glow-card::after { opacity: 1; }
+    .gc-tag { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; color: #a89dff; border: 1px solid rgba(124,108,255,0.35); border-radius: 999px; padding: 5px 10px; }
+    .gc-title { margin: 14px 0 8px; font-size: 21px; font-weight: 700; letter-spacing: -0.01em; }
+    .gc-body { margin: 0; font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.55); word-break: keep-all; }
+    .gc-meta { display: flex; gap: 14px; margin-top: 18px; font-size: 11px; color: rgba(255,255,255,0.4); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">04 · 보더 글로우 카드 (Linear)</span>
+  </div>
+  <div class="demo-hint">마우스를 움직여보세요 ✦</div>
+
+  <div class="stage">
+    <div class="glow-card">
+      <span class="gc-tag">LINEAR STYLE</span>
+      <h2 class="gc-title">커서가 닿는 곳, 보더가 빛난다</h2>
+      <p class="gc-body">카드 표면이 아니라 1px 테두리에만 발광을 남기는 것이 핵심. radial-gradient를 padding 1px 링에 가두면 빛이 보더를 타고 흐릅니다.</p>
+      <div class="gc-meta"><span>mask-composite: exclude</span><span>radial 260px</span><span>1px ring</span></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      var card = document.querySelector(".glow-card");
+      stage.addEventListener("mousemove", function(e){
+        var r = card.getBoundingClientRect();
+        card.style.setProperty("--x", (e.clientX - r.left) + "px");
+        card.style.setProperty("--y", (e.clientY - r.top) + "px");
+      });
+    })();
+  </script>
+</body>
+</html>

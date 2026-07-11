@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10. 다중 통계 카운터 — Number Counter Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(20px,3vw,48px); width: clamp(320px,70vw,900px); }
+    .stat-card { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .stat-value { font: 800 clamp(36px,5vw,64px)/1 "Pretendard Variable",sans-serif; color: #fff; font-variant-numeric: tabular-nums; }
+    .stat-suffix { font: 600 clamp(18px,2.5vw,32px)/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.35); }
+    .stat-card > .stat-value, .stat-card > .stat-suffix { display: inline; }
+    .stat-card { flex-direction: column; }
+    .stat-card > :first-child { display: flex; align-items: baseline; gap: 2px; }
+    .stat-label { font: 400 clamp(12px,1vw,15px)/1.4 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+    .stat-card { flex-wrap: wrap; }
+    .stat-card { display: flex; flex-direction: column; align-items: center; }
+    .stat-num-row { display: flex; align-items: baseline; gap: 2px; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">10 · 다중 통계 카운터</span>
+  </div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="stat-grid">
+      <div class="stat-card" data-target="1200" data-suffix="+" data-label="프로젝트">
+        <span class="stat-value">0</span><span class="stat-suffix">+</span>
+        <span class="stat-label">프로젝트</span>
+      </div>
+      <div class="stat-card" data-target="98" data-suffix="%" data-label="만족도">
+        <span class="stat-value">0</span><span class="stat-suffix">%</span>
+        <span class="stat-label">만족도</span>
+      </div>
+      <div class="stat-card" data-target="50" data-suffix="+" data-label="팀원">
+        <span class="stat-value">0</span><span class="stat-suffix">+</span>
+        <span class="stat-label">팀원</span>
+      </div>
+      <div class="stat-card" data-target="99" data-suffix="%" data-label="업타임">
+        <span class="stat-value">0</span><span class="stat-suffix">.9%</span>
+        <span class="stat-label">업타임</span>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 2500;
+      var startTime = Date.now();
+      var running = true;
+      var cards = document.querySelectorAll(".stat-card");
+      function easeOutCubic(t) { return 1 - Math.pow(1-t,3); }
+      function applyReveal(p) {
+        cards.forEach(function(card, i) {
+          var target = parseInt(card.dataset.target);
+          var stagger = Math.max(0, Math.min(1, (p - i * 0.1) / 0.7));
+          var v = Math.round(easeOutCubic(stagger) * target);
+          card.querySelector(".stat-value").textContent = v.toLocaleString("ko-KR");
+          card.style.opacity = Math.min(1, stagger * 3);
+          card.style.transform = "translateY(" + ((1-Math.min(1,stagger*2)) * 16) + "px)";
+        });
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

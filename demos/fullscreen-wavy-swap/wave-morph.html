@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>09. 물결 모핑 — Fullscreen Wavy Swap Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.75); background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; backdrop-filter: blur(8px); }
+    .demo-reset:hover { color: rgba(255,255,255,1); background: rgba(0,0,0,0.7); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.55); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.6); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; background: rgba(0,0,0,0.4); padding: 8px 14px; border-radius: 999px; backdrop-filter: blur(8px); animation: hint-bounce 1.6s ease-in-out infinite; }
+    @keyframes hint-bounce { 0%, 100% { transform: translateY(0); opacity: 0.6; } 50% { transform: translateY(4px); opacity: 1; } }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.12); z-index: 100; }
+    .demo-progress > div { height: 100%; background: rgba(255,255,255,1); width: 0; }
+    .scroll-track { min-height: 500vh; position: relative; }
+    .sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; background: #000; }
+    .wis-card { position: absolute; inset: 0; will-change: clip-path; }
+    .wis-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .wis-cap { position: absolute; left: 32px; bottom: 40px; color: #fff; font: 600 clamp(14px,1.3vw,18px)/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.02em; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">09 · 물결 모핑</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+        <div class="wis-card" data-i="0">
+          <img class="wis-img" src="https://picsum.photos/seed/fwave-coast/1600/1000" alt="">
+          <span class="wis-cap">01 · 해안의 아침</span>
+        </div>
+        <div class="wis-card" data-i="1">
+          <img class="wis-img" src="https://picsum.photos/seed/fwave-arch/1600/1000" alt="">
+          <span class="wis-cap">02 · 물결 위의 건축</span>
+        </div>
+        <div class="wis-card" data-i="2">
+          <img class="wis-img" src="https://picsum.photos/seed/fwave-dune/1600/1000" alt="">
+          <span class="wis-cap">03 · 사구와 들꽃</span>
+        </div>
+        <div class="wis-card" data-i="3">
+          <img class="wis-img" src="https://picsum.photos/seed/fwave-dusk/1600/1000" alt="">
+          <span class="wis-cap">04 · 황혼의 바다</span>
+        </div>
+        <div class="wis-card" data-i="4">
+          <img class="wis-img" src="https://picsum.photos/seed/fwave-calm/1600/1000" alt="">
+          <span class="wis-cap">05 · 미니멀 풍경</span>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var prog = document.querySelector(".demo-progress > div");
+      var track = document.querySelector(".scroll-track");
+      var cards = document.querySelectorAll(".wis-card");
+      var N = cards.length;
+      function __r(n){ return Math.round(n*10)/10; }
+      var ZERO = 'path("M0 0Z")';
+      function FULL(w,h){ return 'path("M0 0H'+__r(w)+'V'+__r(h)+'H0Z")'; }
+      // 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)
+      function cbody(pts){
+        var d="", i;
+        for(i=1;i<pts.length-1;i++){
+          var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;
+          d += " Q"+__r(pts[i][0])+" "+__r(pts[i][1])+" "+__r(xc)+" "+__r(yc);
+        }
+        d += " Q"+__r(pts[i][0])+" "+__r(pts[i][1])+" "+__r(pts[i][0])+" "+__r(pts[i][1]);
+        return d;
+      }
+      function smooth(pts){ return "M"+__r(pts[0][0])+" "+__r(pts[0][1]) + cbody(pts); }
+      // 닫힌 매끄러운 곡선 (블롭/파장)
+      function smoothClosed(pts){
+        var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;
+        var d="M"+__r(sx)+" "+__r(sy);
+        for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;
+          d += " Q"+__r(pts[i][0])+" "+__r(pts[i][1])+" "+__r(xc)+" "+__r(yc); }
+        return d+"Z";
+      }
+      function waveUp(c,w,h,A,wv){
+        if(c<=0) return ZERO; if(c>=1) return FULL(w,h);
+        var base=(1-c)*(h+2*A)-A, s=Math.max(14,Math.ceil(wv*10)), p=[], i;
+        for(i=0;i<=s;i++){ var x=w*i/s, ph=i/s*wv*Math.PI*2; p.push([x, base+A*Math.sin(ph)]); }
+        return 'path("'+smooth(p)+' L'+__r(w)+' '+__r(h)+' L0 '+__r(h)+'Z")';
+      }
+      function waveDown(c,w,h,A,wv){
+        if(c<=0) return ZERO; if(c>=1) return FULL(w,h);
+        var edge=c*(h+2*A)-A, s=Math.max(14,Math.ceil(wv*10)), p=[], i;
+        for(i=s;i>=0;i--){ var x=w*i/s, ph=i/s*wv*Math.PI*2; p.push([x, edge+A*Math.sin(ph)]); }
+        return 'path("M0 0 L'+__r(w)+' 0 L'+__r(p[0][0])+' '+__r(p[0][1])+cbody(p)+' Z")';
+      }
+      function waveSide(c,w,h,A,wv){
+        if(c<=0) return ZERO; if(c>=1) return FULL(w,h);
+        var ex=c*(w+2*A)-A, s=Math.max(14,Math.ceil(wv*10)), p=[], i;
+        for(i=0;i<=s;i++){ var y=h*i/s, ph=i/s*wv*Math.PI*2; p.push([ex+A*Math.sin(ph), y]); }
+        return 'path("'+smooth(p)+' L0 '+__r(h)+' L0 0Z")';
+      }
+      function waveDiag(c,w,h,A,wv){
+        if(c<=0) return ZERO; if(c>=1) return FULL(w,h);
+        var s=Math.max(16,Math.ceil(wv*10)), p=[], i;
+        for(i=0;i<=s;i++){ var y=h*i/s, ph=i/s*wv*Math.PI*2; p.push([w*(2*c - y/h)+A*Math.sin(ph), y]); }
+        return 'path("'+smooth(p)+' L0 '+__r(h)+' L0 0Z")';
+      }
+      function waveBlob(c,w,h,lobes,af){
+        if(c<=0) return ZERO; if(c>=1) return FULL(w,h);
+        var cx=w/2, cy=h/2, maxR=Math.hypot(w,h)/2*1.18, R=c*maxR, s=Math.max(28,lobes*6), p=[], i;
+        for(i=0;i<s;i++){ var a=i/s*Math.PI*2, r=R*(1+af*Math.sin(a*lobes)); p.push([cx+r*Math.cos(a), cy+r*Math.sin(a)]); }
+        return 'path("'+smoothClosed(p)+'")';
+      }
+      function waveBand(c,w,h,A,wv){
+        if(c<=0) return ZERO; if(c>=1) return FULL(w,h);
+        var cy=h/2, half=c*(h/2+A), s=Math.max(14,Math.ceil(wv*10)), top=[], bot=[], i;
+        for(i=0;i<=s;i++){ var x=w*i/s, ph=i/s*wv*Math.PI*2; top.push([x, cy-half+A*Math.sin(ph)]); }
+        for(i=s;i>=0;i--){ var x=w*i/s, ph=i/s*wv*Math.PI*2; bot.push([x, cy+half+A*Math.sin(ph)]); }
+        return 'path("'+smooth(top)+' L'+__r(bot[0][0])+' '+__r(bot[0][1])+cbody(bot)+' Z")';
+      }
+      function waveCurtain(c,w,h,A,wv){
+        if(c<=0) return ZERO; if(c>=1) return FULL(w,h);
+        var cx=w/2, half=c*(w/2+A), s=Math.max(14,Math.ceil(wv*10)), left=[], right=[], i;
+        for(i=0;i<=s;i++){ var y=h*i/s, ph=i/s*wv*Math.PI*2; left.push([cx-half+A*Math.sin(ph), y]); }
+        for(i=s;i>=0;i--){ var y=h*i/s, ph=i/s*wv*Math.PI*2; right.push([cx+half+A*Math.sin(ph), y]); }
+        return 'path("'+smooth(left)+' L'+__r(right[0][0])+' '+__r(right[0][1])+cbody(right)+' Z")';
+      }
+      function waveStack(c,w,h){
+        if(c<=0) return ZERO; if(c>=1) return FULL(w,h);
+        var A=h*0.06, base=(1-c)*(h+2*A)-A, s=24, p=[], i;
+        for(i=0;i<=s;i++){ var x=w*i/s, ph=i/s*Math.PI*2;
+          p.push([x, base + A*0.62*Math.sin(ph*1.2) + A*0.38*Math.sin(ph*2.6+1)]); }
+        return 'path("'+smooth(p)+' L'+__r(w)+' '+__r(h)+' L0 '+__r(h)+'Z")';
+      }
+      function clipFor(c,w,h){ return waveUp(c,w,h, h*0.12*Math.sin(Math.PI*c)+2, 1.6); }
+      function dims(){ return [window.innerWidth, window.innerHeight]; }
+      function progress(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+      var targetP = 0, curP = 0, rafId = null;
+      function render(p){
+        prog.style.width = (p*100).toFixed(2) + "%";
+        var d = dims(), w = d[0], h = d[1], segs = N - 1;
+        var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;
+        for (var i=0;i<cards.length;i++){
+          var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;
+          cards[i].style.zIndex = i;
+          cards[i].style.clipPath = clipFor(cov, w, h);
+        }
+      }
+      // requestAnimationFrame lerp: 목표 진행률로 매끄럽게 수렴 (부드러운 스크롤)
+      function loop(){
+        curP += (targetP - curP) * 0.14;
+        var done = Math.abs(targetP - curP) < 0.0004;
+        if (done) curP = targetP;
+        render(curP);
+        rafId = done ? null : requestAnimationFrame(loop);
+      }
+      function kick(){ targetP = progress(); if (rafId === null) rafId = requestAnimationFrame(loop); }
+      window.addEventListener("scroll", kick, { passive: true });
+      window.addEventListener("resize", kick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      targetP = progress(); render(curP);
+    })();
+  </script>
+</body>
+</html>

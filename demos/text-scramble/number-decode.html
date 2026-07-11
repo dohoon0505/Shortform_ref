@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10. 숫자 디코드 — Text Scramble Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .nd-wrap { text-align: center; }
+    .nd-row { display: flex; align-items: baseline; justify-content: center; gap: 6px; font: 800 clamp(44px,7.4vw,104px)/1 "Pretendard Variable",sans-serif; }
+    .nd-char { display: inline-block; width: 1ch; text-align: center; color: rgba(255,255,255,0.35); font-variant-numeric: tabular-nums; }
+    .nd-char.on { color: #fff; }
+    .nd-comma { width: 0.55ch; }
+    .nd-suffix { font-size: 0.45em; color: #8ab4ff; opacity: 0; }
+    .nd-label { font: 400 clamp(13px,1.1vw,17px)/1.4 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); margin-top: 18px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">10 · 숫자 디코드</span>
+  </div>
+  <div class="demo-hint">자동 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="nd-wrap">
+      <p class="cap">NUMBER DECODE — STAT</p>
+      <div class="nd-row"><span class="nd-value" aria-label="12,840,000"></span><span class="nd-suffix">+</span></div>
+      <p class="nd-label">월간 인터랙션 이벤트</p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 2600;
+      var LOOP = false;
+      var startTime = Date.now();
+      var running = true;
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+      var FINAL = "12,840,000";
+      var POOL = "0123456789#%$&";
+      var line = document.querySelector(".nd-value");
+      var suffix = document.querySelector(".nd-suffix");
+      var spans = [];
+      FINAL.split("").forEach(function(ch) {
+        var s = document.createElement("span");
+        s.className = ch === "," ? "nd-char nd-comma" : "nd-char";
+        s.dataset.ch = ch;
+        s.textContent = ch === "," ? "," : "0";
+        line.appendChild(s);
+        spans.push(s);
+      });
+      function rnd(seed) { var x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+      function applyReveal(p) {
+        var frame = Math.floor(p * 50);
+        var N = spans.length;
+        spans.forEach(function(s, i) {
+          var lockP = 0.08 + (i / N) * 0.74;
+          if (p >= lockP) {
+            s.textContent = s.dataset.ch;
+            s.classList.add("on");
+          } else {
+            s.classList.remove("on");
+            s.textContent = s.dataset.ch === "," ? "," : POOL.charAt(Math.floor(rnd(i * 37 + Math.floor(frame / 2) * 11) * POOL.length));
+          }
+        });
+        suffix.style.opacity = Math.max(0, Math.min(1, (p - 0.88) / 0.12));
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else if (LOOP) { startTime = Date.now(); setTimeout(tick, 16); }
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

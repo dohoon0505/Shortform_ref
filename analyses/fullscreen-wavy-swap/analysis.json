@@ -1,0 +1,1391 @@
+{
+  "id": "fullscreen-wavy-swap",
+  "title": "Fullscreen Wavy Swap",
+  "type": "category",
+  "url": "https://www.framer.com/marketplace/components/masked-scroll-slider/",
+  "date": "2026-06-04",
+  "summary": "Framer 마켓플레이스 \"Masked Scroll Slider\" 시그니처 — 스크롤 시 화면이 고정(sticky)되고, 화면 전체를 채운 풀블리드 이미지가 물결(wavy) 마스크로 다음 이미지로 전환되는 인터랙션. sticky-stage 위에 이미지 5장을 z-index로 스택하고, 스크롤 진행률을 세그먼트별 로컬 진행률로 환산해 다음 이미지를 clip-path: path()의 2차 베지어 곡선 물결 엣지로 reveal한다. v2에서 물결 단면을 polygon(꺾인 직선)에서 베지어 곡선으로 바꿔 매끄럽게 만들고, requestAnimationFrame lerp 보간을 추가해 스크롤 추종을 부드럽게 했다. 물결의 방향·진폭·형태(상승 / 하강 / 측면 / 사선 / 블롭 / 파장 / 밴드 / 커튼 / 모핑 / 합성)만 패턴별로 달라지며, 모든 reveal은 스크롤 진행률에 매핑된다.",
+  "patternCount": 10,
+  "sections": {
+    "overview": {
+      "title": "00. 카테고리 개요",
+      "blocks": [
+        {
+          "type": "heading",
+          "value": "Fullscreen Wavy Swap — 풀블리드 물결 이미지 전환 v2 (smooth)"
+        },
+        {
+          "type": "text",
+          "value": "Framer 마켓플레이스 \"Masked Scroll Slider\" 시그니처 — 스크롤 시 화면이 고정(sticky)되고, 화면 전체를 채운 풀블리드 이미지가 물결(wavy) 마스크로 다음 이미지로 전환되는 인터랙션. sticky-stage 위에 이미지 5장을 z-index로 스택하고, 스크롤 진행률을 세그먼트별 로컬 진행률로 환산해 다음 이미지를 clip-path: path()의 2차 베지어 곡선 물결 엣지로 reveal한다. v2에서 물결 단면을 polygon(꺾인 직선)에서 베지어 곡선으로 바꿔 매끄럽게 만들고, requestAnimationFrame lerp 보간을 추가해 스크롤 추종을 부드럽게 했다. 물결의 방향·진폭·형태(상승 / 하강 / 측면 / 사선 / 블롭 / 파장 / 밴드 / 커튼 / 모핑 / 합성)만 패턴별로 달라지며, 모든 reveal은 스크롤 진행률에 매핑된다."
+        },
+        {
+          "type": "heading",
+          "value": "10 패턴 인덱스"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "01. 물결 상승 (Masked Slider 시그니처)",
+              "tag": "아래 → 위",
+              "desc": "다음 이미지가 화면 전체 아래에서 완만한 물결 곡선을 그리며 위로 차오른다. 가장 기본이 되는 시그니처 전환."
+            },
+            {
+              "label": "02. 물결 하강",
+              "tag": "위 → 아래",
+              "desc": "다음 이미지가 화면 전체 위에서 물결 곡선을 그리며 아래로 흘러내린다. 상승의 반대 방향."
+            },
+            {
+              "label": "03. 측면 물결 스윕",
+              "tag": "좌 → 우",
+              "desc": "세로 물결 엣지가 화면 전체 좌측에서 우측으로 매끄럽게 쓸려 들어온다."
+            },
+            {
+              "label": "04. 사선 물결",
+              "tag": "좌하단 → 우상단",
+              "desc": "물결 경계가 좌하단 → 우상단 대각선으로 기울어진 채 매끄럽게 쓸려 올라온다."
+            },
+            {
+              "label": "05. 물결 블롭 확장",
+              "tag": "중앙 → 바깥 확장",
+              "desc": "다음 이미지가 화면 전체 중앙에서 둥근 물결 블롭으로 매끄럽게 확장되며 채워진다."
+            },
+            {
+              "label": "06. 물결 파장",
+              "tag": "중앙 → 바깥 확산",
+              "desc": " 화면 전체 중앙에서 잔물결(고주파·저진폭) 동심 파장이 매끄럽게 퍼지듯 확산된다."
+            },
+            {
+              "label": "07. 수직 밴드 분할",
+              "tag": "중앙 → 위·아래 분할",
+              "desc": " 화면 전체 중앙에서 위·아래 두 물결 곡선이 매끄럽게 벌어지며 세로로 펼쳐진다."
+            },
+            {
+              "label": "08. 가로 커튼 분할",
+              "tag": "중앙 → 좌·우 분할",
+              "desc": " 화면 전체 중앙에서 좌·우 두 물결 곡선이 커튼처럼 매끄럽게 벌어진다."
+            },
+            {
+              "label": "09. 물결 모핑",
+              "tag": "아래 → 위, 중간 부풂",
+              "desc": "전환 중간에 물결 진폭이 최대로 부풀었다가 양 끝에서 평평해지며 매끄럽게 모핑된다."
+            },
+            {
+              "label": "10. 레이어드 물결",
+              "tag": "아래 → 위",
+              "desc": "두 개의 다른 주파수 물결이 겹쳐 불규칙하고 자연스러운 합성 물결이 매끄럽게 차오른다."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "공통 인터랙션 모델"
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "폰트",
+              "value": "Pretendard Variable 단일"
+            },
+            {
+              "label": "무대",
+              "value": "sticky-stage 100vh + overflow:hidden + 배경 #000"
+            },
+            {
+              "label": "스크롤 공간",
+              "value": "scroll-track 500vh (이미지 5장 = 4 전환)"
+            },
+            {
+              "label": "이미지",
+              "value": "풀블리드 object-fit:cover, 화면 전체를 채움"
+            },
+            {
+              "label": "진행률 환산",
+              "value": "fp = p×(N-1) → idx = floor(fp), local = fp-idx"
+            },
+            {
+              "label": "물결 단면",
+              "value": "clip-path: path() 2차 베지어 곡선 (매끄러움)"
+            },
+            {
+              "label": "스크롤 보간",
+              "value": "requestAnimationFrame lerp (curP += (target-curP)*0.14)"
+            },
+            {
+              "label": "진폭",
+              "value": "컨테이너 치수 비율 (높이·폭의 4.5~12%)"
+            },
+            {
+              "label": "핵심 원칙",
+              "value": "모든 reveal은 스크롤 진행률에 매핑 (자동 재생 없음)"
+            },
+            {
+              "label": "참고",
+              "value": "Framer 마켓플레이스 Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "읽기 가이드"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "라이브 데모",
+              "tag": "IFRAME",
+              "desc": "demos/fullscreen-wavy-swap/{pattern}.html — 풀블리드 물결 전환"
+            },
+            {
+              "label": "작동 원리",
+              "tag": "HOW",
+              "desc": "스크롤 진행률 → lerp 보간 → 세그먼트 coverage → 베지어 물결 path"
+            },
+            {
+              "label": "정량 메타",
+              "tag": "KV",
+              "desc": "의존성 / 물결 / 방향 / 컨테이너 / 시그니처"
+            },
+            {
+              "label": "코드 스니펫",
+              "tag": "CODE",
+              "desc": "HTML / CSS / JS — 베지어 헬퍼 + lerp 엔진"
+            },
+            {
+              "label": "사용 가이드",
+              "tag": "GUIDE",
+              "desc": "파라미터·주의점·테마 적합성"
+            },
+            {
+              "label": "활용 추천",
+              "tag": "PLACES",
+              "desc": "히어로 / 랜딩 / 제품 / 포트폴리오 4건"
+            },
+            {
+              "label": "트레이드오프",
+              "tag": "NOTE",
+              "desc": "성능·접근성·권장 사용처"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "v2 매끄러움 개선 — 물결 단면을 polygon(꺾인 직선)에서 clip-path: path()의 2차 베지어 곡선으로 교체해 단면이 부드럽고, requestAnimationFrame lerp 보간으로 스크롤 추종을 매끄럽게 했다. 같은 물결 엔진을 카드 형태로 적용한 Card Wavy Swap 카테고리와 한 쌍."
+        }
+      ]
+    },
+    "wave-up": {
+      "title": "01. 물결 상승 (Masked Slider 시그니처)",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "다음 이미지가 화면 전체 아래에서 완만한 물결 곡선을 그리며 위로 차오른다. 가장 기본이 되는 시그니처 전환."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/fullscreen-wavy-swap/wave-up.html",
+          "embedHeight": 560,
+          "embedLabel": "01 · 물결 상승 (Masked Slider 시그니처)",
+          "title": "물결 상승 (Masked Slider 시그니처) 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "스크롤 진행률을 세그먼트별 로컬 진행률 0~1로 환산하고, 다음 이미지를 clip-path: path()의 2차 베지어 곡선으로 reveal한다. 상단 엣지가 완만한 사인 곡선(진폭 약 7% · 1.3주기)을 그리며 화면 전체 아래에서 위로 올라온다. polygon(꺾인 직선) 대신 베지어 path를 써서 단면이 매끄럽고, requestAnimationFrame lerp 보간으로 스크롤이 부드럽게 따라온다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (clip-path: path 베지어)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 → rAF lerp 보간 → 세그먼트 coverage"
+            },
+            {
+              "label": "물결",
+              "value": "완만한 사인 곡선 (진폭 ~7% · 1.3주기)"
+            },
+            {
+              "label": "방향",
+              "value": "아래 → 위"
+            },
+            {
+              "label": "컨테이너",
+              "value": "풀블리드 viewport 5장 z-index 스택"
+            },
+            {
+              "label": "시그니처",
+              "value": "Framer Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wis-card\" data-i=\"0\"><img src=\"img-01.jpg\" alt=\"\"><span class=\"wis-cap\">01 · 해안의 아침</span></div>\n    <div class=\"wis-card\" data-i=\"1\"><img src=\"img-02.jpg\" alt=\"\"><span class=\"wis-cap\">02 · 물결 위의 건축</span></div>\n    <!-- x5 카드 (z-index 순서로 스택, 화면 전체를 채움) -->\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 500vh; position: relative; }\n.sticky-stage { position: sticky; top: 0; height: 100vh;\n  overflow: hidden; background: #000; }\n.wis-card { position: absolute; inset: 0; will-change: clip-path; }\n.wis-card img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var cards = document.querySelectorAll(\".wis-card\"), N = cards.length;\n\nfunction __r(n){ return Math.round(n*10)/10; }\nvar ZERO = 'path(\"M0 0Z\")';\nfunction FULL(w,h){ return 'path(\"M0 0H'+__r(w)+'V'+__r(h)+'H0Z\")'; }\n// 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)\nfunction cbody(pts){\n  var d=\"\", i;\n  for(i=1;i<pts.length-1;i++){\n    var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc);\n  }\n  d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(pts[i][0])+\" \"+__r(pts[i][1]);\n  return d;\n}\nfunction smooth(pts){ return \"M\"+__r(pts[0][0])+\" \"+__r(pts[0][1]) + cbody(pts); }\n// 닫힌 매끄러운 곡선 (블롭/파장)\nfunction smoothClosed(pts){\n  var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;\n  var d=\"M\"+__r(sx)+\" \"+__r(sy);\n  for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc); }\n  return d+\"Z\";\n}\nfunction waveUp(c,w,h,A,wv){\n  if(c<=0) return ZERO; if(c>=1) return FULL(w,h);\n  var base=(1-c)*(h+2*A)-A, s=Math.max(14,Math.ceil(wv*10)), p=[], i;\n  for(i=0;i<=s;i++){ var x=w*i/s, ph=i/s*wv*Math.PI*2; p.push([x, base+A*Math.sin(ph)]); }\n  return 'path(\"'+smooth(p)+' L'+__r(w)+' '+__r(h)+' L0 '+__r(h)+'Z\")';\n}\n\nfunction clipFor(c, w, h){ return waveUp(c,w,h, h*0.07, 1.3); }\nfunction dims(){ return [window.innerWidth, window.innerHeight]; }\n\n// 부드러운 스크롤: 목표 진행률로 매 프레임 lerp 보간 (requestAnimationFrame)\nvar targetP = 0, curP = 0, rafId = null;\nfunction render(p){\n  var d = dims(), w = d[0], h = d[1], segs = N - 1;\n  var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;\n  cards.forEach(function(c, i){\n    var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;\n    c.style.zIndex = i; c.style.clipPath = clipFor(cov, w, h);\n  });\n}\nfunction loop(){\n  curP += (targetP - curP) * 0.14;\n  var done = Math.abs(targetP - curP) < 0.0004; if (done) curP = targetP;\n  render(curP); rafId = done ? null : requestAnimationFrame(loop);\n}\naddEventListener(\"scroll\", function(){ targetP = calcProgress(); if(!rafId) rafId = requestAnimationFrame(loop); }, { passive:true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "가장 안정적인 시그니처 전환. 진폭은 높이의 6~9%, 주기 1~1.6이 매끄럽다. 진폭을 키우면 역동적이지만 이미지 가독성이 잠시 떨어진다. clip-path: path()는 모던 evergreen 전부 지원."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "풀스크린 키 비주얼 — 물결로 다음 히어로 이미지가 차오름"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "섹션 배경 슬라이더 — 스크롤로 풀블리드 비주얼 전환"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "룩북·캠페인 — 화면 가득 한 컷씩 물결 교체"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "대표작 풀스크린 — 물결로 작품 넘김"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 전환 중 이미지가 물결로 잘리므로 핵심 피사체·텍스트는 상·하단에 두지 말 것. path() 미지원 구형 브라우저는 폴백 필요."
+        }
+      ]
+    },
+    "wave-down": {
+      "title": "02. 물결 하강",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "다음 이미지가 화면 전체 위에서 물결 곡선을 그리며 아래로 흘러내린다. 상승의 반대 방향."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/fullscreen-wavy-swap/wave-down.html",
+          "embedHeight": 560,
+          "embedLabel": "02 · 물결 하강",
+          "title": "물결 하강 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "상단(0)에서 시작해 물결진 하단 엣지까지의 영역을 베지어 path로 채운다. 엣지가 완만한 사인 곡선을 그리며 위에서 아래로 내려와 다음 이미지를 덮는다. 위→아래 스크롤 방향과 시각적으로 일치해 가장 직관적인 흐름."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (clip-path: path 베지어)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 → rAF lerp 보간 → 세그먼트 coverage"
+            },
+            {
+              "label": "물결",
+              "value": "완만한 사인 곡선 (진폭 ~7% · 1.3주기)"
+            },
+            {
+              "label": "방향",
+              "value": "위 → 아래"
+            },
+            {
+              "label": "컨테이너",
+              "value": "풀블리드 viewport 5장 z-index 스택"
+            },
+            {
+              "label": "시그니처",
+              "value": "Framer Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wis-card\" data-i=\"0\"><img src=\"img-01.jpg\" alt=\"\"><span class=\"wis-cap\">01 · 해안의 아침</span></div>\n    <div class=\"wis-card\" data-i=\"1\"><img src=\"img-02.jpg\" alt=\"\"><span class=\"wis-cap\">02 · 물결 위의 건축</span></div>\n    <!-- x5 카드 (z-index 순서로 스택, 화면 전체를 채움) -->\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 500vh; position: relative; }\n.sticky-stage { position: sticky; top: 0; height: 100vh;\n  overflow: hidden; background: #000; }\n.wis-card { position: absolute; inset: 0; will-change: clip-path; }\n.wis-card img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var cards = document.querySelectorAll(\".wis-card\"), N = cards.length;\n\nfunction __r(n){ return Math.round(n*10)/10; }\nvar ZERO = 'path(\"M0 0Z\")';\nfunction FULL(w,h){ return 'path(\"M0 0H'+__r(w)+'V'+__r(h)+'H0Z\")'; }\n// 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)\nfunction cbody(pts){\n  var d=\"\", i;\n  for(i=1;i<pts.length-1;i++){\n    var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc);\n  }\n  d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(pts[i][0])+\" \"+__r(pts[i][1]);\n  return d;\n}\nfunction smooth(pts){ return \"M\"+__r(pts[0][0])+\" \"+__r(pts[0][1]) + cbody(pts); }\n// 닫힌 매끄러운 곡선 (블롭/파장)\nfunction smoothClosed(pts){\n  var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;\n  var d=\"M\"+__r(sx)+\" \"+__r(sy);\n  for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc); }\n  return d+\"Z\";\n}\nfunction waveDown(c,w,h,A,wv){\n  if(c<=0) return ZERO; if(c>=1) return FULL(w,h);\n  var edge=c*(h+2*A)-A, s=Math.max(14,Math.ceil(wv*10)), p=[], i;\n  for(i=s;i>=0;i--){ var x=w*i/s, ph=i/s*wv*Math.PI*2; p.push([x, edge+A*Math.sin(ph)]); }\n  return 'path(\"M0 0 L'+__r(w)+' 0 L'+__r(p[0][0])+' '+__r(p[0][1])+cbody(p)+' Z\")';\n}\n\nfunction clipFor(c, w, h){ return waveDown(c,w,h, h*0.07, 1.3); }\nfunction dims(){ return [window.innerWidth, window.innerHeight]; }\n\n// 부드러운 스크롤: 목표 진행률로 매 프레임 lerp 보간 (requestAnimationFrame)\nvar targetP = 0, curP = 0, rafId = null;\nfunction render(p){\n  var d = dims(), w = d[0], h = d[1], segs = N - 1;\n  var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;\n  cards.forEach(function(c, i){\n    var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;\n    c.style.zIndex = i; c.style.clipPath = clipFor(cov, w, h);\n  });\n}\nfunction loop(){\n  curP += (targetP - curP) * 0.14;\n  var done = Math.abs(targetP - curP) < 0.0004; if (done) curP = targetP;\n  render(curP); rafId = done ? null : requestAnimationFrame(loop);\n}\naddEventListener(\"scroll\", function(){ targetP = calcProgress(); if(!rafId) rafId = requestAnimationFrame(loop); }, { passive:true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "스크롤 방향(위→아래)과 reveal 방향이 일치해 가장 자연스럽다. 헤더·내비게이션이 상단에 고정된 레이아웃에서 특히 잘 어울린다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "상단 고정 내비 아래로 비주얼이 물결로 흘러내림"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "위→아래 스크롤 흐름과 일치하는 배경 전환"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "스토리형 제품 소개 — 자연스러운 하강 전환"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "연대기형 작품 — 위에서 아래로 흐름"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 상승(01)과 한 쌍 — 한 페이지에 둘을 섞으면 방향이 혼란스러울 수 있다."
+        }
+      ]
+    },
+    "wave-side": {
+      "title": "03. 측면 물결 스윕",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "세로 물결 엣지가 화면 전체 좌측에서 우측으로 매끄럽게 쓸려 들어온다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/fullscreen-wavy-swap/wave-side.html",
+          "embedHeight": 560,
+          "embedLabel": "03 · 측면 물결 스윕",
+          "title": "측면 물결 스윕 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "우측 경계가 세로 사인 곡선(진폭 약 5% · 1.3주기)을 그리며, 엣지 X가 좌(-A)에서 우(w+A)로 coverage에 비례해 이동한다. 베지어로 곡선이 매끄럽고, lerp 보간으로 스윕이 부드럽다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (clip-path: path 베지어)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 → rAF lerp 보간 → 세그먼트 coverage"
+            },
+            {
+              "label": "물결",
+              "value": "세로 사인 곡선 (진폭 ~5% · 1.3주기)"
+            },
+            {
+              "label": "방향",
+              "value": "좌 → 우"
+            },
+            {
+              "label": "컨테이너",
+              "value": "풀블리드 viewport 5장 z-index 스택"
+            },
+            {
+              "label": "시그니처",
+              "value": "Framer Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wis-card\" data-i=\"0\"><img src=\"img-01.jpg\" alt=\"\"><span class=\"wis-cap\">01 · 해안의 아침</span></div>\n    <div class=\"wis-card\" data-i=\"1\"><img src=\"img-02.jpg\" alt=\"\"><span class=\"wis-cap\">02 · 물결 위의 건축</span></div>\n    <!-- x5 카드 (z-index 순서로 스택, 화면 전체를 채움) -->\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 500vh; position: relative; }\n.sticky-stage { position: sticky; top: 0; height: 100vh;\n  overflow: hidden; background: #000; }\n.wis-card { position: absolute; inset: 0; will-change: clip-path; }\n.wis-card img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var cards = document.querySelectorAll(\".wis-card\"), N = cards.length;\n\nfunction __r(n){ return Math.round(n*10)/10; }\nvar ZERO = 'path(\"M0 0Z\")';\nfunction FULL(w,h){ return 'path(\"M0 0H'+__r(w)+'V'+__r(h)+'H0Z\")'; }\n// 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)\nfunction cbody(pts){\n  var d=\"\", i;\n  for(i=1;i<pts.length-1;i++){\n    var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc);\n  }\n  d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(pts[i][0])+\" \"+__r(pts[i][1]);\n  return d;\n}\nfunction smooth(pts){ return \"M\"+__r(pts[0][0])+\" \"+__r(pts[0][1]) + cbody(pts); }\n// 닫힌 매끄러운 곡선 (블롭/파장)\nfunction smoothClosed(pts){\n  var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;\n  var d=\"M\"+__r(sx)+\" \"+__r(sy);\n  for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc); }\n  return d+\"Z\";\n}\nfunction waveSide(c,w,h,A,wv){\n  if(c<=0) return ZERO; if(c>=1) return FULL(w,h);\n  var ex=c*(w+2*A)-A, s=Math.max(14,Math.ceil(wv*10)), p=[], i;\n  for(i=0;i<=s;i++){ var y=h*i/s, ph=i/s*wv*Math.PI*2; p.push([ex+A*Math.sin(ph), y]); }\n  return 'path(\"'+smooth(p)+' L0 '+__r(h)+' L0 0Z\")';\n}\n\nfunction clipFor(c, w, h){ return waveSide(c,w,h, w*0.05, 1.3); }\nfunction dims(){ return [window.innerWidth, window.innerHeight]; }\n\n// 부드러운 스크롤: 목표 진행률로 매 프레임 lerp 보간 (requestAnimationFrame)\nvar targetP = 0, curP = 0, rafId = null;\nfunction render(p){\n  var d = dims(), w = d[0], h = d[1], segs = N - 1;\n  var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;\n  cards.forEach(function(c, i){\n    var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;\n    c.style.zIndex = i; c.style.clipPath = clipFor(cov, w, h);\n  });\n}\nfunction loop(){\n  curP += (targetP - curP) * 0.14;\n  var done = Math.abs(targetP - curP) < 0.0004; if (done) curP = targetP;\n  render(curP); rafId = done ? null : requestAnimationFrame(loop);\n}\naddEventListener(\"scroll\", function(){ targetP = calcProgress(); if(!rafId) rafId = requestAnimationFrame(loop); }, { passive:true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "가로 방향 전환. 세로 스크롤과 직교하는 흐름이라 시네마틱하다. RTL 사이트는 방향을 우→좌로 반전 권장."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "와이드 파노라마 — 좌측에서 물결로 진입"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "단계별 스토리 — 좌→우 가로 흐름"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "비교 슬라이드 — 나란히 비교 느낌"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "와이드 작품 — 파노라마 스윕"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 가로 흐름이 세로 스크롤과 직교 — 약간의 방향 인지 비용. overflow:hidden 필수."
+        }
+      ]
+    },
+    "wave-diagonal": {
+      "title": "04. 사선 물결",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "물결 경계가 좌하단 → 우상단 대각선으로 기울어진 채 매끄럽게 쓸려 올라온다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/fullscreen-wavy-swap/wave-diagonal.html",
+          "embedHeight": 560,
+          "embedLabel": "04 · 사선 물결",
+          "title": "사선 물결 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "x/w + y/h = 2c 형태의 대각선 임계선에 완만한 사인 진폭을 더해 물결진 사선 엣지를 만든다. coverage가 커지면 대각선이 좌하단에서 우상단으로 밀려나며 다음 이미지를 reveal. 베지어로 단면이 매끄럽다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (clip-path: path 베지어)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 → rAF lerp 보간 → 세그먼트 coverage"
+            },
+            {
+              "label": "물결",
+              "value": "사선 사인 곡선 (진폭 ~5% · 1.2주기)"
+            },
+            {
+              "label": "방향",
+              "value": "좌하단 → 우상단"
+            },
+            {
+              "label": "컨테이너",
+              "value": "풀블리드 viewport 5장 z-index 스택"
+            },
+            {
+              "label": "시그니처",
+              "value": "Framer Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wis-card\" data-i=\"0\"><img src=\"img-01.jpg\" alt=\"\"><span class=\"wis-cap\">01 · 해안의 아침</span></div>\n    <div class=\"wis-card\" data-i=\"1\"><img src=\"img-02.jpg\" alt=\"\"><span class=\"wis-cap\">02 · 물결 위의 건축</span></div>\n    <!-- x5 카드 (z-index 순서로 스택, 화면 전체를 채움) -->\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 500vh; position: relative; }\n.sticky-stage { position: sticky; top: 0; height: 100vh;\n  overflow: hidden; background: #000; }\n.wis-card { position: absolute; inset: 0; will-change: clip-path; }\n.wis-card img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var cards = document.querySelectorAll(\".wis-card\"), N = cards.length;\n\nfunction __r(n){ return Math.round(n*10)/10; }\nvar ZERO = 'path(\"M0 0Z\")';\nfunction FULL(w,h){ return 'path(\"M0 0H'+__r(w)+'V'+__r(h)+'H0Z\")'; }\n// 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)\nfunction cbody(pts){\n  var d=\"\", i;\n  for(i=1;i<pts.length-1;i++){\n    var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc);\n  }\n  d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(pts[i][0])+\" \"+__r(pts[i][1]);\n  return d;\n}\nfunction smooth(pts){ return \"M\"+__r(pts[0][0])+\" \"+__r(pts[0][1]) + cbody(pts); }\n// 닫힌 매끄러운 곡선 (블롭/파장)\nfunction smoothClosed(pts){\n  var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;\n  var d=\"M\"+__r(sx)+\" \"+__r(sy);\n  for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc); }\n  return d+\"Z\";\n}\nfunction waveDiag(c,w,h,A,wv){\n  if(c<=0) return ZERO; if(c>=1) return FULL(w,h);\n  var s=Math.max(16,Math.ceil(wv*10)), p=[], i;\n  for(i=0;i<=s;i++){ var y=h*i/s, ph=i/s*wv*Math.PI*2; p.push([w*(2*c - y/h)+A*Math.sin(ph), y]); }\n  return 'path(\"'+smooth(p)+' L0 '+__r(h)+' L0 0Z\")';\n}\n\nfunction clipFor(c, w, h){ return waveDiag(c,w,h, Math.min(w,h)*0.05, 1.2); }\nfunction dims(){ return [window.innerWidth, window.innerHeight]; }\n\n// 부드러운 스크롤: 목표 진행률로 매 프레임 lerp 보간 (requestAnimationFrame)\nvar targetP = 0, curP = 0, rafId = null;\nfunction render(p){\n  var d = dims(), w = d[0], h = d[1], segs = N - 1;\n  var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;\n  cards.forEach(function(c, i){\n    var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;\n    c.style.zIndex = i; c.style.clipPath = clipFor(cov, w, h);\n  });\n}\nfunction loop(){\n  curP += (targetP - curP) * 0.14;\n  var done = Math.abs(targetP - curP) < 0.0004; if (done) curP = targetP;\n  render(curP); rafId = done ? null : requestAnimationFrame(loop);\n}\naddEventListener(\"scroll\", function(){ targetP = calcProgress(); if(!rafId) rafId = requestAnimationFrame(loop); }, { passive:true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "정적인 수평/수직보다 역동적이다. 사선 각도는 컨테이너 비율로 자동 결정된다. 진폭을 줄이면 깔끔한 대각선 와이프에 가까워진다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "스포츠·다이내믹 브랜드 — 역동적 진입"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "에너지 있는 제품 — 대각선 전환"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "신제품 공개 — 임팩트 있는 와이프"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "모션 디자이너 — 다이내믹 연출"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 대각선이라 모서리별 reveal 타이밍 차이가 크다. 모서리 콘텐츠는 늦게 드러난다."
+        }
+      ]
+    },
+    "wave-blob": {
+      "title": "05. 물결 블롭 확장",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "다음 이미지가 화면 전체 중앙에서 둥근 물결 블롭으로 매끄럽게 확장되며 채워진다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/fullscreen-wavy-swap/wave-blob.html",
+          "embedHeight": 560,
+          "embedLabel": "05 · 물결 블롭 확장",
+          "title": "물결 블롭 확장 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "중앙을 기준으로 반지름 R = coverage × maxR인 원을 그리되, 각도에 따라 r = R(1 + 0.12·sin(angle×5))로 5개의 로브를 만들어 물결진 블롭을 형성한다. 닫힌 베지어 곡선(smoothClosed)으로 가장자리가 매끄럽다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (clip-path: path 베지어)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 → rAF lerp 보간 → 세그먼트 coverage"
+            },
+            {
+              "label": "물결",
+              "value": "5-로브 닫힌 베지어 블롭 (진폭 12%)"
+            },
+            {
+              "label": "방향",
+              "value": "중앙 → 바깥 확장"
+            },
+            {
+              "label": "컨테이너",
+              "value": "풀블리드 viewport 5장 z-index 스택"
+            },
+            {
+              "label": "시그니처",
+              "value": "Framer Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wis-card\" data-i=\"0\"><img src=\"img-01.jpg\" alt=\"\"><span class=\"wis-cap\">01 · 해안의 아침</span></div>\n    <div class=\"wis-card\" data-i=\"1\"><img src=\"img-02.jpg\" alt=\"\"><span class=\"wis-cap\">02 · 물결 위의 건축</span></div>\n    <!-- x5 카드 (z-index 순서로 스택, 화면 전체를 채움) -->\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 500vh; position: relative; }\n.sticky-stage { position: sticky; top: 0; height: 100vh;\n  overflow: hidden; background: #000; }\n.wis-card { position: absolute; inset: 0; will-change: clip-path; }\n.wis-card img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var cards = document.querySelectorAll(\".wis-card\"), N = cards.length;\n\nfunction __r(n){ return Math.round(n*10)/10; }\nvar ZERO = 'path(\"M0 0Z\")';\nfunction FULL(w,h){ return 'path(\"M0 0H'+__r(w)+'V'+__r(h)+'H0Z\")'; }\n// 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)\nfunction cbody(pts){\n  var d=\"\", i;\n  for(i=1;i<pts.length-1;i++){\n    var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc);\n  }\n  d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(pts[i][0])+\" \"+__r(pts[i][1]);\n  return d;\n}\nfunction smooth(pts){ return \"M\"+__r(pts[0][0])+\" \"+__r(pts[0][1]) + cbody(pts); }\n// 닫힌 매끄러운 곡선 (블롭/파장)\nfunction smoothClosed(pts){\n  var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;\n  var d=\"M\"+__r(sx)+\" \"+__r(sy);\n  for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc); }\n  return d+\"Z\";\n}\nfunction waveBlob(c,w,h,lobes,af){\n  if(c<=0) return ZERO; if(c>=1) return FULL(w,h);\n  var cx=w/2, cy=h/2, maxR=Math.hypot(w,h)/2*1.18, R=c*maxR, s=Math.max(28,lobes*6), p=[], i;\n  for(i=0;i<s;i++){ var a=i/s*Math.PI*2, r=R*(1+af*Math.sin(a*lobes)); p.push([cx+r*Math.cos(a), cy+r*Math.sin(a)]); }\n  return 'path(\"'+smoothClosed(p)+'\")';\n}\n\nfunction clipFor(c, w, h){ return waveBlob(c,w,h, 5, 0.12); }\nfunction dims(){ return [window.innerWidth, window.innerHeight]; }\n\n// 부드러운 스크롤: 목표 진행률로 매 프레임 lerp 보간 (requestAnimationFrame)\nvar targetP = 0, curP = 0, rafId = null;\nfunction render(p){\n  var d = dims(), w = d[0], h = d[1], segs = N - 1;\n  var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;\n  cards.forEach(function(c, i){\n    var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;\n    c.style.zIndex = i; c.style.clipPath = clipFor(cov, w, h);\n  });\n}\nfunction loop(){\n  curP += (targetP - curP) * 0.14;\n  var done = Math.abs(targetP - curP) < 0.0004; if (done) curP = targetP;\n  render(curP); rafId = done ? null : requestAnimationFrame(loop);\n}\naddEventListener(\"scroll\", function(){ targetP = calcProgress(); if(!rafId) rafId = requestAnimationFrame(loop); }, { passive:true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "중앙 포커스를 강조하는 오가닉 전환. 로브 4~6개, 진폭 0.10~0.14가 자연스럽다. 로브를 늘리고 진폭을 줄이면 파장(06)에 가까워진다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "크리에이티브 스튜디오 — 유기적 등장"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "브랜드 스토리 — 중앙 포커스 확장"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "뷰티·코스메틱 — 부드러운 블롭"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "아티스트 — 유기적 형태 연출"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 닫힌 곡선 점이 많아 가장 무거운 편. 확장 초반 작은 블롭에서는 맥락 파악이 늦다."
+        }
+      ]
+    },
+    "wave-ripple": {
+      "title": "06. 물결 파장",
+      "blocks": [
+        {
+          "type": "text",
+          "value": " 화면 전체 중앙에서 잔물결(고주파·저진폭) 동심 파장이 매끄럽게 퍼지듯 확산된다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/fullscreen-wavy-swap/wave-ripple.html",
+          "embedHeight": 560,
+          "embedLabel": "06 · 물결 파장",
+          "title": "물결 파장 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "블롭과 동일한 중앙 확장 모델이되 로브를 11개, 진폭 비율을 0.05로 낮춰 잔물결진 원형 파장처럼 보이게 한다. 닫힌 베지어로 가장자리가 부드럽게 출렁인다. 수면에 돌을 던졌을 때의 동심 파장 느낌."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (clip-path: path 베지어)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 → rAF lerp 보간 → 세그먼트 coverage"
+            },
+            {
+              "label": "물결",
+              "value": "11-로브 잔물결 베지어 (진폭 5%)"
+            },
+            {
+              "label": "방향",
+              "value": "중앙 → 바깥 확산"
+            },
+            {
+              "label": "컨테이너",
+              "value": "풀블리드 viewport 5장 z-index 스택"
+            },
+            {
+              "label": "시그니처",
+              "value": "Framer Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wis-card\" data-i=\"0\"><img src=\"img-01.jpg\" alt=\"\"><span class=\"wis-cap\">01 · 해안의 아침</span></div>\n    <div class=\"wis-card\" data-i=\"1\"><img src=\"img-02.jpg\" alt=\"\"><span class=\"wis-cap\">02 · 물결 위의 건축</span></div>\n    <!-- x5 카드 (z-index 순서로 스택, 화면 전체를 채움) -->\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 500vh; position: relative; }\n.sticky-stage { position: sticky; top: 0; height: 100vh;\n  overflow: hidden; background: #000; }\n.wis-card { position: absolute; inset: 0; will-change: clip-path; }\n.wis-card img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var cards = document.querySelectorAll(\".wis-card\"), N = cards.length;\n\nfunction __r(n){ return Math.round(n*10)/10; }\nvar ZERO = 'path(\"M0 0Z\")';\nfunction FULL(w,h){ return 'path(\"M0 0H'+__r(w)+'V'+__r(h)+'H0Z\")'; }\n// 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)\nfunction cbody(pts){\n  var d=\"\", i;\n  for(i=1;i<pts.length-1;i++){\n    var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc);\n  }\n  d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(pts[i][0])+\" \"+__r(pts[i][1]);\n  return d;\n}\nfunction smooth(pts){ return \"M\"+__r(pts[0][0])+\" \"+__r(pts[0][1]) + cbody(pts); }\n// 닫힌 매끄러운 곡선 (블롭/파장)\nfunction smoothClosed(pts){\n  var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;\n  var d=\"M\"+__r(sx)+\" \"+__r(sy);\n  for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc); }\n  return d+\"Z\";\n}\nfunction waveBlob(c,w,h,lobes,af){\n  if(c<=0) return ZERO; if(c>=1) return FULL(w,h);\n  var cx=w/2, cy=h/2, maxR=Math.hypot(w,h)/2*1.18, R=c*maxR, s=Math.max(28,lobes*6), p=[], i;\n  for(i=0;i<s;i++){ var a=i/s*Math.PI*2, r=R*(1+af*Math.sin(a*lobes)); p.push([cx+r*Math.cos(a), cy+r*Math.sin(a)]); }\n  return 'path(\"'+smoothClosed(p)+'\")';\n}\n\nfunction clipFor(c, w, h){ return waveBlob(c,w,h, 11, 0.05); }\nfunction dims(){ return [window.innerWidth, window.innerHeight]; }\n\n// 부드러운 스크롤: 목표 진행률로 매 프레임 lerp 보간 (requestAnimationFrame)\nvar targetP = 0, curP = 0, rafId = null;\nfunction render(p){\n  var d = dims(), w = d[0], h = d[1], segs = N - 1;\n  var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;\n  cards.forEach(function(c, i){\n    var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;\n    c.style.zIndex = i; c.style.clipPath = clipFor(cov, w, h);\n  });\n}\nfunction loop(){\n  curP += (targetP - curP) * 0.14;\n  var done = Math.abs(targetP - curP) < 0.0004; if (done) curP = targetP;\n  render(curP); rafId = done ? null : requestAnimationFrame(loop);\n}\naddEventListener(\"scroll\", function(){ targetP = calcProgress(); if(!rafId) rafId = requestAnimationFrame(loop); }, { passive:true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "고주파·저진폭으로 거의 원형에 가깝되 가장자리가 부드럽게 잔물결진다. 물·자연·명상 테마에 적합. 진폭을 0으로 두면 완전한 원형 와이프."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "웰니스·명상 — 잔잔한 파장 등장"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "음료·생수 브랜드 — 수면 파장"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "친환경 제품 — 자연스러운 확산"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "사진작가 — 잔잔한 reveal"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 진폭이 작아 물결감이 미묘하다 — 강한 인상이 필요하면 블롭(05)이나 상승(01) 권장."
+        }
+      ]
+    },
+    "wave-band": {
+      "title": "07. 수직 밴드 분할",
+      "blocks": [
+        {
+          "type": "text",
+          "value": " 화면 전체 중앙에서 위·아래 두 물결 곡선이 매끄럽게 벌어지며 세로로 펼쳐진다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/fullscreen-wavy-swap/wave-band.html",
+          "embedHeight": 560,
+          "embedLabel": "07 · 수직 밴드 분할",
+          "title": "수직 밴드 분할 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "중앙 수평선을 기준으로 위쪽 베지어 곡선과 아래쪽 베지어 곡선을 하나의 밴드 path로 잇는다. coverage가 커지면 두 곡선이 위·아래로 벌어지며 중앙에서 바깥으로 이미지를 펼친다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (clip-path: path 베지어)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 → rAF lerp 보간 → 세그먼트 coverage"
+            },
+            {
+              "label": "물결",
+              "value": "위·아래 베지어 곡선 2줄 (진폭 ~5%)"
+            },
+            {
+              "label": "방향",
+              "value": "중앙 → 위·아래 분할"
+            },
+            {
+              "label": "컨테이너",
+              "value": "풀블리드 viewport 5장 z-index 스택"
+            },
+            {
+              "label": "시그니처",
+              "value": "Framer Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wis-card\" data-i=\"0\"><img src=\"img-01.jpg\" alt=\"\"><span class=\"wis-cap\">01 · 해안의 아침</span></div>\n    <div class=\"wis-card\" data-i=\"1\"><img src=\"img-02.jpg\" alt=\"\"><span class=\"wis-cap\">02 · 물결 위의 건축</span></div>\n    <!-- x5 카드 (z-index 순서로 스택, 화면 전체를 채움) -->\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 500vh; position: relative; }\n.sticky-stage { position: sticky; top: 0; height: 100vh;\n  overflow: hidden; background: #000; }\n.wis-card { position: absolute; inset: 0; will-change: clip-path; }\n.wis-card img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var cards = document.querySelectorAll(\".wis-card\"), N = cards.length;\n\nfunction __r(n){ return Math.round(n*10)/10; }\nvar ZERO = 'path(\"M0 0Z\")';\nfunction FULL(w,h){ return 'path(\"M0 0H'+__r(w)+'V'+__r(h)+'H0Z\")'; }\n// 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)\nfunction cbody(pts){\n  var d=\"\", i;\n  for(i=1;i<pts.length-1;i++){\n    var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc);\n  }\n  d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(pts[i][0])+\" \"+__r(pts[i][1]);\n  return d;\n}\nfunction smooth(pts){ return \"M\"+__r(pts[0][0])+\" \"+__r(pts[0][1]) + cbody(pts); }\n// 닫힌 매끄러운 곡선 (블롭/파장)\nfunction smoothClosed(pts){\n  var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;\n  var d=\"M\"+__r(sx)+\" \"+__r(sy);\n  for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc); }\n  return d+\"Z\";\n}\nfunction waveBand(c,w,h,A,wv){\n  if(c<=0) return ZERO; if(c>=1) return FULL(w,h);\n  var cy=h/2, half=c*(h/2+A), s=Math.max(14,Math.ceil(wv*10)), top=[], bot=[], i;\n  for(i=0;i<=s;i++){ var x=w*i/s, ph=i/s*wv*Math.PI*2; top.push([x, cy-half+A*Math.sin(ph)]); }\n  for(i=s;i>=0;i--){ var x=w*i/s, ph=i/s*wv*Math.PI*2; bot.push([x, cy+half+A*Math.sin(ph)]); }\n  return 'path(\"'+smooth(top)+' L'+__r(bot[0][0])+' '+__r(bot[0][1])+cbody(bot)+' Z\")';\n}\n\nfunction clipFor(c, w, h){ return waveBand(c,w,h, h*0.05, 1.4); }\nfunction dims(){ return [window.innerWidth, window.innerHeight]; }\n\n// 부드러운 스크롤: 목표 진행률로 매 프레임 lerp 보간 (requestAnimationFrame)\nvar targetP = 0, curP = 0, rafId = null;\nfunction render(p){\n  var d = dims(), w = d[0], h = d[1], segs = N - 1;\n  var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;\n  cards.forEach(function(c, i){\n    var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;\n    c.style.zIndex = i; c.style.clipPath = clipFor(cov, w, h);\n  });\n}\nfunction loop(){\n  curP += (targetP - curP) * 0.14;\n  var done = Math.abs(targetP - curP) < 0.0004; if (done) curP = targetP;\n  render(curP); rafId = done ? null : requestAnimationFrame(loop);\n}\naddEventListener(\"scroll\", function(){ targetP = calcProgress(); if(!rafId) rafId = requestAnimationFrame(loop); }, { passive:true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "중앙에서 양쪽으로 열리는 극적인 오프닝. 가운데 핵심 피사체가 먼저 드러나므로 중앙 구도 이미지에 잘 맞는다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "영화·미디어 — 시네마틱 오프닝"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "런칭 발표 — 중앙 분할 공개"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "주얼리·시계 — 중앙 피사체 강조"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "디렉터 — 극적 인트로"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 단일 밴드 path라 위·아래가 동시에 열린다. 상하단 모서리가 가장 늦게 드러난다."
+        }
+      ]
+    },
+    "wave-curtain": {
+      "title": "08. 가로 커튼 분할",
+      "blocks": [
+        {
+          "type": "text",
+          "value": " 화면 전체 중앙에서 좌·우 두 물결 곡선이 커튼처럼 매끄럽게 벌어진다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/fullscreen-wavy-swap/wave-curtain.html",
+          "embedHeight": 560,
+          "embedLabel": "08 · 가로 커튼 분할",
+          "title": "가로 커튼 분할 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "중앙 수직선을 기준으로 왼쪽 베지어 곡선과 오른쪽 베지어 곡선을 하나의 커튼 path로 잇는다. coverage가 커지면 두 물결 커튼이 좌·우로 벌어지며 중앙에서 바깥으로 이미지를 펼친다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (clip-path: path 베지어)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 → rAF lerp 보간 → 세그먼트 coverage"
+            },
+            {
+              "label": "물결",
+              "value": "좌·우 베지어 곡선 2줄 (진폭 ~4.5%)"
+            },
+            {
+              "label": "방향",
+              "value": "중앙 → 좌·우 분할"
+            },
+            {
+              "label": "컨테이너",
+              "value": "풀블리드 viewport 5장 z-index 스택"
+            },
+            {
+              "label": "시그니처",
+              "value": "Framer Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wis-card\" data-i=\"0\"><img src=\"img-01.jpg\" alt=\"\"><span class=\"wis-cap\">01 · 해안의 아침</span></div>\n    <div class=\"wis-card\" data-i=\"1\"><img src=\"img-02.jpg\" alt=\"\"><span class=\"wis-cap\">02 · 물결 위의 건축</span></div>\n    <!-- x5 카드 (z-index 순서로 스택, 화면 전체를 채움) -->\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 500vh; position: relative; }\n.sticky-stage { position: sticky; top: 0; height: 100vh;\n  overflow: hidden; background: #000; }\n.wis-card { position: absolute; inset: 0; will-change: clip-path; }\n.wis-card img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var cards = document.querySelectorAll(\".wis-card\"), N = cards.length;\n\nfunction __r(n){ return Math.round(n*10)/10; }\nvar ZERO = 'path(\"M0 0Z\")';\nfunction FULL(w,h){ return 'path(\"M0 0H'+__r(w)+'V'+__r(h)+'H0Z\")'; }\n// 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)\nfunction cbody(pts){\n  var d=\"\", i;\n  for(i=1;i<pts.length-1;i++){\n    var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc);\n  }\n  d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(pts[i][0])+\" \"+__r(pts[i][1]);\n  return d;\n}\nfunction smooth(pts){ return \"M\"+__r(pts[0][0])+\" \"+__r(pts[0][1]) + cbody(pts); }\n// 닫힌 매끄러운 곡선 (블롭/파장)\nfunction smoothClosed(pts){\n  var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;\n  var d=\"M\"+__r(sx)+\" \"+__r(sy);\n  for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc); }\n  return d+\"Z\";\n}\nfunction waveCurtain(c,w,h,A,wv){\n  if(c<=0) return ZERO; if(c>=1) return FULL(w,h);\n  var cx=w/2, half=c*(w/2+A), s=Math.max(14,Math.ceil(wv*10)), left=[], right=[], i;\n  for(i=0;i<=s;i++){ var y=h*i/s, ph=i/s*wv*Math.PI*2; left.push([cx-half+A*Math.sin(ph), y]); }\n  for(i=s;i>=0;i--){ var y=h*i/s, ph=i/s*wv*Math.PI*2; right.push([cx+half+A*Math.sin(ph), y]); }\n  return 'path(\"'+smooth(left)+' L'+__r(right[0][0])+' '+__r(right[0][1])+cbody(right)+' Z\")';\n}\n\nfunction clipFor(c, w, h){ return waveCurtain(c,w,h, w*0.045, 1.4); }\nfunction dims(){ return [window.innerWidth, window.innerHeight]; }\n\n// 부드러운 스크롤: 목표 진행률로 매 프레임 lerp 보간 (requestAnimationFrame)\nvar targetP = 0, curP = 0, rafId = null;\nfunction render(p){\n  var d = dims(), w = d[0], h = d[1], segs = N - 1;\n  var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;\n  cards.forEach(function(c, i){\n    var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;\n    c.style.zIndex = i; c.style.clipPath = clipFor(cov, w, h);\n  });\n}\nfunction loop(){\n  curP += (targetP - curP) * 0.14;\n  var done = Math.abs(targetP - curP) < 0.0004; if (done) curP = targetP;\n  render(curP); rafId = done ? null : requestAnimationFrame(loop);\n}\naddEventListener(\"scroll\", function(){ targetP = calcProgress(); if(!rafId) rafId = requestAnimationFrame(loop); }, { passive:true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "무대 커튼이 양쪽으로 열리듯 가로 분할. 밴드(07)와 한 쌍으로, 세로 구도·좌우 대칭 구도에 잘 맞는다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "공연·전시 — 커튼 오프닝"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "이벤트 발표 — 무대 연출"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "패션 캠페인 — 세로 인물 강조"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "무대·공간 디자이너 — 커튼 연출"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 좌·우 모서리가 가장 늦게 드러난다. 좌우 끝 텍스트는 전환 중 잘림."
+        }
+      ]
+    },
+    "wave-morph": {
+      "title": "09. 물결 모핑",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "전환 중간에 물결 진폭이 최대로 부풀었다가 양 끝에서 평평해지며 매끄럽게 모핑된다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/fullscreen-wavy-swap/wave-morph.html",
+          "embedHeight": 560,
+          "embedLabel": "09 · 물결 모핑",
+          "title": "물결 모핑 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "상승 모델에서 진폭을 h×0.12×sin(π·c)+2로 동적 변조한다. coverage 0과 1에서는 진폭이 거의 0(평평)이고 중간(c=0.5)에서 최대로 부푼다 → 전환 시작·끝은 깔끔하고 중간에만 물결이 크게 출렁이는 베지어 모핑."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (clip-path: path 베지어)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 → rAF lerp 보간 → 세그먼트 coverage"
+            },
+            {
+              "label": "물결",
+              "value": "진폭 동적 변조 sin(π·c) (최대 ~12%)"
+            },
+            {
+              "label": "방향",
+              "value": "아래 → 위, 중간 부풂"
+            },
+            {
+              "label": "컨테이너",
+              "value": "풀블리드 viewport 5장 z-index 스택"
+            },
+            {
+              "label": "시그니처",
+              "value": "Framer Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wis-card\" data-i=\"0\"><img src=\"img-01.jpg\" alt=\"\"><span class=\"wis-cap\">01 · 해안의 아침</span></div>\n    <div class=\"wis-card\" data-i=\"1\"><img src=\"img-02.jpg\" alt=\"\"><span class=\"wis-cap\">02 · 물결 위의 건축</span></div>\n    <!-- x5 카드 (z-index 순서로 스택, 화면 전체를 채움) -->\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 500vh; position: relative; }\n.sticky-stage { position: sticky; top: 0; height: 100vh;\n  overflow: hidden; background: #000; }\n.wis-card { position: absolute; inset: 0; will-change: clip-path; }\n.wis-card img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var cards = document.querySelectorAll(\".wis-card\"), N = cards.length;\n\nfunction __r(n){ return Math.round(n*10)/10; }\nvar ZERO = 'path(\"M0 0Z\")';\nfunction FULL(w,h){ return 'path(\"M0 0H'+__r(w)+'V'+__r(h)+'H0Z\")'; }\n// 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)\nfunction cbody(pts){\n  var d=\"\", i;\n  for(i=1;i<pts.length-1;i++){\n    var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc);\n  }\n  d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(pts[i][0])+\" \"+__r(pts[i][1]);\n  return d;\n}\nfunction smooth(pts){ return \"M\"+__r(pts[0][0])+\" \"+__r(pts[0][1]) + cbody(pts); }\n// 닫힌 매끄러운 곡선 (블롭/파장)\nfunction smoothClosed(pts){\n  var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;\n  var d=\"M\"+__r(sx)+\" \"+__r(sy);\n  for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc); }\n  return d+\"Z\";\n}\nfunction waveUp(c,w,h,A,wv){\n  if(c<=0) return ZERO; if(c>=1) return FULL(w,h);\n  var base=(1-c)*(h+2*A)-A, s=Math.max(14,Math.ceil(wv*10)), p=[], i;\n  for(i=0;i<=s;i++){ var x=w*i/s, ph=i/s*wv*Math.PI*2; p.push([x, base+A*Math.sin(ph)]); }\n  return 'path(\"'+smooth(p)+' L'+__r(w)+' '+__r(h)+' L0 '+__r(h)+'Z\")';\n}\n\nfunction clipFor(c, w, h){ return waveUp(c,w,h, h*0.12*Math.sin(Math.PI*c)+2, 1.6); }\nfunction dims(){ return [window.innerWidth, window.innerHeight]; }\n\n// 부드러운 스크롤: 목표 진행률로 매 프레임 lerp 보간 (requestAnimationFrame)\nvar targetP = 0, curP = 0, rafId = null;\nfunction render(p){\n  var d = dims(), w = d[0], h = d[1], segs = N - 1;\n  var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;\n  cards.forEach(function(c, i){\n    var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;\n    c.style.zIndex = i; c.style.clipPath = clipFor(cov, w, h);\n  });\n}\nfunction loop(){\n  curP += (targetP - curP) * 0.14;\n  var done = Math.abs(targetP - curP) < 0.0004; if (done) curP = targetP;\n  render(curP); rafId = done ? null : requestAnimationFrame(loop);\n}\naddEventListener(\"scroll\", function(){ targetP = calcProgress(); if(!rafId) rafId = requestAnimationFrame(loop); }, { passive:true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "시작·끝이 평평해 이미지가 깔끔하게 안착하고 전환 중간에만 큰 물결이 인다. 진폭 변조는 다른 패턴에도 곱해 쓸 수 있는 범용 기법."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "프리미엄 브랜드 — 절제된 드라마"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "스토리텔링 — 리듬감 있는 전환"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "하이엔드 제품 — 정교한 모션"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "모션 전문가 — 디테일한 이징"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 진폭이 매 프레임 바뀌어 출렁임이 크다 — prefers-reduced-motion 대응 권장."
+        }
+      ]
+    },
+    "wave-stack": {
+      "title": "10. 레이어드 물결",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "두 개의 다른 주파수 물결이 겹쳐 불규칙하고 자연스러운 합성 물결이 매끄럽게 차오른다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/fullscreen-wavy-swap/wave-stack.html",
+          "embedHeight": 560,
+          "embedLabel": "10 · 레이어드 물결",
+          "title": "레이어드 물결 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "기본 주파수 사인(진폭 0.62A)에 2.6배 주파수 사인(진폭 0.38A)을 위상 차를 두고 더해 합성한 뒤 베지어로 매끄럽게 잇는다. 단일 사인보다 불규칙·유기적이라 실제 파도에 가까운 느낌으로 아래에서 위로 차오른다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (clip-path: path 베지어)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 → rAF lerp 보간 → 세그먼트 coverage"
+            },
+            {
+              "label": "물결",
+              "value": "2중 주파수 합성 베지어 (~6% 합)"
+            },
+            {
+              "label": "방향",
+              "value": "아래 → 위"
+            },
+            {
+              "label": "컨테이너",
+              "value": "풀블리드 viewport 5장 z-index 스택"
+            },
+            {
+              "label": "시그니처",
+              "value": "Framer Masked Scroll Slider"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wis-card\" data-i=\"0\"><img src=\"img-01.jpg\" alt=\"\"><span class=\"wis-cap\">01 · 해안의 아침</span></div>\n    <div class=\"wis-card\" data-i=\"1\"><img src=\"img-02.jpg\" alt=\"\"><span class=\"wis-cap\">02 · 물결 위의 건축</span></div>\n    <!-- x5 카드 (z-index 순서로 스택, 화면 전체를 채움) -->\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 500vh; position: relative; }\n.sticky-stage { position: sticky; top: 0; height: 100vh;\n  overflow: hidden; background: #000; }\n.wis-card { position: absolute; inset: 0; will-change: clip-path; }\n.wis-card img { width: 100%; height: 100%; object-fit: cover; display: block; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var cards = document.querySelectorAll(\".wis-card\"), N = cards.length;\n\nfunction __r(n){ return Math.round(n*10)/10; }\nvar ZERO = 'path(\"M0 0Z\")';\nfunction FULL(w,h){ return 'path(\"M0 0H'+__r(w)+'V'+__r(h)+'H0Z\")'; }\n// 점들을 지나는 매끄러운 2차 베지어 곡선 (열린 경로, 선행 M 없음)\nfunction cbody(pts){\n  var d=\"\", i;\n  for(i=1;i<pts.length-1;i++){\n    var xc=(pts[i][0]+pts[i+1][0])/2, yc=(pts[i][1]+pts[i+1][1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc);\n  }\n  d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(pts[i][0])+\" \"+__r(pts[i][1]);\n  return d;\n}\nfunction smooth(pts){ return \"M\"+__r(pts[0][0])+\" \"+__r(pts[0][1]) + cbody(pts); }\n// 닫힌 매끄러운 곡선 (블롭/파장)\nfunction smoothClosed(pts){\n  var n=pts.length, i, sx=(pts[n-1][0]+pts[0][0])/2, sy=(pts[n-1][1]+pts[0][1])/2;\n  var d=\"M\"+__r(sx)+\" \"+__r(sy);\n  for(i=0;i<n;i++){ var q=pts[(i+1)%n], xc=(pts[i][0]+q[0])/2, yc=(pts[i][1]+q[1])/2;\n    d += \" Q\"+__r(pts[i][0])+\" \"+__r(pts[i][1])+\" \"+__r(xc)+\" \"+__r(yc); }\n  return d+\"Z\";\n}\nfunction waveStack(c,w,h){\n  if(c<=0) return ZERO; if(c>=1) return FULL(w,h);\n  var A=h*0.06, base=(1-c)*(h+2*A)-A, s=24, p=[], i;\n  for(i=0;i<=s;i++){ var x=w*i/s, ph=i/s*Math.PI*2;\n    p.push([x, base + A*0.62*Math.sin(ph*1.2) + A*0.38*Math.sin(ph*2.6+1)]); }\n  return 'path(\"'+smooth(p)+' L'+__r(w)+' '+__r(h)+' L0 '+__r(h)+'Z\")';\n}\n\nfunction clipFor(c, w, h){ return waveStack(c,w,h); }\nfunction dims(){ return [window.innerWidth, window.innerHeight]; }\n\n// 부드러운 스크롤: 목표 진행률로 매 프레임 lerp 보간 (requestAnimationFrame)\nvar targetP = 0, curP = 0, rafId = null;\nfunction render(p){\n  var d = dims(), w = d[0], h = d[1], segs = N - 1;\n  var fp = p*segs, idx = Math.min(Math.floor(fp), segs-1), local = fp - idx;\n  cards.forEach(function(c, i){\n    var cov = i===0 ? 1 : i<=idx ? 1 : i===idx+1 ? local : 0;\n    c.style.zIndex = i; c.style.clipPath = clipFor(cov, w, h);\n  });\n}\nfunction loop(){\n  curP += (targetP - curP) * 0.14;\n  var done = Math.abs(targetP - curP) < 0.0004; if (done) curP = targetP;\n  render(curP); rafId = done ? null : requestAnimationFrame(loop);\n}\naddEventListener(\"scroll\", function(){ targetP = calcProgress(); if(!rafId) rafId = requestAnimationFrame(loop); }, { passive:true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "두 사인을 겹쳐 가장 유기적인 물결을 만든다. 주파수 비·위상 차를 바꾸면 무한히 다양한 물결을 생성한다. 자연·바다 테마에 최적."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "리조트·여행 — 진짜 파도 같은 전환"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "자연·아웃도어 — 유기적 물결"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "서핑·해양 제품 — 파도 메타포"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "풍경 사진작가 — 자연스러운 흐름"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 합성 물결은 진폭 합이 커 전환 중 잘리는 영역이 넓다."
+        }
+      ]
+    }
+  }
+}

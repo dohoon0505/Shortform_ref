@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Miracell — Service (실측 1452px · 3 카드 · 실 사진 배경)</title>
+<link rel="stylesheet" href="../../miracell-app/styles/globals.css">
+<style>
+/* Service 섹션 — 라이브 실측 1452px (padding 200px 0 0) */
+#mainService {
+  position: relative;
+  width: 100%;
+  height: 1452px;
+  padding: 200px 0 0;
+  background: #fff;
+  overflow: hidden;
+}
+
+.main-service-inner {
+  max-width: var(--area-width);
+  margin: 0 auto;
+  padding: 0 var(--area-padding);
+}
+
+/* Service Head — 가운데 정렬 */
+.main-service-head {
+  text-align: center;
+  margin-bottom: 100px;
+}
+
+.main-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-family2);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--main-color);
+  letter-spacing: .02em;
+  margin-bottom: 24px;
+}
+
+.main-tag .dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--main-color);
+}
+
+.main-service-head .main-tit {
+  font-family: var(--font-family1);
+  font-weight: 800;
+  font-size: 65px;
+  line-height: 1.35;
+  color: #000;
+  letter-spacing: -.02em;
+  margin: 0;
+  max-width: 1100px;
+  text-align: center;
+}
+
+.main-service-head .main-tit .red {
+  color: var(--main-color);
+}
+
+/* Service List — 3 카드 */
+.main-service-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0; /* 라이브는 갭 거의 없음 */
+}
+
+.list-item {
+  position: relative;
+  height: 851px;
+  overflow: hidden;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.list-item.odd-item { transform: translateY(0); }
+.list-item.even-item { transform: translateY(-100px); }
+
+.list-item.cover01 {
+  background-image: url('https://miracell.co.kr/images/main/main_service_bg01.jpg');
+}
+.list-item.cover02 {
+  background-image: url('https://miracell.co.kr/images/main/main_service_bg02.jpg');
+}
+.list-item.cover03 {
+  background-image: url('https://miracell.co.kr/images/main/main_service_bg03.jpg');
+}
+
+.list-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,.75) 100%);
+  z-index: 1;
+  transition: opacity .4s;
+}
+
+.list-item a {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 40px;
+  color: #fff;
+}
+
+.list-item .num {
+  font-family: var(--font-family2);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: rgba(255,255,255,.95);
+}
+
+.list-item .card-text {
+  margin-top: auto;
+}
+
+.list-item strong {
+  display: block;
+  font-family: var(--font-family2);
+  font-size: 36px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.15;
+}
+
+.list-item p {
+  font-family: var(--font-family1);
+  font-size: 16px;
+  color: rgba(255,255,255,.88);
+  line-height: 1.6;
+  margin: 14px 0 0;
+}
+</style>
+</head>
+<body>
+<article id="mainService">
+  <div class="main-service-inner">
+    <div class="main-service-head">
+      <span class="main-tag font-outfit">Service <i class="dot"></i></span>
+      <h4 class="main-tit">미라셀은 첨단 생물학적약제물<br><span class="red">제조 원천기술력을 보유하고 있습니다.</span></h4>
+    </div>
+
+    <ul class="main-service-list">
+      <li class="list-item odd-item cover01">
+        <a href="#">
+          <span class="num font-outfit">01</span>
+          <div class="card-text">
+            <strong>CellBanking</strong>
+            <p>면역세포, 줄기세포<br>추출 보관 서비스</p>
+          </div>
+        </a>
+      </li>
+      <li class="list-item even-item cover02">
+        <a href="#">
+          <span class="num font-outfit">02</span>
+          <div class="card-text">
+            <strong>Stemcell<br>Medical Platform</strong>
+            <p>줄기세포 시술 커뮤니티 플랫폼</p>
+          </div>
+        </a>
+      </li>
+      <li class="list-item odd-item cover03">
+        <a href="#">
+          <span class="num font-outfit">03</span>
+          <div class="card-text">
+            <strong>Medical AICC</strong>
+            <p>병원 업무 자동화를 위한<br>Medical AI 콜센터 솔루션</p>
+          </div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</article>
+</body>
+</html>

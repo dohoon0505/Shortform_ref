@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Miracell — News (실측 1005px 2-Column · 빨강 View More 200×50)</title>
+<link rel="stylesheet" href="../../miracell-app/styles/globals.css">
+<style>
+/* News 섹션 — 라이브 실측 1005px (padding 250 0 150) */
+#mainNews {
+  position: relative;
+  width: 100%;
+  height: 1005px;
+  padding: 250px 0 150px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.main-news-inner {
+  max-width: var(--area-width);
+  margin: 0 auto;
+  padding: 0 var(--area-padding);
+  display: flex;
+  justify-content: space-between;
+  gap: 100px;
+  height: 100%;
+}
+
+/* 좌측 — 타이틀 + View More */
+.main-news-left {
+  flex-shrink: 0;
+  width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.main-news-left .main-tit {
+  font-family: var(--font-family1);
+  font-weight: 800;
+  font-size: 65px;
+  line-height: 1.25;
+  color: #000;
+  letter-spacing: -.02em;
+  margin: 0;
+}
+
+/* View More 버튼 (200×50 빨강 #dd0031 라이브 실측) */
+.main-view-btn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+  height: 50px;
+  padding: 0 20px;
+  background: var(--main-color);
+  border-radius: 10px;
+  color: #fff;
+  font-family: var(--font-family2);
+  font-size: 16px;
+  font-weight: 600;
+  transition: opacity .3s;
+  margin-top: auto;
+}
+
+.main-view-btn:hover { opacity: .85; }
+
+.main-view-btn .plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.7);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 0;
+}
+
+/* 우측 — 5건 리스트 */
+.main-news-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-news-list li {
+  border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+.main-news-list li:first-child {
+  border-top: 1px solid rgba(0,0,0,.1);
+}
+
+.main-news-list a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  padding: 40px 0;
+  color: #000;
+  transition: color .3s;
+}
+
+.main-news-list a:hover {
+  color: var(--main-color);
+}
+
+.main-news-list .tit {
+  flex: 1;
+  font-family: var(--font-family1);
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -.01em;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.main-news-list .date {
+  font-family: var(--font-family2);
+  font-weight: 500;
+  font-size: 14px;
+  color: #888;
+  letter-spacing: .02em;
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+<article id="mainNews">
+  <div class="main-news-inner">
+    <div class="main-news-left">
+      <span class="main-tag font-outfit">News <i class="dot"></i></span>
+      <h4 class="main-tit">미라셀의 소식을<br>전달드립니다.</h4>
+      <a href="#" class="main-view-btn">View More <span class="plus">+</span></a>
+    </div>
+
+    <ul class="main-news-list">
+      <li>
+        <a href="#">
+          <span class="tit">미라셀(주), 미국 FDA 승인 획득 완료</span>
+          <span class="date">2026.04.06</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="tit">[신년인사]2026년 새해 복 많이 받으세요! 미라셀의 새로운 도약을…</span>
+          <span class="date">2026.02.13</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="tit">기준일 설정 공고(260102)</span>
+          <span class="date">2026.01.02</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="tit">임시 주주총회 소집 통지 (260213)</span>
+          <span class="date">2026.01.02</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="tit">미라셀㈜, CGP 아카데미 개최 - Beyond Rejuvenation 줄기세…</span>
+          <span class="date">2025.08.11</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</article>
+<style>
+  .main-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-family2);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--main-color);
+    letter-spacing: .02em;
+  }
+  .main-tag .dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--main-color);
+  }
+</style>
+</body>
+</html>

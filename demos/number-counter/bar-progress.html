@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>08. 바 프로그레스 — Number Counter Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .bar-group { width: clamp(320px,50vw,600px); display: flex; flex-direction: column; gap: 28px; }
+    .bar-row { display: grid; grid-template-columns: 72px 1fr 48px; align-items: center; gap: 16px; }
+    .bar-name { font: 500 clamp(13px,1vw,16px)/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.5); text-align: right; }
+    .bar-track { height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; width: 0; background: #3b82f6; border-radius: 4px; transition: width 0.05s linear; }
+    .bar-pct { font: 600 clamp(13px,1vw,16px)/1 "Pretendard Variable",sans-serif; color: #fff; font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">08 · 바 프로그레스</span>
+  </div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="bar-group">
+      <div class="bar-row"><span class="bar-name">디자인</span><div class="bar-track"><div class="bar-fill" data-target="92"></div></div><span class="bar-pct">0%</span></div>
+      <div class="bar-row"><span class="bar-name">개발</span><div class="bar-track"><div class="bar-fill" data-target="78"></div></div><span class="bar-pct">0%</span></div>
+      <div class="bar-row"><span class="bar-name">마케팅</span><div class="bar-track"><div class="bar-fill" data-target="65"></div></div><span class="bar-pct">0%</span></div>
+      <div class="bar-row"><span class="bar-name">운영</span><div class="bar-track"><div class="bar-fill" data-target="88"></div></div><span class="bar-pct">0%</span></div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 2000;
+      var startTime = Date.now();
+      var running = true;
+      var rows = document.querySelectorAll(".bar-row");
+      function applyReveal(p) {
+        rows.forEach(function(row, i) {
+          var fill = row.querySelector(".bar-fill");
+          var pct = row.querySelector(".bar-pct");
+          var target = parseInt(fill.dataset.target);
+          var stagger = Math.max(0, (p - i * 0.08) / (1 - i * 0.08));
+          var v = Math.round(stagger * target);
+          fill.style.width = stagger * target + "%";
+          pct.textContent = v + "%";
+        });
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05. 스크롤 속도 반응 — Infinite Marquee Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; animation: demo-loop 20s linear infinite; }
+    @keyframes demo-loop { from { width: 0; } to { width: 100%; } }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    /* sticky가 동작하도록 showcase의 overflow를 해제 */
+    .showcase { overflow: visible; }
+    .sv-space { height: 280vh; width: 100%; }
+    .sv-stage { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .sv-wrap { width: 100%; text-align: center; }
+    .sv-band { overflow: hidden; width: 100%; padding: 14px 0; }
+    .sv-track { display: flex; width: max-content; will-change: transform; }
+    .sv-group { display: flex; align-items: center; flex: 0 0 auto; }
+    .sv-group span { font: 800 clamp(32px,5.4vw,66px)/1.2 "Pretendard Variable",sans-serif; color: #fff; white-space: nowrap; padding: 0 26px; }
+    .sv-group i { font-style: normal; color: #8ab4ff; font-size: clamp(16px,2.2vw,28px); }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 24px; text-align: center; }
+    .note-sub { font: 400 12px/1.5 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.35); text-align: center; margin: 26px 0 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">05 · 스크롤 속도 반응</span>
+  </div>
+  <div class="demo-hint">아래로 빠르게 스크롤해 보세요</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="sv-space">
+      <div class="sv-stage">
+        <div class="sv-wrap">
+          <p class="cap">SCROLL VELOCITY — SKEW</p>
+          <div class="sv-band">
+            <div class="sv-track">
+              <div class="sv-group">
+                <span>스크롤의 속도가</span><i>✦</i>
+                <span>마퀴의 속도가 된다</span><i>✦</i>
+                <span>빠를수록 기울어진다</span><i>✦</i>
+              </div>
+            </div>
+          </div>
+          <p class="note-sub">기본 90px/s + |스크롤 속도| 가산 · skewX ±10° 클램프</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // ↻ 다시 보기 = CSS 애니메이션 재시작 (animation:none → reflow → 재부여)
+      function restartCssAnims() {
+        var els = document.querySelectorAll(".js-anim, .demo-progress > div");
+        Array.prototype.forEach.call(els, function(el) {
+          el.style.animation = "none";
+          void el.offsetWidth; // reflow 강제
+          el.style.animation = "";
+        });
+      }
+      window.__reset = restartCssAnims;
+      var track = document.querySelector(".sv-track");
+      var group = track.querySelector(".sv-group");
+      var clone = group.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+      var BASE = 90;
+      var offset = 0, vel = 0;
+      var lastY = window.pageYOffset;
+      var last = Date.now();
+      function tick() {
+        var now = Date.now();
+        var dt = Math.min(64, now - last);
+        last = now;
+        var y = window.pageYOffset;
+        vel += (y - lastY) * 5;      // 스크롤 델타 → 속도 가산
+        lastY = y;
+        vel *= Math.max(0, 1 - dt * 0.004); // 매 틱 감쇠
+        offset += (BASE + Math.abs(vel)) * dt / 1000;
+        var half = group.offsetWidth;
+        if (half > 0) offset = offset % half;
+        var skew = Math.max(-10, Math.min(10, vel * 0.015));
+        track.style.transform = "translateX(" + (-offset) + "px) skewX(" + skew + "deg)";
+        setTimeout(tick, 16);
+      }
+      setTimeout(tick, 16);
+      var baseReset = window.__reset;
+      window.__reset = function() {
+        baseReset();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        offset = 0; vel = 0; lastY = window.pageYOffset; last = Date.now();
+      };
+    })();
+  </script>
+</body>
+</html>

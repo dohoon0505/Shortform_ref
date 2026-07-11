@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03. 라벨 커서 — Custom Cursor Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .demo-touch-note { display: none; position: fixed; left: 16px; bottom: 24px; z-index: 100; font: 500 11px/1.5 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; }
+    @media (hover: none), (pointer: coarse) { .demo-touch-note { display: block; } .demo-hint { display: none; } .stage, .stage * { cursor: auto; } }
+    .stage { position: relative; width: 100%; height: 100vh; overflow: hidden; cursor: none;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 26px; padding: 56px 24px; }
+    .stage * { cursor: none; }
+    .stage-eyebrow { font: 600 10px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.38); }
+    .stage-title { margin: 0; font: 700 clamp(22px,4.2vw,36px)/1.35 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.01em; text-align: center; }
+    .stage-row { display: flex; gap: 14px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .tgt-link { font: 600 14px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.85); text-decoration: none;
+      padding: 13px 24px; border: 1px solid rgba(255,255,255,0.16); border-radius: 999px;
+      transition: border-color 0.25s ease, background 0.25s ease; }
+    .tgt-link:hover { border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.06); }
+    .cursor-el { position: absolute; top: 0; left: 0; z-index: 60; pointer-events: none; will-change: transform;
+      opacity: 0; transition: opacity 0.25s ease; }
+    .stage.is-on .cursor-el { opacity: 1; }
+    
+    .work-card { margin: 0; width: 190px; height: 124px; border-radius: 14px; position: relative; overflow: hidden; }
+    .work-a { background: linear-gradient(135deg, #6d28d9, #2563eb); }
+    .work-b { background: linear-gradient(135deg, #ea580c, #db2777); }
+    .work-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.45)); }
+    .work-name { position: absolute; left: 14px; bottom: 12px; z-index: 1; font: 600 13px/1 "Pretendard Variable","Pretendard",sans-serif; color: #fff; }
+    .view-core { display: flex; align-items: center; justify-content: center; transform: translate(-50%, -50%);
+      width: 14px; height: 14px; border-radius: 999px; background: #fff; overflow: hidden;
+      transition: width 0.25s cubic-bezier(0.2,0,0,1), height 0.25s cubic-bezier(0.2,0,0,1); }
+    .view-label { font: 700 11px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.12em; color: #000;
+      opacity: 0; transform: scale(0.6); transition: opacity 0.2s ease, transform 0.25s ease; white-space: nowrap; }
+    .cursor-view.is-view .view-core { width: 78px; height: 34px; }
+    .cursor-view.is-view .view-label { opacity: 1; transform: scale(1); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">03 · 라벨 커서</span>
+  </div>
+  <div class="demo-hint">스테이지 안에서 마우스를 움직여보세요</div>
+  <div class="demo-touch-note">터치 환경에서는 커스텀 커서가 동작하지 않습니다 — 데스크톱에서 확인해주세요</div>
+
+  <main class="stage">
+    <span class="stage-eyebrow">Label Cursor</span>
+    <h1 class="stage-title">작업물 위에서 VIEW로 변신</h1>
+    <div class="stage-row">
+      <figure class="work-card work-a" data-cursor="view"><figcaption class="work-name">네온 시티</figcaption></figure>
+      <figure class="work-card work-b" data-cursor="view"><figcaption class="work-name">선셋 그라디언트</figcaption></figure>
+    </div>
+    <a class="tgt-link" data-cursor="view" href="#" onclick="return false">전체 작업 보기</a>
+    <div class="cursor-el cursor-view"><span class="view-core"><span class="view-label">VIEW</span></span></div>
+  </main>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      var mx = stage.offsetWidth / 2;
+      var my = stage.offsetHeight / 2;
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        mx = e.clientX - r.left;
+        my = e.clientY - r.top;
+        stage.classList.add("is-on");
+      });
+      stage.addEventListener("mouseleave", function(){
+        stage.classList.remove("is-on");
+      });
+      function lerp(a, b, t){ return a + (b - a) * t; }
+      
+      var cur = stage.querySelector(".cursor-view");
+      var cx = mx, cy = my;
+      stage.addEventListener("mousemove", function(e){
+        cur.classList.toggle("is-view", !!e.target.closest("[data-cursor=view]"));
+      });
+      function frame(){
+        cx = lerp(cx, mx, 0.16);
+        cy = lerp(cy, my, 0.16);
+        cur.style.transform = "translate(" + cx.toFixed(1) + "px," + cy.toFixed(1) + "px)";
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+  </script>
+</body>
+</html>

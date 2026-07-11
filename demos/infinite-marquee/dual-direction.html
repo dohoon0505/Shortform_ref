@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03. 듀얼 디렉션 — Infinite Marquee Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; animation: demo-loop 26s linear infinite; }
+    @keyframes demo-loop { from { width: 0; } to { width: 100%; } }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .dd-wrap { width: 100%; text-align: center; }
+    .dd-band { overflow: hidden; width: 100%; padding: 9px 0; }
+    .dd-track { display: flex; width: max-content; animation: dd-scroll 26s linear infinite; will-change: transform; }
+    .dd-row2 .dd-track { animation-direction: reverse; animation-duration: 30s; }
+    .dd-group { display: flex; align-items: center; flex: 0 0 auto; }
+    .dd-chip { font: 600 clamp(14px,1.7vw,18px)/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 13px 24px; margin: 0 9px; white-space: nowrap; }
+    .dd-row2 .dd-chip { background: rgba(138,180,255,0.1); border-color: transparent; color: #8ab4ff; }
+    @keyframes dd-scroll { to { transform: translateX(-50%); } }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 24px; text-align: center; }
+    .note-sub { font: 400 12px/1.5 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.35); text-align: center; margin: 26px 0 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">03 · 듀얼 디렉션</span>
+  </div>
+  <div class="demo-hint">무한 루프 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="dd-wrap">
+      <p class="cap">DUAL DIRECTION — CROSS FLOW</p>
+      <div class="dd-band dd-row1">
+        <div class="dd-track js-anim">
+          <div class="dd-group">
+            <span class="dd-chip">마이크로 인터랙션</span>
+            <span class="dd-chip">스크롤 내러티브</span>
+            <span class="dd-chip">키네틱 타이포</span>
+            <span class="dd-chip">이징 곡선</span>
+            <span class="dd-chip">모션 토큰</span>
+            <span class="dd-chip">햅틱 리듬</span>
+            <span class="dd-chip">상태 전이</span>
+          </div>
+        </div>
+      </div>
+      <div class="dd-band dd-row2">
+        <div class="dd-track js-anim">
+          <div class="dd-group">
+            <span class="dd-chip">패럴랙스</span>
+            <span class="dd-chip">호버 상태</span>
+            <span class="dd-chip">트랜지션</span>
+            <span class="dd-chip">스프링 물리</span>
+            <span class="dd-chip">시퀀스 연출</span>
+            <span class="dd-chip">듀레이션</span>
+            <span class="dd-chip">베지어 곡선</span>
+          </div>
+        </div>
+      </div>
+      <p class="note-sub">1행 정방향 26s · 2행 reverse 30s — 이속 교차</p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // ↻ 다시 보기 = CSS 애니메이션 재시작 (animation:none → reflow → 재부여)
+      function restartCssAnims() {
+        var els = document.querySelectorAll(".js-anim, .demo-progress > div");
+        Array.prototype.forEach.call(els, function(el) {
+          el.style.animation = "none";
+          void el.offsetWidth; // reflow 강제
+          el.style.animation = "";
+        });
+      }
+      window.__reset = restartCssAnims;
+      // 두 트랙 모두 그룹 복제 — 같은 함수 재사용
+      Array.prototype.forEach.call(document.querySelectorAll(".dd-track"), function(track) {
+        var clone = track.querySelector(".dd-group").cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        track.appendChild(clone);
+      });
+    })();
+  </script>
+</body>
+</html>

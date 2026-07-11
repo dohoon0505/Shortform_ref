@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>PlantyM — View (실측 937px 3 비즈니스 카드 alternating Y)</title>
+<link rel="stylesheet" href="../../plantym-app/styles/globals.css">
+<style>
+.main-view {
+  position: relative;
+  width: 100%;
+  height: 937px;
+  background: var(--primary-color);
+  padding: 0;
+  overflow: hidden;
+}
+
+.flex-box {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.flex-box > article {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Alternating Y translate (ScrollReveal pattern) */
+.flex-box > article:nth-child(1) { padding-top: 40px; }
+.flex-box > article:nth-child(2) { padding-bottom: 40px; }
+.flex-box > article:nth-child(3) { padding-top: 40px; }
+
+.flex-box > article .bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform .8s ease-in-out;
+}
+
+.flex-box > article:hover .bg { transform: scale(1.05); }
+
+.flex-box > article:nth-child(1) .bg { background-image: url('https://www.plantym.com/images/main-view-bg1.png'); }
+.flex-box > article:nth-child(2) .bg { background-image: url('https://www.plantym.com/images/main-view-bg2.png'); }
+.flex-box > article:nth-child(3) .bg { background-image: url('https://www.plantym.com/images/main-view-bg3.png'); }
+
+.flex-box > article::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,.2) 50%, rgba(0,0,0,.9) 100%);
+  z-index: 1;
+}
+
+/* 흰 라운드 박스 태그 (라이브 패턴) */
+.text-boxs {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 80%;
+  text-align: center;
+}
+
+.text-boxs .title {
+  display: inline-block;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  padding: 10px 24px;
+  background: #fff;
+  border-radius: 99px;
+  margin-bottom: 26px;
+}
+
+.text-boxs h2.sbj {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 64px;
+  color: #fff;
+  margin: 0 0 24px;
+  letter-spacing: -.02em;
+  line-height: 1.1;
+}
+
+.text-boxs p.desc {
+  font-family: var(--font-family);
+  font-size: 17px;
+  color: rgba(255,255,255,.85);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.link-boxs {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
+  opacity: 0;
+  transition: opacity .4s;
+}
+
+.flex-box > article:hover .link-boxs { opacity: 1; }
+
+.link-boxs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  color: #fff;
+  text-decoration: none;
+}
+
+.view-more {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  position: relative;
+}
+
+.view-more::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border-top: 1.5px solid #fff;
+  border-right: 1.5px solid #fff;
+  transform: translate(-60%, -50%) rotate(45deg);
+}
+</style>
+</head>
+<body>
+<section class="sec main-view">
+  <div class="flex-box">
+    <article>
+      <div class="bg"></div>
+      <div class="text-boxs">
+        <span class="title">Digital Magazine Platform</span>
+        <h2 class="sbj">디지털 매거진 플랫폼</h2>
+        <p class="desc">라이프를 업데이트하는<br>디지털 매거진 경험 모아진 (Moazine)</p>
+      </div>
+      <div class="link-boxs">
+        <a href="#">VIEW MORE<span class="view-more"></span></a>
+      </div>
+    </article>
+
+    <article>
+      <div class="bg"></div>
+      <div class="text-boxs">
+        <span class="title">BGM으로 브랜드 무드를 완성하다</span>
+        <h2 class="sbj">매장음악 서비스</h2>
+        <p class="desc">브랜드 콘셉트에 맞춘 큐레이션으로<br>매장 분위기를 설계하는 주스샵 (JOOS#)</p>
+      </div>
+      <div class="link-boxs">
+        <a href="#">VIEW MORE<span class="view-more"></span></a>
+      </div>
+    </article>
+
+    <article>
+      <div class="bg"></div>
+      <div class="text-boxs">
+        <span class="title">One-Stop 디지털 사이니지 서비스</span>
+        <h2 class="sbj">디지털 사이니지</h2>
+        <p class="desc">공간 맞춤형 디스플레이를 원스톱으로<br>제공하는 디지털 사이니지 솔루션 (SHOP DS)</p>
+      </div>
+      <div class="link-boxs">
+        <a href="#">VIEW MORE<span class="view-more"></span></a>
+      </div>
+    </article>
+  </div>
+</section>
+</body>
+</html>

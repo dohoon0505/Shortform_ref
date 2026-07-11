@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02. 로고 월 — Infinite Marquee Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; animation: demo-loop 28s linear infinite; }
+    @keyframes demo-loop { from { width: 0; } to { width: 100%; } }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .lw-wrap { width: 100%; text-align: center; }
+    .lw-band { overflow: hidden; width: 100%; padding: 18px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 80px, #000 calc(100% - 80px), transparent); mask-image: linear-gradient(90deg, transparent, #000 80px, #000 calc(100% - 80px), transparent); }
+    .lw-track { display: flex; width: max-content; animation: lw-scroll 28s linear infinite; will-change: transform; }
+    .lw-group { display: flex; align-items: center; flex: 0 0 auto; }
+    .lw-logo { display: inline-block; padding: 0 34px; white-space: nowrap; filter: grayscale(1); opacity: 0.45; transition: filter 180ms ease, opacity 180ms ease; cursor: default; }
+    .lw-band:hover .lw-track { animation-play-state: paused; }
+    .lw-band:hover .lw-logo { filter: none; opacity: 1; }
+    .lw-a { font: 800 26px/1 "Pretendard Variable",sans-serif; letter-spacing: 0.12em; color: #ff6b4a; }
+    .lw-b { font: italic 600 28px/1 "Pretendard Variable",sans-serif; color: #8ab4ff; }
+    .lw-c { font: 900 26px/1 "Pretendard Variable",sans-serif; letter-spacing: 0.3em; color: #ffd23f; }
+    .lw-d { font: 500 28px/1 "Pretendard Variable",sans-serif; color: #4ade80; }
+    .lw-e { font: 800 26px/1 "Pretendard Variable",sans-serif; letter-spacing: 0.18em; color: #f472b6; }
+    .lw-f { font: 300 30px/1 "Pretendard Variable",sans-serif; letter-spacing: 0.2em; color: #22d3ee; }
+    .lw-g { font: 800 26px/1 "Pretendard Variable",sans-serif; letter-spacing: -0.02em; color: #a78bfa; }
+    .lw-h { font: 700 26px/1 "Pretendard Variable",sans-serif; color: #fb923c; }
+    @keyframes lw-scroll { to { transform: translateX(-50%); } }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 24px; text-align: center; }
+    .note-sub { font: 400 12px/1.5 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.35); text-align: center; margin: 26px 0 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">02 · 로고 월</span>
+  </div>
+  <div class="demo-hint">로고에 마우스를 올려보세요</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="lw-wrap">
+      <p class="cap">LOGO WALL — HOVER TO PAUSE</p>
+      <div class="lw-band">
+        <div class="lw-track js-anim">
+          <div class="lw-group">
+            <span class="lw-logo lw-a">◆ NOVA</span>
+            <span class="lw-logo lw-b">Polaris</span>
+            <span class="lw-logo lw-c">HEXA</span>
+            <span class="lw-logo lw-d">orbit●</span>
+            <span class="lw-logo lw-e">VERTEX</span>
+            <span class="lw-logo lw-f">lumen</span>
+            <span class="lw-logo lw-g">ATLAS</span>
+            <span class="lw-logo lw-h">▮ Pulse</span>
+          </div>
+        </div>
+      </div>
+      <p class="note-sub">hover 시 전체 일시정지 + 컬러 복원 · 양끝 mask 80px 페이드</p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // ↻ 다시 보기 = CSS 애니메이션 재시작 (animation:none → reflow → 재부여)
+      function restartCssAnims() {
+        var els = document.querySelectorAll(".js-anim, .demo-progress > div");
+        Array.prototype.forEach.call(els, function(el) {
+          el.style.animation = "none";
+          void el.offsetWidth; // reflow 강제
+          el.style.animation = "";
+        });
+      }
+      window.__reset = restartCssAnims;
+      var track = document.querySelector(".lw-track");
+      var clone = track.querySelector(".lw-group").cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+    })();
+  </script>
+</body>
+</html>

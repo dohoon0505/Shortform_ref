@@ -1,0 +1,8 @@
+# Next.js / Node build artifacts
+node_modules/
+.next/
+out/
+
+# Dev logs
+*.log
+.npm/

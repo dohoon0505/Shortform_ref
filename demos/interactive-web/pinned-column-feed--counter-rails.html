@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05-B. 핀 칼럼 + 통과 피드 — 역방향 2열 뉴스 그리드</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.14); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; transition: width 60ms linear; }
+    .scroll-track { min-height: 260vh; position: relative; }
+    .sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .iw-eyebrow { font: 600 12px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent,#8ab4ff); margin: 0; }
+    .iw-head { font: 800 clamp(28px,4.4vw,56px)/1.12 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.02em; color: #fff; margin: 0; }
+    .iw-sub { font: 700 clamp(20px,2.6vw,30px)/1.3 "Pretendard Variable","Pretendard",sans-serif; color: #fff; margin: 0; }
+    .iw-body { font: 400 clamp(14px,1.4vw,17px)/1.7 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.62); margin: 0; }
+    .iw-cta { display: inline-flex; align-items: center; gap: 8px; font: 600 13px/1 "Pretendard Variable","Pretendard",sans-serif; color: #fff; border: 1px solid rgba(255,255,255,0.32); border-radius: 999px; padding: 14px 24px; text-decoration: none; }
+    .iw-tag { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .cr2-wrap { width: min(1040px, 90vw); display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 48px; align-items: center; }
+    .cr2-head .iw-eyebrow { --accent: #8ab4ff; margin-bottom: 16px; }
+    .cr2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .cr2-col { display: flex; flex-direction: column; gap: 16px; will-change: transform; }
+    .cr2-card { background: linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 28px 22px; min-height: 120px; font: 600 16px/1.5 "Pretendard Variable",sans-serif; color: #fff; display: flex; align-items: flex-end; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">05-B · 핀 칼럼 + 통과 피드</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <section class="cr2-wrap">
+        <div class="cr2-head"><p class="iw-eyebrow">NEWS</p><h2 class="iw-head">유진정밀<br>소식</h2></div>
+        <div class="cr2-grid">
+          <div class="cr2-col cr2-left"><article class="cr2-card">신규 베트남 법인 설립</article><article class="cr2-card">전기차 부품 양산 개시</article><article class="cr2-card">품질 대상 3년 연속 수상</article></div>
+          <div class="cr2-col cr2-right"><article class="cr2-card">스마트 팩토리 전환 완료</article><article class="cr2-card">탄소중립 로드맵 발표</article><article class="cr2-card">독일 모터쇼 참가</article></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+      function seg(p,a,b){ return clamp01((p - a) / (b - a)); }
+      function lerp(a,b,t){ return a + (b - a) * t; }
+      function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+      function easeInOut(t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }
+      function backOut(t){ var c = 1.70158; t = t - 1; return t*t*((c+1)*t + c) + 1; }
+      var track = document.querySelector(".scroll-track");
+      var stage = document.querySelector(".sticky-stage");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+      var left = stage.querySelector(".cr2-left");
+      var right = stage.querySelector(".cr2-right");
+      function applyReveal(p){
+        left.style.transform = "translateY(" + (-p * 9) + "rem)";
+        right.style.transform = "translateY(" + (p * 9) + "rem)";
+      }
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

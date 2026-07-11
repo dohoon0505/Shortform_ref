@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03. 슬롯 롤링 — Text Scramble Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .slot-box { text-align: center; }
+    .slot-wrap { margin: 0; font: 800 clamp(38px,6.4vw,80px)/1 "Pretendard Variable",sans-serif; color: #fff; white-space: nowrap; }
+    .slot { display: inline-block; width: 1em; height: 1em; overflow: hidden; text-align: center; vertical-align: top; }
+    .slot-strip { display: block; will-change: transform; }
+    .slot-strip i { display: block; height: 1em; font-style: normal; color: rgba(255,255,255,0.38); }
+    .slot-strip i:last-child { color: #fff; }
+    .slot-space { display: inline-block; width: 0.45em; }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">03 · 슬롯 롤링</span>
+  </div>
+  <div class="demo-hint">자동 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="slot-box">
+      <p class="cap">SLOT ROLL — SETTLE</p>
+      <h1 class="slot-wrap" aria-label="결과는 또렷하게"></h1>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 2600;
+      var LOOP = false;
+      var startTime = Date.now();
+      var running = true;
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+      var TEXT = "결과는 또렷하게";
+      var GLYPHS = "ABCDEFGHJKMNPQRSTUVWXYZ245789#*";
+      var wrap = document.querySelector(".slot-wrap");
+      var strips = [];
+      function rnd(seed) { var x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+      var K = 7; // 스트립 칸 수 (랜덤 6 + 원본 1)
+      TEXT.split("").forEach(function(ch, i) {
+        if (ch === " ") {
+          var sp = document.createElement("span");
+          sp.className = "slot-space";
+          wrap.appendChild(sp);
+          return;
+        }
+        var slot = document.createElement("span");
+        slot.className = "slot";
+        var strip = document.createElement("span");
+        strip.className = "slot-strip";
+        var html = "";
+        for (var k = 0; k < K - 1; k++) html += "<i>" + GLYPHS.charAt(Math.floor(rnd(i * 53 + k * 17) * GLYPHS.length)) + "</i>";
+        html += "<i>" + ch + "</i>";
+        strip.innerHTML = html;
+        slot.appendChild(strip);
+        wrap.appendChild(slot);
+        strips.push(strip);
+      });
+      function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+      function applyReveal(p) {
+        strips.forEach(function(strip, i) {
+          var local = Math.max(0, Math.min(1, (p - i * 0.055) / 0.5));
+          strip.style.transform = "translateY(" + (-easeOutCubic(local) * (K - 1)) + "em)";
+        });
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else if (LOOP) { startTime = Date.now(); setTimeout(tick, 16); }
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

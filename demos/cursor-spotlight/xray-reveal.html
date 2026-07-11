@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03. 엑스레이 리빌 — Cursor Spotlight Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #050505; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      position: relative; width: 100%; height: 100vh; overflow: hidden;
+      cursor: crosshair;
+      --x: 50%; --y: 50%;
+    }
+    
+    .layer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+    .card { width: 360px; max-width: 84vw; border-radius: 16px; padding: 18px; }
+    .row { display: flex; align-items: center; gap: 12px; margin-top: 16px; }
+    .meta { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    /* 아래층 — 와이어프레임 (블루프린트 톤) */
+    .wf-card { border: 1.5px dashed rgba(125,211,252,0.55); background: rgba(125,211,252,0.04); }
+    .wf-thumb { height: 110px; border: 1.5px dashed rgba(125,211,252,0.45); border-radius: 10px;
+      background:
+        linear-gradient(to top right, transparent calc(50% - 0.7px), rgba(125,211,252,0.4) calc(50% - 0.7px), rgba(125,211,252,0.4) calc(50% + 0.7px), transparent calc(50% + 0.7px)),
+        linear-gradient(to bottom right, transparent calc(50% - 0.7px), rgba(125,211,252,0.4) calc(50% - 0.7px), rgba(125,211,252,0.4) calc(50% + 0.7px), transparent calc(50% + 0.7px));
+    }
+    .wf-avatar { width: 40px; height: 40px; border-radius: 50%; border: 1.5px dashed rgba(125,211,252,0.5); }
+    .wf-line { height: 12px; border: 1px dashed rgba(125,211,252,0.45); border-radius: 6px; }
+    .wf-line-thin { height: 9px; opacity: 0.7; }
+    .wf-btn { width: 72px; height: 30px; border: 1.5px dashed rgba(125,211,252,0.5); border-radius: 999px; }
+    /* 위층 — 완성 UI */
+    .ui-card { background: linear-gradient(180deg, #15161c, #0e0f14); border: 1px solid rgba(255,255,255,0.09); box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
+    .ui-thumb { height: 110px; border-radius: 10px; background: linear-gradient(135deg, #7c6cff, #4cc9f0); }
+    .ui-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #f72585, #ffd166); }
+    .ui-name { font-size: 14px; font-weight: 700; }
+    .ui-sub { font-size: 11px; color: rgba(255,255,255,0.45); }
+    .ui-btn { font-family: inherit; font-size: 12px; font-weight: 600; background: #fff; color: #000; border: 0; border-radius: 999px; padding: 9px 16px; cursor: pointer; }
+    .layer-ui {
+      -webkit-mask-image: radial-gradient(circle 140px at var(--x) var(--y), transparent 55%, #000 72%);
+      mask-image: radial-gradient(circle 140px at var(--x) var(--y), transparent 55%, #000 72%);
+    }
+    .xr-caption { position: absolute; left: 24px; bottom: 24px; font-size: 12px; letter-spacing: 0.06em; color: rgba(255,255,255,0.55); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">03 · 엑스레이 리빌</span>
+  </div>
+  <div class="demo-hint">마우스를 움직여보세요 ✦</div>
+
+  <div class="stage">
+    <div class="layer layer-wf" aria-hidden="true">
+      <div class="card wf-card">
+        <div class="wf-thumb"></div>
+        <div class="row">
+          <div class="wf-avatar"></div>
+          <div class="meta">
+            <div class="wf-line" style="width: 96px;"></div>
+            <div class="wf-line wf-line-thin" style="width: 140px;"></div>
+          </div>
+          <div class="wf-btn"></div>
+        </div>
+      </div>
+    </div>
+    <div class="layer layer-ui">
+      <div class="card ui-card">
+        <div class="ui-thumb"></div>
+        <div class="row">
+          <div class="ui-avatar"></div>
+          <div class="meta">
+            <div class="ui-name">인터랙션 리포트</div>
+            <div class="ui-sub">커서 스포트라이트 · 6월호</div>
+          </div>
+          <button class="ui-btn" type="button">구독하기</button>
+        </div>
+      </div>
+    </div>
+    <div class="xr-caption">커서 아래에서 설계도가 비칩니다</div>
+  </div>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      function setPoint(x, y){
+        stage.style.setProperty("--x", x + "px");
+        stage.style.setProperty("--y", y + "px");
+      }
+      function toCenter(){
+        setPoint(stage.clientWidth / 2, stage.clientHeight / 2);
+      }
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        setPoint(e.clientX - r.left, e.clientY - r.top);
+      });
+      window.addEventListener("resize", toCenter);
+      toCenter();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04. 호버 슬로우 — Infinite Marquee Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; animation: demo-loop 18s linear infinite; }
+    @keyframes demo-loop { from { width: 0; } to { width: 100%; } }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .hp-wrap { width: 100%; text-align: center; }
+    .hp-band { overflow: hidden; width: 100%; padding: 10px 0; cursor: default; }
+    .hp-track { display: flex; width: max-content; will-change: transform; }
+    .hp-group { display: flex; align-items: center; flex: 0 0 auto; }
+    .hp-group span { font: 700 clamp(30px,5vw,60px)/1.2 "Pretendard Variable",sans-serif; color: #fff; white-space: nowrap; padding: 0 24px; }
+    .hp-group i { font-style: normal; color: rgba(255,255,255,0.25); font-size: clamp(20px,3vw,36px); }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 24px; text-align: center; }
+    .note-sub { font: 400 12px/1.5 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.35); text-align: center; margin: 26px 0 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">04 · 호버 슬로우</span>
+  </div>
+  <div class="demo-hint">밴드에 마우스를 올려보세요</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="hp-wrap">
+      <p class="cap">HOVER SLOW — SPEED LERP</p>
+      <div class="hp-band">
+        <div class="hp-track">
+          <div class="hp-group">
+            <span>빠르게 흐르다가</span><i>—</i>
+            <span>머무르면 느려진다</span><i>—</i>
+            <span>속도는 끊기지 않고 보간된다</span><i>—</i>
+          </div>
+        </div>
+      </div>
+      <p class="note-sub">기본 160px/s ↔ hover 24px/s · 지수 보간 감속</p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // ↻ 다시 보기 = CSS 애니메이션 재시작 (animation:none → reflow → 재부여)
+      function restartCssAnims() {
+        var els = document.querySelectorAll(".js-anim, .demo-progress > div");
+        Array.prototype.forEach.call(els, function(el) {
+          el.style.animation = "none";
+          void el.offsetWidth; // reflow 강제
+          el.style.animation = "";
+        });
+      }
+      window.__reset = restartCssAnims;
+      var band = document.querySelector(".hp-band");
+      var track = document.querySelector(".hp-track");
+      var group = track.querySelector(".hp-group");
+      var clone = group.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+      var FAST = 160, SLOW = 24;
+      var speed = FAST, target = FAST, offset = 0;
+      band.addEventListener("mouseenter", function() { target = SLOW; });
+      band.addEventListener("mouseleave", function() { target = FAST; });
+      var last = Date.now();
+      function tick() {
+        var now = Date.now();
+        var dt = Math.min(64, now - last);
+        last = now;
+        speed += (target - speed) * Math.min(1, dt * 0.005); // 지수 보간
+        offset += speed * dt / 1000;
+        var half = group.offsetWidth;
+        if (half > 0) offset = offset % half; // 모듈러 래핑 = 무한
+        track.style.transform = "translateX(" + (-offset) + "px)";
+        setTimeout(tick, 16);
+      }
+      setTimeout(tick, 16);
+      var baseReset = window.__reset;
+      window.__reset = function() { baseReset(); offset = 0; speed = FAST; target = FAST; last = Date.now(); };
+    })();
+  </script>
+</body>
+</html>

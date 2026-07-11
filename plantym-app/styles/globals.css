@@ -1,0 +1,82 @@
+/* ============================================================
+   PlantyM — Mirror Mode 100% Clone
+   라이브 https://www.plantym.com/ 의 :root CSS Variables 6개 실측
+   ============================================================ */
+
+/* Font Imports (Pretendard) */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+
+:root {
+  /* ===== Color Tokens (라이브 실측 6) ===== */
+  --primary-color: #000;
+  --white-color: #fff;
+  --secondary-color: #333333;
+  --accent-color: #fc6d25;
+  --accent2-color: #fc6d25;
+  --bg-sub-color: #f7f7f7;
+
+  /* ===== Layout (실측 추가) ===== */
+  --header-height: 100px;
+  --container-large: 1714px;
+  --container-inner: 1400px;
+
+  /* ===== Font Family (실측) ===== */
+  --font-family: 'Pretendard', 'Noto Sans KR', Dotum, Helvetica, AppleGothic, Gulim, Roboto, '굴림', sans-serif;
+
+  /* ===== Type Scale (실측) ===== */
+  --fs-hero-h1: 96px;
+  --fs-section-h2: 60px;
+  --fs-section-h3: 48px;
+  --fs-card-h2: 32px;
+  --fs-body: 18px;
+  --fs-small: 14px;
+  --fs-mini: 12px;
+
+  /* ===== Transitions ===== */
+  --transition-base: all 0.3s ease;
+  --transition-reveal: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   Base Reset
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 16px; }
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--fs-body);
+  color: var(--primary-color);
+  background: var(--white-color);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+ul, ol, dl, dd { list-style: none; margin: 0; padding: 0; }
+img { display: block; max-width: 100%; }
+button { background: none; border: 0; cursor: pointer; padding: 0; font: inherit; color: inherit; }
+
+/* ============================================================
+   Utility
+   ============================================================ */
+.inner { max-width: var(--container-inner); margin: 0 auto; padding: 0 30px; position: relative; }
+.large { max-width: var(--container-large); }
+.blind { position: absolute; overflow: hidden; width: 1px; height: 1px; margin: -1px; clip: rect(0,0,0,0); }
+.accent { color: var(--accent-color); }
+
+/* ============================================================
+   Animations
+   ============================================================ */
+@keyframes pm-sr-reveal { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes circle_move { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes rolling { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes rolling_reverse { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@keyframes pm-progress { from { stroke-dashoffset: 2620px; } to { stroke-dashoffset: 0; } }
+@keyframes pm-scroll-line { 0%, 100% { transform: scaleY(.3); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+  }
+}

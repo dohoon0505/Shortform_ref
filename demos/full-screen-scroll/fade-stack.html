@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01. 페이드 스택 (Framer Scroll Slides) — Full-screen Scroll Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.14); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; animation: hint-bounce 1.6s ease-in-out infinite; }
+    @keyframes hint-bounce { 0%, 100% { transform: translateY(0); opacity: 0.45; } 50% { transform: translateY(4px); opacity: 0.85; } }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; transition: width 60ms linear; }
+    .scroll-track { min-height: 400vh; position: relative; }
+    .sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+    .fs-stack { position: absolute; inset: 0; overflow: hidden; background: #000; font-family: "Pretendard Variable","Pretendard",sans-serif; }
+    .fs-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; will-change: opacity, transform; }
+    .fs-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.55) 100%); pointer-events: none; z-index: 2; }
+    .fs-caps { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
+    .fs-cap { position: absolute; left: 60px; right: 60px; bottom: 130px; opacity: 0; transform: translateY(16px); transition: opacity 500ms ease-out, transform 500ms cubic-bezier(0.2,0,0,1); will-change: opacity, transform; }
+    .fs-cap.is-on { opacity: 1; transform: translateY(0); }
+    .fs-title { font: 500 clamp(40px, 5vw, 64px)/1.05 inherit; color: #fff; margin: 0 0 22px; max-width: 60%; letter-spacing: -0.02em; }
+    .fs-desc { font: 300 clamp(14px, 1vw, 16px)/1.5 inherit; color: rgba(255,255,255,0.92); margin: 0; max-width: 460px; }
+    .fs-bars { position: absolute; left: 60px; right: 60px; bottom: 48px; display: flex; gap: 40px; align-items: flex-end; z-index: 4; }
+    .fs-bar { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+    .fs-bar-label { display: flex; gap: 10px; align-items: baseline; font: 500 14px/1 inherit; color: rgba(255,255,255,0.5); transition: color 300ms ease; letter-spacing: 0.01em; }
+    .fs-bar-num { font: 400 14px/1 inherit; opacity: 0.78; }
+    .fs-bar.is-active .fs-bar-label, .fs-bar.is-past .fs-bar-label { color: rgba(255,255,255,1); }
+    .fs-bar-track { width: 100%; height: 2px; background: rgba(255,255,255,0.22); overflow: hidden; }
+    .fs-bar-fill { height: 100%; background: #fff; transform: scaleX(0); transform-origin: left; }
+    .fs-img-fade { opacity: 0; transition: opacity 600ms ease-in-out; }
+    .fs-img-fade.is-on { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">01 · 페이드 스택 (Framer Scroll Slides)</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <div class="fs-stack">
+              <img class="fs-img fs-img-fade is-on" src="https://framerusercontent.com/images/d3xhzATSbq7UnQJGe11DInRHoA.png?width=2912&height=1632" alt="Intuition" data-i="0">
+              <img class="fs-img fs-img-fade" src="https://framerusercontent.com/images/Ka2cys5DNM0ZnikfEku6vAQgs.png?width=2912&height=1632" alt="Touch" data-i="1">
+              <img class="fs-img fs-img-fade" src="https://framerusercontent.com/images/J7sgYKuCCsB521hhlHpnH26Xo.png?width=2912&height=1632" alt="Glow" data-i="2">
+              <img class="fs-img fs-img-fade" src="https://framerusercontent.com/images/9Mpgc4sWSDqEN9RprS8TLHnypqY.png?width=2720&height=1760" alt="Pulse" data-i="3">
+              <div class="fs-overlay"></div>
+              <div class="fs-caps">
+                <div class="fs-cap is-on" data-i="0"><h1 class="fs-title">Sensitivity as a guiding force</h1><p class="fs-desc">Forms and colors respond to inner feeling rather than logic. Design becomes instinctive — not constructed, but sensed. A world shaped by quiet whispers of intuition.</p></div>
+                <div class="fs-cap" data-i="1"><h1 class="fs-title">Tactile presence</h1><p class="fs-desc">Surfaces hold the memory of light and time. Texture speaks where words fall silent — materials become a language of their own.</p></div>
+                <div class="fs-cap" data-i="2"><h1 class="fs-title">Emotional illumination</h1><p class="fs-desc">Soft light shapes the mood of every room. Warmth without heat, brightness without glare — atmosphere built from a single ray.</p></div>
+                <div class="fs-cap" data-i="3"><h1 class="fs-title">The living rhythm</h1><p class="fs-desc">Spaces breathe with the people inside. From shadow to glow, from quiet to full — a house alive with its own quiet rhythm.</p></div>
+              </div>
+              <div class="fs-bars">
+                <div class="fs-bar is-active" data-i="0"><div class="fs-bar-label"><span class="fs-bar-num">01</span><span class="fs-bar-name">Intuition</span></div><div class="fs-bar-track"><div class="fs-bar-fill"></div></div></div>
+                <div class="fs-bar" data-i="1"><div class="fs-bar-label"><span class="fs-bar-num">02</span><span class="fs-bar-name">Touch</span></div><div class="fs-bar-track"><div class="fs-bar-fill"></div></div></div>
+                <div class="fs-bar" data-i="2"><div class="fs-bar-label"><span class="fs-bar-num">03</span><span class="fs-bar-name">Glow</span></div><div class="fs-bar-track"><div class="fs-bar-fill"></div></div></div>
+                <div class="fs-bar" data-i="3"><div class="fs-bar-label"><span class="fs-bar-num">04</span><span class="fs-bar-name">Pulse</span></div><div class="fs-bar-track"><div class="fs-bar-fill"></div></div></div>
+              </div>
+            </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var track = document.querySelector(".scroll-track");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+      var imgs = document.querySelectorAll(".fs-img");
+      var caps = document.querySelectorAll(".fs-cap");
+      var bars = document.querySelectorAll(".fs-bar");
+      var fills = document.querySelectorAll(".fs-bar-fill");
+      var N = 4;
+      function applyCommon(p){
+        var idx = Math.min(Math.floor(p * N), N - 1);
+        caps.forEach(function(c, i){ c.classList.toggle("is-on", i === idx); });
+        bars.forEach(function(b, i){
+          b.classList.toggle("is-active", i === idx);
+          b.classList.toggle("is-past", i < idx);
+        });
+        fills.forEach(function(f, i){
+          var start = i / N, end = (i + 1) / N;
+          var local = p < start ? 0 : p > end ? 1 : (p - start) / (end - start);
+          f.style.transform = "scaleX(" + local + ")";
+        });
+        return idx;
+      }
+      function applyReveal(p){
+        var idx = applyCommon(p);
+        imgs.forEach(function(s, i){ s.classList.toggle("is-on", i === idx); });
+      }
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

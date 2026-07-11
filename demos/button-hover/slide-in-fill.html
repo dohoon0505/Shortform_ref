@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01. 슬라이드 인 필 (Framer 시그니처) — Button Hover Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .showcase {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 24px; padding: 40px;
+    }
+    .btn {
+      position: relative; overflow: hidden;
+      display: inline-flex; align-items: center; gap: 10px;
+      font: 600 16px/1 "Pretendard Variable","Pretendard",sans-serif;
+      text-decoration: none; cursor: pointer; border: 0; outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-label, .btn-icon { position: relative; z-index: 1; }
+    .btn-icon { font-size: 18px; transition: transform 0.3s ease, opacity 0.3s ease; }
+    
+    .btn-primary { color: #000; background: #fff; padding: 18px 36px; border-radius: 39px; }
+    .btn-outline { color: rgba(255,255,255,0.9); background: transparent; border: 1px solid rgba(255,255,255,0.25); padding: 14px 28px; border-radius: 39px; }
+    .btn-fill { position: absolute; bottom: 0; left: 50%; width: 24px; height: 24px; border-radius: 50%; transform: translate(-50%, 50%) scale(0); transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); z-index: 0; }
+    .btn-primary .btn-fill { background: #0055ff; }
+    .btn-outline .btn-fill { background: #fff; }
+    .btn-label, .btn-icon { transition: color 0.3s ease; }
+    .btn-primary:hover .btn-fill { transform: translate(-50%, 50%) scale(12); }
+    .btn-primary:hover .btn-label, .btn-primary:hover .btn-icon { color: #fff; }
+    .btn-outline:hover .btn-fill { transform: translate(-50%, 50%) scale(12); }
+    .btn-outline:hover .btn-label { color: #000; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">01 · 슬라이드 인 필 (Framer 시그니처)</span>
+  </div>
+  <div class="demo-hint">버튼에 호버해보세요 ↗</div>
+
+  <main class="showcase">
+    <a class="btn btn-primary" href="#" onclick="return false">
+      <span class="btn-fill"></span>
+      <span class="btn-label">시작하기</span>
+      <span class="btn-icon">→</span>
+    </a>
+    <a class="btn btn-outline" href="#" onclick="return false">
+      <span class="btn-fill"></span>
+      <span class="btn-label">자세히 보기</span>
+    </a>
+  </main>
+
+</body>
+</html>

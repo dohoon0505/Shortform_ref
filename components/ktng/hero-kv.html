@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>KT&amp;G Hero KV (격리 프리뷰)</title>
+<!--
+  KT&G HERO KV (.kv) — 메인 페이지 첫 화면 Visual 영역
+  Source: https://www.ktng.com  (Chrome MCP 실측 2026-05-18)
+  ============================================================
+  측정값 (CLAUDE.md 절대 규칙 0번 — 라이브 styleSheets + computed style):
+   ▸ .main .kv          : width:100%; height:100svh; overflow:hidden; bg:#fff
+   ▸ .main .kv video    : width:100%; height:100%; object-fit:cover
+   ▸ .main .kv__background::after
+                        : position:absolute; inset:0; bg:rgba(0,0,0,0.1)
+                          ← Dimmed 오버레이 정확 opacity = 10%
+   ▸ .kv__text-wrapper  : overflow:hidden; height:~145px (마스크 클리핑 박스)
+   ▸ .kv__text-item     : font-size:128px(headline-1 8rem); fontWeight:600;
+                          color:#fff; line-height:1.13 (=145/128)
+                          전부 2 카피 (placeholder + visible reveal)
+                          측정된 transform: translateY(144.797px) ≈ wrapper height
+   ▸ .kv__scroll-down   : position:absolute; bottom:0; width:3px; height:6.25rem;
+                          ::after 2.5s linear infinite scroll-down-line 애니메이션
+  ============================================================
+  애니메이션 timeline (재현):
+   - intro reveal: line 1 → line 2 stagger 150ms, duration 900ms each
+   - easing: cubic-bezier(0.22, 1, 0.36, 1) (smooth-out)
+   - transform: translateY(100%) → translateY(0)  (wrapper.overflow:hidden 클립)
+-->
+<style>
+  *,*::before,*::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; font-family: "Pretendard", system-ui, sans-serif; background:#000; }
+
+  /* ============================================================
+     .main .kv — Hero KV 컨테이너
+     ============================================================ */
+  .kv {
+    position: relative;
+    width: 100%;
+    height: 100svh;          /* ← 라이브 실측: small viewport height */
+    overflow: hidden;
+    background: #fff;
+  }
+
+  /* .kv__background — 비디오 + dimmed 오버레이 + 텍스트를 담는 박스 */
+  .kv__background {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .kv__background video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ─── DIMMED OVERLAY (라이브 실측 정확값) ─── */
+  .kv__background::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);   /* ← opacity 10% (라이브 일치) */
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* ─── TEXT WRAPPER (마스크 클리핑 박스) ─── */
+  .kv__text-container {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    padding: 0 max(3rem, 4.2708vw);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    color: #fff;
+  }
+  .kv__text-wrapper {
+    overflow: hidden;        /* ← 핵심: 마스크 효과 */
+    /* height는 line-height에 의해 자연 결정 (= ~145px @ 128px font) */
+  }
+  .kv__text-item {
+    font-size: 8rem;         /* 128px (headline-1) */
+    font-weight: 600;
+    line-height: 1.13;       /* ≈ 145/128 (wrapper 높이 매칭) */
+    letter-spacing: -0.04em;
+    color: #fff;
+    margin: 0;
+    /* 초기 상태: 텍스트가 wrapper 아래에 숨겨짐 */
+    transform: translateY(100%);
+    opacity: 0;
+    will-change: transform, opacity;
+  }
+  /* ─── REVEAL 애니메이션 (인트로) ─── */
+  .kv__text-item.is-revealed {
+    animation: kv-reveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .kv__text-item--l2.is-revealed {
+    animation-delay: 0.15s;   /* 2번째 라인 stagger 150ms */
+  }
+  @keyframes kv-reveal {
+    0%   { transform: translateY(100%); opacity: 0; }
+    100% { transform: translateY(0);    opacity: 1; }
+  }
+
+  /* ─── SCROLL DOWN 인디케이터 (라이브 .kv__scroll-down 재현) ─── */
+  .kv__scroll-wrapper {
+    position: absolute;
+    bottom: 60px;
+    left: max(3rem, 4.2708vw);
+    z-index: 3;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .kv__scroll-label {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  .kv__scroll-down {
+    position: relative;
+    overflow: hidden;
+    width: 3px;
+    height: 6.25rem;          /* 100px (라이브 실측) */
+  }
+  .kv__scroll-down::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 1px;
+    height: 100%;
+    background: #fff;
+    opacity: 0.3;
+  }
+  .kv__scroll-down::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px;
+    background: #fff;
+    animation: scroll-down-line 2.5s ease 0s infinite;
+  }
+  @keyframes scroll-down-line {
+    0%   { transform: translateY(-100%); height: 100%; }
+    50%  { transform: translateY(0);     height: 100%; }
+    100% { transform: translateY(100%);  height: 100%; }
+  }
+
+  /* ─── 모바일 (라이브 1024px / 680px breakpoint) ─── */
+  @media (max-width: 1024px) {
+    .kv__text-item { font-size: 5rem; }
+  }
+  @media (max-width: 680px) {
+    .kv__text-item { font-size: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- KT&G HERO KV - DOM 구조 라이브 1:1                            -->
+<!-- ============================================================ -->
+<div class="kv" id="kv">
+  <div class="kv__background">
+    <video autoplay muted loop playsinline poster="">
+      <source src="https://www.ktng.com/attach/download/2177f558-e00b-4ec2-a73c-737b303a2c88" type="video/mp4" />
+    </video>
+    <!-- dimmed overlay는 ::after pseudo-element로 자동 적용 -->
+
+    <!-- 텍스트 영역 -->
+    <div class="kv__text-container">
+      <div class="kv__text-wrapper">
+        <div class="kv__text-item kv__text-item--l1">Beyond Limits,</div>
+      </div>
+      <div class="kv__text-wrapper">
+        <div class="kv__text-item kv__text-item--l2">Towards Innovation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll Down 인디케이터 -->
+  <div class="kv__scroll-wrapper">
+    <div class="kv__scroll-label">Scroll Down</div>
+    <div class="kv__scroll-down"></div>
+  </div>
+</div>
+
+<!-- 추가 콘텐츠 (Hero 아래 — 검증용) -->
+<section style="height:50vh;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:600">
+  ↓ Hero 아래 콘텐츠 (스크롤 검증용)
+</section>
+
+<script>
+(function() {
+  'use strict';
+  // ─────────────────────────────────────────────────────────────
+  // 인트로 reveal 트리거 (페이지 로드 후 1프레임 뒤)
+  // ─────────────────────────────────────────────────────────────
+  function triggerReveal() {
+    document.querySelectorAll('.kv__text-item').forEach(function(el) {
+      el.classList.add('is-revealed');
+    });
+  }
+  // 비디오 로드와 무관하게 즉시 트리거 (텍스트가 먼저 보이도록)
+  requestAnimationFrame(function() {
+    requestAnimationFrame(triggerReveal);
+  });
+
+  // ─────────────────────────────────────────────────────────────
+  // 자가 측정 헬퍼 — 콘솔에서 검증:
+  //   await window.__measureHeroReveal()
+  // ─────────────────────────────────────────────────────────────
+  window.__measureHeroReveal = function() {
+    return new Promise(function(resolve) {
+      // 리셋
+      document.querySelectorAll('.kv__text-item').forEach(function(el) {
+        el.classList.remove('is-revealed');
+        void el.offsetWidth; // reflow
+      });
+      var samples = [];
+      var t0 = performance.now();
+      var iv = setInterval(function() {
+        var items = document.querySelectorAll('.kv__text-item');
+        samples.push({
+          t: Math.round(performance.now() - t0),
+          l1: items[0] ? {
+            opacity: getComputedStyle(items[0]).opacity,
+            transform: getComputedStyle(items[0]).transform
+          } : null,
+          l2: items[1] ? {
+            opacity: getComputedStyle(items[1]).opacity,
+            transform: getComputedStyle(items[1]).transform
+          } : null
+        });
+      }, 16);
+      setTimeout(triggerReveal, 50);
+      setTimeout(function() {
+        clearInterval(iv);
+        resolve(samples);
+      }, 1500);
+    });
+  };
+
+  window.__heroSpec = {
+    kvHeight: getComputedStyle(document.querySelector('.kv')).height,
+    overlayBg: getComputedStyle(document.querySelector('.kv__background'), '::after').backgroundColor,
+    textItem: {
+      fontSize: getComputedStyle(document.querySelector('.kv__text-item')).fontSize,
+      fontWeight: getComputedStyle(document.querySelector('.kv__text-item')).fontWeight,
+      color: getComputedStyle(document.querySelector('.kv__text-item')).color
+    }
+  };
+})();
+</script>
+</body>
+</html>

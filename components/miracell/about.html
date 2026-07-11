@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Miracell — About (실측 1512px Marquee + 셀 617×614 + Counter)</title>
+<link rel="stylesheet" href="../../miracell-app/styles/globals.css">
+<style>
+/* About 섹션 - 라이브 실측 1512px */
+#mainAbout {
+  position: relative;
+  width: 100%;
+  height: 1512px;
+  background: linear-gradient(180deg, #fff 0%, #fde7e5 50%, #f9c8c4 100%);
+  overflow: hidden;
+}
+
+.main-about-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Marquee 영역 (280px 라이브 실측) */
+.main-about-flow-wrap {
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.inner {
+  width: 100%;
+  position: relative;
+}
+
+.flow-txt {
+  width: 100%;
+}
+
+.maskBg {
+  width: 100%;
+  overflow: hidden;
+}
+
+.marquee {
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  position: relative;
+}
+
+.absol {
+  display: flex;
+  white-space: nowrap;
+  animation: mr-marquee 25s linear infinite;
+}
+
+.mar_ch {
+  font-family: var(--font-family2);
+  font-weight: 800;
+  font-size: 280px;
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: rgba(0,0,0,.06);
+  white-space: nowrap;
+  padding-right: 80px;
+}
+
+@keyframes mr-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* 본문 영역 */
+.main-about-inner {
+  max-width: var(--area-width);
+  margin: 0 auto;
+  padding: 60px var(--area-padding) 0;
+  position: relative;
+  z-index: 2;
+}
+
+/* H4 Headline (63px Pretendard 800 #000) */
+.main-tit {
+  font-family: var(--font-family1);
+  font-weight: 800;
+  font-size: 63px;
+  line-height: 1.3;
+  color: #000;
+  letter-spacing: -.02em;
+  margin: 0 0 80px;
+  max-width: 800px;
+}
+
+.main-tit .red { color: var(--main-color); }
+.main-tit .char, .main-tit .word { display: inline-block; }
+
+/* About 비주얼 영역 (셀 + 카운터) */
+.main-about-visual {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.main-about-img {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-about-img img {
+  width: 617px;
+  height: 614px;
+  filter: drop-shadow(0 30px 60px rgba(221,0,49,.18));
+}
+
+/* 우측 3-Stat Counter (수직 정렬) */
+.main-about-counter {
+  display: flex;
+  flex-direction: column;
+}
+
+.main-about-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 30px;
+  padding: 40px 0;
+  border-bottom: 1px solid rgba(0,0,0,.12);
+}
+
+.main-about-item:first-child { padding-top: 20px; }
+.main-about-item:last-child { border-bottom: 0; }
+
+.main-about-item dt {
+  font-family: var(--font-family1);
+  font-weight: 700;
+  font-size: 24px;
+  color: #000;
+  letter-spacing: -.01em;
+  margin: 0 0 8px;
+}
+
+.main-about-item dd {
+  margin: 0;
+  font-family: var(--font-family1);
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.main-about-item .count-num-box {
+  font-family: var(--font-family2);
+  font-weight: 700;
+  font-size: 100px;
+  line-height: .9;
+  color: #000;
+  letter-spacing: -.03em;
+}
+
+/* 큰 워터마크 배경 텍스트 */
+.main-about-bg-txt {
+  position: absolute;
+  bottom: 280px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-family2);
+  font-weight: 800;
+  font-size: 280px;
+  color: rgba(221,0,49,.05);
+  letter-spacing: -.04em;
+  white-space: nowrap;
+  pointer-events: none;
+  line-height: 1;
+  z-index: 1;
+}
+</style>
+</head>
+<body>
+<article id="mainAbout">
+  <div class="main-about-wrap">
+    <div class="main-about-flow-wrap">
+      <div class="inner">
+        <div class="flow-txt">
+          <div class="maskBg">
+            <div class="marquee">
+              <div class="absol">
+                <span class="mar_ch font-outfit">STEM CELL SPECIALIST MIRACELL</span>
+                <span class="mar_ch font-outfit">STEM CELL SPECIALIST MIRACELL</span>
+                <span class="mar_ch font-outfit">STEM CELL SPECIALIST MIRACELL</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-about-bg-txt">CELL SPECIALIST</div>
+
+    <div class="main-about-inner">
+      <h4 class="main-tit">
+        <span class="word">미라셀은</span> <span class="word">생명을</span> <span class="word">존중하며</span> <span class="word">모두의</span><br>
+        <span class="word">건강한</span> <span class="word">삶을</span> <span class="word">비전으로</span> <span class="word">추구하는</span><br>
+        <span class="word red">줄기세포</span> <span class="word red">전문</span> <span class="word red">기업입니다.</span>
+      </h4>
+
+      <div class="main-about-visual">
+        <div class="main-about-img">
+          <img src="https://miracell.co.kr/images/main/main_about_img.png" alt="">
+        </div>
+
+        <div class="main-about-counter">
+          <div class="main-about-item item01">
+            <div>
+              <dt>창립일</dt>
+              <dd>2009년 설립</dd>
+            </div>
+            <div class="count-num-box font-outfit">2009</div>
+          </div>
+          <div class="main-about-item item02">
+            <div>
+              <dt>고객 병원</dt>
+              <dd>국내외 약 650여개 병의원에서 서비스</dd>
+            </div>
+            <div class="count-num-box font-outfit">650</div>
+          </div>
+          <div class="main-about-item item03">
+            <div>
+              <dt>국내 기술 특허</dt>
+              <dd>국내 기술 특허 출원 23건</dd>
+            </div>
+            <div class="count-num-box font-outfit">23</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+</body>
+</html>

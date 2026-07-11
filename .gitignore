@@ -1,0 +1,17 @@
+node_modules/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
+.env
+.env.local
+dist/
+build/
+
+# Playwright 캡처 임시 작업 폴더 (수백 MB jpeg + JSON, git 추적 부적합)
+.playwright-mcp/
+
+# ktng-app/ Next.js 빌드 결과 (선택)
+ktng-app/.next/
+ktng-app/out/

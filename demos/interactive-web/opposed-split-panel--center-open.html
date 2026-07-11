@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04-B. 대향 분할 패널 스토리 — 중앙 개폐형</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.14); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; transition: width 60ms linear; }
+    .scroll-track { min-height: 280vh; position: relative; }
+    .sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .iw-eyebrow { font: 600 12px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent,#8ab4ff); margin: 0; }
+    .iw-head { font: 800 clamp(28px,4.4vw,56px)/1.12 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.02em; color: #fff; margin: 0; }
+    .iw-sub { font: 700 clamp(20px,2.6vw,30px)/1.3 "Pretendard Variable","Pretendard",sans-serif; color: #fff; margin: 0; }
+    .iw-body { font: 400 clamp(14px,1.4vw,17px)/1.7 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.62); margin: 0; }
+    .iw-cta { display: inline-flex; align-items: center; gap: 8px; font: 600 13px/1 "Pretendard Variable","Pretendard",sans-serif; color: #fff; border: 1px solid rgba(255,255,255,0.32); border-radius: 999px; padding: 14px 24px; text-decoration: none; }
+    .iw-tag { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .co-wrap { position: absolute; inset: 0; }
+    .co-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center; padding: 0 32px; opacity: 0; transform: scale(0.9); will-change: opacity, transform; }
+    .co-wrap .iw-eyebrow { --accent: #c9a86a; }
+    .co-panel { position: absolute; top: 0; bottom: 0; width: 50%; display: flex; align-items: center; justify-content: center; will-change: transform; z-index: 2; }
+    .co-left { left: 0; background: linear-gradient(135deg, #1a2740, #0c1322); }
+    .co-right { right: 0; background: linear-gradient(225deg, #241a36, #100c1a); }
+    .co-pn { font: 900 clamp(40px,7vw,90px)/1 "Pretendard Variable",sans-serif; letter-spacing: 0.1em; color: rgba(255,255,255,0.14); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">04-B · 대향 분할 패널 스토리</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <section class="co-wrap">
+        <div class="co-center">
+          <p class="iw-eyebrow">SUNJAE</p>
+          <h2 class="iw-head">신뢰는<br>시간이 만듭니다</h2>
+          <p class="iw-body">30년간 지켜온 약속이 자산의 미래가 됩니다.</p>
+        </div>
+        <div class="co-panel co-left"><span class="co-pn">VALUE</span></div>
+        <div class="co-panel co-right"><span class="co-pn">TRUST</span></div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+      function seg(p,a,b){ return clamp01((p - a) / (b - a)); }
+      function lerp(a,b,t){ return a + (b - a) * t; }
+      function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+      function easeInOut(t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }
+      function backOut(t){ var c = 1.70158; t = t - 1; return t*t*((c+1)*t + c) + 1; }
+      var track = document.querySelector(".scroll-track");
+      var stage = document.querySelector(".sticky-stage");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+      var left = stage.querySelector(".co-left");
+      var right = stage.querySelector(".co-right");
+      var center = stage.querySelector(".co-center");
+      function applyReveal(p){
+        var o = seg(p, 0.05, 0.85);
+        left.style.transform = "translateX(" + (-100 * o) + "%)";
+        right.style.transform = "translateX(" + (100 * o) + "%)";
+        var c = seg(p, 0.4, 0.95);
+        center.style.opacity = c;
+        center.style.transform = "scale(" + (0.9 + 0.1 * c) + ")";
+      }
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

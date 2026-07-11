@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>PlantyM — Footer (실측 641px Sitemap + Plantynet)</title>
+<link rel="stylesheet" href="../../plantym-app/styles/globals.css">
+<style>
+#footer {
+  position: relative;
+  background: var(--primary-color);
+  color: #888;
+  height: 641px;
+  padding: 80px 0 40px;
+  font-family: var(--font-family);
+}
+
+#footer .floating-container {
+  position: absolute;
+  right: 40px;
+  top: 40px;
+  z-index: 2;
+}
+
+.btn-top {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.2);
+  cursor: pointer;
+  transition: all .3s;
+  position: relative;
+}
+
+.btn-top:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.btn-top::before {
+  content: '';
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-top: 1.5px solid #fff;
+  border-right: 1.5px solid #fff;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+#footer .inner {
+  max-width: var(--container-inner);
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.content-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  margin-bottom: 40px;
+}
+
+.sitemap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 50px;
+  flex: 1;
+}
+
+.sitemap article dl { margin: 0; }
+
+.sitemap article dt {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 22px;
+  letter-spacing: -.01em;
+}
+
+.sitemap article dt a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sitemap article dd {
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: rgba(255,255,255,.55);
+  margin: 12px 0;
+  transition: color .3s;
+}
+
+.sitemap article dd a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.sitemap article dd:hover a {
+  color: var(--accent-color);
+}
+
+.con-right {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.footer-link {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-link li a {
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: rgba(255,255,255,.65);
+  text-decoration: none;
+  transition: color .3s;
+}
+
+.footer-link li.active a {
+  color: #fff;
+  font-weight: 600;
+}
+
+.footer-link li a:hover {
+  color: var(--accent-color);
+}
+
+.family-site {
+  position: relative;
+}
+
+.family-site-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 50px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 6px;
+  padding: 12px 18px;
+  color: rgba(255,255,255,.75);
+  font-family: var(--font-family);
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 220px;
+  justify-content: space-between;
+}
+
+.family-site-btn::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-bottom: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+}
+
+.content-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.company-info {
+  font-family: var(--font-family);
+  font-size: 13px;
+  color: rgba(255,255,255,.55);
+  line-height: 1.8;
+  margin: 0;
+  letter-spacing: -.01em;
+}
+
+.company-info strong {
+  color: rgba(255,255,255,.75);
+  font-weight: 600;
+}
+
+.copyright {
+  font-family: var(--font-family);
+  font-size: 12px;
+  color: rgba(255,255,255,.4);
+  margin: 0;
+  letter-spacing: .02em;
+}
+</style>
+</head>
+<body>
+<footer id="footer" class="footer">
+  <div class="floating-container">
+    <button class="btn-top" aria-label="맨 위로"></button>
+  </div>
+
+  <div class="inner">
+    <div class="content-top">
+      <div class="sitemap">
+        <article>
+          <dl>
+            <dt><a href="#">회사소개</a></dt>
+            <dd><a href="#">기업정보</a></dd>
+            <dd><a href="#">연혁</a></dd>
+            <dd><a href="#">CI</a></dd>
+            <dd><a href="#">고객센터</a></dd>
+          </dl>
+        </article>
+        <article>
+          <dl>
+            <dt><a href="#">사업정보</a></dt>
+            <dd><a href="#">디지털 매거진 플랫폼</a></dd>
+            <dd><a href="#">매장음악 서비스</a></dd>
+            <dd><a href="#">디지털 사이니지</a></dd>
+          </dl>
+        </article>
+        <article>
+          <dl>
+            <dt><a href="#">PR</a></dt>
+            <dd><a href="#">공지사항</a></dd>
+            <dd><a href="#">보도자료</a></dd>
+          </dl>
+        </article>
+        <article>
+          <dl>
+            <dt><a href="#">Careers</a></dt>
+          </dl>
+        </article>
+      </div>
+
+      <div class="con-right">
+        <ul class="footer-link">
+          <li class="active"><a href="#">개인정보처리방침</a></li>
+          <li><a href="#">문의하기</a></li>
+        </ul>
+        <div class="family-site">
+          <button class="family-site-btn">
+            <span>Family Site</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-bottom">
+      <p class="company-info">
+        <strong>Plantynet</strong> 대표이사 김진해 · Tel 1660-0838 · Fax 031-709-5100<br>
+        주소 경기도 성남시 분당구 대왕판교로 670 유스페이스2 A동 4층 (삼평동 682)
+      </p>
+      <p class="copyright">Copyright ⓒ PlantyM Co., Ltd All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

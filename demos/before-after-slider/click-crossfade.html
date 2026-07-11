@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>08. 클릭 크로스페이드 — Before/After Slider Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 20; }
+    .demo-reset { font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms, border-color 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.32); }
+    .demo-label { font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable", "Pretendard", sans-serif; color: rgba(255,255,255,0.5); letter-spacing: 0.04em; z-index: 20; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; animation: hint-pulse 2.4s ease-in-out infinite; pointer-events: none; }
+    @keyframes hint-pulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+    body { overflow: hidden; }
+    .stage { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 56px 4vw 48px; }
+    .ba {
+      position: relative;
+      width: min(720px, 90vw, calc((100vh - 128px) * 1.6));
+      aspect-ratio: 16 / 10;
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 30px 80px -24px rgba(0,0,0,0.9);
+      background: #120a28;
+      touch-action: none; user-select: none; -webkit-user-select: none;
+    }
+    .ba-layer { position: absolute; inset: 0; }
+    .ba-layer svg { width: 100%; height: 100%; display: block; }
+    .ba-before svg { filter: grayscale(1) sepia(0.38) brightness(0.74) contrast(0.88); }
+    .ba-tag { position: absolute; top: 14px; z-index: 6; font: 700 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.16em; padding: 7px 12px; border-radius: 999px; background: rgba(0,0,0,0.55); color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.18); pointer-events: none; }
+    .tag-before { left: 14px; }
+    .tag-after { right: 14px; color: #ffd166; border-color: rgba(255,209,102,0.4); }
+    .ba-handle { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: rgba(255,255,255,0.95); box-shadow: 0 0 14px rgba(0,0,0,0.6); z-index: 5; pointer-events: none; }
+    .ba-grip { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #111; display: flex; align-items: center; justify-content: center; font: 700 15px/1 "Pretendard Variable", "Pretendard", sans-serif; box-shadow: 0 6px 18px rgba(0,0,0,0.5); }
+    .ba { width: min(640px, 86vw, calc((100vh - 200px) * 1.6)); cursor: default; touch-action: auto; }
+    .ba-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+    .ba-fade { opacity: 0; transition: opacity 420ms ease; }
+    .ba.show-after .ba-fade { opacity: 1; }
+    .tag-state { left: 14px; transition: color 200ms ease, border-color 200ms ease; }
+    .seg { display: inline-flex; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; padding: 4px; }
+    .seg-btn { font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.14em; color: rgba(255,255,255,0.55); background: transparent; border: 0; border-radius: 999px; padding: 10px 22px; cursor: pointer; transition: color 200ms ease, background 200ms ease; }
+    .seg-btn.is-active { color: #111; background: #fff; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">08 · 클릭 크로스페이드</span>
+  </div>
+  <div class="demo-hint">버튼으로 전환해보세요 ⇄</div>
+
+  <main class="stage">
+    <div class="ba-wrap">
+      <div class="ba" id="ba">
+        <div class="ba-layer ba-before"><svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="sky-b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b1040"/><stop offset="0.45" stop-color="#5b2a86"/><stop offset="0.74" stop-color="#e8537a"/><stop offset="1" stop-color="#ffb347"/></linearGradient><radialGradient id="sun-b"><stop offset="0" stop-color="#fff3c4"/><stop offset="0.5" stop-color="#ffd166" stop-opacity="0.85"/><stop offset="1" stop-color="#ffd166" stop-opacity="0"/></radialGradient><linearGradient id="sea-b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9e5e"/><stop offset="0.25" stop-color="#b34d7d"/><stop offset="1" stop-color="#160d33"/></linearGradient></defs><rect width="800" height="500" fill="url(#sky-b)"/><circle cx="400" cy="332" r="170" fill="url(#sun-b)"/><circle cx="400" cy="332" r="54" fill="#ffe9a8"/><ellipse cx="225" cy="112" rx="95" ry="14" fill="rgba(255,255,255,0.16)"/><ellipse cx="590" cy="76" rx="72" ry="11" fill="rgba(255,255,255,0.13)"/><ellipse cx="660" cy="168" rx="110" ry="13" fill="rgba(255,255,255,0.09)"/><path d="M186 148 q8 -9 16 0 q8 -9 16 0" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M610 206 q7 -8 14 0 q7 -8 14 0" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M0 362 L150 246 L262 330 L368 268 L470 362 Z" fill="#54317e"/><path d="M320 362 L478 228 L618 318 L800 244 L800 362 Z" fill="#3a2161"/><rect y="360" width="800" height="140" fill="url(#sea-b)"/><rect x="350" y="374" width="100" height="5" rx="2.5" fill="rgba(255,217,130,0.5)"/><rect x="364" y="390" width="72" height="4" rx="2" fill="rgba(255,217,130,0.38)"/><rect x="376" y="405" width="48" height="3" rx="1.5" fill="rgba(255,217,130,0.28)"/><rect x="386" y="419" width="28" height="3" rx="1.5" fill="rgba(255,217,130,0.2)"/><path d="M0 470 Q200 452 400 468 T800 462 L800 500 L0 500 Z" fill="#120a28"/></svg></div>
+        <div class="ba-layer ba-fade"><svg viewBox="0 0 800 500" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><linearGradient id="sky-a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b1040"/><stop offset="0.45" stop-color="#5b2a86"/><stop offset="0.74" stop-color="#e8537a"/><stop offset="1" stop-color="#ffb347"/></linearGradient><radialGradient id="sun-a"><stop offset="0" stop-color="#fff3c4"/><stop offset="0.5" stop-color="#ffd166" stop-opacity="0.85"/><stop offset="1" stop-color="#ffd166" stop-opacity="0"/></radialGradient><linearGradient id="sea-a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9e5e"/><stop offset="0.25" stop-color="#b34d7d"/><stop offset="1" stop-color="#160d33"/></linearGradient></defs><rect width="800" height="500" fill="url(#sky-a)"/><circle cx="400" cy="332" r="170" fill="url(#sun-a)"/><circle cx="400" cy="332" r="54" fill="#ffe9a8"/><ellipse cx="225" cy="112" rx="95" ry="14" fill="rgba(255,255,255,0.16)"/><ellipse cx="590" cy="76" rx="72" ry="11" fill="rgba(255,255,255,0.13)"/><ellipse cx="660" cy="168" rx="110" ry="13" fill="rgba(255,255,255,0.09)"/><path d="M186 148 q8 -9 16 0 q8 -9 16 0" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M610 206 q7 -8 14 0 q7 -8 14 0" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M0 362 L150 246 L262 330 L368 268 L470 362 Z" fill="#54317e"/><path d="M320 362 L478 228 L618 318 L800 244 L800 362 Z" fill="#3a2161"/><rect y="360" width="800" height="140" fill="url(#sea-a)"/><rect x="350" y="374" width="100" height="5" rx="2.5" fill="rgba(255,217,130,0.5)"/><rect x="364" y="390" width="72" height="4" rx="2" fill="rgba(255,217,130,0.38)"/><rect x="376" y="405" width="48" height="3" rx="1.5" fill="rgba(255,217,130,0.28)"/><rect x="386" y="419" width="28" height="3" rx="1.5" fill="rgba(255,217,130,0.2)"/><path d="M0 470 Q200 452 400 468 T800 462 L800 500 L0 500 Z" fill="#120a28"/></svg></div>
+        <span class="ba-tag tag-state" id="stateTag">BEFORE</span>
+      </div>
+      <div class="seg" role="group" aria-label="전후 전환">
+        <button class="seg-btn is-active" id="btnBefore" type="button">BEFORE</button>
+        <button class="seg-btn" id="btnAfter" type="button">AFTER</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var ba = document.getElementById("ba");
+      var tag = document.getElementById("stateTag");
+      var btnBefore = document.getElementById("btnBefore");
+      var btnAfter = document.getElementById("btnAfter");
+      function setState(after){
+        ba.classList.toggle("show-after", after);
+        tag.textContent = after ? "AFTER" : "BEFORE";
+        tag.style.color = after ? "#ffd166" : "rgba(255,255,255,0.85)";
+        tag.style.borderColor = after ? "rgba(255,209,102,0.4)" : "rgba(255,255,255,0.18)";
+        btnBefore.classList.toggle("is-active", !after);
+        btnAfter.classList.toggle("is-active", after);
+      }
+      btnBefore.addEventListener("click", function(){ setState(false); });
+      btnAfter.addEventListener("click", function(){ setState(true); });
+      setState(false);
+    })();
+  </script>
+</body>
+</html>

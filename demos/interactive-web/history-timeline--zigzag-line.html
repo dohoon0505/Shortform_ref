@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>08-A. 연혁 타임라인 섹션 — 중앙 라인 지그재그</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.14); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; transition: width 60ms linear; }
+    .scroll-track { min-height: 280vh; position: relative; }
+    .sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .iw-eyebrow { font: 600 12px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent,#8ab4ff); margin: 0; }
+    .iw-head { font: 800 clamp(28px,4.4vw,56px)/1.12 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.02em; color: #fff; margin: 0; }
+    .iw-sub { font: 700 clamp(20px,2.6vw,30px)/1.3 "Pretendard Variable","Pretendard",sans-serif; color: #fff; margin: 0; }
+    .iw-body { font: 400 clamp(14px,1.4vw,17px)/1.7 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.62); margin: 0; }
+    .iw-cta { display: inline-flex; align-items: center; gap: 8px; font: 600 13px/1 "Pretendard Variable","Pretendard",sans-serif; color: #fff; border: 1px solid rgba(255,255,255,0.32); border-radius: 999px; padding: 14px 24px; text-decoration: none; }
+    .iw-tag { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .tl-wrap { position: relative; width: min(760px, 90vw); padding: 30px 0; }
+    .tl-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; transform: translateX(-50%); background: rgba(255,255,255,0.12); }
+    .tl-fill { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: #6fe0a8; transform: scaleY(0); transform-origin: top; }
+    .tl-items { position: relative; display: flex; flex-direction: column; gap: 36px; }
+    .tl-item { position: relative; width: 50%; box-sizing: border-box; opacity: 0; will-change: opacity, transform; }
+    .tl-left { padding-right: 44px; text-align: right; }
+    .tl-right { align-self: flex-end; padding-left: 44px; text-align: left; }
+    .tl-node { position: absolute; top: 6px; width: 14px; height: 14px; border-radius: 999px; background: #0a0a0a; border: 2px solid #6fe0a8; }
+    .tl-left .tl-node { right: -7px; }
+    .tl-right .tl-node { left: -7px; }
+    .tl-year { display: block; font: 800 clamp(22px,3vw,34px)/1 "Pretendard Variable",sans-serif; color: #fff; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">08-A · 연혁 타임라인 섹션</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <section class="tl-wrap">
+        <div class="tl-line"><div class="tl-fill"></div></div>
+        <div class="tl-items">
+          <div class="tl-item tl-left"><div class="tl-node"></div><div class="tl-card"><span class="tl-year">1982</span><p class="iw-body">한울피드 창업</p></div></div>
+          <div class="tl-item tl-right"><div class="tl-node"></div><div class="tl-card"><span class="tl-year">1998</span><p class="iw-body">제2공장 준공</p></div></div>
+          <div class="tl-item tl-left"><div class="tl-node"></div><div class="tl-card"><span class="tl-year">2010</span><p class="iw-body">수출 시작</p></div></div>
+          <div class="tl-item tl-right"><div class="tl-node"></div><div class="tl-card"><span class="tl-year">2024</span><p class="iw-body">스마트팜 전환</p></div></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+      function seg(p,a,b){ return clamp01((p - a) / (b - a)); }
+      function lerp(a,b,t){ return a + (b - a) * t; }
+      function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+      function easeInOut(t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }
+      function backOut(t){ var c = 1.70158; t = t - 1; return t*t*((c+1)*t + c) + 1; }
+      var track = document.querySelector(".scroll-track");
+      var stage = document.querySelector(".sticky-stage");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+      var fill = stage.querySelector(".tl-fill");
+      var items = stage.querySelectorAll(".tl-item");
+      var nodes = stage.querySelectorAll(".tl-node");
+      var N = items.length;
+      function applyReveal(p){
+        fill.style.transform = "scaleY(" + p + ")";
+        for (var i = 0; i < N; i++){
+          var th = (i + 0.5) / N;
+          var lp = seg(p, th - 0.12, th + 0.06);
+          var dir = items[i].classList.contains("tl-left") ? -1 : 1;
+          items[i].style.opacity = lp;
+          items[i].style.transform = "translateX(" + (dir * 48 * (1 - lp)) + "px)";
+          nodes[i].style.transform = "scale(" + (0.4 + 0.6 * lp) + ")";
+          nodes[i].style.boxShadow = "0 0 " + (12 * lp) + "px rgba(111,224,168," + (0.7 * lp) + ")";
+        }
+      }
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

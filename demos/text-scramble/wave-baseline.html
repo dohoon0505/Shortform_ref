@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>07. 웨이브 베이스라인 — Text Scramble Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .wave-box { text-align: center; }
+    .wave-line { margin: 0; font: 800 clamp(28px,4.6vw,58px)/1.3 "Pretendard Variable",sans-serif; color: #fff; white-space: nowrap; }
+    .wave-char { display: inline-block; will-change: transform, opacity; }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">07 · 웨이브 베이스라인</span>
+  </div>
+  <div class="demo-hint">자동 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="wave-box">
+      <p class="cap">WAVE BASELINE — CALM DOWN</p>
+      <h1 class="wave-line" aria-label="물결처럼 일렁이다 가라앉는다"></h1>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 3600;
+      var LOOP = false;
+      var startTime = Date.now();
+      var running = true;
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+      var TEXT = "물결처럼 일렁이다 가라앉는다";
+      var line = document.querySelector(".wave-line");
+      var spans = [];
+      TEXT.split("").forEach(function(ch) {
+        var s = document.createElement("span");
+        s.className = "wave-char";
+        s.innerHTML = ch === " " ? "&nbsp;" : ch;
+        line.appendChild(s);
+        spans.push(s);
+      });
+      function easeOutQuad(t) { return 1 - (1 - t) * (1 - t); }
+      function applyReveal(p) {
+        var phase = p * Math.PI * 7;
+        var damp = 1 - easeOutQuad(p);
+        spans.forEach(function(s, i) {
+          var o = Math.max(0, Math.min(1, p * 6 - i * 0.18));
+          var y = Math.sin(phase - i * 0.55) * 26 * damp;
+          s.style.opacity = o;
+          s.style.transform = "translateY(" + y + "px)";
+        });
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else if (LOOP) { startTime = Date.now(); setTimeout(tick, 16); }
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

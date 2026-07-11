@@ -1,0 +1,1375 @@
+{
+  "id": "scroll-color-morph",
+  "title": "스크롤 컬러 모핑",
+  "type": "category",
+  "url": "https://reallygooddesigns.com/web-design-trends-2026/",
+  "date": "2026-06-10",
+  "summary": "스크롤 진행률에 따라 페이지 배경·텍스트·액센트 컬러가 연속 보간되는 전환 패턴 컬렉션. 섹션마다 무드가 바뀌는 2026 브랜드 모션 트렌드 — sticky로 화면을 고정한 뒤 스크롤 진행률(0~1)을 RGB·HSL 값에 1:1 매핑해, 사용자가 스크롤을 멈추면 색도 정확히 그 지점에 멈춘다. 단순 섹션 배경 페이드부터 다크↔라이트 플립·그라디언트 시프트·서클/대각 와이프·luminance 자동 대비·액센트 hue 회전·듀오톤 씬·적응형 내비·hue-rotate 스크럽까지 10가지 컬러 모핑 매핑을 비교 카탈로그로 정리.",
+  "patternCount": 10,
+  "sections": {
+    "overview": {
+      "title": "00. 카테고리 개요",
+      "blocks": [
+        {
+          "type": "heading",
+          "value": "스크롤 컬러 모핑 — 패턴 카탈로그 v1 (scroll-pin + RGB/HSL 보간)"
+        },
+        {
+          "type": "text",
+          "value": "스크롤 진행률에 따라 페이지 배경·텍스트·액센트 컬러가 연속 보간되는 전환 패턴 컬렉션. 섹션마다 무드가 바뀌는 2026 브랜드 모션 트렌드 — sticky로 화면을 고정한 뒤 스크롤 진행률(0~1)을 RGB·HSL 값에 1:1 매핑해, 사용자가 스크롤을 멈추면 색도 정확히 그 지점에 멈춘다. 단순 섹션 배경 페이드부터 다크↔라이트 플립·그라디언트 시프트·서클/대각 와이프·luminance 자동 대비·액센트 hue 회전·듀오톤 씬·적응형 내비·hue-rotate 스크럽까지 10가지 컬러 모핑 매핑을 비교 카탈로그로 정리."
+        },
+        {
+          "type": "heading",
+          "value": "10 패턴 인덱스"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "01. 섹션 배경 페이드 (시그니처)",
+              "tag": "Vanilla JS (CSS transition 없음)",
+              "desc": "카테고리의 시그니처 패턴. 다크 rgb(8,9,10) → 딥블루 → 크림 3개 구간 색을 progress 구간별 RGB 선형 보간으로 이어 body 배경이 끊김 없이 모핑된다. 텍스트 색도 같은 진행률로 카운터 보간되어 어느 지점에서 멈춰도 가독성이 유지된다."
+            },
+            {
+              "label": "02. 다크 라이트 플립",
+              "tag": "Vanilla JS (CSS transition 없음)",
+              "desc": "progress 0.4~0.6의 좁은 구간에서만 다크 rgb(8,9,10) ↔ 라이트 rgb(246,245,242)를 빠르게 보간하고 텍스트 색을 동시에 반전. 전 구간 보간과 달리 \"임계점을 넘는 순간 모드가 뒤집히는\" 플립으로 체감된다."
+            },
+            {
+              "label": "03. 그라디언트 시프트",
+              "tag": "Vanilla JS (CSS transition 없음)",
+              "desc": "2-stop linear-gradient의 양 끝 색(딥네이비→퍼플 / 다크바이올렛→오렌지)과 각도(135°→315°)를 하나의 progress에 묶어 동시 보간. 매 스크롤마다 그라디언트 문자열을 재조립해 배경 레이어에 대입한다."
+            },
+            {
+              "label": "04. 서클 와이프",
+              "tag": "Vanilla JS (CSS transition 없음)",
+              "desc": "다음 배경색 레이어를 clip-path: circle(r% at 50% 50%)로 깔고 반지름을 progress에 매핑 — 색이 화면 중앙에서 원형으로 차오른다. 레이어 2장을 [0,0.5]·[0.5,1] 구간에 체이닝해 다크→퍼플→크림 2단 와이프."
+            },
+            {
+              "label": "05. 텍스트 컨트라스트 스왑",
+              "tag": "Vanilla JS (CSS transition 없음)",
+              "desc": "배경 RGB를 보간한 뒤 그 상대 휘도(luminance)를 매 프레임 계산해, 텍스트가 흰↔검으로 자동 카운터 보간된다. 색 스톱을 어떻게 바꿔도 가독성이 스스로 유지되는 방어적 패턴."
+            },
+            {
+              "label": "06. 액센트 로테이트",
+              "tag": "Vanilla JS + CSS 변수 (선택)",
+              "desc": "배경은 다크로 고정하고 버튼·링크·하이라이트·밑줄이 공유하는 액센트 토큰만 HSL hue를 progress로 회전(220°→320°→40°). 페이지 무드는 유지하면서 포인트 컬러만 살아 움직인다."
+            },
+            {
+              "label": "07. 듀오톤 씬",
+              "tag": "Vanilla JS (이미지 0, CSS 도형만)",
+              "desc": "CSS 도형(그라디언트 패널 + 원 + 둔덕)으로 구성한 일러스트의 주조·보조 2색 팔레트를 구간별로 교체 보간 — NIGHT→NEON→FOREST로 씬의 무드가 통째로 전환된다. 도형마다 두 색의 혼합비만 달리해 칠한다."
+            },
+            {
+              "label": "08. 대각 스플릿",
+              "tag": "Vanilla JS (CSS transition 없음)",
+              "desc": "다음 색 레이어를 clip-path: polygon 대각 경계로 자르고 경계 위치를 progress에 매핑 — 크림색이 좌상단에서 대각선으로 화면을 쓸고 들어온다. 레이어에 카피를 복제해 경계가 글자도 함께 자르며 지나간다."
+            },
+            {
+              "label": "09. 내비 적응형",
+              "tag": "Vanilla JS (CSS transition 없음)",
+              "desc": "상단 고정 미니 내비 아래로 3개 섹션(다크→크림→딥블루) 스트립이 지나가고, 섹션 경계가 내비 위치와 교차하는 순간을 계산해 로고·링크·CTA 색이 흰↔검으로 반전된다. currentColor 상속으로 색 한 줄만 갱신."
+            },
+            {
+              "label": "10. 휴 스크럽",
+              "tag": "Vanilla JS + CSS filter",
+              "desc": "히어로 아트워크(radial-gradient 블롭 3장) 전체에 filter: hue-rotate(p×360deg)를 스크럽 — 스크롤 한 번이 색상환 한 바퀴가 된다. 우하단 HUD에 현재 각도를 표시해 진행률↔색상환 대응을 시각화."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "공통 디자인 토큰 + scroll 모델"
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "폰트",
+              "value": "Pretendard Variable (한글) · 실측 참고 linear.app은 Inter Variable"
+            },
+            {
+              "label": "기준 다크 색",
+              "value": "rgb(8,9,10) — linear.app 실측 다크 배경"
+            },
+            {
+              "label": "Scroll 모델",
+              "value": ".scroll-track 240vh + .sticky-stage 100vh (position:sticky top:0)"
+            },
+            {
+              "label": "진행률 계산",
+              "value": "p = clamp(0, -rect.top / (rect.height - innerHeight), 1)"
+            },
+            {
+              "label": "색 보간",
+              "value": "RGB lerp 공용 함수 (Math.round) — 전경 토큰 카운터 보간 필수"
+            },
+            {
+              "label": "성능 힌트",
+              "value": "will-change: background-color + inline style 1:1 매핑 (transition 우회 금지)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "읽기 가이드"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "라이브 데모",
+              "tag": "IFRAME",
+              "desc": "demos/scroll-color-morph/{pattern}.html 의 standalone 페이지를 iframe으로 임베드. iframe 안에서 스크롤하면 진행률에 따라 색이 보간. ↻ 다시 보기로 처음으로"
+            },
+            {
+              "label": "작동 원리",
+              "tag": "HOW",
+              "desc": "진행률(0~1)을 어떤 색 공간(RGB/HSL)·어떤 토큰에 매핑하는지 핵심 메커니즘"
+            },
+            {
+              "label": "정량 메타",
+              "tag": "KV",
+              "desc": "의존성 / 트리거 / 색 스톱 / 매핑 구간 / 성능 비용 등 6항목"
+            },
+            {
+              "label": "코드 스니펫",
+              "tag": "CODE",
+              "desc": "HTML / CSS / JS 세 블록. sticky track + scroll handler + lerp 포함"
+            },
+            {
+              "label": "사용 가이드",
+              "tag": "GUIDE",
+              "desc": "어떻게 사용하나 — 색 스톱 선정·대비 유지·접근성·주의점"
+            },
+            {
+              "label": "활용 추천",
+              "tag": "PLACES",
+              "desc": "히어로 헤더 / 랜딩 페이지 / 제품 섹션 / 포트폴리오 소개의 4가지 컨텍스트 활용"
+            },
+            {
+              "label": "트레이드오프",
+              "tag": "NOTE",
+              "desc": "성능·접근성·권장 사용처에 대한 한 줄 메모"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "참고 자료: Really Good Designs — Web Design Trends 2026 (https://reallygooddesigns.com/web-design-trends-2026/)의 \"스크롤 연동 컬러 트랜지션\" 트렌드 + linear.app 다크 토큰 실측 rgb(8,9,10). 모든 데모는 자동 재생이 아니라 사용자가 iframe 안에서 스크롤할 때만 색이 보간되며, 스크롤을 멈추면 색도 정확히 그 진행률 지점에 멈춘다. ↻ 다시 보기 버튼이 scroll position을 0으로 리셋한다."
+        }
+      ]
+    },
+    "section-bg-fade": {
+      "title": "01. 섹션 배경 페이드 (시그니처)",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "카테고리의 시그니처 패턴. 다크 rgb(8,9,10) → 딥블루 → 크림 3개 구간 색을 progress 구간별 RGB 선형 보간으로 이어 body 배경이 끊김 없이 모핑된다. 텍스트 색도 같은 진행률로 카운터 보간되어 어느 지점에서 멈춰도 가독성이 유지된다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/scroll-color-morph/section-bg-fade.html",
+          "embedHeight": 560,
+          "embedLabel": "01 · 섹션 배경 페이드 (시그니처)",
+          "title": "섹션 배경 페이드 (시그니처) 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "배경 색 스톱 3개를 [다크, 딥블루, 크림]으로 정의하고 progress를 2개 구간으로 나눈다 — p<0.5는 스톱0→1, p≥0.5는 스톱1→2. 각 구간의 로컬 t로 R·G·B 채널을 각각 선형 보간해 body.style.backgroundColor에 직접 대입한다. 텍스트 색(흰→흰→검)도 같은 진행률로 카운터 보간하므로 중간 어느 지점에서도 대비가 유지된다. transition 없이 inline style 1:1 매핑이라 스크롤을 멈추면 색도 정확히 그 지점에 멈춘다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (CSS transition 없음)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 0→1 (sticky pin)"
+            },
+            {
+              "label": "색 스톱",
+              "value": "rgb(8,9,10) → rgb(16,30,72) → rgb(244,238,226)"
+            },
+            {
+              "label": "매핑",
+              "value": "2구간 분할: [0,0.5]·[0.5,1] 구간별 RGB lerp"
+            },
+            {
+              "label": "Track 높이",
+              "value": "240vh (스크롤 공간)"
+            },
+            {
+              "label": "성능 비용",
+              "value": "낮음 (backgroundColor 보간만)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <h1 class=\"stage-head\">색이 섹션을 잇습니다.</h1>\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scroll-track { min-height: 240vh; }\n.sticky-stage { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; justify-content: center; }\nbody { background: rgb(8,9,10); will-change: background-color; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var BG = [[8,9,10],[16,30,72],[244,238,226]];     /* 다크 → 딥블루 → 크림 */\nvar FG = [[255,255,255],[235,240,255],[17,17,17]]; /* 텍스트 카운터 색 */\nfunction mix(a, b, t){\n  return \"rgb(\" + Math.round(a[0] + (b[0] - a[0]) * t) + \",\"\n    + Math.round(a[1] + (b[1] - a[1]) * t) + \",\"\n    + Math.round(a[2] + (b[2] - a[2]) * t) + \")\";\n}\nfunction pick(stops, p){\n  var seg = p < 0.5 ? 0 : 1;\n  var t = Math.max(0, Math.min(1, seg === 0 ? p / 0.5 : (p - 0.5) / 0.5));\n  return mix(stops[seg], stops[seg + 1], t);\n}\nvar track = document.querySelector(\".scroll-track\");\nvar head = document.querySelector(\".stage-head\");\nwindow.addEventListener(\"scroll\", function(){\n  var rect = track.getBoundingClientRect();\n  var p = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));\n  document.body.style.backgroundColor = pick(BG, p);\n  head.style.color = pick(FG, p);\n}, { passive: true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "브랜드 컬러 2~3개를 스톱으로 잡는 것이 출발점 — 스톱이 4개 이상이면 구간 폭을 1/(stops-1)로 균등 분할해 일반화한다. 다크→라이트로 넘어가는 스톱 사이에는 중간 명도의 색(딥블루 등)을 끼워야 중간 지점이 탁한 회색으로 죽지 않는다. 텍스트·보더 등 전경 토큰도 반드시 같은 progress로 카운터 보간해 전 구간에서 대비 4.5:1을 유지할 것. prefers-reduced-motion에서는 보간 없이 섹션 경계에서 즉시 색을 교체하는 폴백을 권장."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "다크 히어로에서 첫 기능 섹션(라이트)으로 넘어갈 때 배경이 끊김 없이 모핑 — 섹션 경계가 사라지는 2026 트렌드의 기본형"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "챕터마다 브랜드 서브 컬러를 배정한 롱폼 랜딩. 스크롤 위치가 곧 챕터 무드가 된다"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "제품 라인업별 시그니처 컬러로 배경이 차례로 모핑 — 라인업 전환을 색으로 안내"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "프로젝트 케이스 스터디 사이를 각 프로젝트의 키 컬러로 잇는 전환 장치"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — backgroundColor 보간 자체는 저렴하지만 페이지 전체 리페인트가 발생 — 배경 위에 큰 고정 이미지·블러 레이어가 있으면 합성 비용이 커진다. 중간 색이 죽지 않는 스톱 선정이 디자인의 90%. prefers-reduced-motion 대응 필수."
+        }
+      ]
+    },
+    "dark-light-flip": {
+      "title": "02. 다크 라이트 플립",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "progress 0.4~0.6의 좁은 구간에서만 다크 rgb(8,9,10) ↔ 라이트 rgb(246,245,242)를 빠르게 보간하고 텍스트 색을 동시에 반전. 전 구간 보간과 달리 \"임계점을 넘는 순간 모드가 뒤집히는\" 플립으로 체감된다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/scroll-color-morph/dark-light-flip.html",
+          "embedHeight": 480,
+          "embedLabel": "02 · 다크 라이트 플립",
+          "title": "다크 라이트 플립 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "보간 구간을 [0.4, 0.6]으로 좁게 잡는 것이 핵심. t = clamp01((p - 0.4) / 0.2)로 로컬 진행률을 만들면 progress 0.4까지는 완전한 다크, 0.6부터는 완전한 라이트가 되고, 가운데 20% 구간에서만 배경 rgb(8,9,10)→rgb(246,245,242)과 텍스트 흰→검이 동시에 빠르게 보간된다. 전 구간(0~1) 보간과 달리 \"임계점을 넘는 순간 모드가 뒤집히는\" 플립 체감을 만들며, 스크롤을 멈추면 중간 명도 그대로 정지한다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (CSS transition 없음)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 0→1 (sticky pin)"
+            },
+            {
+              "label": "플립 구간",
+              "value": "[0.4, 0.6] — 전체의 20%만 보간"
+            },
+            {
+              "label": "배경",
+              "value": "rgb(8,9,10) ↔ rgb(246,245,242)"
+            },
+            {
+              "label": "텍스트",
+              "value": "#fff ↔ #111 동시 카운터 보간"
+            },
+            {
+              "label": "성능 비용",
+              "value": "낮음 (RGB 보간 2건)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <h1 class=\"flip-head\">한 번의 스크롤로 낮과 밤이 뒤집힙니다.</h1>\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": "body { background: rgb(8,9,10); color: #fff; will-change: background-color; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var DARK = [8,9,10], LIGHT = [246,245,242];\nfunction mix(a, b, t){\n  return \"rgb(\" + Math.round(a[0] + (b[0] - a[0]) * t) + \",\"\n    + Math.round(a[1] + (b[1] - a[1]) * t) + \",\"\n    + Math.round(a[2] + (b[2] - a[2]) * t) + \")\";\n}\nvar track = document.querySelector(\".scroll-track\");\nwindow.addEventListener(\"scroll\", function(){\n  var rect = track.getBoundingClientRect();\n  var p = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));\n  var t = Math.max(0, Math.min(1, (p - 0.4) / 0.2));   /* 플립 구간 [0.4, 0.6] */\n  document.body.style.backgroundColor = mix(DARK, LIGHT, t);\n  document.body.style.color = mix([255,255,255], [17,17,17], t);\n}, { passive: true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "다크 히어로에서 라이트 본문으로 전환되는 사이트의 \"모드 스위치\"를 스크롤 제스처로 연출할 때 사용. 구간 폭은 0.15~0.25가 적당 — 너무 좁으면(<0.1) 깜빡임처럼 보이고, 넓으면 플립 체감이 사라진다. 구간 중앙에서 배경과 텍스트가 동시에 중간 명도가 되어 대비가 최저가 되므로, 텍스트 보간 시작을 배경보다 약간 앞당기면(예: 0.38) 저대비 순간이 짧아진다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "다크 히어로 → 라이트 기능 소개로 넘어가는 첫 스크롤 — \"커튼이 걷히는\" 오프닝 제스처"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "야간/주간 무드를 오가는 제품(수면 앱·조명·OS 테마)의 비포-애프터 연출"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "다크 모드 지원을 알리는 섹션 — 사용자가 스크롤로 두 모드를 직접 오가게 함"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "다크 인트로 → 라이트 작업 그리드로 넘어가는 분위기 전환점"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 플립 구간 중앙에서 배경·텍스트가 모두 중간 명도가 되는 저대비 순간이 생긴다. 보간 폭을 좁게 유지하고 장문 본문을 플립 구간에 배치하지 말 것. 로고·일러스트도 두 모드 버전을 opacity 크로스페이드로 함께 보간해야 일관적이다."
+        }
+      ]
+    },
+    "gradient-shift": {
+      "title": "03. 그라디언트 시프트",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "2-stop linear-gradient의 양 끝 색(딥네이비→퍼플 / 다크바이올렛→오렌지)과 각도(135°→315°)를 하나의 progress에 묶어 동시 보간. 매 스크롤마다 그라디언트 문자열을 재조립해 배경 레이어에 대입한다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/scroll-color-morph/gradient-shift.html",
+          "embedHeight": 480,
+          "embedLabel": "03 · 그라디언트 시프트",
+          "title": "그라디언트 시프트 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "배경 레이어 한 장에 linear-gradient 문자열을 매 스크롤 이벤트마다 다시 조립해 대입한다. 각도는 135 + 180×p로 135°→315°, 시작 색은 딥네이비→퍼플, 끝 색은 다크바이올렛→오렌지로 같은 p에 묶여 동시에 보간된다. 색 정지점이 둘뿐이라 문자열 재조립 비용은 무시할 수준이며, 회전과 색 변화가 한 제스처에 묶여 \"조명이 도는\" 인상을 만든다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (CSS transition 없음)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 0→1 (sticky pin)"
+            },
+            {
+              "label": "각도",
+              "value": "135° → 315° (+180° 회전)"
+            },
+            {
+              "label": "시작 색",
+              "value": "rgb(10,14,40) → rgb(88,16,104)"
+            },
+            {
+              "label": "끝 색",
+              "value": "rgb(36,12,72) → rgb(255,122,64)"
+            },
+            {
+              "label": "성능 비용",
+              "value": "중간 (그라디언트 리페인트 / 프레임)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"grad-bg\"></div>\n    <div class=\"grad-copy\">그라디언트가 함께 회전합니다.</div>\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".grad-bg { position: absolute; inset: 0; z-index: 0; will-change: background; }\n.grad-copy { position: relative; z-index: 1; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var A1 = [10,14,40], A2 = [88,16,104];    /* 시작 색: 딥네이비 → 퍼플 */\nvar B1 = [36,12,72], B2 = [255,122,64];   /* 끝 색: 다크바이올렛 → 오렌지 */\nfunction mix(a, b, t){\n  return \"rgb(\" + Math.round(a[0] + (b[0] - a[0]) * t) + \",\"\n    + Math.round(a[1] + (b[1] - a[1]) * t) + \",\"\n    + Math.round(a[2] + (b[2] - a[2]) * t) + \")\";\n}\nvar bg = document.querySelector(\".grad-bg\");\nvar track = document.querySelector(\".scroll-track\");\nwindow.addEventListener(\"scroll\", function(){\n  var rect = track.getBoundingClientRect();\n  var p = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));\n  var angle = 135 + 180 * p;                /* 135° → 315° */\n  bg.style.background = \"linear-gradient(\" + angle + \"deg, \" + mix(A1, A2, p) + \", \" + mix(B1, B2, p) + \")\";\n}, { passive: true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "브랜드가 그라디언트 아이덴티티를 쓰는 사이트(핀테크·AI·크리에이티브 툴)에 적합. 각도 변화는 ±180°가 체감 한계 — 360° 이상 돌리면 어지럽다. 두 끝 색의 명도 차이가 크면 회전 중 텍스트 대비가 출렁이므로 카피에 text-shadow 또는 반투명 스크림을 깔 것. radial-gradient로 바꾸면 중심이 이동하는 변형도 같은 구조로 가능."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "AI·핀테크 제품의 그라디언트 히어로가 스크롤에 따라 조명이 돌듯 회전 — Stripe 그라디언트 무드"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "섹션마다 그라디언트 톤이 달라지는 롱폼 — 각도+색을 동시에 시프트해 챕터 전환"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "요금제·기능 비교 배경에 은은한 그라디언트 시프트로 시선 유지"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "크리에이티브 스튜디오 인트로 — 시그니처 그라디언트가 스크롤 제스처에 살아 움직임"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 그라디언트는 단색보다 리페인트 비용이 크다 — 전체 화면 그라디언트를 매 프레임 갱신하므로 저사양 기기에서 프레임 저하 가능. 배경 레이어 한 장에만 적용하고 blur·shadow 중첩은 피할 것. 텍스트 대비 검수 필수."
+        }
+      ]
+    },
+    "circle-wipe": {
+      "title": "04. 서클 와이프",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "다음 배경색 레이어를 clip-path: circle(r% at 50% 50%)로 깔고 반지름을 progress에 매핑 — 색이 화면 중앙에서 원형으로 차오른다. 레이어 2장을 [0,0.5]·[0.5,1] 구간에 체이닝해 다크→퍼플→크림 2단 와이프."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/scroll-color-morph/circle-wipe.html",
+          "embedHeight": 520,
+          "embedLabel": "04 · 서클 와이프",
+          "title": "서클 와이프 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "다음 색을 absolute 레이어로 깔고 clip-path: circle(r% at 50% 50%)의 반지름 r을 progress × 150%로 직접 매핑한다. 150%는 화면 네 코너까지 완전히 덮는 반지름. 이 데모는 레이어 2장을 [0, 0.5]·[0.5, 1] 구간에 체이닝해 다크→퍼플→크림 2단 와이프를 만들고, 텍스트 색은 [0.6, 0.85] 구간에서 흰→검으로 카운터 보간해 크림 배경 위 가독성을 유지한다. clip-path는 합성 단계에서 처리되어 리페인트가 없다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (CSS transition 없음)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 0→1 (sticky pin)"
+            },
+            {
+              "label": "핵심 기술",
+              "value": "clip-path: circle(r% at 50% 50%)"
+            },
+            {
+              "label": "반지름",
+              "value": "0% → 150% (네 코너까지 커버)"
+            },
+            {
+              "label": "레이어",
+              "value": "2장 체이닝: [0,0.5]·[0.5,1] 구간 분담"
+            },
+            {
+              "label": "성능 비용",
+              "value": "낮음 (clip-path GPU 합성)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <div class=\"wipe-layer\"></div>\n    <div class=\"wipe-copy\">색이 원형으로 차오릅니다.</div>\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; background: rgb(8,9,10); }\n.wipe-layer { position: absolute; inset: 0; background: rgb(76,48,178); clip-path: circle(0% at 50% 50%); will-change: clip-path; }\n.wipe-copy { position: relative; z-index: 2; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var layer = document.querySelector(\".wipe-layer\");\nvar track = document.querySelector(\".scroll-track\");\nwindow.addEventListener(\"scroll\", function(){\n  var rect = track.getBoundingClientRect();\n  var p = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));\n  layer.style.clipPath = \"circle(\" + (p * 150) + \"% at 50% 50%)\";  /* 150%면 코너까지 커버 */\n}, { passive: true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "원점(at x% y%)을 CTA 버튼·로고 위치로 옮기면 \"그 요소에서 색이 퍼져나가는\" 연출이 된다. 반지름 최대값은 원점이 중앙일 때 150%, 코너일 때 200%가 안전. 레이어를 3장 이상 체이닝하면 구간 폭을 1/N로 나눠 같은 구조로 확장. 와이프 경계가 또렷한 것이 매력이므로 blur를 섞지 말 것. 텍스트는 마지막 레이어 색 기준으로 카운터 보간 필수."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "히어로 CTA 버튼 위치에서 다음 섹션 색이 원형으로 퍼져나가는 진입 — 클릭 유도와 시선 집중을 동시에"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "브랜드 발표·리브랜딩 페이지에서 새 브랜드 컬러가 화면을 점령하는 순간 연출"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "제품 컬러웨이(색상 옵션) 소개 — 옵션마다 해당 색이 원형으로 차오름"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "프로젝트 썸네일에서 케이스 스터디 배경색으로 확장되는 전환 장치"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — clip-path circle은 GPU 합성이라 저렴하지만 레이어 수만큼 합성 레이어가 쌓인다 — 3장 이상이면 will-change 남용 주의. 원형 경계의 앤티에일리어싱이 저해상도에서 거칠어 보일 수 있다. prefers-reduced-motion에서는 와이프 대신 즉시 색 교체 권장."
+        }
+      ]
+    },
+    "text-contrast-swap": {
+      "title": "05. 텍스트 컨트라스트 스왑",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "배경 RGB를 보간한 뒤 그 상대 휘도(luminance)를 매 프레임 계산해, 텍스트가 흰↔검으로 자동 카운터 보간된다. 색 스톱을 어떻게 바꿔도 가독성이 스스로 유지되는 방어적 패턴."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/scroll-color-morph/text-contrast-swap.html",
+          "embedHeight": 480,
+          "embedLabel": "05 · 텍스트 컨트라스트 스왑",
+          "title": "텍스트 컨트라스트 스왑 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "배경 색을 3 스톱(다크→앰버→딥네이비)으로 보간해 [r,g,b] 배열을 얻은 뒤, 같은 프레임에서 상대 휘도 lum = (0.2126R + 0.7152G + 0.0722B) / 255를 계산한다. lum 0.35~0.55 구간을 로컬 t로 삼아 텍스트를 흰→검으로 보간 — 임계 토글이 아니라 좁은 구간 보간이라 깜빡임이 없다. 텍스트가 배경을 \"따라가는\" 것이 아니라 휘도에 \"반대로 반응\"하므로 색 스톱을 어떻게 바꿔도 가독성이 자동 유지된다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (CSS transition 없음)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 0→1 (sticky pin)"
+            },
+            {
+              "label": "휘도 공식",
+              "value": "lum = (0.2126R + 0.7152G + 0.0722B) / 255"
+            },
+            {
+              "label": "스왑 구간",
+              "value": "lum 0.35~0.55에서 흰→검 보간"
+            },
+            {
+              "label": "색 스톱",
+              "value": "rgb(8,9,10) → rgb(244,196,72) → rgb(18,22,56)"
+            },
+            {
+              "label": "성능 비용",
+              "value": "낮음 (산술 연산 + 색 대입)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scroll-track\">\n  <div class=\"sticky-stage\">\n    <h1 class=\"lum-head\">배경이 밝아지면 글자가 어두워집니다.</h1>\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": "body { background: rgb(8,9,10); will-change: background-color; }\n.lum-head { color: #fff; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var BG = [[8,9,10],[244,196,72],[18,22,56]];  /* 다크 → 앰버 → 딥네이비 */\nfunction mixArr(a, b, t){\n  return [Math.round(a[0]+(b[0]-a[0])*t), Math.round(a[1]+(b[1]-a[1])*t), Math.round(a[2]+(b[2]-a[2])*t)];\n}\nvar head = document.querySelector(\".lum-head\");\nvar track = document.querySelector(\".scroll-track\");\nwindow.addEventListener(\"scroll\", function(){\n  var rect = track.getBoundingClientRect();\n  var p = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));\n  var seg = p < 0.5 ? 0 : 1;\n  var t = Math.max(0, Math.min(1, seg === 0 ? p / 0.5 : (p - 0.5) / 0.5));\n  var c = mixArr(BG[seg], BG[seg + 1], t);\n  document.body.style.backgroundColor = \"rgb(\" + c[0] + \",\" + c[1] + \",\" + c[2] + \")\";\n  /* 상대 휘도 → 텍스트 카운터 보간 */\n  var lum = (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) / 255;\n  var k = Math.max(0, Math.min(1, (lum - 0.35) / 0.2));\n  var fg = mixArr([255,255,255], [17,17,17], k);\n  head.style.color = \"rgb(\" + fg[0] + \",\" + fg[1] + \",\" + fg[2] + \")\";\n}, { passive: true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "배경 색 스톱을 디자이너가 자유롭게 바꾸는 시스템(CMS 테마·시즌 캠페인)에서 텍스트 대비를 코드가 보증하게 하는 패턴. 스왑 구간 폭 0.2가 기본 — 좁히면 스냅처럼, 넓히면 부드럽게. 흰/검 대신 브랜드 라이트/다크 토큰을 써도 같은 구조. 휘도 임계 0.45 부근은 WCAG 대비가 흰·검 모두 애매한 영역이므로 그 휘도에 오래 머무는 스톱 설계는 피할 것."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "시즌 캠페인마다 배경색이 바뀌는 히어로 — 카피 색은 코드가 자동으로 맞춰줌"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "CMS에서 운영자가 섹션 색을 바꾸는 랜딩 빌더 — 가독성 가드레일 내장"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "제품 컬러별 배경 모핑 섹션에서 스펙 텍스트의 대비를 자동 유지"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "프로젝트 키 컬러가 제각각인 케이스 스터디 목록 — 타이틀 색 자동 결정"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 상대 휘도는 지각 휘도의 근사일 뿐 — 채도 높은 중간 명도(순색 빨강·파랑)에서는 흰·검 어느 쪽도 대비 4.5:1이 안 나올 수 있다. 그런 색은 스톱에서 제외하거나 텍스트에 스크림을 깔 것. 매 프레임 산술 비용은 무시할 수준."
+        }
+      ]
+    },
+    "accent-rotate": {
+      "title": "06. 액센트 로테이트",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "배경은 다크로 고정하고 버튼·링크·하이라이트·밑줄이 공유하는 액센트 토큰만 HSL hue를 progress로 회전(220°→320°→40°). 페이지 무드는 유지하면서 포인트 컬러만 살아 움직인다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/scroll-color-morph/accent-rotate.html",
+          "embedHeight": 480,
+          "embedLabel": "06 · 액센트 로테이트",
+          "title": "액센트 로테이트 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "배경 rgb(8,9,10)은 고정한 채 hue = (220 + 180×p) % 360으로 색상환만 회전한다 — p 0에서 블루(220°), 중반에 마젠타(320°), 끝에서 앰버(40°). 채도 88%·명도 62%를 고정하면 어떤 hue에서도 다크 배경 위 대비가 비슷하게 유지된다. 데모는 하이라이트 텍스트·밑줄 바·CTA 배경에 같은 HSL 문자열을 직접 대입하고, 실무에서는 CSS 변수 --accent 하나에 setProperty 해 모든 컴포넌트가 var(--accent)를 참조하는 구조를 권장(스니펫 JS가 그 방식)."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS + CSS 변수 (선택)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 0→1 (sticky pin)"
+            },
+            {
+              "label": "Hue 경로",
+              "value": "220° → 320° → 40° (+180° 회전)"
+            },
+            {
+              "label": "고정 값",
+              "value": "S 88% · L 62% (대비 일정 유지)"
+            },
+            {
+              "label": "적용 토큰",
+              "value": "하이라이트 텍스트 · 밑줄 바 · CTA 배경"
+            },
+            {
+              "label": "성능 비용",
+              "value": "매우 낮음 (색 문자열 대입만)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<h1>배경은 그대로, <span class=\"acc\">액센트만</span> 돕니다.</h1>\n<button class=\"acc-btn\">시작하기</button>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ":root { --accent: hsl(220, 88%, 62%); }\n.acc { color: var(--accent); }\n.acc-btn { background: var(--accent); color: #0a0a0c; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var track = document.querySelector(\".scroll-track\");\nwindow.addEventListener(\"scroll\", function(){\n  var rect = track.getBoundingClientRect();\n  var p = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));\n  var hue = Math.round(220 + 180 * p) % 360;   /* 220° → 320° → 40° */\n  /* CSS 변수 하나만 갱신하면 var(--accent)를 참조하는 모든 컴포넌트가 따라온다 */\n  document.documentElement.style.setProperty(\"--accent\", \"hsl(\" + hue + \", 88%, 62%)\");\n}, { passive: true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "배경 전체를 바꾸기엔 부담스럽고 무드 변화는 주고 싶을 때의 절충안. HSL의 L을 고정해도 hue별 지각 명도는 다르므로(노랑은 밝고 파랑은 어둡게 보임) 60~70% 범위에서 hue 구간별로 L을 미세 조정하면 더 균질하다. CTA 버튼 위 텍스트는 어두운 고정색(#0a0a0c)으로 두면 전 구간 안전. 액센트가 의미를 갖는 UI(에러 빨강·성공 초록)와 겹치지 않게 hue 경로를 설계할 것."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "다크 SaaS 히어로에서 키워드 하이라이트와 CTA만 스크롤 따라 색이 도는 절제된 모션"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "기능 챕터마다 액센트 hue를 배정 — 스크롤 위치가 곧 현재 챕터의 포인트 컬러"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "요금제 티어(Free→Pro→Enterprise)를 hue 회전으로 구분 — 배경 변경 없이 위계 표현"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "다크 포트폴리오에서 링크·호버 색만 살아 움직여 과하지 않은 개성 연출"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 변화 면적이 작아 임팩트는 10패턴 중 가장 약하다 — 대신 성능·접근성 부담도 가장 적다. hue에 따라 지각 명도가 출렁여 특정 구간(노랑 부근)에서 액센트가 들떠 보일 수 있음. 색맹 사용자에게 hue 변화만으로 의미를 전달하지 말 것."
+        }
+      ]
+    },
+    "duotone-scene": {
+      "title": "07. 듀오톤 씬",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "CSS 도형(그라디언트 패널 + 원 + 둔덕)으로 구성한 일러스트의 주조·보조 2색 팔레트를 구간별로 교체 보간 — NIGHT→NEON→FOREST로 씬의 무드가 통째로 전환된다. 도형마다 두 색의 혼합비만 달리해 칠한다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/scroll-color-morph/duotone-scene.html",
+          "embedHeight": 520,
+          "embedLabel": "07 · 듀오톤 씬",
+          "title": "듀오톤 씬 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "주조색 A·보조색 B 두 팔레트를 각각 3 스톱으로 정의하고 같은 progress로 보간해 [r,g,b] 배열 두 개를 얻는다. 씬의 모든 도형은 이 두 색의 혼합비만 달리해 칠한다 — 하늘 패널은 A→mix(A,B,0.4) 그라디언트, 해는 B 순색, 뒤 둔덕은 mix 0.55, 앞 둔덕은 mix 0.8. 팔레트 두 개만 보간하면 일러스트 전체 톤이 한 진행률에 묶여 NIGHT→NEON→FOREST로 무드가 통째로 전환된다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (이미지 0, CSS 도형만)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 0→1 (sticky pin)"
+            },
+            {
+              "label": "팔레트 구조",
+              "value": "주조 A + 보조 B — 도형은 mix(A,B,k)로 파생"
+            },
+            {
+              "label": "팔레트 스톱",
+              "value": "NIGHT(네이비·민트) → NEON(퍼플·코랄) → FOREST(그린·옐로)"
+            },
+            {
+              "label": "혼합비 k",
+              "value": "하늘 0.4 · 뒤 둔덕 0.55 · 앞 둔덕 0.8 · 해 1.0"
+            },
+            {
+              "label": "성능 비용",
+              "value": "낮음 (도형 4개 색 대입)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"scene\">\n  <div class=\"s-sun\"></div>\n  <div class=\"s-hill s-hill-back\"></div>\n  <div class=\"s-hill s-hill-front\"></div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".scene { position: relative; aspect-ratio: 16 / 9; border-radius: 24px; overflow: hidden; }\n.s-sun { position: absolute; width: 22%; aspect-ratio: 1; border-radius: 50%; left: 16%; top: 13%; }\n.s-hill { position: absolute; width: 92%; aspect-ratio: 2.6 / 1; border-radius: 50%; bottom: -34%; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var A = [[44,62,148],[142,52,180],[16,108,84]];   /* 주조: 네이비 → 퍼플 → 그린 */\nvar B = [[122,222,198],[255,152,112],[248,208,88]]; /* 보조: 민트 → 코랄 → 옐로 */\nfunction mixArr(a, b, t){\n  return [Math.round(a[0]+(b[0]-a[0])*t), Math.round(a[1]+(b[1]-a[1])*t), Math.round(a[2]+(b[2]-a[2])*t)];\n}\nfunction rgbStr(c){ return \"rgb(\" + c[0] + \",\" + c[1] + \",\" + c[2] + \")\"; }\nfunction pickArr(stops, p){\n  var seg = p < 0.5 ? 0 : 1;\n  var t = Math.max(0, Math.min(1, seg === 0 ? p / 0.5 : (p - 0.5) / 0.5));\n  return mixArr(stops[seg], stops[seg + 1], t);\n}\nvar scene = document.querySelector(\".scene\");\nvar sun = document.querySelector(\".s-sun\");\nvar track = document.querySelector(\".scroll-track\");\nwindow.addEventListener(\"scroll\", function(){\n  var rect = track.getBoundingClientRect();\n  var p = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));\n  var a = pickArr(A, p), b = pickArr(B, p);\n  scene.style.background = \"linear-gradient(165deg, \" + rgbStr(a) + \", \" + rgbStr(mixArr(a, b, 0.4)) + \")\";\n  sun.style.backgroundColor = rgbStr(b);\n}, { passive: true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "도형 수가 늘어도 색은 항상 A·B 두 팔레트에서 파생시키는 것이 핵심 — 도형마다 독립 스톱을 주면 중간 지점에서 톤이 깨진다. 혼합비 k를 도형의 깊이(멀수록 A에 가깝게)로 배정하면 자동으로 공기원근이 생긴다. SVG 일러스트라면 fill에 같은 방식으로 대입 가능. 팔레트 교체 구간을 균등(0.5) 대신 비대칭으로 잡아 특정 무드에 오래 머물게 할 수도 있다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "제품 일러스트의 시간대(아침→낮→밤)가 스크롤로 바뀌는 스토리텔링 히어로"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "온보딩 스텝별 일러스트 무드 전환 — 스텝 진행을 팔레트로 은유"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "테마(라이트·다크·시즌) 기능 소개 — 같은 씬이 팔레트만 바뀌는 것을 직접 시연"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "일러스트레이터·브랜드 디자이너의 컬러 시스템 역량을 보여주는 인터랙티브 쇼케이스"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 도형이 많아지면 매 프레임 대입 건수가 늘어난다 — 10개 이내 권장, 그 이상이면 CSS 변수 2개(--tone-a/--tone-b)로 묶어 갱신. 두 팔레트의 명도 관계(A 어둡고 B 밝게)가 스톱마다 유지되어야 씬 구조가 읽힌다. 사진에는 적용 불가 — CSS/SVG 도형 전용."
+        }
+      ]
+    },
+    "split-diagonal": {
+      "title": "08. 대각 스플릿",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "다음 색 레이어를 clip-path: polygon 대각 경계로 자르고 경계 위치를 progress에 매핑 — 크림색이 좌상단에서 대각선으로 화면을 쓸고 들어온다. 레이어에 카피를 복제해 경계가 글자도 함께 자르며 지나간다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/scroll-color-morph/split-diagonal.html",
+          "embedHeight": 480,
+          "embedLabel": "08 · 대각 스플릿",
+          "title": "대각 스플릿 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "polygon 4점 중 위 변의 x를 e, 아래 변의 x를 e-45로 묶어 기울기가 고정된 대각 경계를 만든다. e = p × 165로 경계가 -45%에서 165%까지 스윕 — p=1이면 위 165%·아래 120%로 화면을 완전히 덮는다. 핵심 디테일은 두 레이어에 동일한 카피를 복제 배치하는 것: 경계가 배경만이 아니라 글자도 함께 잘라 흰 글자가 검은 글자로 \"썰리며\" 바뀐다. clip-path 보간은 합성 단계 처리라 리페인트가 없다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (CSS transition 없음)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 0→1 (sticky pin)"
+            },
+            {
+              "label": "핵심 기술",
+              "value": "clip-path: polygon 4점 — 위/아래 변 x 오프셋 고정"
+            },
+            {
+              "label": "경계 스윕",
+              "value": "e = p × 165 (위 변 0→165%, 아래 변 -45→120%)"
+            },
+            {
+              "label": "카피 처리",
+              "value": "두 레이어에 동일 카피 복제 — 글자도 경계에 잘림"
+            },
+            {
+              "label": "성능 비용",
+              "value": "낮음 (clip-path GPU 합성)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"split-layer split-base\">\n  <div class=\"split-copy\">대각선이 색을 끌고 들어옵니다.</div>\n</div>\n<div class=\"split-layer split-next\">\n  <div class=\"split-copy\">대각선이 색을 끌고 들어옵니다.</div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".split-layer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }\n.split-base { background: rgb(8,9,10); color: #fff; }\n.split-next { background: rgb(244,238,226); color: #141414; clip-path: polygon(0% 0%, 0% 0%, -45% 100%, 0% 100%); will-change: clip-path; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var next = document.querySelector(\".split-next\");\nvar track = document.querySelector(\".scroll-track\");\nwindow.addEventListener(\"scroll\", function(){\n  var rect = track.getBoundingClientRect();\n  var p = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));\n  var e = p * 165;   /* 위 변 0→165%, 아래 변은 -45% 오프셋으로 기울기 고정 */\n  next.style.clipPath = \"polygon(0% 0%, \" + e + \"% 0%, \" + (e - 45) + \"% 100%, 0% 100%)\";\n}, { passive: true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "경계 기울기는 위·아래 변의 x 오프셋(여기서 45%)으로 조절 — 0이면 수직 와이프, 클수록 가파른 대각. 진행 방향을 우→좌로 바꾸려면 polygon을 오른쪽 변 기준으로 뒤집는다. 카피 복제 기법을 쓸 때 두 레이어의 레이아웃이 픽셀 단위로 일치해야 하므로 같은 마크업·같은 클래스를 사용할 것. 하드스톱 linear-gradient(배경 한 장)로도 비슷한 효과가 나지만 글자까지 자르는 연출은 레이어 복제만 가능."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "히어로 끝에서 다음 섹션 색이 대각선으로 진입 — 속도감 있는 에디토리얼 전환"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "비포/애프터 비교 섹션 — 경계를 progress에 걸어 사용자가 직접 가르게 함"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "두 가지 플랜·모드의 대비를 대각 경계로 분할 — 경계가 곧 선택의 은유"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "챕터 전환마다 키 컬러가 사선으로 들이치는 매거진풍 페이지 넘김"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 대각 경계의 앤티에일리어싱이 일부 브라우저에서 1px 계단으로 보일 수 있다 — 경계에 1px 반투명 보더를 더하면 완화. 카피 복제는 DOM 중복이므로 스크린리더가 두 번 읽지 않도록 복제 레이어에 aria-hidden=\"true\"를 달 것."
+        }
+      ]
+    },
+    "nav-adapt": {
+      "title": "09. 내비 적응형",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "상단 고정 미니 내비 아래로 3개 섹션(다크→크림→딥블루) 스트립이 지나가고, 섹션 경계가 내비 위치와 교차하는 순간을 계산해 로고·링크·CTA 색이 흰↔검으로 반전된다. currentColor 상속으로 색 한 줄만 갱신."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/scroll-color-morph/nav-adapt.html",
+          "embedHeight": 560,
+          "embedLabel": "09 · 내비 적응형",
+          "title": "내비 적응형 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "화면(100vh) 뒤로 3×100vh 섹션 스트립이 translateY(-p × 66.67%)로 지나간다. 내비가 보고 있는 스트립 좌표 navY = p×200 + 8(vh)을 계산하면 섹션 인덱스 floor(navY/100)와 섹션 안 위치 frac을 얻는다 — frac 92~100, 즉 다음 섹션 경계가 내비에 닿기 직전 8vh 구간에서 내비 색을 다음 섹션의 카운터 색으로 RGB 보간한다. 내비 내부는 모두 currentColor를 상속하므로 nav.style.color 한 줄로 로고·링크·CTA 보더가 함께 반전된다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (CSS transition 없음)"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 0→1 (sticky pin)"
+            },
+            {
+              "label": "교차 계산",
+              "value": "navY = p×200 + 8(vh) → idx = floor(navY/100)"
+            },
+            {
+              "label": "반전 구간",
+              "value": "경계 직전 8vh에서 흰↔검 RGB 보간"
+            },
+            {
+              "label": "색 전파",
+              "value": "nav.style.color 1건 — currentColor 상속"
+            },
+            {
+              "label": "섹션 색",
+              "value": "rgb(8,9,10) → rgb(244,240,232) → rgb(14,22,52)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"strip\">\n  <section class=\"sec sec-1\">다크 섹션</section>\n  <section class=\"sec sec-2\">크림 섹션</section>\n  <section class=\"sec sec-3\">딥블루 섹션</section>\n</div>\n<nav class=\"mini-nav\">\n  <span class=\"nav-logo\">LAB®</span>\n  <span class=\"nav-cta\">시작하기</span>\n</nav>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".strip { position: absolute; inset: 0 0 auto; height: 300%; will-change: transform; }\n.sec { height: 33.3334%; }\n.mini-nav { position: absolute; top: 0; left: 0; right: 0; z-index: 10; color: #fff; }\n.mini-nav a { color: inherit; }\n.nav-cta { border: 1px solid currentColor; border-radius: 999px; padding: 8px 16px; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var NAVC = [[255,255,255],[17,17,17],[255,255,255]];  /* 섹션별 내비 카운터 색 */\nfunction mix(a, b, t){\n  return \"rgb(\" + Math.round(a[0] + (b[0] - a[0]) * t) + \",\"\n    + Math.round(a[1] + (b[1] - a[1]) * t) + \",\"\n    + Math.round(a[2] + (b[2] - a[2]) * t) + \")\";\n}\nvar strip = document.querySelector(\".strip\");\nvar nav = document.querySelector(\".mini-nav\");\nvar track = document.querySelector(\".scroll-track\");\nwindow.addEventListener(\"scroll\", function(){\n  var rect = track.getBoundingClientRect();\n  var p = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));\n  strip.style.transform = \"translateY(\" + (-p * 66.6667) + \"%)\";\n  /* 내비가 보고 있는 스트립 좌표(vh) → 섹션 인덱스 + 경계 보간 */\n  var navY = p * 200 + 8;\n  var idx = Math.min(2, Math.floor(navY / 100));\n  var frac = navY - idx * 100;\n  var blend = idx < 2 ? Math.max(0, Math.min(1, (frac - 92) / 8)) : 0;\n  nav.style.color = mix(NAVC[idx], NAVC[Math.min(2, idx + 1)], blend);\n}, { passive: true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "실서비스에서는 sticky 스트립 대신 실제 섹션들의 getBoundingClientRect().top과 내비 높이를 비교해 같은 계산을 한다 — 섹션마다 data-nav=\"light|dark\" 속성을 달아두면 색 테이블이 자동 구성된다. 반전 구간 폭(8vh)은 내비 높이와 비슷하게 잡아야 경계가 내비를 \"통과하는\" 동안 자연스럽다. 로고가 이미지라면 흰/검 2벌을 opacity 크로스페이드. mix-blend-mode: difference로 한 줄 구현도 가능하지만 브랜드 색 통제가 안 되므로 계산 방식을 권장."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "다크 히어로 → 라이트 본문으로 넘어갈 때 고정 내비가 자연스럽게 반전 — 모든 프리미엄 사이트의 기본기"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "섹션 색이 교차하는 롱폼에서 내비 가독성을 전 구간 보장"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "제품 컬러 섹션 위를 지나는 동안 내비·진행 인디케이터가 카운터 색으로 적응"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "프로젝트마다 배경색이 다른 포트폴리오에서 로고·메뉴가 항상 읽히게 유지"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 섹션 경계 계산이 레이아웃 변화(이미지 로드·아코디언)에 어긋날 수 있으므로 실서비스에서는 resize/ResizeObserver에서 경계를 재측정할 것. 내비 높이의 절반쯤 경계가 걸치는 동안 위·아래가 다른 색 위에 놓인다 — 반전 구간 보간이 이를 완충하지만 완벽하진 않다. mix-blend-mode 대안은 Safari에서 고정 요소와 조합 시 버그 이력 있음."
+        }
+      ]
+    },
+    "hue-scrub": {
+      "title": "10. 휴 스크럽",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "히어로 아트워크(radial-gradient 블롭 3장) 전체에 filter: hue-rotate(p×360deg)를 스크럽 — 스크롤 한 번이 색상환 한 바퀴가 된다. 우하단 HUD에 현재 각도를 표시해 진행률↔색상환 대응을 시각화."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/scroll-color-morph/hue-scrub.html",
+          "embedHeight": 520,
+          "embedLabel": "10 · 휴 스크럽",
+          "title": "휴 스크럽 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "아트워크 컨테이너 한 장에 filter: hue-rotate(p × 360deg)를 대입하는 단 한 줄이 핵심. 컨테이너 안 radial-gradient 블롭 전체의 색상이 GPU 필터로 함께 회전하고, 카피·HUD는 컨테이너 밖에 두어 hue 영향을 받지 않는다. p=0과 p=1이 같은 색(360°=0°)이라 트랙 끝에서 처음으로 자연스럽게 이어지는 유일한 패턴. HUD에 현재 각도를 표기해 진행률↔색상환 대응을 사용자에게 그대로 노출한다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS + CSS filter"
+            },
+            {
+              "label": "트리거",
+              "value": "스크롤 진행률 0→1 (sticky pin)"
+            },
+            {
+              "label": "매핑",
+              "value": "hue-rotate(p × 360deg) — 1스크롤 = 1색상환"
+            },
+            {
+              "label": "적용 범위",
+              "value": "아트워크 컨테이너만 (카피는 필터 밖)"
+            },
+            {
+              "label": "HUD",
+              "value": "우하단 각도 표시 (HUE 0°~360°)"
+            },
+            {
+              "label": "성능 비용",
+              "value": "중간 (필터 면적에 비례 — GPU)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"hue-art\">\n  <div class=\"blob blob-1\"></div>\n  <div class=\"blob blob-2\"></div>\n</div>\n<div class=\"hue-hud\">HUE 0°</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".hue-art { position: absolute; inset: 0; will-change: filter; }\n.blob { position: absolute; border-radius: 50%; }\n.blob-1 { width: 46vw; height: 46vw; background: radial-gradient(circle at 35% 35%, rgb(47,107,255), transparent 70%); }\n/* 카피·HUD는 .hue-art 밖에 두어 hue 영향을 받지 않게 */"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var art = document.querySelector(\".hue-art\");\nvar hud = document.querySelector(\".hue-hud\");\nvar track = document.querySelector(\".scroll-track\");\nwindow.addEventListener(\"scroll\", function(){\n  var rect = track.getBoundingClientRect();\n  var p = Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));\n  var deg = Math.round(p * 360);   /* 진행률 = 색상환 각도 */\n  art.style.filter = \"hue-rotate(\" + deg + \"deg)\";\n  hud.textContent = \"HUE \" + deg + \"\\u00B0\";\n}, { passive: true });"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "사진·그라디언트·일러스트 무엇이든 컨테이너에 넣으면 한 줄로 동작하는 가장 게으른(좋은 의미로) 컬러 모핑. 단 hue-rotate는 명도·채도도 미세하게 왜곡하는 행렬 근사이므로 브랜드 정색이 필요한 로고에는 쓰지 말 것. 텍스트·UI는 반드시 필터 컨테이너 밖에 배치. 360° 전체가 부담스러우면 ±60° 범위로 줄여 톤 흔들림 정도로 절제하는 변형도 좋다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "추상 그라디언트 아트 히어로 — 스크롤 위치마다 다른 색의 첫인상을 만드는 생성적 무드"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "음악·이벤트·페스티벌 랜딩의 사이키델릭한 배경 스크럽"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "제품 사진의 컬러 베리에이션을 실물 촬영 없이 스크롤로 시연"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "방문할 때마다·스크롤할 때마다 색이 다른 인터랙티브 아이덴티티"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — filter는 적용 면적에 비례해 GPU 비용이 든다 — 전체 화면 아트워크면 모바일에서 프레임 저하 가능, will-change: filter 필수. hue-rotate 행렬은 sRGB 근사라 채도 높은 색에서 명도가 출렁인다. 사진 속 피부톤이 변색되므로 인물 사진에는 부적합."
+        }
+      ]
+    }
+  }
+}

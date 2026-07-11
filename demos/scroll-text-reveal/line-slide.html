@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02. 줄별 슬라이드 업 — Scroll Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #000; color: #fff;
+      font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .demo-controls {
+      position: fixed; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      z-index: 20;
+    }
+    .demo-reset {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.72);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 8px 14px; cursor: pointer;
+      transition: color 160ms, background 160ms, border-color 160ms;
+    }
+    .demo-reset:hover {
+      color: #fff; background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.32);
+    }
+    .demo-label {
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .demo-hint {
+      position: fixed; right: 16px; bottom: 24px;
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      z-index: 20;
+      animation: demo-hint-bounce 1.6s ease-in-out infinite;
+    }
+    @keyframes demo-hint-bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.45; }
+      50%       { transform: translateY(4px); opacity: 0.8; }
+    }
+    .demo-progress {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 2px; background: rgba(255,255,255,0.06);
+      z-index: 20;
+    }
+    .demo-progress > div {
+      height: 100%; background: #fff; width: 0;
+      transition: width 60ms linear;
+    }
+    .scroll-track { min-height: 240vh; position: relative; }
+    .sticky-stage {
+      position: sticky; top: 0;
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 8vw 60px;
+      overflow: hidden;
+    }
+    /* 패턴별 CSS */
+    .reveal { font: 600 34px/1.5 "Pretendard Variable","Pretendard",system-ui; color: #fff; max-width: 900px; letter-spacing: -0.01em; }
+    .reveal .ln { overflow: hidden; padding: 4px 0; }
+    .reveal .ln > span { display: inline-block; transform: translateY(115%); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">02 · 줄별 슬라이드 업</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <div class="reveal"><div class="ln"><span>강력하고 확장된 가능성을 제공합니다.</span></div><div class="ln"><span>디자인과 로직을 한 곳에서 결합하여,</span></div><div class="ln"><span>동적인 동작과 애니메이션,</span></div><div class="ln"><span>상태 기반 인터랙션을 매번 처음부터 만들지 않아도 됩니다.</span></div></div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var track = document.querySelector(".scroll-track");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+
+      // 패턴별 init + applyReveal 정의
+      var lns = document.querySelectorAll(".reveal .ln");
+      var N = lns.length;
+      function applyReveal(p){
+        lns.forEach(function(ln, i){
+          var startP = i / (N + 1.2);
+          var localP = Math.max(0, Math.min(1, (p - startP) / 0.28));
+          var ease = 1 - Math.pow(1 - localP, 3);
+          ln.querySelector("span").style.transform = "translateY(" + (115 * (1 - ease)) + "%)";
+        });
+      }
+
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

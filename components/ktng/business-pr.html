@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>KT&amp;G BUSINESS (.with) + PR CENTER (.news) — 격리 프리뷰</title>
+<!--
+  KT&G 메인 페이지: BUSINESS (.with) + PR CENTER (.news) 섹션
+  Source: https://www.ktng.com  (Chrome MCP 실측 2026-05-18)
+  ============================================================
+  측정값 (CLAUDE.md 절대 규칙 0번 — 라이브 실측):
+   ▸ 매핑:
+     - BUSINESS (사업영역) = .with 섹션 ("함께 그리는 KT&G의 미래" + Business/Career)
+     - PR CENTER = .news 섹션 ("Latest News" + featured + list)
+
+   ▸ IntersectionObserver threshold:
+     - 트리거 시점: section visiblePct ≈ 50-60% (첫 카드 row가 viewport 진입)
+     - 옵션: { threshold: 0.3 } 또는 { rootMargin: "-25% 0px" }
+
+   ▸ Stagger 패턴 (라이브 .news__label / .news__featured 측정):
+     - 초기 상태: opacity:0, transform: translateY(80px) (matrix(1,0,0,1,0,80))
+     - 완료: opacity:1, transform: translateY(0)
+     - duration: 800-900ms ease-out
+     - transition-delay: 0ms / 150ms / 300ms / 450ms / 600ms / 750ms (**stagger 150ms**)
+
+   ▸ Hover (라이브 CSS rule 직접 추출):
+     - .news-card:hover .news-card__image: transform: scale(1.1), 0.3s ease-in-out
+     - .main-news:hover .main-news__image: transform: scale(1.05), 0.3s
+     - .with__item:hover .with__item-image: transform: scale(1.1), 0.3s ease-in-out
+     - news-list-button on hover: bg → #3F42E5 (보라), 32×32px
+     - icon arrow: translateX(100%), 0.3s
+     - box-shadow hover 효과: 라이브에서 검출 안 됨 (scale 변환만 사용)
+  ============================================================
+-->
+<style>
+  *,*::before,*::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; font-family: "Pretendard", system-ui, sans-serif; background: #fff; color: #000; }
+  .demo-spacer { height: 100vh; background: linear-gradient(180deg,#f0f0f0,#fff); display: flex; align-items: center; justify-content: center; color: #787878; font-size: 18px; }
+
+  :root {
+    --c-purple: #3F42E5;        /* KT&G 시그니처 */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* ============================================================
+     SHARED: reveal 애니메이션 패턴 (라이브 측정값 그대로)
+     ============================================================ */
+  .reveal-item {
+    opacity: 0;
+    transform: translateY(80px);   /* 라이브 실측: 80px */
+    transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+    will-change: opacity, transform;
+  }
+  .reveal-item.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Stagger: 카드별 transition-delay 150ms */
+  .reveal-item[data-delay="0"]   { transition-delay: 0s; }
+  .reveal-item[data-delay="150"] { transition-delay: 0.15s; }
+  .reveal-item[data-delay="300"] { transition-delay: 0.30s; }
+  .reveal-item[data-delay="450"] { transition-delay: 0.45s; }
+  .reveal-item[data-delay="600"] { transition-delay: 0.60s; }
+  .reveal-item[data-delay="750"] { transition-delay: 0.75s; }
+
+  /* ============================================================
+     PR CENTER (.news) — Latest News 섹션
+     ============================================================ */
+  .news {
+    padding: 7.5rem max(3rem, 4.2708vw);
+    background: #fff;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .news__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #000;
+    margin: 0 0 2rem;
+    letter-spacing: -0.02em;
+  }
+  .news__divider { border-top: 1px solid rgba(0,0,0,0.1); margin: 2rem 0; }
+  .news__grid {
+    display: grid;
+    grid-template-columns: minmax(280px, 360px) minmax(280px, 1fr) minmax(360px, 1.2fr);
+    gap: 32px 48px;
+    align-items: start;
+  }
+
+  /* Featured card (왼쪽 large) */
+  .news__featured { cursor: pointer; }
+  .news__featured-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #000;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.5rem;
+  }
+  .news__featured-desc {
+    font-size: 0.875rem;
+    color: #787878;
+    line-height: 1.5;
+    margin: 0 0 2rem;
+  }
+  .news__featured-date {
+    font-size: 0.875rem;
+    color: #787878;
+  }
+
+  /* Center poster image */
+  .news__poster {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+    aspect-ratio: 4 / 5;
+    background: linear-gradient(160deg,#1a4ad9 0%,#1a4ad9 35%,#f5a623 100%);
+  }
+  .news__poster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+    display: block;
+  }
+  .news__poster:hover .news__poster-img {
+    transform: scale(1.05);    /* main-news hover scale */
+  }
+
+  /* List items (오른쪽 column) */
+  .news__list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .news__list-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    padding: 1.25rem 1rem;
+    background: rgba(0,0,0,0.02);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    align-items: center;
+  }
+  .news__list-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .news__list-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #000;
+    line-height: 1.4;
+  }
+  .news__list-date {
+    font-size: 0.8125rem;
+    color: #787878;
+  }
+  .news__list-button {
+    width: 1.25rem;          /* 기본 20px (hover시 32px로) */
+    height: 1.25rem;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.1);
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    overflow: hidden;
+    position: relative;
+  }
+  .news__list-button svg { width: 12px; height: 12px; transition: transform 0.3s; }
+  .news__list-item:hover .news__list-button {
+    width: 2rem;             /* hover시 32px */
+    height: 2rem;
+    background-color: var(--c-purple);    /* #3F42E5 */
+    color: #fff;
+    opacity: 1;
+  }
+  .news__list-item:hover .news__list-button svg {
+    transform: translateX(2px);
+  }
+
+  /* ============================================================
+     BUSINESS (.with) — Business/Career 2-card 섹션
+     ============================================================ */
+  .with {
+    padding: 7.5rem max(3rem, 4.2708vw);
+    background: #fff;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .with__heading {
+    margin-bottom: 4rem;
+  }
+  .with__eyebrow {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #000;
+    margin: 0 0 1.5rem;
+    letter-spacing: 0.02em;
+  }
+  .with__h {
+    font-size: 4rem;
+    font-weight: 600;
+    color: #000;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    margin: 0;
+  }
+  .with__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .with__item {
+    cursor: pointer;
+    /* with__item 자체는 opacity:1 — 컨테이너 col이 reveal-item */
+  }
+  .with__item-title {
+    font-size: 5.5rem;
+    font-weight: 600;
+    color: #000;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin: 0 0 1.5rem;
+  }
+  .with__item-desc {
+    font-size: 1.25rem;
+    color: #000;
+    line-height: 1.5;
+    margin: 0 0 1.5rem;
+  }
+  .with__item-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #000;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 2.5rem;
+  }
+  .with__item-cta-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s var(--ease-out);
+    font-size: 16px;
+  }
+  .with__item:hover .with__item-cta-icon {
+    transform: translateX(6px) rotate(-12deg);
+  }
+
+  .with__item-image-wrap {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+  .with__item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;    /* 라이브 실측: 0.3s ease-in-out */
+    background-size: cover;
+    background-position: center;
+  }
+  .with__item:hover .with__item-image {
+    transform: scale(1.1);   /* 라이브 측정값: 1.1 */
+  }
+
+  @media (max-width: 1024px) {
+    .news__grid { grid-template-columns: 1fr; gap: 48px; }
+    .with__h { font-size: 2.25rem; }
+    .with__grid { grid-template-columns: 1fr; gap: 48px; }
+    .with__item-title { font-size: 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-spacer">↑ 위에서 스크롤 다운 (트리거 검증용 빈 영역) ↓</div>
+
+<!-- ============================================================ -->
+<!-- PR CENTER (.news) — Latest News 섹션                         -->
+<!-- ============================================================ -->
+<section class="news" id="newsSection">
+  <h2 class="news__title reveal-item" data-delay="0">Latest News</h2>
+  <div class="news__divider"></div>
+  <div class="news__grid">
+    <!-- Featured (큰 텍스트) -->
+    <article class="news__featured reveal-item" data-delay="150">
+      <h3 class="news__featured-title">KT&amp;G 상상마당, '제18회 대단한 단편영화제' 출품작 공모</h3>
+      <p class="news__featured-desc">우수 단편영화 발굴 및 제작 지원…3개 부문 오는 6월 9일까지 동시 모집</p>
+      <div class="news__featured-date">2026. 05. 06</div>
+    </article>
+
+    <!-- Featured poster image -->
+    <div class="news__poster reveal-item" data-delay="300">
+      <div class="news__poster-img" style="background:linear-gradient(160deg,#1a4ad9 0%,#1a4ad9 35%,#f5a623 100%); width:100%; height:100%;"></div>
+    </div>
+
+    <!-- List items column -->
+    <div class="news__list">
+      <article class="news__list-item reveal-item" data-delay="450">
+        <div class="news__list-text">
+          <div class="news__list-title">KT&amp;G, '다우존스 지속가능경영 월드 지수(DJBIC World)' 2년 연속 편입</div>
+          <div class="news__list-date">2026. 05. 04</div>
+        </div>
+        <div class="news__list-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </article>
+      <article class="news__list-item reveal-item" data-delay="600">
+        <div class="news__list-text">
+          <div class="news__list-title">KT&amp;G-대구지방환경청-영양군청-국립생태원, 습지 보전 위한 MOU 체결</div>
+          <div class="news__list-date">2026. 04. 29</div>
+        </div>
+        <div class="news__list-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </article>
+      <article class="news__list-item reveal-item" data-delay="750">
+        <div class="news__list-text">
+          <div class="news__list-title">KT&amp;G장학재단, '문화예술 장학사업' 발레 부문 장학증서 전달</div>
+          <div class="news__list-date">2026. 04. 28</div>
+        </div>
+        <div class="news__list-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- BUSINESS (.with) — Business / Career 2-card 섹션              -->
+<!-- ============================================================ -->
+<section class="with" id="withSection">
+  <div class="with__heading reveal-item" data-delay="0">
+    <div class="with__eyebrow">With KT&amp;G</div>
+    <h2 class="with__h">함께 그리는 KT&amp;G의 미래</h2>
+  </div>
+  <div class="with__grid">
+    <article class="with__item reveal-item" data-delay="150">
+      <h3 class="with__item-title">Business</h3>
+      <p class="with__item-desc">KT&amp;G의 주요 핵심사업을 소개합니다</p>
+      <button class="with__item-cta">주요사업 바로가기 <span class="with__item-cta-icon">→</span></button>
+      <div class="with__item-image-wrap">
+        <div class="with__item-image" style="background-image:url('https://www.ktng.com/images/main/with-1.webp')"></div>
+      </div>
+    </article>
+    <article class="with__item reveal-item" data-delay="300">
+      <h3 class="with__item-title">Career</h3>
+      <p class="with__item-desc">KT&amp;G와 함께 성장할 글로벌 인재를 찾습니다</p>
+      <button class="with__item-cta">인재채용 바로가기 <span class="with__item-cta-icon">→</span></button>
+      <div class="with__item-image-wrap">
+        <div class="with__item-image" style="background-image:url('https://www.ktng.com/images/main/with-2.webp')"></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="demo-spacer">↓ 하단 빈 영역</div>
+
+<script>
+(function() {
+  'use strict';
+  // ============================================================
+  // IntersectionObserver — 라이브 측정 기반 threshold 0.3
+  // (라이브: section visiblePct ~50-60%에서 트리거 → 첫 카드만 진입 시점)
+  // ============================================================
+  var sectionObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        // 섹션 진입 시 → 섹션 내 모든 reveal-item에 is-revealed 추가
+        // 각 item의 transition-delay로 stagger 효과
+        var items = entry.target.querySelectorAll('.reveal-item');
+        items.forEach(function(it) {
+          it.classList.add('is-revealed');
+        });
+        sectionObserver.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.3,            // section 30% 가시화 시 트리거 (실측 60% 매칭)
+    rootMargin: '0px 0px -10% 0px'   // 화면 하단 10% 일찍 트리거
+  });
+
+  document.querySelectorAll('#newsSection, #withSection').forEach(function(sec) {
+    sectionObserver.observe(sec);
+  });
+
+  // ============================================================
+  // 자가 측정 헬퍼 — 콘솔 검증:
+  //   window.__measureReveal('newsSection')
+  //   window.__measureReveal('withSection')
+  // ============================================================
+  window.__measureReveal = function(sectionId) {
+    return new Promise(function(resolve) {
+      var sec = document.getElementById(sectionId);
+      var items = sec.querySelectorAll('.reveal-item');
+      items.forEach(function(it) {
+        it.classList.remove('is-revealed');
+        void it.offsetWidth;
+      });
+      var samples = [];
+      var t0 = performance.now();
+      var iv = setInterval(function() {
+        samples.push({
+          t: Math.round(performance.now() - t0),
+          ops: Array.from(items).map(function(it) {
+            return Math.round(parseFloat(getComputedStyle(it).opacity) * 100);
+          }),
+          trs: Array.from(items).map(function(it) {
+            var m = getComputedStyle(it).transform.match(/-?\d+(?:\.\d+)?\)$/);
+            return m ? Math.round(parseFloat(m[0])) : 0;
+          })
+        });
+      }, 16);
+      setTimeout(function() {
+        items.forEach(function(it) { it.classList.add('is-revealed'); });
+      }, 50);
+      setTimeout(function() {
+        clearInterval(iv);
+        resolve(samples);
+      }, 2500);
+    });
+  };
+
+  // 진단 스펙
+  window.__bizPrSpec = {
+    newsTop: document.getElementById('newsSection').getBoundingClientRect().top + scrollY,
+    withTop: document.getElementById('withSection').getBoundingClientRect().top + scrollY,
+    cards: {
+      newsItems: document.querySelectorAll('#newsSection .reveal-item').length,
+      withItems: document.querySelectorAll('#withSection .reveal-item').length
+    },
+    spec: {
+      threshold: 0.3,
+      staggerMs: 150,
+      durationMs: 900,
+      translateYPx: 80,
+      easing: 'ease-out',
+      hoverScale: { news_card: 1.1, main_news: 1.05, with_item: 1.1 },
+      hoverDuration: '0.3s ease-in-out'
+    }
+  };
+})();
+</script>
+</body>
+</html>

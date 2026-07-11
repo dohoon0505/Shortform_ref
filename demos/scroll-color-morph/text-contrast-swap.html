@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05. 텍스트 컨트라스트 스왑 — Scroll Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #000; color: #fff;
+      font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      will-change: background-color;
+    }
+    .demo-controls {
+      position: fixed; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      z-index: 20;
+    }
+    .demo-reset {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.72);
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 8px 14px; cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: color 160ms, background 160ms, border-color 160ms;
+    }
+    .demo-reset:hover {
+      color: #fff; background: rgba(0,0,0,0.55); border-color: rgba(255,255,255,0.32);
+    }
+    .demo-label {
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.14em; text-transform: uppercase;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    }
+    .demo-hint {
+      position: fixed; right: 16px; bottom: 24px;
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      z-index: 20;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      animation: demo-hint-bounce 1.6s ease-in-out infinite;
+    }
+    @keyframes demo-hint-bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.45; }
+      50%       { transform: translateY(4px); opacity: 0.8; }
+    }
+    .demo-progress {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 2px; background: rgba(127,127,127,0.18);
+      z-index: 20;
+    }
+    .demo-progress > div {
+      height: 100%; background: #fff; width: 0;
+      mix-blend-mode: difference;
+      transition: width 60ms linear;
+    }
+    .scroll-track { min-height: 240vh; position: relative; }
+    .sticky-stage {
+      position: sticky; top: 0;
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 8vw 60px;
+      overflow: hidden;
+    }
+    /* 패턴별 CSS */
+    .lum-wrap { text-align: center; max-width: 780px; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    .lum-hud { font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.18em; padding: 8px 14px; border: 1px solid currentColor; border-radius: 999px; opacity: 0.75; color: #fff; }
+    .lum-head { font: 800 56px/1.2 "Pretendard Variable","Pretendard",system-ui; letter-spacing: -0.02em; margin: 0; color: #fff; }
+    .lum-sub { font: 400 18px/1.7 "Pretendard Variable","Pretendard",system-ui; opacity: 0.7; margin: 0; color: #fff; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">05 · 텍스트 컨트라스트 스왑</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <div class="lum-wrap">
+        <span class="lum-hud">LUM 0.04 · TEXT #FFF</span>
+        <h1 class="lum-head">배경이 밝아지면<br>글자가 어두워집니다.</h1>
+        <p class="lum-sub">상대 휘도(luminance)를 계산해 텍스트가 자동으로 반대 방향으로 보간됩니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var track = document.querySelector(".scroll-track");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+
+      // 공용 색 보간 헬퍼
+      function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+      function lerp(a, b, t){ return a + (b - a) * t; }
+      function mixArr(a, b, t){
+        return [Math.round(lerp(a[0], b[0], t)), Math.round(lerp(a[1], b[1], t)), Math.round(lerp(a[2], b[2], t))];
+      }
+      function lerpRGB(a, b, t){
+        var c = mixArr(a, b, t);
+        return "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+      }
+      function pick3Arr(stops, p){
+        var seg = p < 0.5 ? 0 : 1;
+        var t = clamp01(seg === 0 ? p / 0.5 : (p - 0.5) / 0.5);
+        return mixArr(stops[seg], stops[seg + 1], t);
+      }
+      function pick3(stops, p){
+        var c = pick3Arr(stops, p);
+        return "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+      }
+
+      // 패턴별 init + applyReveal 정의
+      var headEl = document.querySelector(".lum-head");
+      var subEl = document.querySelector(".lum-sub");
+      var hudEl = document.querySelector(".lum-hud");
+      var BG = [[8,9,10],[244,196,72],[18,22,56]];
+      function applyReveal(p){
+        var c = pick3Arr(BG, p);
+        document.body.style.backgroundColor = "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+        var lum = (0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]) / 255;
+        var t = clamp01((lum - 0.35) / 0.2);
+        var fg = lerpRGB([255,255,255], [17,17,17], t);
+        headEl.style.color = fg;
+        subEl.style.color = fg;
+        hudEl.style.color = fg;
+        hudEl.textContent = "LUM " + lum.toFixed(2) + " · TEXT " + (t > 0.5 ? "#111" : "#FFF");
+      }
+
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

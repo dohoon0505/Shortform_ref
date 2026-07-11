@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>08. 아웃라인·필 교차 밴드 — Infinite Marquee Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; animation: demo-loop 28s linear infinite; }
+    @keyframes demo-loop { from { width: 0; } to { width: 100%; } }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .of-wrap { width: 100%; overflow: hidden; padding: 28px 0; text-align: center; }
+    .of-band { overflow: hidden; width: 110vw; margin-left: -5vw; }
+    .of-row2 { transform: rotate(-2deg); margin-top: 12px; }
+    .of-track { display: flex; width: max-content; animation: of-scroll 28s linear infinite; will-change: transform; }
+    .of-row2 .of-track { animation-direction: reverse; animation-duration: 34s; }
+    .of-group { display: flex; align-items: center; flex: 0 0 auto; }
+    .of-group span { font: 900 clamp(34px,6vw,76px)/1.2 "Pretendard Variable",sans-serif; white-space: nowrap; padding: 0 26px; letter-spacing: 0.01em; }
+    .of-fill { color: #fff; }
+    .of-line { color: transparent; -webkit-text-stroke: 2px rgba(255,255,255,0.65); }
+    @keyframes of-scroll { to { transform: translateX(-50%); } }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 24px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">08 · 아웃라인·필 교차 밴드</span>
+  </div>
+  <div class="demo-hint">무한 루프 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="of-wrap">
+      <p class="cap">OUTLINE × FILL — CROSS BAND</p>
+      <div class="of-band of-row1">
+        <div class="of-track js-anim">
+          <div class="of-group">
+            <span class="of-fill">모션이 곧 브랜드</span>
+            <span class="of-line">INTERACTION LAB</span>
+            <span class="of-fill">디자인을 움직임으로</span>
+            <span class="of-line">MOTION FIRST</span>
+          </div>
+        </div>
+      </div>
+      <div class="of-band of-row2">
+        <div class="of-track js-anim">
+          <div class="of-group">
+            <span class="of-line">인터랙션 랩</span>
+            <span class="of-fill">MOTION FIRST</span>
+            <span class="of-line">멈추지 않는 흐름</span>
+            <span class="of-fill">INTERACTION LAB</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // ↻ 다시 보기 = CSS 애니메이션 재시작 (animation:none → reflow → 재부여)
+      function restartCssAnims() {
+        var els = document.querySelectorAll(".js-anim, .demo-progress > div");
+        Array.prototype.forEach.call(els, function(el) {
+          el.style.animation = "none";
+          void el.offsetWidth; // reflow 강제
+          el.style.animation = "";
+        });
+      }
+      window.__reset = restartCssAnims;
+      Array.prototype.forEach.call(document.querySelectorAll(".of-track"), function(track) {
+        var clone = track.querySelector(".of-group").cloneNode(true);
+        clone.setAttribute("aria-hidden", "true");
+        track.appendChild(clone);
+      });
+    })();
+  </script>
+</body>
+</html>

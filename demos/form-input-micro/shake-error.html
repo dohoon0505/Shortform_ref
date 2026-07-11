@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03. 에러 셰이크 — Form Input Micro Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+    .demo-reset:hover { background: rgba(255,255,255,0.16); color: #fff; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 64px 20px 48px;
+    }
+    .form-card {
+      width: 100%; max-width: 380px;
+      background: #0d0d0d; border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 18px; padding: 32px 28px 28px;
+      box-shadow: 0 24px 60px -30px rgba(0,0,0,0.85);
+    }
+    .form-title { margin: 0 0 6px; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+    .form-desc { margin: 0 0 24px; font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.45); }
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: rgba(255,255,255,0.55); }
+    .text-input {
+      width: 100%; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.16); border-radius: 10px;
+      padding: 13px 14px; font: 500 15px/1.4 "Pretendard Variable","Pretendard",sans-serif;
+      color: #fff; outline: none; caret-color: #3b82f6;
+      transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+    }
+    .text-input::placeholder { color: rgba(255,255,255,0.28); }
+    .text-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.18); }
+    
+    .se-field.is-error .se-input { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.14); animation: se-shake 0.4s cubic-bezier(0.36,0.07,0.19,0.97) both; }
+    .se-field.is-valid .se-input { border-color: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.14); }
+    @keyframes se-shake { 10%,90% { transform: translateX(-1px); } 20%,80% { transform: translateX(2px); } 30%,50%,70% { transform: translateX(-5px); } 40%,60% { transform: translateX(5px); } }
+    .se-error { max-height: 0; opacity: 0; overflow: hidden; margin: 0; font-size: 12px; line-height: 1.5; color: #f87171; transform: translateY(-4px); transition: max-height 0.22s ease-out, opacity 0.22s ease-out, transform 0.22s ease-out, margin-top 0.22s ease-out; }
+    .se-field.is-error .se-error { max-height: 40px; opacity: 1; transform: translateY(0); margin-top: 8px; }
+    .se-submit { width: 100%; margin-top: 4px; padding: 13px 0; border: 0; border-radius: 10px; background: #3b82f6; color: #fff; font: 600 15px/1 "Pretendard Variable","Pretendard",sans-serif; cursor: pointer; transition: background 0.2s ease-out, transform 0.15s ease-out; }
+    .se-submit:hover { background: #2563eb; }
+    .se-submit:active { transform: scale(0.985); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">03 · 에러 셰이크</span>
+  </div>
+  <div class="demo-hint">아무 값이나 넣고 검증해 보세요</div>
+
+  <main class="stage">
+    <div class="form-card">
+      <h2 class="form-title">이메일 검증</h2>
+      <p class="form-desc">잘못된 형식을 입력하고 검증 버튼을 눌러 보세요. 필드가 좌우로 흔들리며 에러 메시지가 내려옵니다.</p>
+      <div class="field se-field" id="se-field">
+        <label class="field-label" for="se-email">이메일 주소</label>
+        <input class="text-input se-input" id="se-email" type="text" placeholder="you@example.com" autocomplete="off">
+        <p class="se-error" id="se-error" role="alert">올바른 이메일 형식이 아닙니다. @와 도메인을 확인해 주세요.</p>
+      </div>
+      <button class="se-submit" id="se-submit" type="button">검증하기</button>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var field = document.getElementById("se-field");
+      var input = document.getElementById("se-email");
+      var btn = document.getElementById("se-submit");
+      var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      btn.addEventListener("click", function(){
+        var ok = EMAIL.test(input.value.trim());
+        field.classList.remove("is-error");
+        field.classList.remove("is-valid");
+        if (ok) {
+          field.classList.add("is-valid");
+          input.setAttribute("aria-invalid", "false");
+        } else {
+          void field.offsetWidth;
+          field.classList.add("is-error");
+          input.setAttribute("aria-invalid", "true");
+          input.focus();
+        }
+      });
+      input.addEventListener("input", function(){
+        field.classList.remove("is-error");
+        field.classList.remove("is-valid");
+        input.removeAttribute("aria-invalid");
+      });
+      window.__reset = function(){
+        document.querySelectorAll("input, textarea").forEach(function(el){
+          el.value = "";
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.blur();
+        });
+        if (window.__resetDemo) window.__resetDemo();
+      };
+    })();
+  </script>
+</body>
+</html>

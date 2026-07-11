@@ -1,0 +1,1383 @@
+{
+  "id": "button-hover",
+  "title": "버튼 hover",
+  "type": "category",
+  "url": "https://framer.com/m/Slide-In-Button-bb0t.js@AkIIpTKoP29X3k3M6qp2",
+  "date": "2026-05-28",
+  "summary": "Framer Slide-In Button 컴포넌트를 참고로, 버튼에 마우스를 올렸을 때 시각적으로 반응하는 10가지 hover 인터랙션 패턴. 배경 채우기·텍스트 슬라이드·광택 스윕·스케일 스프링·배경 스와이프·아웃라인 필·아이콘 리빌·리플·글로우·마그네틱 등 CSS+JS 기반의 실용적 변형을 비교 카탈로그로 정리.",
+  "patternCount": 10,
+  "sections": {
+    "overview": {
+      "title": "00. 카테고리 개요",
+      "blocks": [
+        {
+          "type": "heading",
+          "value": "버튼 hover — Framer Slide-In Button 기반 10종 패턴"
+        },
+        {
+          "type": "text",
+          "value": "Framer Slide-In Button 컴포넌트를 참고로, 버튼에 마우스를 올렸을 때 시각적으로 반응하는 10가지 hover 인터랙션 패턴. 배경 채우기·텍스트 슬라이드·광택 스윕·스케일 스프링·배경 스와이프·아웃라인 필·아이콘 리빌·리플·글로우·마그네틱 등 CSS+JS 기반의 실용적 변형을 비교 카탈로그로 정리."
+        },
+        {
+          "type": "heading",
+          "value": "10 패턴 인덱스"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "01. 슬라이드 인 필 (Framer 시그니처)",
+              "tag": "CSS only (실제 요소 — pseudo-element 대신)",
+              "desc": "Framer Slide-In Button 컴포넌트 재현. hover 시 작은 원이 하단 중앙에서 scale로 팽창하여 버튼 전체를 채우고, hover 해제 시 서서히 줄어들어 사라짐."
+            },
+            {
+              "label": "02. 텍스트 슬라이드",
+              "tag": "CSS only",
+              "desc": "hover 시 텍스트가 위로 슬라이드하며 아래에서 동일 텍스트(다른 색)가 올라오는 swap 효과."
+            },
+            {
+              "label": "03. 샤인 스윕",
+              "tag": "CSS only (::after pseudo-element)",
+              "desc": "hover 시 대각선 광택(gradient)이 버튼을 가로질러 지나가는 프리미엄 효과."
+            },
+            {
+              "label": "04. 스케일 스프링",
+              "tag": "CSS only",
+              "desc": "hover 시 버튼이 spring bounce로 약간 커지고(1.06x) 그림자가 깊어지는 입체 효과."
+            },
+            {
+              "label": "05. 배경 스와이프",
+              "tag": "CSS only (::before)",
+              "desc": "hover 시 배경 색상이 좌→우로 스와이프하며 채워지고 텍스트 색상이 전환."
+            },
+            {
+              "label": "06. 아웃라인 필",
+              "tag": "CSS only",
+              "desc": "hover 시 center에서 scale(0)→scale(1)로 배경이 확장 — 아웃라인 → 솔리드 전환."
+            },
+            {
+              "label": "07. 아이콘 리빌",
+              "tag": "CSS only",
+              "desc": "hover 시 화살표 아이콘이 우측에서 슬라이드 인, 텍스트는 좌측으로 이동."
+            },
+            {
+              "label": "08. 리플",
+              "tag": "Vanilla JS (커서 위치 계산)",
+              "desc": "hover 시 커서 위치에서 원형 파동이 퍼져나가는 Material Design 스타일 리플."
+            },
+            {
+              "label": "09. 글로우",
+              "tag": "CSS only",
+              "desc": "hover 시 네온 보더 글로우 + 외부 그림자 — 어두운 배경에서 빛나는 버튼."
+            },
+            {
+              "label": "10. 마그네틱",
+              "tag": "Vanilla JS (mousemove 계산)",
+              "desc": "hover 영역 내에서 버튼이 커서를 따라 미세하게 이동 — 자석처럼 끌리는 인터랙션."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "공통 디자인 토큰"
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "폰트",
+              "value": "Pretendard Variable 600"
+            },
+            {
+              "label": "버튼 크기",
+              "value": "primary 18px 36px / outline 14px 28px"
+            },
+            {
+              "label": "border-radius",
+              "value": "999px (pill) 또는 39px (Framer 참고)"
+            },
+            {
+              "label": "배경",
+              "value": "#0a0a0a (다크)"
+            },
+            {
+              "label": "primary 색상",
+              "value": "#fff bg + #000 text (hover 시 변형)"
+            },
+            {
+              "label": "outline 색상",
+              "value": "transparent bg + rgba(255,255,255,0.25) border"
+            },
+            {
+              "label": "이징 참고",
+              "value": "spring 근사 cubic-bezier(0.34,1.56,0.64,1)"
+            },
+            {
+              "label": "Framer 참고",
+              "value": "Slide-In Button (spring 0.5s bounce 0.1)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "읽기 가이드"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "라이브 데모",
+              "tag": "IFRAME",
+              "desc": "demos/button-hover/{pattern}.html — 버튼 hover 인터랙션"
+            },
+            {
+              "label": "작동 원리",
+              "tag": "HOW",
+              "desc": ":hover → CSS transition / JS mousemove 매핑"
+            },
+            {
+              "label": "정량 메타",
+              "tag": "KV",
+              "desc": "의존성 / 트리거 / 이징 / duration / 핵심 메커니즘"
+            },
+            {
+              "label": "코드 스니펫",
+              "tag": "CODE",
+              "desc": "HTML / CSS / JS — 패턴별 핵심 코드"
+            },
+            {
+              "label": "사용 가이드",
+              "tag": "GUIDE",
+              "desc": "파라미터·주의점·모바일 fallback"
+            },
+            {
+              "label": "활용 추천",
+              "tag": "PLACES",
+              "desc": "히어로 / 랜딩 / 제품 / 포트폴리오 4건"
+            },
+            {
+              "label": "트레이드오프",
+              "tag": "NOTE",
+              "desc": "성능·접근성·권장 사용처"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "Framer Slide-In Button 컴포넌트(spring 0.5s, bounce 0.1, fill from bottom, ArrowRight icon)를 첫 번째 패턴으로 재현하고, 9가지 추가 변형을 비교 카탈로그로 정리. 모든 데모는 다크 배경(#0a0a0a) + Pretendard Variable + 한국어 라벨."
+        }
+      ]
+    },
+    "slide-in-fill": {
+      "title": "01. 슬라이드 인 필 (Framer 시그니처)",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "Framer Slide-In Button 컴포넌트 재현. hover 시 작은 원이 하단 중앙에서 scale로 팽창하여 버튼 전체를 채우고, hover 해제 시 서서히 줄어들어 사라짐."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/button-hover/slide-in-fill.html",
+          "embedHeight": 400,
+          "embedLabel": "01 · 슬라이드 인 필 (Framer 시그니처)",
+          "title": "슬라이드 인 필 (Framer 시그니처) 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "Framer Slide-In Button의 핵심 메커니즘. .btn-fill 요소(24×24 원형)가 하단 중앙(bottom:0, left:50%)에서 scale(0→12)로 팽창하여 버튼 전체를 덮음. translate(-50%,50%)로 원의 중심을 버튼 하단 가장자리에 정확히 배치. hover 해제 시 동일 transition이 역방향으로 적용되어 원이 서서히 줄어들며 사라짐. cubic-bezier(0.34,1.56,0.64,1)이 spring bounce를 CSS로 근사. overflow:hidden이 필수."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "CSS only (실제 요소 — pseudo-element 대신)"
+            },
+            {
+              "label": "트리거",
+              "value": ":hover → scale(0→12) 원형 팽창"
+            },
+            {
+              "label": "이징",
+              "value": "cubic-bezier(0.34,1.56,0.64,1) — spring 근사"
+            },
+            {
+              "label": "duration",
+              "value": "0.5s (scale) + 0.3s (color)"
+            },
+            {
+              "label": "핵심",
+              "value": "24px 원형 → scale(12) 팽창 + overflow:hidden"
+            },
+            {
+              "label": "참고",
+              "value": "Framer Slide-In Button (spring 0.5s bounce 0.1)"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<a class=\"btn btn-primary\" href=\"#\">\n  <span class=\"btn-fill\"></span>\n  <span class=\"btn-label\">시작하기</span>\n  <span class=\"btn-icon\">→</span>\n</a>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".btn { position: relative; overflow: hidden; border-radius: 39px; }\n.btn-fill { position: absolute; bottom: 0; left: 50%;\n  width: 24px; height: 24px; border-radius: 50%;\n  background: #0055ff;\n  transform: translate(-50%, 50%) scale(0);\n  transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1); }\n.btn:hover .btn-fill { transform: translate(-50%, 50%) scale(12); }\n.btn:hover .btn-label { color: #fff; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "// CSS only — JS 불필요\n// spring 이징: cubic-bezier(0.34, 1.56, 0.64, 1)\n// hover 해제 시 동일 transition으로 자연스럽게 축소"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "scale 값은 버튼 크기에 따라 조정 — 버튼 대각선 길이 ÷ 원 반지름(12px) 이상이면 완전히 덮임. pill 버튼(border-radius 39px+)에서 가장 자연스러움. hover out 시 transition이 자동 역재생되므로 별도 처리 불필요."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "SaaS 메인 CTA — 원형 팽창의 강한 시각적 피드백으로 클릭 유도"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "가격 페이지 CTA — pill 형태 + 색상 전환"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "제품 카드 하단 CTA — 카드 hover와 연계"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "Contact CTA — 포인트 컬러 원형으로 채우기"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — overflow:hidden 필수. scale 값이 버튼 크기에 비례해야 하므로 버튼 크기가 크게 달라지면 scale 재조정 필요."
+        }
+      ]
+    },
+    "text-slide": {
+      "title": "02. 텍스트 슬라이드",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "hover 시 텍스트가 위로 슬라이드하며 아래에서 동일 텍스트(다른 색)가 올라오는 swap 효과."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/button-hover/text-slide.html",
+          "embedHeight": 400,
+          "embedLabel": "02 · 텍스트 슬라이드",
+          "title": "텍스트 슬라이드 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "두 개의 동일 텍스트를 세로로 쌓고 overflow:hidden으로 첫 번째만 표시. hover 시 둘 다 translateY(-100%)로 이동하여 두 번째 텍스트(다른 색)가 드러남. height:1em이 정확한 한 줄 높이를 보장."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "CSS only"
+            },
+            {
+              "label": "트리거",
+              "value": ":hover → translateY(-100%)"
+            },
+            {
+              "label": "이징",
+              "value": "cubic-bezier(0.2,0,0,1)"
+            },
+            {
+              "label": "duration",
+              "value": "0.35s"
+            },
+            {
+              "label": "핵심",
+              "value": "overflow:hidden + height:1em + 2중 텍스트"
+            },
+            {
+              "label": "참고",
+              "value": "Awwwards / Locomotive / Studio Freight"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<a class=\"btn\" href=\"#\">\n  <span class=\"btn-text-wrap\">\n    <span class=\"btn-t\">시작하기</span>\n    <span class=\"btn-t btn-t-hover\">시작하기</span>\n  </span>\n</a>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".btn-text-wrap { display: inline-flex; flex-direction: column;\n  overflow: hidden; height: 1em; line-height: 1; }\n.btn-t { display: block;\n  transition: transform 0.35s cubic-bezier(0.2,0,0,1); }\n.btn-t-hover { color: #3b82f6; }\n.btn:hover .btn-t { transform: translateY(-100%); }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "// CSS only — JS 불필요"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "텍스트가 동일해야 자연스러움. hover 텍스트 색상을 브랜드 컬러로 두면 포인트. height:1em이 핵심 — font-size나 line-height가 달라지면 어긋남."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "CTA 버튼 — 텍스트 전환으로 시각 피드백"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "네비게이션 링크 — 텍스트 슬라이드 인터랙션"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "인라인 텍스트 링크 — 미니멀 호버"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "프로젝트 링크 — 타이포그래피 강조"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 텍스트를 두 번 반복해야 하므로 마크업이 늘어남. 긴 텍스트에서는 높이 계산이 어긋날 수 있음."
+        }
+      ]
+    },
+    "shine-sweep": {
+      "title": "03. 샤인 스윕",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "hover 시 대각선 광택(gradient)이 버튼을 가로질러 지나가는 프리미엄 효과."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/button-hover/shine-sweep.html",
+          "embedHeight": 400,
+          "embedLabel": "03 · 샤인 스윕",
+          "title": "샤인 스윕 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "::after pseudo-element에 대각선 gradient(투명→반투명 흰색→투명)를 두고, hover 시 left -80%→130%로 이동. overflow:hidden이 필수. 버튼 배경 위에 광택이 지나가는 프리미엄 느낌."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "CSS only (::after pseudo-element)"
+            },
+            {
+              "label": "트리거",
+              "value": ":hover → left 이동"
+            },
+            {
+              "label": "이징",
+              "value": "ease (0.6s)"
+            },
+            {
+              "label": "gradient",
+              "value": "120deg 대각선 (transparent → white 35% → transparent)"
+            },
+            {
+              "label": "핵심",
+              "value": "overflow:hidden + pseudo-element left 이동"
+            },
+            {
+              "label": "참고",
+              "value": "Apple / Tesla 프리미엄 CTA"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<a class=\"btn btn-primary\" href=\"#\">\n  <span class=\"btn-label\">시작하기</span>\n  <span class=\"btn-icon\">→</span>\n</a>\n<a class=\"btn btn-outline\" href=\"#\">\n  <span class=\"btn-label\">자세히 보기</span>\n</a>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".btn { position: relative; overflow: hidden; }\n.btn::after { content: \"\"; position: absolute;\n  top: 0; left: -80%; width: 60%; height: 100%;\n  background: linear-gradient(120deg, transparent,\n    rgba(255,255,255,0.35), transparent);\n  transition: left 0.6s ease; }\n.btn:hover::after { left: 130%; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "// CSS only — ::after pseudo-element"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "gradient 각도를 110~130deg로 두면 자연스러운 대각선. 반투명도 0.2~0.4가 적정 — 너무 높으면 텍스트 가독성 저하. 어두운 버튼에서는 흰색 gradient, 밝은 버튼에서도 동일."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "프리미엄 브랜드 CTA — 고급스러운 광택"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "제품 구매 버튼 — 시선 유도"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "하이라이트 카드 CTA — 프리미엄 강조"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "연락하기 CTA — 세련된 인터랙션"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — hover out 시 반대로 돌아가지 않고 사라짐 — transition이 한 방향. 반복 호버 시 약간의 지연."
+        }
+      ]
+    },
+    "scale-spring": {
+      "title": "04. 스케일 스프링",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "hover 시 버튼이 spring bounce로 약간 커지고(1.06x) 그림자가 깊어지는 입체 효과."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/button-hover/scale-spring.html",
+          "embedHeight": 400,
+          "embedLabel": "04 · 스케일 스프링",
+          "title": "스케일 스프링 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "hover 시 scale(1.06)으로 확대 + box-shadow 깊이 증가. cubic-bezier(0.34,1.56,0.64,1)이 spring overshoot를 근사하여 튕기는 느낌. :active에서 scale(0.98)로 눌림 피드백."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "CSS only"
+            },
+            {
+              "label": "트리거",
+              "value": ":hover → scale + shadow"
+            },
+            {
+              "label": "이징",
+              "value": "cubic-bezier(0.34,1.56,0.64,1) — spring"
+            },
+            {
+              "label": "duration",
+              "value": "0.5s (scale) + 0.3s (shadow)"
+            },
+            {
+              "label": "핵심",
+              "value": "scale 1.04~1.08 + shadow depth 증가"
+            },
+            {
+              "label": "참고",
+              "value": "iOS 버튼 / Stripe 인터랙션"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<a class=\"btn btn-primary\" href=\"#\">\n  <span class=\"btn-label\">시작하기</span>\n  <span class=\"btn-icon\">→</span>\n</a>\n<a class=\"btn btn-outline\" href=\"#\">\n  <span class=\"btn-label\">자세히 보기</span>\n</a>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".btn { transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1),\n  box-shadow 0.3s ease; }\n.btn:hover { transform: scale(1.06);\n  box-shadow: 0 10px 40px -10px rgba(255,255,255,0.25); }\n.btn:active { transform: scale(0.98); transition-duration: 0.1s; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "// CSS only — spring 이징으로 bounce 근사"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "scale 1.04~1.08이 적정. 1.1 이상은 과장됨. :active 축소(0.96~0.98)를 추가하면 클릭 피드백 완성. overflow:hidden 없이 사용 가능."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "메인 CTA — 자연스러운 입체감"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "카드 CTA — 카드 자체와 별개로 버튼만 반응"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "장바구니 추가 — 터치 피드백 대체"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "프로젝트 보기 — 간결한 반응"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 주변 요소 배치가 흐트러질 수 있음 — will-change:transform 또는 고정 크기 컨테이너 권장."
+        }
+      ]
+    },
+    "bg-swipe": {
+      "title": "05. 배경 스와이프",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "hover 시 배경 색상이 좌→우로 스와이프하며 채워지고 텍스트 색상이 전환."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/button-hover/bg-swipe.html",
+          "embedHeight": 400,
+          "embedLabel": "05 · 배경 스와이프",
+          "title": "배경 스와이프 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "::before pseudo-element가 width 0→100%로 좌→우 확장. border-radius:inherit으로 버튼 곡률 유지. 텍스트는 z-index:1로 위에 유지되고 색상만 transition."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "CSS only (::before)"
+            },
+            {
+              "label": "트리거",
+              "value": ":hover → width 0→100%"
+            },
+            {
+              "label": "이징",
+              "value": "cubic-bezier(0.2,0,0,1)"
+            },
+            {
+              "label": "duration",
+              "value": "0.4s"
+            },
+            {
+              "label": "핵심",
+              "value": "::before width + border-radius:inherit"
+            },
+            {
+              "label": "참고",
+              "value": "클래식 버튼 hover 패턴"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<a class=\"btn btn-primary\" href=\"#\">\n  <span class=\"btn-label\">시작하기</span>\n  <span class=\"btn-icon\">→</span>\n</a>\n<a class=\"btn btn-outline\" href=\"#\">\n  <span class=\"btn-label\">자세히 보기</span>\n</a>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".btn { position: relative; overflow: hidden;\n  border: 1px solid #fff; background: transparent; }\n.btn::before { content: \"\"; position: absolute;\n  top: 0; left: 0; width: 0; height: 100%;\n  background: #fff; border-radius: inherit;\n  transition: width 0.4s cubic-bezier(0.2,0,0,1); }\n.btn:hover::before { width: 100%; }\n.btn:hover .btn-label { color: #000; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "// CSS only — ::before pseudo-element"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "가장 범용적인 hover fill. 방향을 바꾸려면 left→right 대신 right:0으로. border-radius:inherit이 핵심 — 별도 값을 주면 모서리가 어긋남."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "다크 모드 사이트의 ghost 버튼 CTA"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "섹션 구분 CTA — 깔끔한 색상 전환"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "제품 카드 버튼 — 카드 테마와 맞춤"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "프로젝트 링크 — 미니멀 인터랙션"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 한 방향(좌→우)만 자연스러움. 양방향이 필요하면 center-origin 패턴으로 변형."
+        }
+      ]
+    },
+    "outline-fill": {
+      "title": "06. 아웃라인 필",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "hover 시 center에서 scale(0)→scale(1)로 배경이 확장 — 아웃라인 → 솔리드 전환."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/button-hover/outline-fill.html",
+          "embedHeight": 400,
+          "embedLabel": "06 · 아웃라인 필",
+          "title": "아웃라인 필 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "::before가 inset:0으로 버튼 전체를 덮되 scale(0)에서 시작. hover 시 scale(1)로 중앙에서 확장. border-radius:inherit으로 곡률 유지. 아웃라인→솔리드 자연스러운 전환."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "CSS only"
+            },
+            {
+              "label": "트리거",
+              "value": ":hover → scale(0→1)"
+            },
+            {
+              "label": "이징",
+              "value": "cubic-bezier(0.2,0,0,1)"
+            },
+            {
+              "label": "duration",
+              "value": "0.4s"
+            },
+            {
+              "label": "핵심",
+              "value": "inset:0 + transform-origin:center + scale"
+            },
+            {
+              "label": "참고",
+              "value": "Vercel / Linear ghost 버튼"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<a class=\"btn btn-primary\" href=\"#\">\n  <span class=\"btn-label\">시작하기</span>\n  <span class=\"btn-icon\">→</span>\n</a>\n<a class=\"btn btn-outline\" href=\"#\">\n  <span class=\"btn-label\">자세히 보기</span>\n</a>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".btn { position: relative; overflow: hidden;\n  border: 2px solid #3b82f6; background: transparent; }\n.btn::before { content: \"\"; position: absolute; inset: 0;\n  background: #3b82f6; border-radius: inherit;\n  transform: scale(0); transform-origin: center;\n  transition: transform 0.4s cubic-bezier(0.2,0,0,1); }\n.btn:hover::before { transform: scale(1); }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "// CSS only — center origin scale"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "transform-origin을 바꾸면 확장 시작점 변경 가능 (top-left, bottom-right 등). border 색상과 fill 색상을 맞추면 자연스러움."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "보조 CTA (ghost → solid 전환)"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "문의하기 버튼 — 아웃라인 default + hover fill"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "더보기 링크 — 서브 CTA"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "이력서 다운로드 — 보조 액션"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — scale 전환이라 중간에 border와 fill 경계가 살짝 보일 수 있음. inset:-1px로 보정 가능."
+        }
+      ]
+    },
+    "icon-reveal": {
+      "title": "07. 아이콘 리빌",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "hover 시 화살표 아이콘이 우측에서 슬라이드 인, 텍스트는 좌측으로 이동."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/button-hover/icon-reveal.html",
+          "embedHeight": 400,
+          "embedLabel": "07 · 아이콘 리빌",
+          "title": "아이콘 리빌 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "아이콘의 max-width:0 + opacity:0에서 시작. hover 시 max-width:24px + opacity:1로 전환. flex gap도 0→8px로 전환되어 텍스트가 자연스럽게 좌측으로. translateX(-8px→0)이 슬라이드 느낌 추가."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "CSS only"
+            },
+            {
+              "label": "트리거",
+              "value": ":hover → max-width + gap + opacity"
+            },
+            {
+              "label": "이징",
+              "value": "cubic-bezier(0.2,0,0,1)"
+            },
+            {
+              "label": "duration",
+              "value": "0.35s"
+            },
+            {
+              "label": "핵심",
+              "value": "max-width:0 + gap 전환 (아이콘 공간 확보)"
+            },
+            {
+              "label": "참고",
+              "value": "Framer Slide-In Button 아이콘 진입"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<a class=\"btn\" href=\"#\">\n  <span class=\"btn-label\">시작하기</span>\n  <span class=\"btn-icon-reveal\">→</span>\n</a>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".btn { display: inline-flex; gap: 0;\n  transition: gap 0.35s cubic-bezier(0.2,0,0,1); }\n.btn-icon-reveal { max-width: 0; opacity: 0;\n  transform: translateX(-8px);\n  transition: max-width 0.35s, opacity 0.25s, transform 0.35s; }\n.btn:hover { gap: 8px; }\n.btn:hover .btn-icon-reveal {\n  max-width: 24px; opacity: 1; transform: translateX(0); }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "// CSS only — gap + max-width 전환"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "gap 전환이 핵심 — max-width만으로는 텍스트와의 간격이 없음. overflow:hidden을 아이콘에만 적용. 아이콘은 →, ↗, ▸ 등 방향성 있는 기호 권장."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "CTA — hover 시 방향성 강조"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "더 알아보기 링크 — 인라인 아이콘"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "카드 CTA — 아이콘으로 클릭 유도"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "프로젝트 링크 — 미니멀 + 아이콘"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — max-width 전환이 GPU 가속 안 됨. 매우 긴 전환(>0.5s)에서는 약간 jank. 짧은 전환(0.3~0.4s) 권장."
+        }
+      ]
+    },
+    "ripple": {
+      "title": "08. 리플",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "hover 시 커서 위치에서 원형 파동이 퍼져나가는 Material Design 스타일 리플."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/button-hover/ripple.html",
+          "embedHeight": 400,
+          "embedLabel": "08 · 리플",
+          "title": "리플 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "mouseenter 시 커서 좌표에서 원형 span 생성. scale(0→4) + opacity(1→0) 애니메이션 0.6s. overflow:hidden 필수. animationend에서 DOM 정리."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (커서 위치 계산)"
+            },
+            {
+              "label": "트리거",
+              "value": "mouseenter → span 생성 + animation"
+            },
+            {
+              "label": "이징",
+              "value": "ease-out (0.6s)"
+            },
+            {
+              "label": "scale",
+              "value": "0 → 4 (버튼 크기의 4배)"
+            },
+            {
+              "label": "핵심",
+              "value": "커서 위치 기반 ripple origin"
+            },
+            {
+              "label": "참고",
+              "value": "Material Design / Google 버튼"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<a class=\"btn btn-primary\" href=\"#\">\n  <span class=\"btn-label\">시작하기</span>\n  <span class=\"btn-icon\">→</span>\n</a>\n<a class=\"btn btn-outline\" href=\"#\">\n  <span class=\"btn-label\">자세히 보기</span>\n</a>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".btn { position: relative; overflow: hidden; }\n.btn-ripple { position: absolute; border-radius: 50%;\n  background: rgba(59,130,246,0.25);\n  transform: scale(0);\n  animation: ripple-expand 0.6s ease-out forwards; }\n@keyframes ripple-expand { to { transform: scale(4); opacity: 0; } }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "btn.addEventListener(\"mouseenter\", function(e){\n  var rect = btn.getBoundingClientRect();\n  var ripple = document.createElement(\"span\");\n  ripple.className = \"btn-ripple\";\n  var size = Math.max(rect.width, rect.height);\n  ripple.style.width = ripple.style.height = size + \"px\";\n  ripple.style.left = (e.clientX - rect.left - size/2) + \"px\";\n  ripple.style.top = (e.clientY - rect.top - size/2) + \"px\";\n  btn.appendChild(ripple);\n});"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "scale 최종값은 버튼 크기에 따라 3~5. DOM에 ripple span이 누적되므로 animationend에서 반드시 remove(). click이 아닌 hover에서도 동작하도록 mouseenter 사용."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "Material 스타일 CTA — 인터랙티브 피드백"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "폼 제출 버튼 — 클릭/터치 피드백"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "장바구니 추가 — 즉각 반응"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "인터랙티브 데모 버튼 — 동적 시각"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — JS 필수. DOM에 span이 생성/삭제되므로 GC 비용. 빠른 반복 hover 시 여러 ripple 동시 생성."
+        }
+      ]
+    },
+    "glow": {
+      "title": "09. 글로우",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "hover 시 네온 보더 글로우 + 외부 그림자 — 어두운 배경에서 빛나는 버튼."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/button-hover/glow.html",
+          "embedHeight": 400,
+          "embedLabel": "09 · 글로우",
+          "title": "글로우 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "box-shadow 3중(외부 근거리 + 외부 원거리 + 내부 glow) + text-shadow로 네온 효과. border-color도 함께 밝아짐. 어두운 배경(#0a0a0a 이하)에서만 효과적."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "CSS only"
+            },
+            {
+              "label": "트리거",
+              "value": ":hover → box-shadow + text-shadow + border-color"
+            },
+            {
+              "label": "이징",
+              "value": "ease (0.3s)"
+            },
+            {
+              "label": "글로우 색상",
+              "value": "#3b82f6 (blue-500) 계열"
+            },
+            {
+              "label": "핵심",
+              "value": "3중 box-shadow + text-shadow + inset glow"
+            },
+            {
+              "label": "참고",
+              "value": "Vercel / 사이버펑크 UI"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<a class=\"btn btn-primary\" href=\"#\">\n  <span class=\"btn-label\">시작하기</span>\n  <span class=\"btn-icon\">→</span>\n</a>\n<a class=\"btn btn-outline\" href=\"#\">\n  <span class=\"btn-label\">자세히 보기</span>\n</a>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".btn { border: 1px solid rgba(59,130,246,0.4); color: #3b82f6;\n  transition: box-shadow 0.3s, border-color 0.3s, text-shadow 0.3s; }\n.btn:hover { border-color: #3b82f6;\n  box-shadow: 0 0 20px rgba(59,130,246,0.35),\n    0 0 60px rgba(59,130,246,0.12),\n    inset 0 0 20px rgba(59,130,246,0.06);\n  text-shadow: 0 0 12px rgba(59,130,246,0.5); }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "// CSS only — box-shadow + text-shadow"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "box-shadow를 3단계로 분리(20px 근거리 + 60px 원거리 + inset)하면 깊이감. text-shadow도 같은 색상으로. 밝은 배경에서는 효과 미미."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "다크 모드 전용 CTA — 네온 강조"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "SaaS 다크 테마 — 기술적 느낌"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "프리미엄 기능 CTA — 하이라이트"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "개발자 포트폴리오 — 사이버 감성"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 밝은 배경에서 무용. box-shadow 다중이라 모바일 렌더링 비용 약간. 남용하면 산만."
+        }
+      ]
+    },
+    "magnetic": {
+      "title": "10. 마그네틱",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "hover 영역 내에서 버튼이 커서를 따라 미세하게 이동 — 자석처럼 끌리는 인터랙션."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/button-hover/magnetic.html",
+          "embedHeight": 400,
+          "embedLabel": "10 · 마그네틱",
+          "title": "마그네틱 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "버튼을 감싸는 .mag-zone에서 mousemove 이벤트 발생. 커서와 zone 중심의 차이를 계수(0.2x, 0.3y)만큼 translate. mouseleave 시 원래 위치로 복귀(transition 0.25s). zone 패딩이 hover 감지 영역."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (mousemove 계산)"
+            },
+            {
+              "label": "트리거",
+              "value": "mousemove → translate(커서 오프셋 × 계수)"
+            },
+            {
+              "label": "이징",
+              "value": "cubic-bezier(0.2,0,0,1) (leave 복귀)"
+            },
+            {
+              "label": "계수",
+              "value": "x: 0.2, y: 0.3 (미세 이동)"
+            },
+            {
+              "label": "핵심",
+              "value": ".mag-zone 감지 영역 + 오프셋 translate"
+            },
+            {
+              "label": "참고",
+              "value": "Awwwards / Locomotive / Apple 사이트"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"mag-zone\">\n  <a class=\"btn mag-btn\" href=\"#\">\n    <span class=\"btn-label\">시작하기</span>\n    <span class=\"btn-icon\">→</span>\n  </a>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".mag-zone { padding: 24px; display: flex;\n  align-items: center; justify-content: center; }\n.btn { transition: transform 0.25s cubic-bezier(0.2,0,0,1); }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "zone.addEventListener(\"mousemove\", function(e){\n  var rect = zone.getBoundingClientRect();\n  var x = e.clientX - rect.left - rect.width / 2;\n  var y = e.clientY - rect.top - rect.height / 2;\n  btn.style.transform = \"translate(\" + (x*0.2) + \"px,\" + (y*0.3) + \"px)\";\n});\nzone.addEventListener(\"mouseleave\", function(){\n  btn.style.transform = \"translate(0,0)\";\n});"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "계수 0.15~0.3이 자연스러움. 0.5 이상은 과장됨. zone 패딩이 클수록 감지 범위 넓어짐(24~48px 권장). leave 시 transition이 부드러운 복귀 담당."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "메인 CTA — 시선을 끌어당기는 마그네틱"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "크리에이티브 에이전시 사이트 — 인터랙티브 디테일"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "하이라이트 버튼 — 유니크한 피드백"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "디자이너 포트폴리오 — Awwwards 감성"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — JS 필수. 모바일(터치)에서는 의미 없음 — hover 없으므로 fallback 필요. mousemove가 60fps 이벤트라 throttle 고려."
+        }
+      ]
+    }
+  }
+}

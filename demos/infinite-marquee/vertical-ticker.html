@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06. 세로 티커 — Infinite Marquee Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; animation: demo-loop 10s linear infinite; }
+    @keyframes demo-loop { from { width: 0; } to { width: 100%; } }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .vt-wrap { text-align: center; width: 100%; }
+    .vt-card { display: flex; align-items: center; gap: 16px; width: min(560px, 86vw); margin: 0 auto; padding: 16px 20px; border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; background: #0d0d0d; text-align: left; }
+    .vt-live { flex: 0 0 auto; font: 700 10px/1 "Pretendard Variable",sans-serif; color: #4ade80; border: 1px solid rgba(74,222,128,0.4); border-radius: 999px; padding: 6px 10px; letter-spacing: 0.14em; }
+    .vt-window { height: 24px; overflow: hidden; flex: 1; }
+    .vt-list { list-style: none; margin: 0; padding: 0; animation: vt-roll 10s infinite; }
+    .vt-list li { height: 24px; line-height: 24px; font: 500 15px/24px "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .vt-list li em { font-style: normal; color: #8ab4ff; margin-right: 10px; font-size: 12px; }
+    @keyframes vt-roll {
+      0%, 21%   { transform: translateY(0); }
+      25%, 46%  { transform: translateY(-24px); }
+      50%, 71%  { transform: translateY(-48px); }
+      75%, 96%  { transform: translateY(-72px); }
+      100%      { transform: translateY(-96px); }
+    }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 24px; text-align: center; }
+    .note-sub { font: 400 12px/1.5 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.35); text-align: center; margin: 26px 0 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">06 · 세로 티커</span>
+  </div>
+  <div class="demo-hint">무한 루프 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="vt-wrap">
+      <p class="cap">VERTICAL TICKER — NEWS ROLL</p>
+      <div class="vt-card">
+        <span class="vt-live">LIVE</span>
+        <div class="vt-window">
+          <ul class="vt-list js-anim">
+            <li><em>14:02</em>무한 마퀴 카테고리 패턴 10종 공개</li>
+            <li><em>14:17</em>신규 가입 1,204명 돌파</li>
+            <li><em>15:05</em>디자인 시스템 v5.2 업데이트 배포</li>
+            <li><em>15:48</em>모션 가이드 뉴스레터 발행</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note-sub">translateY 스텝 루프 — 마지막에 첫 항목 클론으로 이음새 제거</p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // ↻ 다시 보기 = CSS 애니메이션 재시작 (animation:none → reflow → 재부여)
+      function restartCssAnims() {
+        var els = document.querySelectorAll(".js-anim, .demo-progress > div");
+        Array.prototype.forEach.call(els, function(el) {
+          el.style.animation = "none";
+          void el.offsetWidth; // reflow 강제
+          el.style.animation = "";
+        });
+      }
+      window.__reset = restartCssAnims;
+      // 첫 항목을 끝에 클론 — 100% 지점(-96px)이 첫 줄과 같은 그림이 되어 심리스
+      var list = document.querySelector(".vt-list");
+      var first = list.children[0].cloneNode(true);
+      first.setAttribute("aria-hidden", "true");
+      list.appendChild(first);
+    })();
+  </script>
+</body>
+</html>

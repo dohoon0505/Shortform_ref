@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01. 그리드 로우 슬라이드 (시그니처) — Accordion FAQ Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #000; color: #fff;
+      font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font: inherit; color: inherit; }
+    .demo-controls {
+      position: fixed; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      z-index: 100;
+    }
+    .demo-reset {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.72);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 8px 14px; cursor: pointer;
+      transition: color 160ms, background 160ms, border-color 160ms;
+    }
+    .demo-reset:hover {
+      color: #fff; background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.32);
+    }
+    .demo-label {
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .demo-hint {
+      position: fixed; right: 16px; bottom: 24px;
+      font: 500 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.04em;
+      z-index: 100;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 8px 14px;
+      animation: hint-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes hint-pulse {
+      0%, 100% { opacity: 0.6; transform: translateY(0); }
+      50%       { opacity: 1; transform: translateY(-3px); }
+    }
+    /* 공통 스테이지 + FAQ 헤더 */
+    .stage { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 64px 24px 48px; }
+    .faq-wrap { width: min(620px, 92vw); }
+    .faq-head { margin: 0 0 18px; }
+    .faq-eyebrow { font: 700 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: #8b5cf6; letter-spacing: 0.2em; text-transform: uppercase; }
+    .faq-title { margin: 10px 0 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+    /* 패턴별 CSS */
+    .gr-list { border-top: 1px solid rgba(255,255,255,0.14); }
+    .gr-item { border-bottom: 1px solid rgba(255,255,255,0.14); }
+    .gr-q { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 17px 4px; background: none; border: 0; text-align: left; cursor: pointer; color: #fff; font-size: 15px; font-weight: 600; line-height: 1.5; }
+    .gr-ico { flex-shrink: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 300; color: rgba(255,255,255,0.5); transition: transform 320ms cubic-bezier(0.4,0,0.2,1), color 320ms; }
+    .gr-item.is-open .gr-ico { transform: rotate(45deg); color: #8b5cf6; }
+    .gr-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms cubic-bezier(0.4,0,0.2,1); }
+    .gr-a-in { overflow: hidden; min-height: 0; }
+    .gr-a-in p { margin: 0; padding: 0 36px 18px 4px; font-size: 14px; line-height: 1.7; color: rgba(255,255,255,0.62); }
+    .gr-item.is-open .gr-a { grid-template-rows: 1fr; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">01 · 그리드 로우 슬라이드 (시그니처)</span>
+  </div>
+  <div class="demo-hint">질문을 클릭해보세요</div>
+
+  <main class="stage">
+    <div class="faq-wrap">
+    <header class="faq-head">
+      <div class="faq-eyebrow">FAQ</div>
+      <h1 class="faq-title">자주 묻는 질문</h1>
+    </header>
+    <div class="gr-list">
+    <div class="gr-item">
+      <button class="gr-q" type="button" aria-expanded="false" aria-controls="gr-a1">
+        <span class="gr-qt">프로젝트 기간은 보통 얼마나 걸리나요?</span>
+        <span class="gr-ico" aria-hidden="true">+</span>
+      </button>
+      <div class="gr-a" id="gr-a1" role="region">
+        <div class="gr-a-in"><p>브랜딩 단독 프로젝트는 4~6주, 웹사이트 구축을 포함하면 8~12주가 일반적입니다. 킥오프 미팅에서 범위를 확정한 뒤 상세 일정표를 공유드립니다.</p></div>
+      </div>
+    </div>
+    <div class="gr-item">
+      <button class="gr-q" type="button" aria-expanded="false" aria-controls="gr-a2">
+        <span class="gr-qt">수정 횟수에 제한이 있나요?</span>
+        <span class="gr-ico" aria-hidden="true">+</span>
+      </button>
+      <div class="gr-a" id="gr-a2" role="region">
+        <div class="gr-a-in"><p>각 단계마다 2회의 무상 수정 라운드가 포함되어 있습니다. 그 이상의 수정은 시간당 요율로 진행되며, 작업 전에 예상 견적을 먼저 안내드립니다.</p></div>
+      </div>
+    </div>
+    <div class="gr-item">
+      <button class="gr-q" type="button" aria-expanded="false" aria-controls="gr-a3">
+        <span class="gr-qt">어떤 방식으로 소통하며 진행되나요?</span>
+        <span class="gr-ico" aria-hidden="true">+</span>
+      </button>
+      <div class="gr-a" id="gr-a3" role="region">
+        <div class="gr-a-in"><p>전용 슬랙 채널과 주 1회 정기 화상 미팅으로 진행 상황을 공유합니다. 모든 산출물은 피그마와 노션에서 실시간으로 확인하실 수 있습니다.</p></div>
+      </div>
+    </div>
+    <div class="gr-item">
+      <button class="gr-q" type="button" aria-expanded="false" aria-controls="gr-a4">
+        <span class="gr-qt">결과물의 소유권은 누구에게 있나요?</span>
+        <span class="gr-ico" aria-hidden="true">+</span>
+      </button>
+      <div class="gr-a" id="gr-a4" role="region">
+        <div class="gr-a-in"><p>잔금이 입금되는 시점에 모든 산출물의 저작권과 원본 파일이 클라이언트에게 이전됩니다. 포트폴리오 공개 여부는 사전에 협의해 결정합니다.</p></div>
+      </div>
+    </div>
+    </div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // 기본 리셋: 모든 항목 닫기 (패턴 JS가 기본 상태 복원으로 재정의 가능)
+      window.__reset = function(){
+        document.querySelectorAll(".is-open").forEach(function(el){ el.classList.remove("is-open"); });
+        document.querySelectorAll("[aria-expanded]").forEach(function(b){ b.setAttribute("aria-expanded", "false"); });
+      };
+      // 패턴별 JS
+      document.querySelectorAll(".gr-q").forEach(function(btn){
+        btn.addEventListener("click", function(){
+          var item = btn.closest(".gr-item");
+          var open = item.classList.toggle("is-open");
+          btn.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

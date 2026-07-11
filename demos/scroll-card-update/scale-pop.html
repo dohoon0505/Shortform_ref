@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03. 스케일 팝 — Scroll Card Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #f0f0f0; color: #000; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(0,0,0,0.5); background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; backdrop-filter: blur(8px); }
+    .demo-reset:hover { color: #000; background: #fff; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(0,0,0,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(0,0,0,0.4); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; background: rgba(255,255,255,0.75); padding: 8px 14px; border-radius: 999px; backdrop-filter: blur(8px); animation: hint-bounce 1.6s ease-in-out infinite; }
+    @keyframes hint-bounce { 0%, 100% { transform: translateY(0); opacity: 0.6; } 50% { transform: translateY(4px); opacity: 1; } }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(0,0,0,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #000; width: 0; transition: width 60ms linear; }
+    .scroll-track { min-height: 500vh; position: relative; }
+    .sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+    .scu-bg { position: absolute; inset: 0; opacity: 0; transition: opacity 600ms ease; }
+    .scu-bg.is-on { opacity: 1; }
+    .scu-card { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; will-change: transform, opacity; }
+    .scu-inner { width: 65vw; max-width: 1100px; display: grid; grid-template-columns: 59fr 41fr; background: #fff; border-radius: 9px; overflow: hidden; aspect-ratio: 1100 / 587; }
+    .scu-text { display: flex; flex-direction: column; justify-content: center; padding: clamp(32px,2.6vw,44px) clamp(44px,4.17vw,70px) clamp(32px,2.6vw,44px) clamp(32px,2.6vw,44px); gap: clamp(32px,2.6vw,44px); }
+    .scu-num { display: flex; align-items: baseline; gap: 4px; font: 400 clamp(15px,1.15vw,19px)/normal inherit; }
+    .scu-num-cur { color: #000; }
+    .scu-num-sep { color: rgb(105,111,123); }
+    .scu-num-tot { color: rgb(105,111,123); }
+    .scu-num-title { color: #000; margin-left: 16px; }
+    .scu-body { font: 400 clamp(22px,1.77vw,30px)/1.2 inherit; color: #000; margin: 0; }
+    .scu-btn { display: inline-flex; align-items: center; font: 500 clamp(13px,0.94vw,16px)/1 inherit; color: #fff; background: #0f0f0f; border: 0; border-radius: 300px; padding: clamp(14px,1.1vw,18px) clamp(28px,2.1vw,36px); cursor: pointer; transition: background 160ms; align-self: flex-start; }
+    .scu-btn:hover { background: #2a2a2a; }
+    .scu-img-wrap { overflow: hidden; }
+    .scu-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    
+    .scu-card { opacity: 0; transform: scale(0.92); transition: opacity 500ms ease-out, transform 500ms cubic-bezier(0.2,0,0,1); }
+    .scu-card.is-on { opacity: 1; transform: scale(1); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">03 · 스케일 팝</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+        <div class="scu-bg is-on" style="background:linear-gradient(rgb(240,240,240) 42.34%,rgb(240,195,236) 91.67%,rgb(204,231,233) 104.12%)"></div>
+        <div class="scu-bg" style="background:linear-gradient(rgb(242,241,237) 42.49%,rgb(213,223,224) 93.98%,rgb(229,255,148) 104.08%)"></div>
+        <div class="scu-bg" style="background:linear-gradient(rgb(237,234,228) 42.62%,rgb(249,251,201) 94.17%,rgb(254,233,105) 104.07%)"></div>
+        <div class="scu-bg" style="background:linear-gradient(0deg,rgb(255,85,0) -13.02%,rgb(219,221,218) 9.58%,rgb(245,242,236) 83.05%)"></div>
+        <div class="scu-card is-on" data-i="0">
+          <div class="scu-inner">
+            <div class="scu-text">
+              <div class="scu-num"><span class="scu-num-cur">01</span><span class="scu-num-sep">/</span><span class="scu-num-tot">04</span><span class="scu-num-title">Create at the speed of thought</span></div>
+              <p class="scu-body">Tell Base44 your idea, and watch it transform into a working app with all the building blocks already in place, from beautifully designed pages to user flows and one-click integrations.</p>
+              <button class="scu-btn" type="button">Start building</button>
+            </div>
+            <div class="scu-img-wrap"><img class="scu-img" src="https://static.wixstatic.com/media/dea07e_125faa410ab84732b15a14d6408fa704~mv2.jpg/v1/fill/w_681,h_881,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Create%20at%20the%20speed%20of%20thought%20-%20Desktop.jpg" alt=""></div>
+          </div>
+        </div>
+        <div class="scu-card" data-i="1">
+          <div class="scu-inner">
+            <div class="scu-text">
+              <div class="scu-num"><span class="scu-num-cur">02</span><span class="scu-num-sep">/</span><span class="scu-num-tot">04</span><span class="scu-num-title">A backend that builds with you</span></div>
+              <p class="scu-body">While you shape the idea, Base44 automatically sets up the logic and infrastructure so your app works out of the box. User logins, authentication, data storage, and role-based permissions are generated behind the scenes.</p>
+              <button class="scu-btn" type="button">Start building</button>
+            </div>
+            <div class="scu-img-wrap"><img class="scu-img" src="https://static.wixstatic.com/media/dea07e_3e3440eba62a4e0280547c9c58f1c31a~mv2.jpg/v1/fill/w_681,h_881,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/A%20backend%20that%20builds%20with%20you%20-%20Desktop.jpg" alt=""></div>
+          </div>
+        </div>
+        <div class="scu-card" data-i="2">
+          <div class="scu-inner">
+            <div class="scu-text">
+              <div class="scu-num"><span class="scu-num-cur">03</span><span class="scu-num-sep">/</span><span class="scu-num-tot">04</span><span class="scu-num-title">Ready to use, instantly</span></div>
+              <p class="scu-body">Our platform comes with built-in hosting, analytics, and custom domains so when your app is ready to go live, all you have to do is press publish.</p>
+              <button class="scu-btn" type="button">Start building</button>
+            </div>
+            <div class="scu-img-wrap"><img class="scu-img" src="https://static.wixstatic.com/media/dea07e_01a647f9a0c244ce9d4f3cd3289bf081~mv2.jpg/v1/fill/w_681,h_881,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Ready%20to%20use%2C%20instantly%20-%20Desktop.jpg" alt=""></div>
+          </div>
+        </div>
+        <div class="scu-card" data-i="3">
+          <div class="scu-inner">
+            <div class="scu-text">
+              <div class="scu-num"><span class="scu-num-cur">04</span><span class="scu-num-sep">/</span><span class="scu-num-tot">04</span><span class="scu-num-title">One platform. Any agent.</span></div>
+              <p class="scu-body">Get access to the latest AI models as they launch. Base44 automatically selects the best model for your project, or you can choose the one that fits your build, your style, and your workflow.</p>
+              <button class="scu-btn" type="button">Start building</button>
+            </div>
+            <div class="scu-img-wrap"><img class="scu-img" src="https://static.wixstatic.com/media/dea07e_2c9ac0357d0b460eb02073c3740626f1~mv2.jpg/v1/fill/w_681,h_881,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/One%20platform_%20Any%20agent%20-%20Desktop.jpg" alt=""></div>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var track = document.querySelector(".scroll-track");
+      var bgs = document.querySelectorAll(".scu-bg");
+      var cards = document.querySelectorAll(".scu-card");
+      var N = 4;
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+      function applyReveal(p){
+        var idx = Math.min(Math.floor(p * N), N - 1);
+        cards.forEach(function(c, i){
+          c.classList.toggle("is-on", i === idx);
+          if (i < idx) c.style.transform = "scale(1.04)";
+          else if (i > idx) c.style.transform = "scale(0.92)";
+          else c.style.transform = "scale(1)";
+        });
+      }
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        var idx = Math.min(Math.floor(p * N), N - 1);
+        bgs.forEach(function(bg, i){ bg.classList.toggle("is-on", i === idx); });
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

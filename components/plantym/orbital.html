@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>PlantyM — Orbital Intro (GSAP ScrollTrigger 시그니처 10,800px)</title>
+<link rel="stylesheet" href="../../plantym-app/styles/globals.css">
+<style>
+/* Pin-spacer 10,800px outer + .motion 1080px sticky */
+.main-intro {
+  position: relative;
+  width: 100%;
+}
+
+.pin-spacer {
+  position: relative;
+  width: 100%;
+  height: 10800px;
+}
+
+.motion {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 1080px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.group {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SVG 점선 원 + 진행률 */
+.stroke {
+  position: absolute;
+  width: 835px;
+  height: 835px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.stroke svg {
+  width: 100%;
+  height: 100%;
+}
+
+.stroke svg .percentage {
+  transform: rotate(-90deg);
+  transform-origin: center;
+  stroke-dasharray: 2483;
+  stroke-dashoffset: 2483;
+  animation: pm-orbital-progress 8s linear infinite;
+}
+
+@keyframes pm-orbital-progress {
+  from { stroke-dashoffset: 2483; }
+  50% { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Ring image */
+.img-box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 250px;
+  height: 250px;
+  transform: translate(-50%, -50%);
+  animation: pm-ring-scale 8s ease-in-out infinite;
+}
+
+@keyframes pm-ring-scale {
+  0%, 100% { transform: translate(-50%, -50%) scale(.3); }
+  50% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.img-box::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, var(--accent-color), rgba(252,109,37,.2) 70%, transparent 100%);
+  border-radius: 50%;
+}
+
+.img-box::after {
+  content: '';
+  position: absolute;
+  inset: 30%;
+  border: 6px solid var(--accent-color);
+  border-radius: 50%;
+}
+
+/* Title sequence (3 panels) */
+.title-wrap {
+  position: absolute;
+  z-index: 2;
+  text-align: center;
+  font-family: var(--font-family);
+  width: 100%;
+  padding: 0 60px;
+}
+
+.title-wrap p {
+  font-size: var(--fs-section-h3);
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  letter-spacing: -.02em;
+  line-height: 1.3;
+  opacity: 0;
+  animation: pm-orbital-panel 8s ease-in-out infinite;
+}
+
+.title-wrap p:nth-child(1) { animation-delay: 0s; }
+.title-wrap p:nth-child(2) { animation-delay: 2.6s; }
+.title-wrap p:nth-child(3) { animation-delay: 5.3s; }
+
+@keyframes pm-orbital-panel {
+  0%, 100% { opacity: 0; transform: translateY(20px); }
+  8%, 25% { opacity: 1; transform: translateY(0); }
+  33% { opacity: 0; transform: translateY(-20px); }
+}
+
+.title-wrap p .accent { color: var(--accent-color); }
+
+/* Demo notice */
+.demo-notice {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-family: var(--font-family);
+  font-size: 13px;
+  color: #888;
+  letter-spacing: .05em;
+  background: rgba(255,255,255,.95);
+  padding: 8px 16px;
+  border-radius: 99px;
+  border: 1px solid #ebebeb;
+}
+</style>
+</head>
+<body>
+<section class="sec main-intro">
+  <div class="pin-spacer">
+    <div class="motion">
+      <div class="group">
+        <div class="stroke">
+          <svg viewBox="0 0 835 835">
+            <circle cx="417.5" cy="417.5" r="395" fill="none" stroke="#ddd" stroke-width="2" stroke-dasharray="6"></circle>
+            <circle class="percentage" cx="417.5" cy="417.5" r="395" fill="none" stroke="#FC6D25" stroke-width="2"></circle>
+          </svg>
+        </div>
+        <div class="img-box"></div>
+        <div class="title-wrap">
+          <p><span class="accent">Planty</span> 그룹은<br>콘텐츠 · 네트워크 · 투자<br>부문의 다양한 사업을 통해<br>모두의 내일을 이롭게 가꿔갑니다.</p>
+          <p><span class="accent">New Content Lifestyle</span><br>지식을 펼치고, 감성을 더하고,<br>일상을 풍요롭게</p>
+          <p><span class="accent">PlantyM</span>은<br>매거진 · 음악 · 디스플레이 부문의<br>다양한 사업을 통해 가치를 만드는<br>콘텐츠를 창출하고 있습니다.</p>
+        </div>
+        <div class="demo-notice">📌 라이브: GSAP ScrollTrigger pin 10,800px scroll-driven · 본 demo: 8s 루프 시연</div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>KT&amp;G Header (격리 프리뷰)</title>
+<!--
+  KT&G GNB Header Component — 측정 기반 1:1 재현
+  Source: https://www.ktng.com (Chrome MCP 실측 2026-05-18)
+  ===================================================================
+  측정값 (CLAUDE.md 절대 규칙 0번):
+   - .header           : position:fixed; top:0; height:6.5rem(104px); bg: rgba(0,0,0,0) [항상]
+                         z-index:9997; color:#fff (기본); transition: 없음 (스크롤 무관)
+   - .header__inner    : backdrop-filter: blur(20px) [항상 활성]
+   - .header__menu     : width:9.375rem(150px); font-size:1.25rem(20px); fontWeight:500
+                         letter-spacing:-0.4px; color:#fff(hero 위) / #000(메가메뉴 오픈 시)
+   - .header__two-depth: overflow:hidden; 인라인 style로 height 0↔426 애니메이션
+                         CSS transition:0s — JS RAF 기반 (~500ms ease-out 곡선)
+                         hover 후 ~241ms 지연되어 시작, ~500ms에 완료
+   - .header__two-depth-item: padding:2.5rem 0 (40px); width:9.375rem (150px) per 컬럼
+   - .header__two-depth-link: color:#000; fontWeight:500; line-height:1.4
+                              font-size: clamp(14px,0.8333vw,16px) × 1.125
+   - .header__two-depth-link a underline: transition: background-size 0.3s ease-in-out
+                              underline color: #3F42E5 (KT&G 시그니처 보라)
+                              1.5px 두께, 3px offset
+-->
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; font-family: "Pretendard", -apple-system, "Apple SD Gothic Neo", system-ui, sans-serif; }
+
+  /* ─── DEMO BACKGROUND (오직 프리뷰 배경용, 실제 헤더와 무관) ─── */
+  body { min-height: 100vh; background: #fff; }
+  .demo-hero { position: relative; height: 100vh; background: linear-gradient(135deg,#3a3050 0%,#1a2a5a 50%,#0a1530 100%); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 32px; font-weight: 600; letter-spacing: -0.02em; }
+  .demo-hero::after { content: 'HERO 영역 — 헤더 위에 어두운 배경 (메뉴 흰색)'; }
+  .demo-section { padding: 240px 89px; background: #fff; color: #000; font-size: 24px; font-weight: 500; text-align: center; }
+  .demo-section + .demo-section { background: #f4f4f4; }
+
+  /* ============================================================
+     KT&G HEADER — 라이브 실측 기반 1:1 재현
+     ============================================================ */
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9997;
+    width: 100%;
+    height: 6.5rem;          /* 104px (라이브 실측) */
+    color: #fff;             /* 기본 화이트 — hero 어두운 배경 위 가독성 */
+  }
+
+  .header__inner {
+    width: 100%;
+    height: 100%;
+    -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);   /* 라이브 실측: 항상 활성 */
+  }
+
+  .header__wrapper {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    height: 6.5rem;          /* 104px */
+  }
+
+  /* ─── LOGO ─── */
+  .header__logo-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1 1 0%;
+    width: 8.1875rem;
+    height: 100%;
+    cursor: pointer;
+  }
+  .header__logo {
+    margin-left: max(3rem, 4.2708vw);
+    height: 3.25rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .header__logo-mark { display: inline-flex; }
+  .header__logo-mark svg { width: 32px; height: 32px; }
+
+  /* ─── GNB ONE-DEPTH (5 메뉴) ─── */
+  .header__one-depth {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 0%;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .header__menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 9.375rem;         /* 150px (라이브 실측) */
+    height: 100%;
+    font-size: 1.25rem;      /* 20px */
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.4px;
+    cursor: pointer;
+  }
+  .header__menu > a {
+    color: inherit;
+    text-decoration: none;
+    padding: 8px 0;
+    position: relative;
+  }
+  /* hover된 메뉴 표시: 하단 underline (라이브와 동일한 background-image 기법) */
+  .header__menu > a::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -8px;
+    height: 1.5px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.3s ease-in-out;
+  }
+  .header__menu:hover > a::after,
+  .header__menu.is-active > a::after { transform: scaleX(1); }
+
+  /* ─── RIGHT UTILITIES (고객문의 / 신고 / 보건 / Lang) ─── */
+  .header__interaction {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-right: max(3rem, 4.2708vw);
+    flex: 1 1 0%;
+    justify-content: flex-end;
+  }
+  .header__contact-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .header__contact-link {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: inherit;
+    text-decoration: none;
+    line-height: 1.4;
+  }
+  .header__lang {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  .header__lang svg { width: 22px; height: 22px; }
+
+  /* ─── TWO-DEPTH (MEGA MENU) ─── */
+  .header__two-depth {
+    overflow: hidden;
+    position: relative;
+    height: 0;                /* 초기 닫힘 (JS가 인라인 height로 0↔426 토글) */
+    border: 0 solid rgba(238, 238, 238, 0);
+    /* 핵심: 헤더 자체엔 CSS transition 없음, JS RAF로 height 보간 */
+  }
+  .header__two-depth-wrapper {
+    display: flex;
+    justify-content: center;
+    height: 26.5rem;          /* 426px 메가메뉴 전체 높이 */
+  }
+  .header__two-depth-item {
+    padding: 2.5rem 0;
+    width: 9.375rem;
+    list-style: none;
+    margin: 0;
+    background: rgba(0,0,0,0.02);
+  }
+  .header__two-depth-link {
+    display: block;
+    margin-bottom: 1.55556em;
+    font-size: calc(1.125 * clamp(14px, 0.8333vw, 16px));
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+    color: #000;
+  }
+  .header__two-depth-link a {
+    --lh: 1.4em;
+    --thickness: 1.5px;
+    --offset: 3px;
+    color: inherit;
+    text-decoration: none;
+    background-image: repeating-linear-gradient(to bottom,
+      transparent 0 calc(var(--lh) - var(--thickness) - var(--offset)),
+      #3f42e5 calc(var(--lh) - var(--thickness) - var(--offset)) calc(var(--lh) - var(--offset)),
+      transparent calc(var(--lh) - var(--offset)) var(--lh));
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    background-position: 0 0;
+    transition: background-size 0.3s ease-in-out;
+  }
+  .header__two-depth-link a:hover { background-size: 100% 100%; }
+
+  /* ─── 메가메뉴 오픈 시 텍스트 색 변경: white→black ─── */
+  .header.is-mega-open { color: #000; }
+
+  /* ─── 모바일 (라이브 1024px breakpoint) ─── */
+  @media (max-width: 1024px) {
+    .header, .header__wrapper { height: 6rem; }
+    .header__menu { display: none; }
+    .header__one-depth { display: none; }
+    .header__two-depth { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!--  KT&G HEADER — DOM 구조는 라이브와 1:1 동일                     -->
+<!-- ============================================================ -->
+<header class="header" id="hdr">
+  <div class="header__inner">
+    <div class="header__wrapper">
+      <!-- LOGO -->
+      <div class="header__logo-wrapper">
+        <div class="header__logo">
+          <span class="header__logo-mark">
+            <svg viewBox="0 0 32 32" fill="currentColor"><circle cx="16" cy="16" r="14" stroke="currentColor" stroke-width="2" fill="none"/><text x="50%" y="55%" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">KT&amp;G</text></svg>
+          </span>
+        </div>
+      </div>
+
+      <!-- GNB ONE-DEPTH -->
+      <ul class="header__one-depth">
+        <li class="header__menu" data-menu="0"><a href="#">회사소개</a></li>
+        <li class="header__menu" data-menu="1"><a href="#">투자정보</a></li>
+        <li class="header__menu" data-menu="2"><a href="#">지속가능경영</a></li>
+        <li class="header__menu" data-menu="3"><a href="#">미디어</a></li>
+        <li class="header__menu" data-menu="4"><a href="#">인재채용</a></li>
+      </ul>
+
+      <!-- RIGHT UTILITIES -->
+      <div class="header__interaction">
+        <div class="header__contact-links">
+          <a class="header__contact-link" href="#">고객문의</a>
+          <a class="header__contact-link" href="#">비윤리행위 신고</a>
+          <a class="header__contact-link" href="#">안전보건소통마당</a>
+        </div>
+        <button class="header__lang" aria-label="Language">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3 a9 9 0 0 1 0 18 a9 9 0 0 1 0 -18 M12 3 a4 9 0 0 1 0 18 a4 9 0 0 1 0 -18"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TWO-DEPTH (Mega Menu) -->
+  <div class="header__two-depth" id="megaMenu">
+    <div class="header__two-depth-wrapper">
+      <!-- 회사소개 -->
+      <ul class="header__two-depth-item">
+        <li class="header__two-depth-link"><a href="#">KT&amp;G 소개</a></li>
+        <li class="header__two-depth-link"><a href="#">연혁</a></li>
+        <li class="header__two-depth-link"><a href="#">주요사업</a></li>
+        <li class="header__two-depth-link"><a href="#">글로벌 네트워크</a></li>
+      </ul>
+      <!-- 투자정보 -->
+      <ul class="header__two-depth-item">
+        <li class="header__two-depth-link"><a href="#">IR 개요</a></li>
+        <li class="header__two-depth-link"><a href="#">기업가치 제고 계획</a></li>
+        <li class="header__two-depth-link"><a href="#">지배구조</a></li>
+        <li class="header__two-depth-link"><a href="#">재무정보</a></li>
+        <li class="header__two-depth-link"><a href="#">주식정보</a></li>
+        <li class="header__two-depth-link"><a href="#">공시정보</a></li>
+        <li class="header__two-depth-link"><a href="#">IR 자료실</a></li>
+      </ul>
+      <!-- 지속가능경영 -->
+      <ul class="header__two-depth-item">
+        <li class="header__two-depth-link"><a href="#">ESG 개요</a></li>
+        <li class="header__two-depth-link"><a href="#">환경</a></li>
+        <li class="header__two-depth-link"><a href="#">사회</a></li>
+        <li class="header__two-depth-link"><a href="#">윤리경영</a></li>
+        <li class="header__two-depth-link"><a href="#">아카이빙</a></li>
+      </ul>
+      <!-- 미디어 -->
+      <ul class="header__two-depth-item">
+        <li class="header__two-depth-link"><a href="#">뉴스룸</a></li>
+        <li class="header__two-depth-link"><a href="#">소셜미디어</a></li>
+        <li class="header__two-depth-link"><a href="#">라이브러리</a></li>
+      </ul>
+      <!-- 인재채용 -->
+      <ul class="header__two-depth-item">
+        <li class="header__two-depth-link"><a href="#">인사제도</a></li>
+        <li class="header__two-depth-link"><a href="#">직무소개</a></li>
+        <li class="header__two-depth-link"><a href="#">채용가이드</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<!-- DEMO CONTENT (헤더 아래) -->
+<section class="demo-hero"></section>
+<section class="demo-section">콘텐츠 영역 1 — 헤더가 흰 배경 위에서 검정 텍스트로 보임</section>
+<section class="demo-section">콘텐츠 영역 2</section>
+<section class="demo-section">콘텐츠 영역 3 (스크롤 테스트용)</section>
+
+<!--
+  JS: 라이브와 동일한 방식 — JS가 인라인 height를 0 ↔ 426으로 토글
+       transition은 CSS에 없고, RAF 기반 보간으로 ~500ms ease-out 구현
+       (라이브 실측: 첫 변화 ~241ms 지연 후 ~500ms 동안 426px 도달)
+-->
+<script>
+(function() {
+  'use strict';
+  var TARGET_HEIGHT = 426;          // 라이브 .header__two-depth-wrapper 26.5rem = 424~426px
+  var DURATION = 500;               // 라이브 실측 ~500ms
+  var DELAY = 240;                  // 라이브 실측 hover 후 첫 height 변화까지 ~241ms
+
+  var header = document.getElementById('hdr');
+  var mega = document.getElementById('megaMenu');
+  var menus = document.querySelectorAll('.header__menu');
+  var oneDepth = document.querySelector('.header__one-depth');
+  var hoverTimer = null;
+  var closeTimer = null;
+  var rafId = null;
+  var animStart = 0;
+  var fromH = 0;
+  var toH = 0;
+
+  // ease-out cubic (라이브 측정 곡선 매칭: cubic-bezier(0.4, 0, 0.2, 1))
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+  function animateHeight(target) {
+    if (rafId) cancelAnimationFrame(rafId);
+    fromH = mega.offsetHeight;
+    toH = target;
+    animStart = performance.now();
+    function tick(now) {
+      var t = Math.min((now - animStart) / DURATION, 1);
+      var eased = easeOutCubic(t);
+      var h = Math.round(fromH + (toH - fromH) * eased);
+      mega.style.height = h + 'px';
+      if (t < 1) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = null;
+      }
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function openMega() {
+    clearTimeout(closeTimer);
+    if (mega.offsetHeight >= TARGET_HEIGHT) return;
+    hoverTimer = setTimeout(function() {
+      header.classList.add('is-mega-open');
+      animateHeight(TARGET_HEIGHT);
+    }, DELAY);
+  }
+
+  function closeMega() {
+    clearTimeout(hoverTimer);
+    closeTimer = setTimeout(function() {
+      header.classList.remove('is-mega-open');
+      animateHeight(0);
+      menus.forEach(function(m) { m.classList.remove('is-active'); });
+    }, 200);
+  }
+
+  // 하나의 메뉴라도 hover 시 메가 열기, 헤더 전체 영역 떠나면 닫기
+  oneDepth.addEventListener('mouseenter', openMega);
+  mega.addEventListener('mouseenter', function() { clearTimeout(closeTimer); });
+
+  header.addEventListener('mouseleave', closeMega);
+
+  menus.forEach(function(m) {
+    m.addEventListener('mouseenter', function() {
+      menus.forEach(function(x) { x.classList.remove('is-active'); });
+      m.classList.add('is-active');
+    });
+  });
+
+  // ──────────────────────────────────────────────────────────────
+  // 자체 측정 헬퍼 (페이지 콘솔에서 검증용):
+  //   window.__measureMega()  →  hover 시뮬레이션 후 height 시계열 반환
+  // ──────────────────────────────────────────────────────────────
+  window.__measureMega = function() {
+    return new Promise(function(resolve) {
+      var samples = [];
+      mega.style.height = '0px';
+      header.classList.remove('is-mega-open');
+      var t0 = performance.now();
+      var iv = setInterval(function() {
+        samples.push({ t: Math.round(performance.now() - t0), h: mega.offsetHeight });
+      }, 16);
+      setTimeout(function() { openMega(); }, 50);
+      setTimeout(function() { clearInterval(iv); resolve(samples); }, 1200);
+    });
+  };
+})();
+</script>
+</body>
+</html>

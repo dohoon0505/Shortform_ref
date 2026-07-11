@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>07. 듀오톤 씬 — Scroll Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #000; color: #fff;
+      font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      will-change: background-color;
+    }
+    .demo-controls {
+      position: fixed; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      z-index: 20;
+    }
+    .demo-reset {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.72);
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 8px 14px; cursor: pointer;
+      backdrop-filter: blur(6px);
+      transition: color 160ms, background 160ms, border-color 160ms;
+    }
+    .demo-reset:hover {
+      color: #fff; background: rgba(0,0,0,0.55); border-color: rgba(255,255,255,0.32);
+    }
+    .demo-label {
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.14em; text-transform: uppercase;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+    }
+    .demo-hint {
+      position: fixed; right: 16px; bottom: 24px;
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      z-index: 20;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+      animation: demo-hint-bounce 1.6s ease-in-out infinite;
+    }
+    @keyframes demo-hint-bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.45; }
+      50%       { transform: translateY(4px); opacity: 0.8; }
+    }
+    .demo-progress {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 2px; background: rgba(127,127,127,0.18);
+      z-index: 20;
+    }
+    .demo-progress > div {
+      height: 100%; background: #fff; width: 0;
+      mix-blend-mode: difference;
+      transition: width 60ms linear;
+    }
+    .scroll-track { min-height: 240vh; position: relative; }
+    .sticky-stage {
+      position: sticky; top: 0;
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 8vw 60px;
+      overflow: hidden;
+    }
+    /* 패턴별 CSS */
+    .duo-wrap { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+    .scene { position: relative; width: min(640px, 78vw); aspect-ratio: 16 / 9; border-radius: 24px; overflow: hidden; background: linear-gradient(165deg, rgb(44,62,148), rgb(75,126,168)); }
+    .s-sun { position: absolute; width: 22%; aspect-ratio: 1; border-radius: 50%; left: 16%; top: 13%; background: rgb(122,222,198); }
+    .s-hill { position: absolute; width: 92%; aspect-ratio: 2.6 / 1; border-radius: 50%; }
+    .s-hill-back { left: -28%; bottom: -34%; background: rgb(87,150,176); }
+    .s-hill-front { right: -30%; bottom: -46%; background: rgb(106,190,188); }
+    .duo-caption { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .duo-hud { font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.22em; padding: 8px 14px; border: 1px solid rgba(255,255,255,0.25); border-radius: 999px; color: rgba(255,255,255,0.6); }
+    .duo-sub { font: 400 17px/1.6 "Pretendard Variable","Pretendard",system-ui; color: rgba(255,255,255,0.62); margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">07 · 듀오톤 씬</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <div class="duo-wrap">
+        <div class="scene">
+          <div class="s-sun"></div>
+          <div class="s-hill s-hill-back"></div>
+          <div class="s-hill s-hill-front"></div>
+        </div>
+        <div class="duo-caption">
+          <span class="duo-hud">PALETTE · NIGHT</span>
+          <p class="duo-sub">두 가지 색만으로 씬의 시간대가 바뀝니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var track = document.querySelector(".scroll-track");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+
+      // 공용 색 보간 헬퍼
+      function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+      function lerp(a, b, t){ return a + (b - a) * t; }
+      function mixArr(a, b, t){
+        return [Math.round(lerp(a[0], b[0], t)), Math.round(lerp(a[1], b[1], t)), Math.round(lerp(a[2], b[2], t))];
+      }
+      function lerpRGB(a, b, t){
+        var c = mixArr(a, b, t);
+        return "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+      }
+      function pick3Arr(stops, p){
+        var seg = p < 0.5 ? 0 : 1;
+        var t = clamp01(seg === 0 ? p / 0.5 : (p - 0.5) / 0.5);
+        return mixArr(stops[seg], stops[seg + 1], t);
+      }
+      function pick3(stops, p){
+        var c = pick3Arr(stops, p);
+        return "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+      }
+
+      // 패턴별 init + applyReveal 정의
+      var sceneEl = document.querySelector(".scene");
+      var sunEl = document.querySelector(".s-sun");
+      var hillBackEl = document.querySelector(".s-hill-back");
+      var hillFrontEl = document.querySelector(".s-hill-front");
+      var hudEl = document.querySelector(".duo-hud");
+      var A = [[44,62,148],[142,52,180],[16,108,84]];
+      var B = [[122,222,198],[255,152,112],[248,208,88]];
+      var BGS = [[10,14,32],[24,10,36],[8,24,20]];
+      var NAMES = ["NIGHT","NEON","FOREST"];
+      function rgbStr(c){ return "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")"; }
+      function applyReveal(p){
+        var a = pick3Arr(A, p);
+        var b = pick3Arr(B, p);
+        document.body.style.backgroundColor = pick3(BGS, p);
+        sceneEl.style.background = "linear-gradient(165deg, " + rgbStr(a) + " 0%, " + rgbStr(mixArr(a, b, 0.4)) + " 100%)";
+        sunEl.style.backgroundColor = rgbStr(b);
+        hillBackEl.style.backgroundColor = rgbStr(mixArr(a, b, 0.55));
+        hillFrontEl.style.backgroundColor = rgbStr(mixArr(a, b, 0.8));
+        hudEl.textContent = "PALETTE · " + NAMES[Math.min(2, Math.floor(p * 3))];
+      }
+
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

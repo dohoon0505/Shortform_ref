@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02. 텍스트 슬라이드 — Button Hover Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .showcase {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 24px; padding: 40px;
+    }
+    .btn {
+      position: relative; overflow: hidden;
+      display: inline-flex; align-items: center; gap: 10px;
+      font: 600 16px/1 "Pretendard Variable","Pretendard",sans-serif;
+      text-decoration: none; cursor: pointer; border: 0; outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-label, .btn-icon { position: relative; z-index: 1; }
+    .btn-icon { font-size: 18px; transition: transform 0.3s ease, opacity 0.3s ease; }
+    
+    .btn-primary { color: #000; background: #fff; padding: 18px 36px; border-radius: 999px; }
+    .btn-outline { color: rgba(255,255,255,0.9); background: transparent; border: 1px solid rgba(255,255,255,0.25); padding: 14px 28px; border-radius: 999px; }
+    .btn-text-wrap { display: inline-flex; flex-direction: column; overflow: hidden; height: 1em; line-height: 1; position: relative; z-index: 1; }
+    .btn-t { display: block; transition: transform 0.35s cubic-bezier(0.2,0,0,1); }
+    .btn-primary .btn-t-hover { color: #3b82f6; }
+    .btn-outline .btn-t-hover { color: #fff; }
+    .btn:hover .btn-t { transform: translateY(-100%); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">02 · 텍스트 슬라이드</span>
+  </div>
+  <div class="demo-hint">버튼에 호버해보세요 ↗</div>
+
+  <main class="showcase">
+    <a class="btn btn-primary" href="#" onclick="return false">
+      <span class="btn-text-wrap"><span class="btn-t">시작하기</span><span class="btn-t btn-t-hover">시작하기</span></span>
+      <span class="btn-icon">→</span>
+    </a>
+    <a class="btn btn-outline" href="#" onclick="return false">
+      <span class="btn-text-wrap"><span class="btn-t">자세히 보기</span><span class="btn-t btn-t-hover">자세히 보기</span></span>
+    </a>
+  </main>
+
+</body>
+</html>

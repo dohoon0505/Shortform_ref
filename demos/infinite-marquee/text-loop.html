@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01. 텍스트 루프 (시그니처) — Infinite Marquee Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; animation: demo-loop 24s linear infinite; }
+    @keyframes demo-loop { from { width: 0; } to { width: 100%; } }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .tl-wrap { width: 100%; text-align: center; }
+    .tl-band { overflow: hidden; width: 100%; }
+    .tl-track { display: flex; width: max-content; animation: tl-scroll 24s linear infinite; will-change: transform; }
+    .tl-group { display: flex; align-items: center; flex: 0 0 auto; }
+    .tl-group span { font: 800 clamp(40px,7vw,88px)/1.15 "Pretendard Variable",sans-serif; color: #fff; white-space: nowrap; padding: 0 28px; }
+    .tl-group i { font-style: normal; font-size: clamp(18px,2.4vw,30px); color: #8ab4ff; }
+    @keyframes tl-scroll { to { transform: translateX(-50%); } }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 24px; text-align: center; }
+    .note-sub { font: 400 12px/1.5 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.35); text-align: center; margin: 26px 0 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">01 · 텍스트 루프 (시그니처)</span>
+  </div>
+  <div class="demo-hint">무한 루프 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="tl-wrap">
+      <p class="cap">INFINITE MARQUEE — TEXT LOOP</p>
+      <div class="tl-band">
+        <div class="tl-track js-anim">
+          <div class="tl-group">
+            <span>디자인을 움직임으로</span><i>✦</i>
+            <span>인터랙션 랩</span><i>✦</i>
+            <span>모션이 곧 브랜드</span><i>✦</i>
+            <span>멈추지 않는 흐름</span><i>✦</i>
+          </div>
+        </div>
+      </div>
+      <p class="note-sub">콘텐츠 2벌 복제 + translateX(-50%) 루프 — 24s linear</p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // ↻ 다시 보기 = CSS 애니메이션 재시작 (animation:none → reflow → 재부여)
+      function restartCssAnims() {
+        var els = document.querySelectorAll(".js-anim, .demo-progress > div");
+        Array.prototype.forEach.call(els, function(el) {
+          el.style.animation = "none";
+          void el.offsetWidth; // reflow 강제
+          el.style.animation = "";
+        });
+      }
+      window.__reset = restartCssAnims;
+      // 콘텐츠 2벌 복제 — 그룹 1벌이 -50% 이동하는 순간 다음 벌이 정확히 같은 자리
+      var track = document.querySelector(".tl-track");
+      var clone = track.querySelector(".tl-group").cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+    })();
+  </script>
+</body>
+</html>

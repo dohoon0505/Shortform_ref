@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>07. 이미지 스트립 — Infinite Marquee Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; animation: demo-loop 32s linear infinite; }
+    @keyframes demo-loop { from { width: 0; } to { width: 100%; } }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .ist-wrap { width: 100%; text-align: center; }
+    .ist-band { overflow: hidden; width: 100%; padding: 24px 0; }
+    .ist-track { display: flex; width: max-content; animation: ist-scroll 32s linear infinite; will-change: transform; }
+    .ist-group { display: flex; flex: 0 0 auto; }
+    .ist-card { width: clamp(180px,22vw,240px); height: clamp(120px,15vw,160px); border-radius: 16px; margin: 0 12px; flex: 0 0 auto; display: flex; align-items: flex-end; padding: 14px; transition: transform 180ms ease; cursor: pointer; }
+    .ist-card:hover { transform: scale(1.07); }
+    .ist-card figcaption { font: 600 11px/1 "Pretendard Variable",sans-serif; letter-spacing: 0.14em; color: rgba(255,255,255,0.85); }
+    .ist-1 { background: linear-gradient(135deg, #1e3a8a, #22d3ee); }
+    .ist-2 { background: radial-gradient(circle at 30% 30%, #f472b6, #7c3aed); }
+    .ist-3 { background: conic-gradient(from 210deg, #fb923c, #e11d48, #fb923c); }
+    .ist-4 { background: linear-gradient(160deg, #064e3b, #4ade80); }
+    .ist-5 { background: radial-gradient(circle at 70% 20%, #ffd23f, #b45309); }
+    .ist-6 { background: linear-gradient(120deg, #0f172a, #8ab4ff); }
+    @keyframes ist-scroll { to { transform: translateX(-50%); } }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 24px; text-align: center; }
+    .note-sub { font: 400 12px/1.5 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.35); text-align: center; margin: 26px 0 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">07 · 이미지 스트립</span>
+  </div>
+  <div class="demo-hint">카드에 마우스를 올려보세요</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="ist-wrap">
+      <p class="cap">IMAGE STRIP — HOVER SCALE</p>
+      <div class="ist-band">
+        <div class="ist-track js-anim">
+          <div class="ist-group">
+            <figure class="ist-card ist-1"><figcaption>ARTWORK 01</figcaption></figure>
+            <figure class="ist-card ist-2"><figcaption>ARTWORK 02</figcaption></figure>
+            <figure class="ist-card ist-3"><figcaption>ARTWORK 03</figcaption></figure>
+            <figure class="ist-card ist-4"><figcaption>ARTWORK 04</figcaption></figure>
+            <figure class="ist-card ist-5"><figcaption>ARTWORK 05</figcaption></figure>
+            <figure class="ist-card ist-6"><figcaption>ARTWORK 06</figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <p class="note-sub">트랙은 계속 흐르고 hover한 카드만 scale 1.07</p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // ↻ 다시 보기 = CSS 애니메이션 재시작 (animation:none → reflow → 재부여)
+      function restartCssAnims() {
+        var els = document.querySelectorAll(".js-anim, .demo-progress > div");
+        Array.prototype.forEach.call(els, function(el) {
+          el.style.animation = "none";
+          void el.offsetWidth; // reflow 강제
+          el.style.animation = "";
+        });
+      }
+      window.__reset = restartCssAnims;
+      var track = document.querySelector(".ist-track");
+      var clone = track.querySelector(".ist-group").cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01-A. 풀스크린 히어로 오프닝 — 스크럽 헤드라인 라이즈</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.14); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; transition: width 60ms linear; }
+    .scroll-track { min-height: 240vh; position: relative; }
+    .sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .iw-eyebrow { font: 600 12px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent,#8ab4ff); margin: 0; }
+    .iw-head { font: 800 clamp(28px,4.4vw,56px)/1.12 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.02em; color: #fff; margin: 0; }
+    .iw-sub { font: 700 clamp(20px,2.6vw,30px)/1.3 "Pretendard Variable","Pretendard",sans-serif; color: #fff; margin: 0; }
+    .iw-body { font: 400 clamp(14px,1.4vw,17px)/1.7 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.62); margin: 0; }
+    .iw-cta { display: inline-flex; align-items: center; gap: 8px; font: 600 13px/1 "Pretendard Variable","Pretendard",sans-serif; color: #fff; border: 1px solid rgba(255,255,255,0.32); border-radius: 999px; padding: 14px 24px; text-decoration: none; }
+    .iw-tag { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .hero-a { position: absolute; inset: 0; }
+    .ha-bg { position: absolute; inset: 0; background: radial-gradient(130% 120% at 50% 0%, #1f4533 0%, #0c1812 55%, #000 100%); will-change: transform; }
+    .ha-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 32px; z-index: 2; }
+    .hero-a .iw-eyebrow { --accent: #6fe0a8; margin-bottom: 26px; }
+    .ha-title { margin-bottom: 28px; }
+    .ha-title span { display: inline-block; }
+    .ha-divider { width: 60px; height: 2px; background: #6fe0a8; margin-bottom: 26px; transform-origin: left; }
+    .hero-a .iw-body { max-width: 430px; margin-bottom: 34px; }
+    .r { opacity: 0; will-change: opacity, transform; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">01-A · 풀스크린 히어로 오프닝</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <section class="hero-a">
+        <div class="ha-bg"></div>
+        <div class="ha-inner">
+          <p class="iw-eyebrow r" data-i="0">한울피드 · SINCE 1982</p>
+          <h1 class="iw-head ha-title">
+            <span class="r" data-i="1">자연을 먹이고,</span><br>
+            <span class="r" data-i="2">생명을 키웁니다</span>
+          </h1>
+          <div class="ha-divider r" data-i="3"></div>
+          <p class="iw-body r" data-i="4">40년간 축적한 배합 기술로 더 건강한 사육의 기준을 설계합니다.</p>
+          <a class="iw-cta r" data-i="5" href="javascript:void(0)">브랜드 스토리 보기 →</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+      function seg(p,a,b){ return clamp01((p - a) / (b - a)); }
+      function lerp(a,b,t){ return a + (b - a) * t; }
+      function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+      function easeInOut(t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }
+      function backOut(t){ var c = 1.70158; t = t - 1; return t*t*((c+1)*t + c) + 1; }
+      var track = document.querySelector(".scroll-track");
+      var stage = document.querySelector(".sticky-stage");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+      var items = stage.querySelectorAll(".r");
+      var bg = stage.querySelector(".ha-bg");
+      function applyReveal(p){
+        for (var i = 0; i < items.length; i++){
+          var el = items[i];
+          var k = +el.getAttribute("data-i");
+          var s = 0.08 + k * 0.11;
+          var lp = seg(p, s, s + 0.16);
+          if (el.classList.contains("ha-divider")) {
+            el.style.opacity = 1;
+            el.style.transform = "scaleX(" + lp + ")";
+          } else {
+            el.style.opacity = lp;
+            el.style.transform = "translateX(" + (40 * (1 - lp)) + "px)";
+          }
+        }
+        bg.style.transform = "scale(" + (1.12 - 0.12 * seg(p, 0, 0.6)) + ")";
+      }
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

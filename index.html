@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interaction Lab — 인터랙티브 모션 및 인터랙션 연구소</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css?v=20260526v2">
+</head>
+<body data-theme="light">
+
+<!-- ============ ICON SPRITE ============ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M3 10.5L12 3l9 7.5V20a1 1 0 01-1 1h-5v-7h-6v7H4a1 1 0 01-1-1v-9.5z"/>
+    </symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+    </symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+    </symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+    </symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 9l6 6 6-6"/>
+    </symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 6L6 18M6 6l12 12"/>
+    </symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 6h18M3 12h18M3 18h18"/>
+    </symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 5v14M5 12h14"/>
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============ SIDEBAR TOGGLE (mobile) ============ -->
+<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="네비게이션 열기">
+  <svg width="20" height="20"><use href="#i-menu"/></svg>
+</button>
+<div class="sidebar-scrim" onclick="closeSidebar()"></div>
+
+<!-- ============ SIDEBAR COLLAPSE TOGGLE (desktop) ============ -->
+<button class="sidebar-collapse" onclick="toggleSidebarCollapse()" aria-label="사이드바 접기/펴기" title="사이드바 접기 / 펴기">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path class="collapse-arrow" d="M15 6l-6 6 6 6"/>
+  </svg>
+</button>
+
+<!-- ============ SIDEBAR ============ -->
+<aside class="sidebar" id="sidebar">
+  <a class="sidebar-brand" href="#">
+    <div class="brand-mark">IL</div>
+    <div class="sidebar-brand-text">
+      <div class="brand-name">Interaction Lab</div>
+      <div class="brand-ver">v0.0.0</div>
+    </div>
+  </a>
+
+  <!-- Home -->
+  <div class="sidebar-group">
+    <ul class="sidebar-nav">
+      <li><a class="sidebar-link is-active" href="#" data-section="home">
+        <svg class="ico"><use href="#i-home"/></svg>홈</a></li>
+    </ul>
+  </div>
+
+  <!-- References (dynamically populated; 사이트 분석이 있을 때만 JS가 표시) -->
+  <div class="sidebar-group" id="sidebar-references" style="display:none">
+    <div class="sidebar-group-title">레퍼런스 보고서</div>
+    <ul class="sidebar-nav" id="ref-nav-list">
+      <li class="sidebar-empty">분석된 레퍼런스가 없습니다</li>
+    </ul>
+  </div>
+
+  <!-- Theme toggle -->
+  <div class="sidebar-theme">
+    <div>
+      <div class="sidebar-theme-label">테마</div>
+      <div class="sidebar-theme-sub" id="theme-sub">Light Mode</div>
+    </div>
+    <button class="sidebar-theme-btn" onclick="toggleTheme()" aria-label="테마 전환">
+      <span id="sidebar-theme-icon">☾</span>
+      <span id="sidebar-theme-label">Dark</span>
+    </button>
+  </div>
+</aside>
+
+<!-- ============ MAIN CONTENT ============ -->
+<div class="container" id="top">
+
+  <!-- HOME -->
+  <section class="hero" id="home-hero">
+    <div class="hero-meta">
+      <span class="tag">INTERACTION LAB</span>
+    </div>
+    <h1>움직임을<br>해부합니다.</h1>
+    <p class="hero-desc">
+      실무에서 쓰이는 인터랙티브 모션과 마이크로 인터랙션을 패턴 단위로 해부하고 재현합니다.<br>
+      스크롤 리빌, 무한 마퀴, 오버레이 메뉴, 스크램블 타이포, 커스텀 커서, 컬러 모핑 — 각 인터랙션을 라이브 데모와 복붙 가능한 코드 스니펫으로 정리한 카탈로그입니다.
+    </p>
+  </section>
+
+  <!-- INTERACTIVE WEB -->
+  <section class="home-section">
+    <h2 class="home-section-title">인터랙티브 웹</h2>
+    <p class="home-section-desc">컴포넌트가 아니라 실제 웹 페이지의 한 섹션 전체를 구성하는 인터랙티브 요소입니다. 한국 실사이트 6곳(사료·병원·제조·금융·헬스케어·NGO)을 실측해 섹션 단위 연출 10종 × 변형 예시 3개 = 라이브 데모 30개로 정리했습니다.</p>
+    <div class="analysis-grid">
+      <a class="analysis-card" href="#ref/interactive-web">
+        <div class="analysis-card-num">WEB</div>
+        <h3>섹션 인터랙티브 요소</h3>
+        <p>풀스크린 히어로 · 커튼 리빌 · 핀 칼럼 피드 · 연혁 타임라인 · 시네마틱 피날레 — 10요소 30데모</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- COLLECTION -->
+  <section class="home-section">
+    <h2 class="home-section-title">수록 카테고리</h2>
+    <p class="home-section-desc">현재 21개 카테고리 · 210개 인터랙션 패턴 + 인터랙티브 웹 10요소 30데모를 라이브 데모와 HTML·CSS·JS 코드로 제공합니다. 카드를 누르면 해당 카탈로그로 이동합니다.</p>
+    <div class="analysis-grid">
+      <a class="analysis-card" href="#ref/infinite-marquee">
+        <div class="analysis-card-num">01</div>
+        <h3>무한 마퀴</h3>
+        <p>로고월·텍스트 밴드가 끊김 없이 흐르는 무한 루프 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/scroll-color-morph">
+        <div class="analysis-card-num">02</div>
+        <h3>스크롤 컬러 모핑</h3>
+        <p>스크롤 진행률에 따라 배경·테마 색이 보간되는 패턴 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/overlay-menu">
+        <div class="analysis-card-num">03</div>
+        <h3>풀스크린 오버레이 메뉴</h3>
+        <p>햄버거 클릭 시 화면을 덮는 오버레이 메뉴 연출 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/animated-tabs">
+        <div class="analysis-card-num">04</div>
+        <h3>애니메이티드 탭</h3>
+        <p>활성 인디케이터가 미끄러지는 탭·세그먼트 전환 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/accordion-faq">
+        <div class="analysis-card-num">05</div>
+        <h3>아코디언 FAQ</h3>
+        <p>질문 클릭 시 답변이 부드럽게 펼쳐지는 아코디언 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/form-input-micro">
+        <div class="analysis-card-num">06</div>
+        <h3>폼 인풋 마이크로 인터랙션</h3>
+        <p>입력·검증에 즉각 반응하는 폼 피드백 패턴 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/text-scramble">
+        <div class="analysis-card-num">07</div>
+        <h3>스크램블 텍스트</h3>
+        <p>글자가 랜덤 글리프에서 해독되는 키네틱 타이포 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/scroll-path-draw">
+        <div class="analysis-card-num">08</div>
+        <h3>스크롤 패스 드로잉</h3>
+        <p>SVG 선이 스크롤만큼 펜으로 그리듯 완성되는 패턴 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/cursor-spotlight">
+        <div class="analysis-card-num">09</div>
+        <h3>커서 스포트라이트</h3>
+        <p>커서 주변만 콘텐츠를 비추는 radial mask 패턴 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/custom-cursor">
+        <div class="analysis-card-num">10</div>
+        <h3>커스텀 커서</h3>
+        <p>hover 대상에 따라 모양·라벨로 변신하는 커서 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/image-hover">
+        <div class="analysis-card-num">11</div>
+        <h3>이미지 hover</h3>
+        <p>이미지 카드가 줌·필터·클립·틸트로 반응하는 패턴 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/before-after-slider">
+        <div class="analysis-card-num">12</div>
+        <h3>비포-애프터 슬라이더</h3>
+        <p>드래그 분할선으로 전/후 이미지를 비교하는 슬라이더 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/fullscreen-wavy-swap">
+        <div class="analysis-card-num">13</div>
+        <h3>Fullscreen Wavy Swap</h3>
+        <p>풀스크린 물결 마스크로 이미지를 매끄럽게 교체하는 전환 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/card-wavy-swap">
+        <div class="analysis-card-num">14</div>
+        <h3>Card Wavy Swap</h3>
+        <p>카드 프레임 안에서 물결 마스크로 이미지를 바꾸는 전환 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/scrollx-card">
+        <div class="analysis-card-num">15</div>
+        <h3>ScrollX Card</h3>
+        <p>세로 스크롤을 가로 카드 글라이드로 변환하는 패턴 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/scroll-card-update">
+        <div class="analysis-card-num">16</div>
+        <h3>Scroll-Card-Update</h3>
+        <p>스크롤에 따라 우측 미디어 카드가 교체되는 패턴 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/full-screen-scroll">
+        <div class="analysis-card-num">17</div>
+        <h3>Full-screen Scroll</h3>
+        <p>풀스크린 슬라이드가 스크롤로 전환되는 패턴 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/nav-bar-dropdown">
+        <div class="analysis-card-num">18</div>
+        <h3>Nav bar dropdown</h3>
+        <p>내비게이션에 마우스를 올렸을 때 펼쳐지는 드롭다운 메뉴 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/scroll-text-reveal">
+        <div class="analysis-card-num">19</div>
+        <h3>스크롤 텍스트 로드</h3>
+        <p>스크롤 진행률에 맞춰 텍스트가 순차적으로 드러나는 패턴 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/button-hover">
+        <div class="analysis-card-num">20</div>
+        <h3>버튼 hover</h3>
+        <p>버튼에 마우스를 올렸을 때의 마이크로 인터랙션 10종</p>
+      </a>
+      <a class="analysis-card" href="#ref/number-counter">
+        <div class="analysis-card-num">21</div>
+        <h3>숫자 카운터</h3>
+        <p>숫자가 목표값까지 차오르는 카운트업 애니메이션 10종</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- EMPTY STATE -->
+  <section class="home-section home-empty">
+    <div class="empty-icon">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>
+      </svg>
+    </div>
+    <h2>원하는 인터랙션을 바로 가져가세요</h2>
+    <p>좌측 사이드바에서 카테고리를 선택하면 라이브 데모와<br>복붙용 HTML·CSS·JS 코드, 인터랙티브 .md 다운로드를 제공합니다.</p>
+    <div class="empty-example">
+      <code>#ref/fullscreen-wavy-swap</code>
+      <svg class="ico"><use href="#i-arrow-right"/></svg>
+      <span>Fullscreen Wavy Swap 카탈로그</span>
+    </div>
+  </section>
+
+  <!-- REPORT VIEW (dynamically populated by JS) -->
+  <section id="report-view" style="display:none;"></section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>Interaction Lab · v0.0.0 · 인터랙티브 모션 및 인터랙션 연구소</div>
+      <div class="footer-sig">MAINTAINED BY /DH · 2026</div>
+    </div>
+  </footer>
+
+</div>
+
+<script src="assets/js/main.js?v=20260526v2"></script>
+</body>
+</html>

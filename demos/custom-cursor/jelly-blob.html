@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05. 젤리 블롭 — Custom Cursor Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .demo-touch-note { display: none; position: fixed; left: 16px; bottom: 24px; z-index: 100; font: 500 11px/1.5 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; }
+    @media (hover: none), (pointer: coarse) { .demo-touch-note { display: block; } .demo-hint { display: none; } .stage, .stage * { cursor: auto; } }
+    .stage { position: relative; width: 100%; height: 100vh; overflow: hidden; cursor: none;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 26px; padding: 56px 24px; }
+    .stage * { cursor: none; }
+    .stage-eyebrow { font: 600 10px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.38); }
+    .stage-title { margin: 0; font: 700 clamp(22px,4.2vw,36px)/1.35 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.01em; text-align: center; }
+    .stage-row { display: flex; gap: 14px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .tgt-link { font: 600 14px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.85); text-decoration: none;
+      padding: 13px 24px; border: 1px solid rgba(255,255,255,0.16); border-radius: 999px;
+      transition: border-color 0.25s ease, background 0.25s ease; }
+    .tgt-link:hover { border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.06); }
+    .cursor-el { position: absolute; top: 0; left: 0; z-index: 60; pointer-events: none; will-change: transform;
+      opacity: 0; transition: opacity 0.25s ease; }
+    .stage.is-on .cursor-el { opacity: 1; }
+    
+    .cursor-blob { width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%;
+      background: radial-gradient(circle at 32% 32%, #c4b5fd, #7c3aed 72%);
+      box-shadow: 0 0 28px rgba(124,58,237,0.4); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">05 · 젤리 블롭</span>
+  </div>
+  <div class="demo-hint">스테이지 안에서 마우스를 움직여보세요</div>
+  <div class="demo-touch-note">터치 환경에서는 커스텀 커서가 동작하지 않습니다 — 데스크톱에서 확인해주세요</div>
+
+  <main class="stage">
+    <span class="stage-eyebrow">Jelly Blob</span>
+    <h1 class="stage-title">속도가 모양을 만듭니다</h1>
+    <div class="stage-row">
+      <a class="tgt-link" data-hover href="#" onclick="return false">빠르게 흔들어보기</a>
+      <a class="tgt-link" data-hover href="#" onclick="return false">천천히 그려보기</a>
+    </div>
+    <div class="cursor-el cursor-blob"></div>
+  </main>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      var mx = stage.offsetWidth / 2;
+      var my = stage.offsetHeight / 2;
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        mx = e.clientX - r.left;
+        my = e.clientY - r.top;
+        stage.classList.add("is-on");
+      });
+      stage.addEventListener("mouseleave", function(){
+        stage.classList.remove("is-on");
+      });
+      function lerp(a, b, t){ return a + (b - a) * t; }
+      
+      var blob = stage.querySelector(".cursor-blob");
+      var bx = mx, by = my;
+      var lastAngle = 0, hs = 1, ht = 1;
+      stage.addEventListener("mousemove", function(e){
+        ht = e.target.closest("[data-hover]") ? 1.5 : 1;
+      });
+      function frame(){
+        var nx = lerp(bx, mx, 0.16);
+        var ny = lerp(by, my, 0.16);
+        var vx = nx - bx, vy = ny - by;
+        bx = nx; by = ny;
+        hs = lerp(hs, ht, 0.15);
+        var speed = Math.sqrt(vx * vx + vy * vy);
+        if (speed > 0.3) lastAngle = Math.atan2(vy, vx) * 180 / Math.PI;
+        var stretch = Math.min(speed / 26, 0.5);
+        blob.style.transform = "translate(" + bx.toFixed(1) + "px," + by.toFixed(1) + "px)"
+          + " rotate(" + lastAngle.toFixed(1) + "deg)"
+          + " scale(" + ((1 + stretch) * hs).toFixed(3) + "," + ((1 - stretch * 0.55) * hs).toFixed(3) + ")";
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+  </script>
+</body>
+</html>

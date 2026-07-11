@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01. 플로팅 라벨 (시그니처) — Form Input Micro Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+    .demo-reset:hover { background: rgba(255,255,255,0.16); color: #fff; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 64px 20px 48px;
+    }
+    .form-card {
+      width: 100%; max-width: 380px;
+      background: #0d0d0d; border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 18px; padding: 32px 28px 28px;
+      box-shadow: 0 24px 60px -30px rgba(0,0,0,0.85);
+    }
+    .form-title { margin: 0 0 6px; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+    .form-desc { margin: 0 0 24px; font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.45); }
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: rgba(255,255,255,0.55); }
+    .text-input {
+      width: 100%; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.16); border-radius: 10px;
+      padding: 13px 14px; font: 500 15px/1.4 "Pretendard Variable","Pretendard",sans-serif;
+      color: #fff; outline: none; caret-color: #3b82f6;
+      transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+    }
+    .text-input::placeholder { color: rgba(255,255,255,0.28); }
+    .text-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.18); }
+    
+    .fl-field { position: relative; }
+    .fl-input { width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.16); border-radius: 10px; padding: 16px 14px 14px; font: 500 15px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: #fff; outline: none; caret-color: #3b82f6; transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out; }
+    .fl-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.18); }
+    .fl-label { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); padding: 0 4px; font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.38); background: #0d0d0d; border-radius: 4px; pointer-events: none; transition: top 0.2s cubic-bezier(0.25,0.46,0.45,0.94), font-size 0.2s cubic-bezier(0.25,0.46,0.45,0.94), color 0.2s ease-out, font-weight 0.2s ease-out; }
+    .fl-input:focus + .fl-label,
+    .fl-input:not(:placeholder-shown) + .fl-label { top: 0; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.6); }
+    .fl-input:focus + .fl-label { color: #3b82f6; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">01 · 플로팅 라벨 (시그니처)</span>
+  </div>
+  <div class="demo-hint">필드를 클릭해 입력해 보세요</div>
+
+  <main class="stage">
+    <div class="form-card">
+      <h2 class="form-title">계정 만들기</h2>
+      <p class="form-desc">필드를 클릭하면 라벨이 보더 위로 떠오릅니다. 입력값이 남아 있으면 라벨도 위에 머뭅니다.</p>
+      <div class="field fl-field">
+        <input class="fl-input" id="fl-email" type="email" placeholder=" " autocomplete="off">
+        <label class="fl-label" for="fl-email">이메일 주소</label>
+      </div>
+      <div class="field fl-field">
+        <input class="fl-input" id="fl-name" type="text" placeholder=" " autocomplete="off">
+        <label class="fl-label" for="fl-name">이름</label>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      window.__reset = function(){
+        document.querySelectorAll("input, textarea").forEach(function(el){
+          el.value = "";
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.blur();
+        });
+        if (window.__resetDemo) window.__resetDemo();
+      };
+    })();
+  </script>
+</body>
+</html>

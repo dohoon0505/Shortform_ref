@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10. 커튼 슬릿 — Cursor Spotlight Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #050505; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      position: relative; width: 100%; height: 100vh; overflow: hidden;
+      cursor: crosshair;
+      --x: 50%; --y: 50%;
+    }
+    
+    .pane { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 0 8vw; }
+    .pane-light {
+      background:
+        radial-gradient(circle at 70% 20%, rgba(255,209,102,0.5), transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(76,201,240,0.35), transparent 45%),
+        linear-gradient(160deg, #f7f5f0, #e9e6f7);
+      color: #161616;
+      clip-path: inset(0 calc(100% - var(--x)) 0 0);
+    }
+    .pane-dark {
+      background:
+        radial-gradient(circle at 30% 25%, rgba(124,108,255,0.35), transparent 45%),
+        radial-gradient(circle at 80% 75%, rgba(247,37,133,0.28), transparent 45%),
+        linear-gradient(160deg, #0b0b10, #16102b);
+      color: #fff;
+      clip-path: inset(0 0 0 var(--x));
+    }
+    .pane-kicker { font-size: 11px; font-weight: 600; letter-spacing: 0.28em; opacity: 0.55; }
+    .pane-title { margin: 0; font-size: clamp(30px, 6.4vw, 56px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; word-break: keep-all; }
+    .pane-sub { margin: 0; font-size: 13px; opacity: 0.6; word-break: keep-all; }
+    .slit-line { position: absolute; top: 0; bottom: 0; left: var(--x); width: 2px; margin-left: -1px;
+      background: rgba(255,255,255,0.75); mix-blend-mode: difference; pointer-events: none;
+    }
+    .slit-handle { position: absolute; top: 50%; left: var(--x); transform: translate(-50%, -50%);
+      width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #000;
+      display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4); pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">10 · 커튼 슬릿</span>
+  </div>
+  <div class="demo-hint">마우스를 움직여보세요 ✦</div>
+
+  <div class="stage">
+    <div class="pane pane-light">
+      <span class="pane-kicker">LIGHT</span>
+      <h1 class="pane-title">하나의 화면,<br>두 개의 무드</h1>
+      <p class="pane-sub">커서가 왼쪽으로 갈수록 라이트 무드가 넓어집니다</p>
+    </div>
+    <div class="pane pane-dark" aria-hidden="true">
+      <span class="pane-kicker">DARK</span>
+      <h1 class="pane-title">하나의 화면,<br>두 개의 무드</h1>
+      <p class="pane-sub">커서가 오른쪽으로 갈수록 다크 무드가 넓어집니다</p>
+    </div>
+    <div class="slit-line"></div>
+    <div class="slit-handle">⇄</div>
+  </div>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      function setPoint(x, y){
+        stage.style.setProperty("--x", x + "px");
+        stage.style.setProperty("--y", y + "px");
+      }
+      function toCenter(){
+        setPoint(stage.clientWidth / 2, stage.clientHeight / 2);
+      }
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        setPoint(e.clientX - r.left, e.clientY - r.top);
+      });
+      window.addEventListener("resize", toCenter);
+      toCenter();
+    })();
+  </script>
+</body>
+</html>

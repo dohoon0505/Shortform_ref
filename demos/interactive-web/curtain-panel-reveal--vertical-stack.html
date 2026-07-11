@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02-A. 멀티 패널 커튼 리빌 스토리 — 수직 패널 순차 벗기기</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.14); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; transition: width 60ms linear; }
+    .scroll-track { min-height: 260vh; position: relative; }
+    .sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .iw-eyebrow { font: 600 12px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent,#8ab4ff); margin: 0; }
+    .iw-head { font: 800 clamp(28px,4.4vw,56px)/1.12 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.02em; color: #fff; margin: 0; }
+    .iw-sub { font: 700 clamp(20px,2.6vw,30px)/1.3 "Pretendard Variable","Pretendard",sans-serif; color: #fff; margin: 0; }
+    .iw-body { font: 400 clamp(14px,1.4vw,17px)/1.7 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.62); margin: 0; }
+    .iw-cta { display: inline-flex; align-items: center; gap: 8px; font: 600 13px/1 "Pretendard Variable","Pretendard",sans-serif; color: #fff; border: 1px solid rgba(255,255,255,0.32); border-radius: 999px; padding: 14px 24px; text-decoration: none; }
+    .iw-tag { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .cr-wrap { position: relative; width: min(1040px, 90vw); display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+    .cr-visual { position: relative; aspect-ratio: 4/3; border-radius: 18px; overflow: hidden; }
+    .cr-media { position: absolute; inset: 0; background: linear-gradient(135deg, #2a5641 0%, #15281d 60%, #0c1812 100%); }
+    .cr-panel { position: absolute; inset: 0; background: rgba(255,255,255,0.72); will-change: transform; }
+    .cr-text { opacity: 0; transform: translateX(40px); will-change: opacity, transform; }
+    .cr-a .iw-eyebrow { --accent: #6fe0a8; margin-bottom: 20px; }
+    .cr-title { margin-bottom: 22px; }
+    .cr-float { position: absolute; left: 50%; bottom: 7%; transform: translateY(60px); display: flex; flex-direction: column; gap: 6px; padding: 16px 22px; background: #0d0d0d; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; opacity: 0; will-change: opacity, transform; }
+    .cr-float strong { font: 700 16px/1 "Pretendard Variable",sans-serif; color: #fff; }
+    .cr-float .iw-tag { --accent: #6fe0a8; color: #6fe0a8; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">02-A · 멀티 패널 커튼 리빌 스토리</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <section class="cr-wrap cr-a">
+        <div class="cr-visual">
+          <div class="cr-media"></div>
+          <div class="cr-panel" data-i="0"></div>
+          <div class="cr-panel" data-i="1"></div>
+          <div class="cr-panel" data-i="2"></div>
+          <div class="cr-panel" data-i="3"></div>
+        </div>
+        <div class="cr-text">
+          <p class="iw-eyebrow">BRAND STORY</p>
+          <h2 class="iw-head cr-title">100년을 바라보는<br>한울의 약속</h2>
+          <p class="iw-body">한 톨의 곡물에서 시작된 신뢰가 식탁의 안전으로 이어집니다.</p>
+        </div>
+        <div class="cr-float"><span class="iw-tag">SINCE 1982</span><strong>40년 외길</strong></div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+      function seg(p,a,b){ return clamp01((p - a) / (b - a)); }
+      function lerp(a,b,t){ return a + (b - a) * t; }
+      function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+      function easeInOut(t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }
+      function backOut(t){ var c = 1.70158; t = t - 1; return t*t*((c+1)*t + c) + 1; }
+      var track = document.querySelector(".scroll-track");
+      var stage = document.querySelector(".sticky-stage");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+      var panels = stage.querySelectorAll(".cr-panel");
+      var text = stage.querySelector(".cr-text");
+      var floatEl = stage.querySelector(".cr-float");
+      function applyReveal(p){
+        for (var i = 0; i < panels.length; i++){
+          var s = 0.12 + i * 0.15;
+          var lp = seg(p, s, s + 0.2);
+          panels[i].style.transform = "translateY(" + (-110 * lp) + "%)";
+        }
+        var tp = seg(p, 0.2, 0.5);
+        text.style.opacity = tp;
+        text.style.transform = "translateX(" + (40 * (1 - tp)) + "px)";
+        var fp = seg(p, 0.55, 0.85);
+        floatEl.style.opacity = fp;
+        floatEl.style.transform = "translateY(" + (60 * (1 - fp)) + "px)";
+      }
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

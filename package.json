@@ -1,0 +1,13 @@
+{
+  "name": "web-reference-lab",
+  "version": "0.0.0",
+  "description": "Web Reference Lab · 웹 디자인 레퍼런스 연구소. 실제 운영 웹사이트의 디자인 시스템을 연구원 수준으로 분석.",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate.mjs"
+  },
+  "keywords": ["web-design", "reference", "analysis", "design-system"],
+  "author": "/DH",
+  "license": "MIT"
+}

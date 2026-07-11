@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01. 플래시라이트 텍스트 (시그니처) — Cursor Spotlight Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #050505; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      position: relative; width: 100%; height: 100vh; overflow: hidden;
+      cursor: crosshair;
+      --x: 50%; --y: 50%;
+    }
+    
+    .layer { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px 8vw; }
+    .copy { margin: 0; max-width: 640px; font-size: clamp(20px, 3.6vw, 30px); font-weight: 700; line-height: 1.7; letter-spacing: -0.01em; word-break: keep-all; }
+    .layer-dim .copy { color: rgba(255,255,255,0.1); }
+    .layer-lit .copy { color: #fff; }
+    .layer-lit {
+      -webkit-mask-image: radial-gradient(circle 180px at var(--x) var(--y), #000 30%, transparent 78%);
+      mask-image: radial-gradient(circle 180px at var(--x) var(--y), #000 30%, transparent 78%);
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">01 · 플래시라이트 텍스트 (시그니처)</span>
+  </div>
+  <div class="demo-hint">마우스를 움직여보세요 ✦</div>
+
+  <div class="stage">
+    <div class="layer layer-dim">
+      <p class="copy">어둠 속에서 인터페이스는 전부를 말하지 않습니다. 커서가 머무는 자리에만 빛이 고이고, 문장은 손전등의 궤적을 따라 한 단어씩 깨어납니다. 시선이 곧 조명이 되는 경험 — 그것이 커서 스포트라이트의 출발점입니다.</p>
+    </div>
+    <div class="layer layer-lit" aria-hidden="true">
+      <p class="copy">어둠 속에서 인터페이스는 전부를 말하지 않습니다. 커서가 머무는 자리에만 빛이 고이고, 문장은 손전등의 궤적을 따라 한 단어씩 깨어납니다. 시선이 곧 조명이 되는 경험 — 그것이 커서 스포트라이트의 출발점입니다.</p>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      function setPoint(x, y){
+        stage.style.setProperty("--x", x + "px");
+        stage.style.setProperty("--y", y + "px");
+      }
+      function toCenter(){
+        setPoint(stage.clientWidth / 2, stage.clientHeight / 2);
+      }
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        setPoint(e.clientX - r.left, e.clientY - r.top);
+      });
+      window.addEventListener("resize", toCenter);
+      toCenter();
+    })();
+  </script>
+</body>
+</html>

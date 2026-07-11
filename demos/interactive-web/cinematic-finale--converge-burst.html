@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>09-A. 시네마틱 멀티 페이즈 피날레 — 수렴-발산 오브제 + 심볼 팝</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.14); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; transition: width 60ms linear; }
+    .scroll-track { min-height: 280vh; position: relative; }
+    .sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .iw-eyebrow { font: 600 12px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent,#8ab4ff); margin: 0; }
+    .iw-head { font: 800 clamp(28px,4.4vw,56px)/1.12 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.02em; color: #fff; margin: 0; }
+    .iw-sub { font: 700 clamp(20px,2.6vw,30px)/1.3 "Pretendard Variable","Pretendard",sans-serif; color: #fff; margin: 0; }
+    .iw-body { font: 400 clamp(14px,1.4vw,17px)/1.7 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.62); margin: 0; }
+    .iw-cta { display: inline-flex; align-items: center; gap: 8px; font: 600 13px/1 "Pretendard Variable","Pretendard",sans-serif; color: #fff; border: 1px solid rgba(255,255,255,0.32); border-radius: 999px; padding: 14px 24px; text-decoration: none; }
+    .iw-tag { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .cf-wrap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+    .cf-obj { position: absolute; width: clamp(90px,12vw,150px); aspect-ratio: 3/4; border-radius: 12px; will-change: transform, opacity; }
+    .cf-o0 { background: linear-gradient(140deg,#c9a86a,#7a5e2e); }
+    .cf-o1 { background: linear-gradient(140deg,#3a5a8a,#16263f); }
+    .cf-o2 { background: linear-gradient(140deg,#6a3a5a,#2a1428); }
+    .cf-symbol { position: absolute; width: clamp(120px,16vw,200px); aspect-ratio: 1; opacity: 0; will-change: transform, opacity; z-index: 3; }
+    .cf-clock { position: absolute; inset: 0; border-radius: 999px; border: 3px solid #c9a86a; background: radial-gradient(circle, #14233f, #0a1322); }
+    .cf-hand { position: absolute; left: 50%; bottom: 50%; background: #fff; transform-origin: bottom center; border-radius: 2px; }
+    .cf-hand-m { width: 3px; height: 38%; }
+    .cf-hand-h { width: 4px; height: 26%; background: #c9a86a; }
+    .cf-pin { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; border-radius: 999px; background: #c9a86a; transform: translate(-50%,-50%); }
+    .cf-copy { position: relative; z-index: 4; text-align: center; opacity: 0; transform: translateY(20px); will-change: opacity, transform; }
+    .cf-wrap .iw-eyebrow { --accent: #c9a86a; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">09-A · 시네마틱 멀티 페이즈 피날레</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <section class="cf-wrap">
+        <div class="cf-obj cf-o0"></div>
+        <div class="cf-obj cf-o1"></div>
+        <div class="cf-obj cf-o2"></div>
+        <div class="cf-symbol"><div class="cf-clock"><span class="cf-hand cf-hand-m"></span><span class="cf-hand cf-hand-h"></span><span class="cf-pin"></span></div></div>
+        <div class="cf-copy"><p class="iw-eyebrow">TIMELESS VALUE</p><h2 class="iw-head">시간이 지나도<br>변하지 않는 가치</h2></div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+      function seg(p,a,b){ return clamp01((p - a) / (b - a)); }
+      function lerp(a,b,t){ return a + (b - a) * t; }
+      function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+      function easeInOut(t){ return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2; }
+      function backOut(t){ var c = 1.70158; t = t - 1; return t*t*((c+1)*t + c) + 1; }
+      var track = document.querySelector(".scroll-track");
+      var stage = document.querySelector(".sticky-stage");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+      var objs = stage.querySelectorAll(".cf-obj");
+      var symbol = stage.querySelector(".cf-symbol");
+      var handM = stage.querySelector(".cf-hand-m");
+      var handH = stage.querySelector(".cf-hand-h");
+      var copy = stage.querySelector(".cf-copy");
+      var seeds = [{x:-120,y:-80},{x:130,y:-60},{x:-40,y:120}];
+      var bursts = [{x:-130,y:-30},{x:150,y:20},{x:40,y:140}];
+      function applyReveal(p){
+        var conv = seg(p, 0, 0.3);
+        var burst = seg(p, 0.55, 0.85);
+        for (var i = 0; i < objs.length; i++){
+          var sx = seeds[i].x * (1 - conv) + bursts[i].x * burst;
+          var sy = seeds[i].y * (1 - conv) + bursts[i].y * burst;
+          var sc = (0.9 + 0.1 * conv) - 0.3 * burst;
+          objs[i].style.transform = "translate(" + sx + "px," + sy + "px) scale(" + sc + ")";
+          objs[i].style.opacity = 1 - seg(p, 0.78, 0.92);
+        }
+        var pop = backOut(seg(p, 0.3, 0.55));
+        symbol.style.opacity = clamp01(seg(p, 0.3, 0.4));
+        symbol.style.transform = "scale(" + (0.2 + 0.8 * pop) + ")";
+        handM.style.transform = "translateX(-50%) rotate(" + (p * 720) + "deg)";
+        handH.style.transform = "translateX(-50%) rotate(" + (p * 60) + "deg)";
+        var cp = seg(p, 0.75, 1);
+        copy.style.opacity = cp;
+        copy.style.transform = "translateY(" + (20 * (1 - cp)) + "px)";
+      }
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

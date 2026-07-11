@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10. 오토 프로그레스 탭 — Animated Tabs Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #000; color: #fff;
+      font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font: inherit; color: inherit; }
+    .demo-controls {
+      position: fixed; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      z-index: 100;
+    }
+    .demo-reset {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.72);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 8px 14px; cursor: pointer;
+      transition: color 160ms, background 160ms, border-color 160ms;
+    }
+    .demo-reset:hover {
+      color: #fff; background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.32);
+    }
+    .demo-label {
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .demo-hint {
+      position: fixed; right: 16px; bottom: 24px;
+      font: 500 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.04em;
+      z-index: 100;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 8px 14px;
+      animation: hint-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes hint-pulse {
+      0%, 100% { opacity: 0.6; transform: translateY(0); }
+      50%       { opacity: 1; transform: translateY(-3px); }
+    }
+    /* 공통 탭 스테이지 */
+    .stage {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 28px; padding: 64px 24px 48px;
+    }
+    .tablist { position: relative; display: inline-flex; align-items: center; }
+    .tab {
+      position: relative; z-index: 1; appearance: none; border: 0; background: transparent;
+      cursor: pointer; font: 600 14px/1 "Pretendard Variable","Pretendard",sans-serif;
+      color: rgba(255,255,255,0.55); padding: 10px 18px; border-radius: 999px;
+      transition: color 0.18s ease; -webkit-tap-highlight-color: transparent;
+    }
+    .tab:hover { color: rgba(255,255,255,0.85); }
+    .tab[aria-selected="true"] { color: #fff; }
+    .panels { position: relative; width: min(520px, 88vw); }
+    .panel {
+      background: rgba(255,255,255,0.045); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 16px; padding: 22px;
+    }
+    .panel[hidden] { display: none; }
+    .panel-art { height: 110px; border-radius: 10px; margin: 0 0 16px; }
+    .panel-title { margin: 0 0 8px; font: 700 17px/1.35 "Pretendard Variable","Pretendard",sans-serif; color: #fff; letter-spacing: -0.01em; }
+    .panel-body { margin: 0; font: 400 14px/1.7 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.62); }
+    
+    /* 패턴별 CSS */
+    .tablist { gap: 18px; align-items: stretch; }
+    .tab { display: flex; flex-direction: column; align-items: stretch; gap: 9px; padding: 8px 2px 10px; border-radius: 6px; min-width: 84px; text-align: left; }
+    .lbl { display: block; }
+    .prog { display: block; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.14); overflow: hidden; }
+    .prog > span { display: block; width: 0%; height: 100%; border-radius: 2px; background: #fff; }
+    .panel-in { animation: panel-in 220ms cubic-bezier(0.4,0,0.2,1) both; }
+    @keyframes panel-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">10 · 오토 프로그레스 탭</span>
+  </div>
+  <div class="demo-hint">가만히 두면 5초마다 전환 — hover 일시정지 · 클릭 점프</div>
+
+  <main class="stage">
+    <div class="tablist" role="tablist" aria-label="제품 안내 탭">
+        <button class="tab" id="tab-0" role="tab" aria-selected="true" aria-controls="panel-0"><span class="lbl">개요</span><span class="prog" aria-hidden="true"><span></span></span></button>
+        <button class="tab" id="tab-1" role="tab" aria-selected="false" aria-controls="panel-1"><span class="lbl">기능</span><span class="prog" aria-hidden="true"><span></span></span></button>
+        <button class="tab" id="tab-2" role="tab" aria-selected="false" aria-controls="panel-2"><span class="lbl">요금</span><span class="prog" aria-hidden="true"><span></span></span></button>
+        <button class="tab" id="tab-3" role="tab" aria-selected="false" aria-controls="panel-3"><span class="lbl">문의</span><span class="prog" aria-hidden="true"><span></span></span></button>
+      </div>
+      <div class="panels">
+        <div class="panel" id="panel-0" role="tabpanel" aria-labelledby="tab-0">
+          <div class="panel-art" style="background:linear-gradient(135deg,#6366f1 0%,#a855f7 100%)"></div>
+          <h2 class="panel-title">한눈에 보는 대시보드</h2>
+          <p class="panel-body">제품의 핵심 지표를 실시간으로 모아 보여줍니다. 팀 전체가 같은 화면을 보며 의사결정을 내릴 수 있습니다.</p>
+        </div>
+        <div class="panel" id="panel-1" role="tabpanel" aria-labelledby="tab-1" hidden>
+          <div class="panel-art" style="background:linear-gradient(135deg,#06b6d4 0%,#3b82f6 100%)"></div>
+          <h2 class="panel-title">모듈형 워크플로</h2>
+          <p class="panel-body">자동화 규칙부터 권한 관리까지 필요한 기능만 골라 켤 수 있습니다. 설정은 전부 코드 없이 끝납니다.</p>
+        </div>
+        <div class="panel" id="panel-2" role="tabpanel" aria-labelledby="tab-2" hidden>
+          <div class="panel-art" style="background:linear-gradient(135deg,#f59e0b 0%,#ef4444 100%)"></div>
+          <h2 class="panel-title">쓴 만큼만 청구</h2>
+          <p class="panel-body">종량제와 고정 요금제 중 선택할 수 있고, 14일 무료 체험 동안 모든 기능이 열립니다.</p>
+        </div>
+        <div class="panel" id="panel-3" role="tabpanel" aria-labelledby="tab-3" hidden>
+          <div class="panel-art" style="background:linear-gradient(135deg,#10b981 0%,#14b8a6 100%)"></div>
+          <h2 class="panel-title">24시간 안에 답변</h2>
+          <p class="panel-body">도입 상담과 기술 지원 모두 채팅과 이메일로 받습니다. 평일 기준 24시간 안에 답변드립니다.</p>
+        </div>
+      </div>
+  </main>
+
+  <script>
+    (function(){
+      // 패턴별 JS — update(i, prev) 정의 + 인디케이터 헬퍼 (코어보다 먼저: var 초기화 순서)
+      var DUR = 5000;
+      var fills = [].slice.call(document.querySelectorAll(".prog > span"));
+      var list = document.querySelector(".tablist");
+      var raf = null, startTs = null, elapsed = 0, paused = false;
+      function frame(ts){
+        if (startTs === null || paused) startTs = ts - elapsed;
+        else elapsed = ts - startTs;
+        var ratio = Math.min(1, elapsed / DUR);
+        fills[current].style.width = (ratio * 100) + "%";
+        if (ratio >= 1) { select((current + 1) % tabs.length); return; }
+        raf = requestAnimationFrame(frame);
+      }
+      function update(i, prev){
+        fills.forEach(function(f, j){ f.style.width = j < i ? "100%" : "0%"; });
+        swapPanel(i);
+        if (raf) cancelAnimationFrame(raf);
+        startTs = null; elapsed = 0;
+        raf = requestAnimationFrame(frame);
+      }
+      list.addEventListener("mouseenter", function(){ paused = true; });
+      list.addEventListener("mouseleave", function(){ paused = false; });
+      function swapPanel(i){
+        panels.forEach(function(pn, j){ pn.hidden = j !== i; pn.classList.remove("panel-in"); });
+        void panels[i].offsetWidth;
+        panels[i].classList.add("panel-in");
+      }
+      // 공통 코어 — select / 키보드 / resize 재측정 / __reset(첫 탭) / select(0)
+      var tabs = [].slice.call(document.querySelectorAll(".tab"));
+      var panels = [].slice.call(document.querySelectorAll(".panel"));
+      var current = 0;
+      function showPanel(i){ panels.forEach(function(pn, j){ pn.hidden = j !== i; }); }
+      function select(i){
+        var prev = current; current = i;
+        tabs.forEach(function(t, j){ t.setAttribute("aria-selected", j === i ? "true" : "false"); });
+        update(i, prev);
+      }
+      tabs.forEach(function(t, i){ t.addEventListener("click", function(){ select(i); }); });
+      document.querySelector(".tablist").addEventListener("keydown", function(e){
+        var dir = (e.key === "ArrowRight" || e.key === "ArrowDown") ? 1 : ((e.key === "ArrowLeft" || e.key === "ArrowUp") ? -1 : 0);
+        if (!dir) return;
+        e.preventDefault();
+        var n = (current + dir + tabs.length) % tabs.length;
+        select(n); tabs[n].focus();
+      });
+      window.addEventListener("resize", function(){ update(current, current); });
+      window.__reset = function(){ select(0); };
+      select(0);
+    })();
+  </script>
+</body>
+</html>

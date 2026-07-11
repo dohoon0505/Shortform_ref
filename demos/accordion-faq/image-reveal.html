@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>07. 이미지 동반 — Accordion FAQ Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #000; color: #fff;
+      font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    button { font: inherit; color: inherit; }
+    .demo-controls {
+      position: fixed; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      z-index: 100;
+    }
+    .demo-reset {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.72);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 8px 14px; cursor: pointer;
+      transition: color 160ms, background 160ms, border-color 160ms;
+    }
+    .demo-reset:hover {
+      color: #fff; background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.32);
+    }
+    .demo-label {
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .demo-hint {
+      position: fixed; right: 16px; bottom: 24px;
+      font: 500 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.04em;
+      z-index: 100;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 8px 14px;
+      animation: hint-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes hint-pulse {
+      0%, 100% { opacity: 0.6; transform: translateY(0); }
+      50%       { opacity: 1; transform: translateY(-3px); }
+    }
+    /* 공통 스테이지 + FAQ 헤더 */
+    .stage { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 64px 24px 48px; }
+    .faq-wrap { width: min(620px, 92vw); }
+    .faq-head { margin: 0 0 18px; }
+    .faq-eyebrow { font: 700 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: #8b5cf6; letter-spacing: 0.2em; text-transform: uppercase; }
+    .faq-title { margin: 10px 0 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+    /* 패턴별 CSS */
+    .ir-wrap { width: min(860px, 94vw); display: grid; grid-template-columns: 1.1fr 300px; gap: 28px; align-items: stretch; }
+    @media (max-width: 720px) { .ir-wrap { grid-template-columns: 1fr; } .ir-panel { min-height: 200px; order: -1; } }
+    .ir-left { align-self: center; }
+    .ir-list { border-top: 1px solid rgba(255,255,255,0.12); }
+    .ir-item { border-bottom: 1px solid rgba(255,255,255,0.12); }
+    .ir-q { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 15px 4px; background: none; border: 0; text-align: left; cursor: pointer; color: rgba(255,255,255,0.78); font-size: 15px; font-weight: 600; line-height: 1.5; }
+    .ir-qt { transition: color 280ms; }
+    .ir-item.is-open .ir-qt { color: #fff; }
+    .ir-ico { flex-shrink: 0; font-size: 18px; font-weight: 300; color: rgba(255,255,255,0.45); transition: transform 320ms cubic-bezier(0.4,0,0.2,1), color 320ms; }
+    .ir-item.is-open .ir-ico { transform: rotate(45deg); color: #8b5cf6; }
+    .ir-a { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 320ms cubic-bezier(0.4,0,0.2,1); }
+    .ir-a-in { overflow: hidden; min-height: 0; }
+    .ir-a-in p { margin: 0; padding: 0 8px 16px 4px; font-size: 13.5px; line-height: 1.65; color: rgba(255,255,255,0.6); }
+    .ir-item.is-open .ir-a { grid-template-rows: 1fr; }
+    .ir-panel { position: relative; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); min-height: 340px; }
+    .ir-art { position: absolute; inset: 0; opacity: 0; transition: opacity 360ms ease; display: flex; align-items: flex-end; padding: 18px; }
+    .ir-art.is-on { opacity: 1; }
+    .ir-art::after { content: ""; position: absolute; inset: 0; background: radial-gradient(420px 280px at 70% 25%, rgba(255,255,255,0.35), transparent 70%); }
+    .ir-art span { position: relative; z-index: 1; font: 700 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.18em; color: rgba(255,255,255,0.85); }
+    .ir-art-1 { background: linear-gradient(135deg, #7c3aed, #ec4899); }
+    .ir-art-2 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+    .ir-art-3 { background: linear-gradient(135deg, #2563eb, #06b6d4); }
+    .ir-art-4 { background: linear-gradient(135deg, #059669, #84cc16); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">07 · 이미지 동반</span>
+  </div>
+  <div class="demo-hint">질문을 클릭하면 우측 아트워크가 바뀝니다</div>
+
+  <main class="stage">
+    <div class="ir-wrap">
+    <div class="ir-left">
+    <header class="faq-head">
+      <div class="faq-eyebrow">FAQ</div>
+      <h1 class="faq-title">자주 묻는 질문</h1>
+    </header>
+    <div class="ir-list">
+    <div class="ir-item is-open" data-art="a1">
+      <button class="ir-q" type="button" aria-expanded="true" aria-controls="ir-a1">
+        <span class="ir-qt">프로젝트 기간은 보통 얼마나 걸리나요?</span>
+        <span class="ir-ico" aria-hidden="true">+</span>
+      </button>
+      <div class="ir-a" id="ir-a1" role="region">
+        <div class="ir-a-in"><p>브랜딩 단독 프로젝트는 4~6주, 웹사이트 구축을 포함하면 8~12주가 일반적입니다. 킥오프 미팅에서 범위를 확정한 뒤 상세 일정표를 공유드립니다.</p></div>
+      </div>
+    </div>
+    <div class="ir-item" data-art="a2">
+      <button class="ir-q" type="button" aria-expanded="false" aria-controls="ir-a2">
+        <span class="ir-qt">수정 횟수에 제한이 있나요?</span>
+        <span class="ir-ico" aria-hidden="true">+</span>
+      </button>
+      <div class="ir-a" id="ir-a2" role="region">
+        <div class="ir-a-in"><p>각 단계마다 2회의 무상 수정 라운드가 포함되어 있습니다. 그 이상의 수정은 시간당 요율로 진행되며, 작업 전에 예상 견적을 먼저 안내드립니다.</p></div>
+      </div>
+    </div>
+    <div class="ir-item" data-art="a3">
+      <button class="ir-q" type="button" aria-expanded="false" aria-controls="ir-a3">
+        <span class="ir-qt">어떤 방식으로 소통하며 진행되나요?</span>
+        <span class="ir-ico" aria-hidden="true">+</span>
+      </button>
+      <div class="ir-a" id="ir-a3" role="region">
+        <div class="ir-a-in"><p>전용 슬랙 채널과 주 1회 정기 화상 미팅으로 진행 상황을 공유합니다. 모든 산출물은 피그마와 노션에서 실시간으로 확인하실 수 있습니다.</p></div>
+      </div>
+    </div>
+    <div class="ir-item" data-art="a4">
+      <button class="ir-q" type="button" aria-expanded="false" aria-controls="ir-a4">
+        <span class="ir-qt">결과물의 소유권은 누구에게 있나요?</span>
+        <span class="ir-ico" aria-hidden="true">+</span>
+      </button>
+      <div class="ir-a" id="ir-a4" role="region">
+        <div class="ir-a-in"><p>잔금이 입금되는 시점에 모든 산출물의 저작권과 원본 파일이 클라이언트에게 이전됩니다. 포트폴리오 공개 여부는 사전에 협의해 결정합니다.</p></div>
+      </div>
+    </div>
+    </div>
+    </div>
+    <div class="ir-panel" aria-hidden="true">
+      <div class="ir-art ir-art-1 is-on" data-art="a1"><span>01 · TIMELINE</span></div>
+      <div class="ir-art ir-art-2" data-art="a2"><span>02 · REVISION</span></div>
+      <div class="ir-art ir-art-3" data-art="a3"><span>03 · WORKFLOW</span></div>
+      <div class="ir-art ir-art-4" data-art="a4"><span>04 · LICENSE</span></div>
+    </div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // 기본 리셋: 모든 항목 닫기 (패턴 JS가 기본 상태 복원으로 재정의 가능)
+      window.__reset = function(){
+        document.querySelectorAll(".is-open").forEach(function(el){ el.classList.remove("is-open"); });
+        document.querySelectorAll("[aria-expanded]").forEach(function(b){ b.setAttribute("aria-expanded", "false"); });
+      };
+      // 패턴별 JS
+      var irItems = Array.prototype.slice.call(document.querySelectorAll(".ir-item"));
+      var irArts = Array.prototype.slice.call(document.querySelectorAll(".ir-art"));
+      function irOpen(target){
+        irItems.forEach(function(x){
+          var on = x === target;
+          x.classList.toggle("is-open", on);
+          x.querySelector(".ir-q").setAttribute("aria-expanded", on ? "true" : "false");
+        });
+        var key = target.getAttribute("data-art");
+        irArts.forEach(function(a){ a.classList.toggle("is-on", a.getAttribute("data-art") === key); });
+      }
+      irItems.forEach(function(item){
+        item.querySelector(".ir-q").addEventListener("click", function(){ irOpen(item); });
+      });
+      // 패널 공백 방지: 리셋은 첫 항목 복원
+      window.__reset = function(){ irOpen(irItems[0]); };
+    })();
+  </script>
+</body>
+</html>

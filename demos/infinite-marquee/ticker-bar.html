@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10. 뉴스 티커 바 — Infinite Marquee Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; animation: demo-loop 20s linear infinite; }
+    @keyframes demo-loop { from { width: 0; } to { width: 100%; } }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .tk-wrap { width: min(860px, 94vw); margin: 0 auto; text-align: center; }
+    .tk-bar { display: flex; align-items: stretch; border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; overflow: hidden; background: #0d0d0d; }
+    .tk-breaking { flex: 0 0 auto; display: flex; align-items: center; padding: 0 16px; background: #e11d48; color: #fff; font: 800 11px/1 "Pretendard Variable",sans-serif; letter-spacing: 0.12em; }
+    .tk-view { flex: 1; overflow: hidden; display: flex; align-items: center; -webkit-mask-image: linear-gradient(90deg, transparent, #000 32px, #000 calc(100% - 32px), transparent); mask-image: linear-gradient(90deg, transparent, #000 32px, #000 calc(100% - 32px), transparent); }
+    .tk-track { display: flex; width: max-content; animation: tk-scroll 20s linear infinite; will-change: transform; }
+    .tk-view:hover .tk-track { animation-play-state: paused; }
+    .tk-group { display: flex; align-items: center; flex: 0 0 auto; }
+    .tk-item { font: 500 14px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.8); text-decoration: none; padding: 15px 10px; white-space: nowrap; }
+    .tk-item:hover { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+    .tk-group i { color: rgba(255,255,255,0.3); font-style: normal; padding: 0 6px; }
+    @keyframes tk-scroll { to { transform: translateX(-50%); } }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 24px; text-align: center; }
+    .note-sub { font: 400 12px/1.5 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.35); text-align: center; margin: 26px 0 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">10 · 뉴스 티커 바</span>
+  </div>
+  <div class="demo-hint">항목에 마우스를 올려보세요</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="tk-wrap">
+      <p class="cap">NEWS TICKER BAR — SITE NOTICE</p>
+      <div class="tk-bar">
+        <span class="tk-breaking">BREAKING</span>
+        <div class="tk-view">
+          <div class="tk-track js-anim">
+            <div class="tk-group">
+              <a class="tk-item" href="#">무한 마퀴 카테고리 10종 공개</a><i>·</i>
+              <a class="tk-item" href="#">2026 모션 트렌드 리포트 발행</a><i>·</i>
+              <a class="tk-item" href="#">디자인 시스템 v5.2 업데이트</a><i>·</i>
+              <a class="tk-item" href="#">인터랙션 랩 뉴스레터 구독 오픈</a><i>·</i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="note-sub">항목 hover 시 밑줄 + 트랙 일시정지 — 클릭 보장</p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // ↻ 다시 보기 = CSS 애니메이션 재시작 (animation:none → reflow → 재부여)
+      function restartCssAnims() {
+        var els = document.querySelectorAll(".js-anim, .demo-progress > div");
+        Array.prototype.forEach.call(els, function(el) {
+          el.style.animation = "none";
+          void el.offsetWidth; // reflow 강제
+          el.style.animation = "";
+        });
+      }
+      window.__reset = restartCssAnims;
+      var track = document.querySelector(".tk-track");
+      var clone = track.querySelector(".tk-group").cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+      // 데모용 — 항목 클릭 시 페이지 점프 방지
+      Array.prototype.forEach.call(document.querySelectorAll(".tk-item"), function(a) {
+        a.addEventListener("click", function(e) { e.preventDefault(); });
+      });
+    })();
+  </script>
+</body>
+</html>

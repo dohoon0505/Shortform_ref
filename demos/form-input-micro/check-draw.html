@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04. 체크 드로잉 — Form Input Micro Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: background 0.2s ease, color 0.2s ease; }
+    .demo-reset:hover { background: rgba(255,255,255,0.16); color: #fff; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      padding: 64px 20px 48px;
+    }
+    .form-card {
+      width: 100%; max-width: 380px;
+      background: #0d0d0d; border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 18px; padding: 32px 28px 28px;
+      box-shadow: 0 24px 60px -30px rgba(0,0,0,0.85);
+    }
+    .form-title { margin: 0 0 6px; font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+    .form-desc { margin: 0 0 24px; font-size: 13px; line-height: 1.55; color: rgba(255,255,255,0.45); }
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .field-label { display: block; margin-bottom: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.02em; color: rgba(255,255,255,0.55); }
+    .text-input {
+      width: 100%; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.16); border-radius: 10px;
+      padding: 13px 14px; font: 500 15px/1.4 "Pretendard Variable","Pretendard",sans-serif;
+      color: #fff; outline: none; caret-color: #3b82f6;
+      transition: border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+    }
+    .text-input::placeholder { color: rgba(255,255,255,0.28); }
+    .text-input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.18); }
+    
+    .cd-wrap { position: relative; }
+    .cd-input { padding-right: 44px; }
+    .cd-field.is-valid .cd-input { border-color: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.14); }
+    .cd-check { position: absolute; right: 13px; top: 50%; width: 20px; height: 20px; transform: translateY(-50%) scale(0.8); opacity: 0; transition: opacity 0.18s ease-out, transform 0.18s ease-out; }
+    .cd-check path { stroke-dasharray: 21; stroke-dashoffset: 21; transition: stroke-dashoffset 0.3s cubic-bezier(0.25,0.46,0.45,0.94) 0.05s; }
+    .cd-field.is-valid .cd-check { opacity: 1; transform: translateY(-50%) scale(1); }
+    .cd-field.is-valid .cd-check path { stroke-dashoffset: 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">04 · 체크 드로잉</span>
+  </div>
+  <div class="demo-hint">이메일을 끝까지 입력해 보세요</div>
+
+  <main class="stage">
+    <div class="form-card">
+      <h2 class="form-title">실시간 형식 검사</h2>
+      <p class="form-desc">올바른 이메일 형식이 되는 순간 체크가 그려지고 보더가 초록으로 바뀝니다.</p>
+      <div class="field cd-field" id="cd-field">
+        <label class="field-label" for="cd-email">이메일 주소</label>
+        <div class="cd-wrap">
+          <input class="text-input cd-input" id="cd-email" type="email" placeholder="you@example.com" autocomplete="off">
+          <svg class="cd-check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12.5l4.5 4.5L19 7.5" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var field = document.getElementById("cd-field");
+      var input = document.getElementById("cd-email");
+      var EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      input.addEventListener("input", function(){
+        field.classList.toggle("is-valid", EMAIL.test(input.value.trim()));
+      });
+      window.__reset = function(){
+        document.querySelectorAll("input, textarea").forEach(function(el){
+          el.value = "";
+          el.dispatchEvent(new Event("input", { bubbles: true }));
+          el.blur();
+        });
+        if (window.__resetDemo) window.__resetDemo();
+      };
+    })();
+  </script>
+</body>
+</html>

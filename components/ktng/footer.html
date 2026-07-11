@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>KT&amp;G Footer — 격리 프리뷰</title>
+<!--
+  KT&G FOOTER — 하단 푸터 영역
+  Source: https://www.ktng.com  (Chrome MCP 실측 2026-05-18)
+  ============================================================
+  측정값 (CLAUDE.md 절대 규칙 0번):
+   ▸ .footer 본체:
+     - background: rgb(255,255,255) 흰색
+     - padding: 4rem max(3rem, 4.2708vw) 3rem (64px 상 / 좌우 가변 / 48px 하)
+     - border-top: 1px solid rgb(221,221,221) (#DDD)
+     - height: 582px (5 컬럼 + bottom 행)
+
+   ▸ .footer__container: display:flex; justify-content:space-between; margin-bottom:2.5rem
+   ▸ .footer__nav-wrapper: display:flex; gap:4rem (64px)
+   ▸ .footer__nav-title: font-size:1.125rem(18px); fontWeight:500; letter-spacing:-0.36px; color:#000
+   ▸ .footer__nav-list: gap:1rem(16px); margin-top:1.5rem(24px)
+   ▸ .footer__nav-list-item: font-size:1rem(16px); color:rgb(120,120,120); letter-spacing:-0.32px
+   ▸ .footer__sns-icon: 1.75rem × 1.75rem (28px 정사각, 3개: IG/YT/FB)
+   ▸ .footer__copyright: font-size:0.9375rem(15px); color:rgb(120,120,120)
+   ▸ .drop-down__trigger: "Family Site +" 우측 끝
+   ▸ .footer__info-item: 사이트맵 / 고정형 영상정보처리기기 운영관리방침 / 개인정보처리방침
+-->
+<style>
+  *,*::before,*::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; font-family: "Pretendard", system-ui, sans-serif; background: #f5f5f5; }
+
+  .demo-spacer { height: 50vh; display: flex; align-items: center; justify-content: center; color: #787878; font-size: 18px; background: linear-gradient(180deg,#f0f0f0,#fff); }
+
+  /* ============================================================
+     KT&G FOOTER (라이브 실측 1:1 재현)
+     ============================================================ */
+  .footer {
+    background-color: #fff;
+    padding: 4rem max(3rem, 4.2708vw) 3rem;
+    border-top: 1px solid #ddd;
+    color: #000;
+    font-family: "Pretendard", system-ui, sans-serif;
+  }
+  .footer__wrapper { position: relative; max-width: 1741px; margin: 0 auto; }
+
+  /* ─── TOP: 5 컬럼 + Family Site dropdown ─── */
+  .footer__container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+  }
+  .footer__nav-wrapper {
+    display: flex;
+    gap: 4rem;
+  }
+  .footer__nav {
+    min-width: 6.5rem;
+  }
+  .footer__nav-title {
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: -0.36px;
+    color: #000;
+    margin: 0;
+  }
+  .footer__nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 0;
+    list-style: none;
+  }
+  .footer__nav-list-item {
+    font-size: 1rem;
+    line-height: 1.6;
+    letter-spacing: -0.32px;
+    color: rgb(120, 120, 120);
+  }
+  .footer__nav-list-item a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  .footer__nav-list-item a:hover { color: #000; }
+
+  /* ─── Family Site dropdown (우측 끝) ─── */
+  .drop-down {
+    display: flex;
+    align-items: flex-start;
+  }
+  .drop-down__trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 100px;
+    font-size: 0.875rem;
+    color: #000;
+    background: #fff;
+    cursor: pointer;
+    min-width: 13.5rem;
+    transition: all 0.3s ease;
+  }
+  .drop-down__trigger:hover { border-color: #000; }
+  .drop-down__trigger-icon {
+    font-size: 1.125rem;
+    line-height: 1;
+  }
+
+  /* ─── SNS 아이콘 (우측 정렬) ─── */
+  .footer__sns {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 1.5rem;
+  }
+  .footer__sns-icon-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .footer__sns-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+  .footer__sns-icon:hover { opacity: 0.6; }
+  .footer__sns-icon svg { width: 100%; height: 100%; }
+
+  /* ─── BOTTOM: 사이트맵·방침 + Copyright ─── */
+  .footer__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer__info {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .footer__info-item {
+    font-size: 0.9375rem;
+    color: #000;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+  .footer__info-item:hover { opacity: 0.6; }
+  .footer__copyright {
+    font-size: 0.9375rem;
+    color: rgb(120, 120, 120);
+    line-height: 1.4;
+  }
+
+  /* ─── Mobile-only info row (sm) — 라이브: footer__info--s ─── */
+  .footer__info--s { display: none; }
+
+  @media (max-width: 1024px) {
+    .footer { padding: 3rem 1.5rem 2.5rem; }
+    .footer__container { flex-direction: column; gap: 2rem; margin-bottom: 1.5rem; }
+    .footer__nav-wrapper { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+    .footer__bottom { flex-direction: column; align-items: flex-start; }
+    .footer__info--l { display: none; }
+    .footer__info--s { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; padding-bottom: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-spacer">↑ 위에서 스크롤 (Footer 상단 보더 검증)</div>
+
+<!-- ============================================================ -->
+<!-- KT&G FOOTER — DOM 구조 라이브 1:1                              -->
+<!-- ============================================================ -->
+<div class="footer" id="footer">
+  <div class="footer__wrapper">
+    <!-- TOP: 5 nav columns + Family Site dropdown -->
+    <div class="footer__container">
+      <div class="footer__nav-wrapper">
+        <div class="footer__nav">
+          <div class="footer__nav-title">회사소개</div>
+          <ul class="footer__nav-list">
+            <li class="footer__nav-list-item"><a href="#">KT&amp;G 소개</a></li>
+            <li class="footer__nav-list-item"><a href="#">연혁</a></li>
+            <li class="footer__nav-list-item"><a href="#">주요사업</a></li>
+            <li class="footer__nav-list-item"><a href="#">글로벌 네트워크</a></li>
+          </ul>
+        </div>
+        <div class="footer__nav">
+          <div class="footer__nav-title">투자정보</div>
+          <ul class="footer__nav-list">
+            <li class="footer__nav-list-item"><a href="#">IR 개요</a></li>
+            <li class="footer__nav-list-item"><a href="#">기업가치 제고 계획</a></li>
+            <li class="footer__nav-list-item"><a href="#">지배구조</a></li>
+            <li class="footer__nav-list-item"><a href="#">재무정보</a></li>
+            <li class="footer__nav-list-item"><a href="#">주식정보</a></li>
+            <li class="footer__nav-list-item"><a href="#">공시정보</a></li>
+            <li class="footer__nav-list-item"><a href="#">IR 자료실</a></li>
+          </ul>
+        </div>
+        <div class="footer__nav">
+          <div class="footer__nav-title">지속가능경영</div>
+          <ul class="footer__nav-list">
+            <li class="footer__nav-list-item"><a href="#">ESG 개요</a></li>
+            <li class="footer__nav-list-item"><a href="#">환경</a></li>
+            <li class="footer__nav-list-item"><a href="#">사회</a></li>
+            <li class="footer__nav-list-item"><a href="#">윤리경영</a></li>
+            <li class="footer__nav-list-item"><a href="#">아카이빙</a></li>
+          </ul>
+        </div>
+        <div class="footer__nav">
+          <div class="footer__nav-title">미디어</div>
+          <ul class="footer__nav-list">
+            <li class="footer__nav-list-item"><a href="#">뉴스룸</a></li>
+            <li class="footer__nav-list-item"><a href="#">소셜미디어</a></li>
+            <li class="footer__nav-list-item"><a href="#">라이브러리</a></li>
+          </ul>
+        </div>
+        <div class="footer__nav">
+          <div class="footer__nav-title">인재채용</div>
+          <ul class="footer__nav-list">
+            <li class="footer__nav-list-item"><a href="#">인사제도</a></li>
+            <li class="footer__nav-list-item"><a href="#">직무소개</a></li>
+            <li class="footer__nav-list-item"><a href="#">채용가이드</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="drop-down">
+        <div class="drop-down__trigger">
+          <span>Family Site</span>
+          <span class="drop-down__trigger-icon">+</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SNS Icons (우측 정렬) -->
+    <div class="footer__sns">
+      <div class="footer__sns-icon-wrapper">
+        <a class="footer__sns-icon" aria-label="Instagram">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="22" height="22" rx="6"/><circle cx="14" cy="14" r="5"/><circle cx="21" cy="7" r="1.5" fill="currentColor"/></svg>
+        </a>
+        <a class="footer__sns-icon" aria-label="YouTube">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="6" width="24" height="16" rx="4"/><path d="M12 11 v6 l5-3 z" fill="currentColor"/></svg>
+        </a>
+        <a class="footer__sns-icon" aria-label="Facebook">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M16 28V16h4l1-5h-5V8c0-1.5.5-3 3-3h2V1h-3c-3.5 0-6 2-6 6v4H8v5h4v12z" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- BOTTOM: 사이트맵·방침 링크 + Copyright -->
+    <div class="footer__bottom">
+      <div class="footer__info footer__info--l">
+        <a class="footer__info-item" href="#">사이트맵</a>
+        <a class="footer__info-item" href="#">고정형 영상정보처리기기 운영관리방침</a>
+        <a class="footer__info-item" href="#"><strong>개인정보처리방침</strong></a>
+      </div>
+      <div class="footer__info footer__info--s">
+        <a class="footer__info-item" href="#">사이트맵</a>
+        <a class="footer__info-item" href="#">고정형 영상정보처리기기 운영관리방침</a>
+        <a class="footer__info-item" href="#"><strong>개인정보처리방침</strong></a>
+      </div>
+      <span class="footer__copyright">Copyright © 2025 KT&amp;G Corp. All Rights Reserved.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+window.__footerSpec = {
+  bg: getComputedStyle(document.getElementById('footer')).backgroundColor,
+  padding: getComputedStyle(document.getElementById('footer')).padding,
+  borderTop: getComputedStyle(document.getElementById('footer')).borderTopColor,
+  navColumns: document.querySelectorAll('.footer__nav').length,
+  snsIcons: document.querySelectorAll('.footer__sns-icon').length,
+  bottomInfoItems: document.querySelectorAll('.footer__info--l .footer__info-item').length,
+  copyrightFontSize: getComputedStyle(document.querySelector('.footer__copyright')).fontSize,
+  copyrightColor: getComputedStyle(document.querySelector('.footer__copyright')).color,
+  height: document.getElementById('footer').offsetHeight,
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>08. 프리뷰 썸네일 — Custom Cursor Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .demo-touch-note { display: none; position: fixed; left: 16px; bottom: 24px; z-index: 100; font: 500 11px/1.5 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; }
+    @media (hover: none), (pointer: coarse) { .demo-touch-note { display: block; } .demo-hint { display: none; } .stage, .stage * { cursor: auto; } }
+    .stage { position: relative; width: 100%; height: 100vh; overflow: hidden; cursor: none;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 26px; padding: 56px 24px; }
+    .stage * { cursor: none; }
+    .stage-eyebrow { font: 600 10px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.38); }
+    .stage-title { margin: 0; font: 700 clamp(22px,4.2vw,36px)/1.35 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.01em; text-align: center; }
+    .stage-row { display: flex; gap: 14px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .tgt-link { font: 600 14px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.85); text-decoration: none;
+      padding: 13px 24px; border: 1px solid rgba(255,255,255,0.16); border-radius: 999px;
+      transition: border-color 0.25s ease, background 0.25s ease; }
+    .tgt-link:hover { border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.06); }
+    .cursor-el { position: absolute; top: 0; left: 0; z-index: 60; pointer-events: none; will-change: transform;
+      opacity: 0; transition: opacity 0.25s ease; }
+    .stage.is-on .cursor-el { opacity: 1; }
+    
+    .work-list { list-style: none; margin: 0; padding: 0; width: min(440px, 84vw); }
+    .work-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.12); transition: padding 0.25s ease; }
+    .work-row:hover { padding-left: 14px; }
+    .work-title { font: 600 16px/1 "Pretendard Variable","Pretendard",sans-serif; }
+    .work-year { font: 500 12px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.4); }
+    .thumb-dot { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: #fff; }
+    .thumb-card { position: absolute; left: 22px; top: -44px; width: 124px; height: 88px; border-radius: 10px; overflow: hidden;
+      transform: scale(0) rotate(-8deg); transform-origin: 0 70%;
+      transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1); box-shadow: 0 14px 34px rgba(0,0,0,0.5); }
+    .cursor-thumb.is-show .thumb-card { transform: scale(1) rotate(-6deg); }
+    .thumb-art { position: absolute; inset: 0; opacity: 0; transition: opacity 0.2s ease; }
+    .thumb-art.on { opacity: 1; }
+    .art-0 { background: linear-gradient(135deg, #22d3ee, #6366f1); }
+    .art-1 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+    .art-2 { background: linear-gradient(135deg, #10b981, #84cc16); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">08 · 프리뷰 썸네일</span>
+  </div>
+  <div class="demo-hint">스테이지 안에서 마우스를 움직여보세요</div>
+  <div class="demo-touch-note">터치 환경에서는 커스텀 커서가 동작하지 않습니다 — 데스크톱에서 확인해주세요</div>
+
+  <main class="stage">
+    <span class="stage-eyebrow">Selected Works</span>
+    <ul class="work-list">
+      <li class="work-row" data-thumb="0"><span class="work-title">네온 시티 브랜딩</span><span class="work-year">2026</span></li>
+      <li class="work-row" data-thumb="1"><span class="work-title">오로라 캠페인</span><span class="work-year">2025</span></li>
+      <li class="work-row" data-thumb="2"><span class="work-title">포레스트 에디토리얼</span><span class="work-year">2025</span></li>
+    </ul>
+    <div class="cursor-el cursor-thumb">
+      <span class="thumb-dot"></span>
+      <div class="thumb-card">
+        <div class="thumb-art art-0"></div>
+        <div class="thumb-art art-1"></div>
+        <div class="thumb-art art-2"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      var mx = stage.offsetWidth / 2;
+      var my = stage.offsetHeight / 2;
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        mx = e.clientX - r.left;
+        my = e.clientY - r.top;
+        stage.classList.add("is-on");
+      });
+      stage.addEventListener("mouseleave", function(){
+        stage.classList.remove("is-on");
+      });
+      function lerp(a, b, t){ return a + (b - a) * t; }
+      
+      var cur = stage.querySelector(".cursor-thumb");
+      var arts = [].slice.call(stage.querySelectorAll(".thumb-art"));
+      var cx = mx, cy = my;
+      stage.addEventListener("mousemove", function(e){
+        var row = e.target.closest("[data-thumb]");
+        if (row){
+          var idx = parseInt(row.getAttribute("data-thumb"), 10);
+          cur.classList.add("is-show");
+          for (var i = 0; i < arts.length; i++) arts[i].classList.toggle("on", i === idx);
+        } else {
+          cur.classList.remove("is-show");
+        }
+      });
+      function frame(){
+        var vx = mx - cx;
+        cx = lerp(cx, mx, 0.14);
+        cy = lerp(cy, my, 0.14);
+        var tilt = Math.max(-8, Math.min(8, vx * 0.06));
+        cur.style.transform = "translate(" + cx.toFixed(1) + "px," + cy.toFixed(1) + "px) rotate(" + tilt.toFixed(2) + "deg)";
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>PlantyM — News (실측 1,552px Notice + PR Swiper)</title>
+<link rel="stylesheet" href="../../plantym-app/styles/globals.css">
+<style>
+.main-group.news {
+  position: relative;
+  width: 100%;
+  height: 1552px;
+  background: var(--bg-sub-color);
+  padding: 140px 0 100px;
+  overflow: hidden;
+}
+
+.main-group.news .inner {
+  max-width: var(--container-inner);
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.main-group.news .heading {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: var(--fs-section-h3);
+  color: var(--primary-color);
+  margin: 0 0 80px;
+  letter-spacing: -.02em;
+  line-height: 1.3;
+}
+
+.main-group.news .heading .accent { color: var(--accent-color); }
+
+.content-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+article.notice, article.pr {
+  background: #fff;
+  border-radius: 16px;
+  padding: 50px 40px;
+  position: relative;
+}
+
+article.pr {
+  background: var(--primary-color);
+  color: #fff;
+}
+
+article.notice h4, article.pr h4 {
+  font-family: var(--font-family);
+  font-weight: 700;
+  font-size: 26px;
+  color: inherit;
+  margin: 0 0 36px;
+  letter-spacing: -.01em;
+}
+
+article.notice h4 { color: var(--primary-color); }
+article.pr h4 { color: #fff; }
+
+.swiper-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+  border-bottom: 1px solid #ebebeb;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+.swiper-slide:first-child { border-top: 1px solid #ebebeb; }
+
+article.pr .swiper-slide { border-color: rgba(255,255,255,.15); }
+article.pr .swiper-slide:first-child { border-top: 1px solid rgba(255,255,255,.15); }
+
+.swiper-slide:hover { color: var(--accent-color); }
+
+.list-title {
+  font-family: var(--font-family);
+  font-size: 17px;
+  font-weight: 500;
+  color: inherit;
+  margin: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.list-date {
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: inherit;
+  opacity: .65;
+  margin-left: 20px;
+  flex-shrink: 0;
+}
+
+.list-bottom {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 2px;
+  background: rgba(0,0,0,.1);
+  overflow: hidden;
+}
+
+article.pr .progress-bar { background: rgba(255,255,255,.15); }
+
+.progress-bar-inner {
+  width: 100%;
+  height: 100%;
+  background: var(--accent-color);
+  transform: scaleX(.45);
+  transform-origin: left;
+  transition: transform .4s;
+}
+
+.list-handle-wrap {
+  display: flex;
+  gap: 10px;
+}
+
+.prev-btn, .next-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid rgba(0,0,0,.2);
+  cursor: pointer;
+  position: relative;
+  transition: all .3s;
+}
+
+article.pr .prev-btn, article.pr .next-btn {
+  border-color: rgba(255,255,255,.3);
+}
+
+.prev-btn:hover, .next-btn:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+}
+
+.prev-btn::before, .next-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-top: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+}
+
+.prev-btn::before {
+  transform: translate(-30%, -50%) rotate(-135deg);
+}
+
+.next-btn::before {
+  transform: translate(-70%, -50%) rotate(45deg);
+}
+
+.prev-btn:hover::before, .next-btn:hover::before {
+  border-color: #fff;
+}
+</style>
+</head>
+<body>
+<section class="sec main-group news">
+  <div class="inner large">
+    <h3 class="heading">
+      <span class="accent">PlantyM</span>의 소식과 이야기
+    </h3>
+
+    <div class="content-body">
+      <article class="notice">
+        <h4>공지사항</h4>
+        <div class="swiper-list">
+          <div class="swiper-slide">
+            <p class="list-title">공지사항</p>
+            <span class="list-date">2026. 02. 27</span>
+          </div>
+          <div class="swiper-slide">
+            <p class="list-title">홈페이지 리뉴얼 안내</p>
+            <span class="list-date">2026. 01. 15</span>
+          </div>
+          <div class="swiper-slide">
+            <p class="list-title">2026 신년 인사</p>
+            <span class="list-date">2026. 01. 02</span>
+          </div>
+          <div class="swiper-slide">
+            <p class="list-title">서비스 점검 안내</p>
+            <span class="list-date">2025. 12. 28</span>
+          </div>
+          <div class="swiper-slide">
+            <p class="list-title">2026 송년 인사</p>
+            <span class="list-date">2025. 12. 24</span>
+          </div>
+        </div>
+        <div class="list-bottom">
+          <div class="progress-bar">
+            <div class="progress-bar-inner" style="transform: scaleX(.3)"></div>
+          </div>
+          <div class="list-handle-wrap">
+            <button class="prev-btn"></button>
+            <button class="next-btn"></button>
+          </div>
+        </div>
+      </article>
+
+      <article class="pr">
+        <h4>보도자료</h4>
+        <div class="swiper-list">
+          <div class="swiper-slide">
+            <p class="list-title">플랜티엠, 디지털 매거진 신규 콘텐츠 출시</p>
+            <span class="list-date">2026. 02. 20</span>
+          </div>
+          <div class="swiper-slide">
+            <p class="list-title">주스샵, AI 매장음악 신서비스 발표</p>
+            <span class="list-date">2026. 02. 10</span>
+          </div>
+          <div class="swiper-slide">
+            <p class="list-title">디지털 사이니지 솔루션 확장</p>
+            <span class="list-date">2026. 01. 25</span>
+          </div>
+          <div class="swiper-slide">
+            <p class="list-title">PlantyM 글로벌 파트너십 강화</p>
+            <span class="list-date">2026. 01. 10</span>
+          </div>
+          <div class="swiper-slide">
+            <p class="list-title">디지털 콘텐츠 어워드 수상</p>
+            <span class="list-date">2025. 12. 20</span>
+          </div>
+        </div>
+        <div class="list-bottom">
+          <div class="progress-bar">
+            <div class="progress-bar-inner" style="transform: scaleX(.6)"></div>
+          </div>
+          <div class="list-handle-wrap">
+            <button class="prev-btn"></button>
+            <button class="next-btn"></button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+</body>
+</html>

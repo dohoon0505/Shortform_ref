@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>07. 아이콘 스왑 — Custom Cursor Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .demo-touch-note { display: none; position: fixed; left: 16px; bottom: 24px; z-index: 100; font: 500 11px/1.5 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; }
+    @media (hover: none), (pointer: coarse) { .demo-touch-note { display: block; } .demo-hint { display: none; } .stage, .stage * { cursor: auto; } }
+    .stage { position: relative; width: 100%; height: 100vh; overflow: hidden; cursor: none;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 26px; padding: 56px 24px; }
+    .stage * { cursor: none; }
+    .stage-eyebrow { font: 600 10px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.38); }
+    .stage-title { margin: 0; font: 700 clamp(22px,4.2vw,36px)/1.35 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.01em; text-align: center; }
+    .stage-row { display: flex; gap: 14px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .tgt-link { font: 600 14px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.85); text-decoration: none;
+      padding: 13px 24px; border: 1px solid rgba(255,255,255,0.16); border-radius: 999px;
+      transition: border-color 0.25s ease, background 0.25s ease; }
+    .tgt-link:hover { border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.06); }
+    .cursor-el { position: absolute; top: 0; left: 0; z-index: 60; pointer-events: none; will-change: transform;
+      opacity: 0; transition: opacity 0.25s ease; }
+    .stage.is-on .cursor-el { opacity: 1; }
+    
+    .zone { width: 168px; padding: 24px 16px; border: 1px dashed rgba(255,255,255,0.22); border-radius: 14px;
+      display: flex; flex-direction: column; gap: 7px; align-items: center; text-align: center;
+      transition: border-color 0.25s ease, background 0.25s ease; }
+    .zone:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.04); }
+    .zone strong { font: 600 14px/1 "Pretendard Variable","Pretendard",sans-serif; }
+    .zone span { font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); }
+    .cur-core { position: relative; display: flex; align-items: center; justify-content: center;
+      transform: translate(-50%, -50%); width: 14px; height: 14px; border-radius: 50%; background: #fff;
+      transition: width 0.2s ease, height 0.2s ease; }
+    .cur-ic { position: absolute; opacity: 0; transform: scale(0.4); transition: opacity 0.16s ease, transform 0.2s ease; }
+    .cursor-icon.has-mode .cur-core { width: 42px; height: 42px; }
+    .cursor-icon.mode-arrow .ic-arrow, .cursor-icon.mode-plus .ic-plus, .cursor-icon.mode-drag .ic-drag { opacity: 1; transform: scale(1); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">07 · 아이콘 스왑</span>
+  </div>
+  <div class="demo-hint">스테이지 안에서 마우스를 움직여보세요</div>
+  <div class="demo-touch-note">터치 환경에서는 커스텀 커서가 동작하지 않습니다 — 데스크톱에서 확인해주세요</div>
+
+  <main class="stage">
+    <span class="stage-eyebrow">Icon Swap</span>
+    <h1 class="stage-title">영역마다 커서의 역할이 바뀝니다</h1>
+    <div class="stage-row">
+      <div class="zone" data-cursor="arrow"><strong>외부 링크</strong><span>새 탭으로 이동</span></div>
+      <div class="zone" data-cursor="plus"><strong>갤러리 추가</strong><span>항목 더하기</span></div>
+      <div class="zone" data-cursor="drag"><strong>캐러셀</strong><span>좌우 드래그</span></div>
+    </div>
+    <div class="cursor-el cursor-icon">
+      <span class="cur-core">
+        <svg class="cur-ic ic-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 L17 7 M9 7 h8 v8"></path></svg>
+        <svg class="cur-ic ic-plus" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round"><path d="M12 5 v14 M5 12 h14"></path></svg>
+        <svg class="cur-ic ic-drag" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 h16 M8 8 l-4 4 4 4 M16 8 l4 4 -4 4"></path></svg>
+      </span>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      var mx = stage.offsetWidth / 2;
+      var my = stage.offsetHeight / 2;
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        mx = e.clientX - r.left;
+        my = e.clientY - r.top;
+        stage.classList.add("is-on");
+      });
+      stage.addEventListener("mouseleave", function(){
+        stage.classList.remove("is-on");
+      });
+      function lerp(a, b, t){ return a + (b - a) * t; }
+      
+      var cur = stage.querySelector(".cursor-icon");
+      var cx = mx, cy = my;
+      var mode = "";
+      stage.addEventListener("mousemove", function(e){
+        var z = e.target.closest("[data-cursor]");
+        var m = z ? z.getAttribute("data-cursor") : "";
+        if (m !== mode){
+          mode = m;
+          cur.className = "cursor-el cursor-icon" + (m ? " has-mode mode-" + m : "");
+        }
+      });
+      function frame(){
+        cx = lerp(cx, mx, 0.18);
+        cy = lerp(cy, my, 0.18);
+        cur.style.transform = "translate(" + cx.toFixed(1) + "px," + cy.toFixed(1) + "px)";
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+  </script>
+</body>
+</html>

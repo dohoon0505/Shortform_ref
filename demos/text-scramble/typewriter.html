@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02. 타자기 — Text Scramble Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .tw-wrap { text-align: center; width: min(86vw, 820px); }
+    .tw-line { margin: 0; font: 700 clamp(26px,4.2vw,48px)/1.45 "Pretendard Variable",sans-serif; color: #fff; min-height: 1.45em; }
+    .tw-cursor { display: inline-block; width: 3px; height: 1em; background: #fff; margin-left: 5px; vertical-align: -0.12em; animation: blink 1s infinite; transition: opacity 400ms; }
+    .tw-cursor.off { opacity: 0; animation: none; }
+    @keyframes blink { 0%, 45% { opacity: 1; } 50%, 95% { opacity: 0; } 100% { opacity: 1; } }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">02 · 타자기</span>
+  </div>
+  <div class="demo-hint">자동 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="tw-wrap">
+      <p class="cap">TYPEWRITER — INTRO</p>
+      <h1 class="tw-line"><span class="tw-text"></span><span class="tw-cursor"></span></h1>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 3200;
+      var LOOP = false;
+      var startTime = Date.now();
+      var running = true;
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+      var TEXT = "안녕하세요, 우리는 모션을 설계하는 팀입니다.";
+      var textEl = document.querySelector(".tw-text");
+      var cursor = document.querySelector(".tw-cursor");
+      function applyReveal(p) {
+        var typeP = Math.min(1, p / 0.82);
+        var count = Math.round(typeP * TEXT.length);
+        textEl.textContent = TEXT.slice(0, count);
+        if (p > 0.92) cursor.classList.add("off");
+        else cursor.classList.remove("off");
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else if (LOOP) { startTime = Date.now(); setTimeout(tick, 16); }
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

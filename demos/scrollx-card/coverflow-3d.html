@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03. 커버플로우 3D — ScrollX Card Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #f4f4f5; color: #18181b; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(0,0,0,0.5); background: rgba(255,255,255,0.85); border: 1px solid rgba(0,0,0,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; backdrop-filter: blur(8px); }
+    .demo-reset:hover { color: #000; background: #fff; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(0,0,0,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(0,0,0,0.4); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; background: rgba(255,255,255,0.75); padding: 8px 14px; border-radius: 999px; backdrop-filter: blur(8px); animation: hint-bounce 1.6s ease-in-out infinite; }
+    @keyframes hint-bounce { 0%, 100% { transform: translateY(0); opacity: 0.6; } 50% { transform: translateY(4px); opacity: 1; } }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(0,0,0,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #18181b; width: 0; transition: width 60ms linear; }
+    .scroll-track { min-height: 720vh; position: relative; }
+    .sticky-stage { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; background: #f4f4f5; }
+    .sx-heading { text-align: center; font: 700 clamp(32px,5vw,72px)/1 inherit; color: #18181b; margin: 0 0 clamp(28px,5vh,60px); letter-spacing: -0.02em; }
+    .sx-viewport { width: 100%; overflow: hidden; }
+    .sx-track { display: flex; gap: 24px; padding: 0 clamp(24px,6vw,120px); will-change: transform; }
+    .sx-card { flex: 0 0 clamp(240px,22vw,300px); background: #fff; border: 1px solid #ececec; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 14px; will-change: transform, opacity; }
+    .sx-end-spacer { flex: 0 0 clamp(120px,40vw,760px); }
+    .sx-img-wrap { width: 100%; aspect-ratio: 5 / 6; border-radius: 10px; overflow: hidden; background: #e5e5e5; }
+    .sx-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .sx-meta { padding: 14px 4px 4px; }
+    .sx-title { font: 600 clamp(16px,1.4vw,20px)/1.2 inherit; color: #18181b; margin: 0; }
+    .sx-sub { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-top: 8px; }
+    .sx-cat { font: 400 clamp(11px,0.95vw,13px)/1.3 inherit; color: #71717a; }
+    .sx-year { font: 400 clamp(11px,0.95vw,13px)/1 inherit; color: #a1a1aa; flex: none; }
+    
+    .sx-track { perspective: 1400px; align-items: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">03 · 커버플로우 3D</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <h2 class="sx-heading">Selected Work</h2>
+      <div class="sx-viewport">
+        <div class="sx-track">
+        <article class="sx-card" data-i="0">
+          <div class="sx-img-wrap"><img class="sx-img" src="https://picsum.photos/seed/pulse99/600/760" alt="" loading="lazy"></div>
+          <div class="sx-meta">
+            <h3 class="sx-title">Pulse</h3>
+            <div class="sx-sub"><span class="sx-cat">UI/UX Design & App Dev</span><span class="sx-year">2026</span></div>
+          </div>
+        </article>
+        <article class="sx-card" data-i="1">
+          <div class="sx-img-wrap"><img class="sx-img" src="https://picsum.photos/seed/orbit42/600/760" alt="" loading="lazy"></div>
+          <div class="sx-meta">
+            <h3 class="sx-title">Orbit</h3>
+            <div class="sx-sub"><span class="sx-cat">Digital Strategy & Marketing</span><span class="sx-year">2025</span></div>
+          </div>
+        </article>
+        <article class="sx-card" data-i="2">
+          <div class="sx-img-wrap"><img class="sx-img" src="https://picsum.photos/seed/flux17/600/760" alt="" loading="lazy"></div>
+          <div class="sx-meta">
+            <h3 class="sx-title">Flux</h3>
+            <div class="sx-sub"><span class="sx-cat">Web Development & SEO</span><span class="sx-year">2025</span></div>
+          </div>
+        </article>
+        <article class="sx-card" data-i="3">
+          <div class="sx-img-wrap"><img class="sx-img" src="https://picsum.photos/seed/echo73/600/760" alt="" loading="lazy"></div>
+          <div class="sx-meta">
+            <h3 class="sx-title">Echo</h3>
+            <div class="sx-sub"><span class="sx-cat">Content & Social Media</span><span class="sx-year">2025</span></div>
+          </div>
+        </article>
+        <article class="sx-card" data-i="4">
+          <div class="sx-img-wrap"><img class="sx-img" src="https://picsum.photos/seed/zenith8/600/760" alt="" loading="lazy"></div>
+          <div class="sx-meta">
+            <h3 class="sx-title">Zenith</h3>
+            <div class="sx-sub"><span class="sx-cat">Brand & Product Design</span><span class="sx-year">2025</span></div>
+          </div>
+        </article>
+        <article class="sx-card" data-i="5">
+          <div class="sx-img-wrap"><img class="sx-img" src="https://picsum.photos/seed/vertex5/600/760" alt="" loading="lazy"></div>
+          <div class="sx-meta">
+            <h3 class="sx-title">Vertex</h3>
+            <div class="sx-sub"><span class="sx-cat">E-commerce Design</span><span class="sx-year">2025</span></div>
+          </div>
+        </article>
+        <article class="sx-card" data-i="6">
+          <div class="sx-img-wrap"><img class="sx-img" src="https://picsum.photos/seed/nova31/600/760" alt="" loading="lazy"></div>
+          <div class="sx-meta">
+            <h3 class="sx-title">Nova</h3>
+            <div class="sx-sub"><span class="sx-cat">Motion & 3D Design</span><span class="sx-year">2024</span></div>
+          </div>
+        </article>
+        <article class="sx-card" data-i="7">
+          <div class="sx-img-wrap"><img class="sx-img" src="https://picsum.photos/seed/drift64/600/760" alt="" loading="lazy"></div>
+          <div class="sx-meta">
+            <h3 class="sx-title">Drift</h3>
+            <div class="sx-sub"><span class="sx-cat">Editorial & Print</span><span class="sx-year">2024</span></div>
+          </div>
+        </article>
+        <div class="sx-end-spacer" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var scrollTrack = document.querySelector(".scroll-track");
+      var stage = document.querySelector(".sticky-stage");
+      var track = document.querySelector(".sx-track");
+      var cards = document.querySelectorAll(".sx-card");
+      var N = 8;
+      var target = 0, current = 0, lastP = 0;
+      function calc(){
+        var rect = scrollTrack.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+      function maxX(){ return Math.max(0, track.scrollWidth - stage.clientWidth); }
+      function applyMove(p){
+        var mx = maxX(), vw = stage.clientWidth;
+        track.style.transform = "translateX(" + (-mx * p) + "px)";
+        cards.forEach(function(c){
+          var cx = c.offsetLeft + c.offsetWidth / 2 - mx * p;
+          var d = (cx - vw / 2) / vw;
+          var rot = Math.max(-60, Math.min(60, -d * 110));
+          c.style.transform = "rotateY(" + rot + "deg) scale(" + Math.max(0.78, 1 - Math.abs(d) * 0.3) + ")";
+          c.style.zIndex = String(100 - Math.round(Math.abs(d) * 100));
+        });
+      }
+      // smooth scroll — 실제 스크롤(target)을 current가 lerp로 부드럽게 추격
+      function loop(){
+        target = calc();
+        current += (target - current) * 0.08;
+        if (Math.abs(target - current) < 0.0002) current = target;
+        progressFill.style.width = (current * 100) + "%";
+        applyMove(current);
+        lastP = current;
+        requestAnimationFrame(loop);
+      }
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      requestAnimationFrame(loop);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>09. 지우고 다시 쓰기 — Text Scramble Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .er-box { text-align: center; width: min(86vw, 820px); }
+    .er-line { margin: 0; font: 700 clamp(26px,4.2vw,48px)/1.45 "Pretendard Variable",sans-serif; color: #fff; min-height: 1.45em; }
+    .er-cursor { display: inline-block; width: 3px; height: 1em; background: #8ab4ff; margin-left: 5px; vertical-align: -0.12em; animation: blink 1s infinite; }
+    @keyframes blink { 0%, 45% { opacity: 1; } 50%, 95% { opacity: 0; } 100% { opacity: 1; } }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">09 · 지우고 다시 쓰기</span>
+  </div>
+  <div class="demo-hint">자동 루프 재생</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="er-box">
+      <p class="cap">ERASE &amp; REWRITE — LOOP</p>
+      <h1 class="er-line"><span class="er-text"></span><span class="er-cursor"></span></h1>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 8000;
+      var LOOP = true;
+      var startTime = Date.now();
+      var running = true;
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+      var PHRASES = ["디자인은 언어다.", "모션은 그 언어의 억양이다."];
+      var textEl = document.querySelector(".er-text");
+      // [동작, 문구 인덱스, 시작 p, 끝 p]
+      var SEGS = [
+        ["type", 0, 0.00, 0.20],
+        ["hold", 0, 0.20, 0.34],
+        ["erase", 0, 0.34, 0.44],
+        ["type", 1, 0.44, 0.66],
+        ["hold", 1, 0.66, 0.84],
+        ["erase", 1, 0.84, 0.94],
+        ["blank", 0, 0.94, 1.00]
+      ];
+      function applyReveal(p) {
+        for (var i = 0; i < SEGS.length; i++) {
+          var s = SEGS[i];
+          if (p <= s[3] || i === SEGS.length - 1) {
+            var phrase = PHRASES[s[1]];
+            var segP = Math.max(0, Math.min(1, (p - s[2]) / (s[3] - s[2])));
+            var count;
+            if (s[0] === "type") count = Math.round(segP * phrase.length);
+            else if (s[0] === "hold") count = phrase.length;
+            else if (s[0] === "erase") count = Math.round((1 - segP) * phrase.length);
+            else count = 0;
+            textEl.textContent = phrase.slice(0, count);
+            return;
+          }
+        }
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else if (LOOP) { startTime = Date.now(); setTimeout(tick, 16); }
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

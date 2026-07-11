@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01. 스크램블 디코드 (시그니처) — Text Scramble Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .scr-wrap { text-align: center; }
+    .scr-line { margin: 0; font: 800 clamp(34px,5.6vw,72px)/1.3 "Pretendard Variable",sans-serif; letter-spacing: 0.01em; white-space: nowrap; }
+    .scr-char { display: inline-block; width: 1em; text-align: center; color: rgba(255,255,255,0.28); }
+    .scr-char.on { color: #fff; }
+    .scr-space { display: inline-block; width: 0.45em; }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">01 · 스크램블 디코드 (시그니처)</span>
+  </div>
+  <div class="demo-hint">자동 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="scr-wrap">
+      <p class="cap">TEXT SCRAMBLE — DECODE</p>
+      <h1 class="scr-line" aria-label="모션이 브랜드를 만든다"></h1>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 2800;
+      var LOOP = false;
+      var startTime = Date.now();
+      var running = true;
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+      var TEXT = "모션이 브랜드를 만든다";
+      var POOL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&@!?<>+=*";
+      var line = document.querySelector(".scr-line");
+      var spans = [];
+      TEXT.split("").forEach(function(ch) {
+        var s = document.createElement("span");
+        if (ch === " ") { s.className = "scr-space"; s.innerHTML = "&nbsp;"; }
+        else { s.className = "scr-char"; s.textContent = ch; }
+        s.dataset.ch = ch;
+        line.appendChild(s);
+        spans.push(s);
+      });
+      function rnd(seed) { var x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+      function applyReveal(p) {
+        var frame = Math.floor(p * 60);
+        var N = spans.length;
+        spans.forEach(function(s, i) {
+          if (s.dataset.ch === " ") return;
+          var lockP = 0.1 + (i / N) * 0.8;
+          if (p >= lockP) {
+            s.textContent = s.dataset.ch;
+            s.classList.add("on");
+          } else {
+            s.classList.remove("on");
+            s.textContent = POOL.charAt(Math.floor(rnd(i * 91 + Math.floor(frame / 2) * 7) * POOL.length));
+          }
+        });
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else if (LOOP) { startTime = Date.now(); setTimeout(tick, 16); }
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

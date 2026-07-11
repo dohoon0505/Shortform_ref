@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10. 홀드 프로그레스 — Custom Cursor Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #0a0a0a; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .demo-touch-note { display: none; position: fixed; left: 16px; bottom: 24px; z-index: 100; font: 500 11px/1.5 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; }
+    @media (hover: none), (pointer: coarse) { .demo-touch-note { display: block; } .demo-hint { display: none; } .stage, .stage * { cursor: auto; } }
+    .stage { position: relative; width: 100%; height: 100vh; overflow: hidden; cursor: none;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 26px; padding: 56px 24px; }
+    .stage * { cursor: none; }
+    .stage-eyebrow { font: 600 10px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.38); }
+    .stage-title { margin: 0; font: 700 clamp(22px,4.2vw,36px)/1.35 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.01em; text-align: center; }
+    .stage-row { display: flex; gap: 14px; align-items: center; justify-content: center; flex-wrap: wrap; }
+    .tgt-link { font: 600 14px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.85); text-decoration: none;
+      padding: 13px 24px; border: 1px solid rgba(255,255,255,0.16); border-radius: 999px;
+      transition: border-color 0.25s ease, background 0.25s ease; }
+    .tgt-link:hover { border-color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.06); }
+    .cursor-el { position: absolute; top: 0; left: 0; z-index: 60; pointer-events: none; will-change: transform;
+      opacity: 0; transition: opacity 0.25s ease; }
+    .stage.is-on .cursor-el { opacity: 1; }
+    
+    .hold-btn { font: 600 14px/1 "Pretendard Variable","Pretendard",sans-serif; color: #fff; background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.22); border-radius: 999px; padding: 16px 28px;
+      transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease; }
+    .hold-btn.is-confirmed { background: #34d399; border-color: #34d399; color: #052e1b; }
+    .hold-btn.danger.is-confirmed { background: #f87171; border-color: #f87171; color: #450a0a; }
+    .hold-svg { position: absolute; left: -28px; top: -28px; }
+    .hold-core { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border-radius: 50%; background: #fff;
+      transition: transform 0.2s ease, background 0.2s ease; }
+    .cursor-hold.is-done .hold-core { transform: scale(2.4); background: #34d399; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">10 · 홀드 프로그레스</span>
+  </div>
+  <div class="demo-hint">스테이지 안에서 마우스를 움직여보세요</div>
+  <div class="demo-touch-note">터치 환경에서는 커스텀 커서가 동작하지 않습니다 — 데스크톱에서 확인해주세요</div>
+
+  <main class="stage">
+    <span class="stage-eyebrow">Hold to Confirm</span>
+    <h1 class="stage-title">길게 눌러 액션을 확정하세요</h1>
+    <div class="stage-row">
+      <button class="hold-btn" data-hold type="button"><span class="hold-label">길게 눌러 구독</span></button>
+      <button class="hold-btn danger" data-hold type="button"><span class="hold-label">길게 눌러 삭제</span></button>
+    </div>
+    <div class="cursor-el cursor-hold">
+      <svg class="hold-svg" width="56" height="56" viewBox="0 0 56 56">
+        <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="3"></circle>
+        <circle class="hold-fill" cx="28" cy="28" r="24" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="150.8" transform="rotate(-90 28 28)"></circle>
+      </svg>
+      <span class="hold-core"></span>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      var mx = stage.offsetWidth / 2;
+      var my = stage.offsetHeight / 2;
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        mx = e.clientX - r.left;
+        my = e.clientY - r.top;
+        stage.classList.add("is-on");
+      });
+      stage.addEventListener("mouseleave", function(){
+        stage.classList.remove("is-on");
+      });
+      function lerp(a, b, t){ return a + (b - a) * t; }
+      
+      var cur = stage.querySelector(".cursor-hold");
+      var fill = stage.querySelector(".hold-fill");
+      var C = 150.8;
+      var cx = mx, cy = my;
+      var holding = false, progress = 0, done = false;
+      var hoverBtn = null;
+      var last = Date.now();
+      stage.addEventListener("mousemove", function(e){
+        hoverBtn = e.target.closest("[data-hold]");
+      });
+      stage.addEventListener("pointerdown", function(){ holding = true; });
+      window.addEventListener("pointerup", function(){ holding = false; });
+      function frame(){
+        var now = Date.now();
+        var dt = Math.min(64, now - last);
+        last = now;
+        if (holding && !done) progress += dt / 900;
+        else if (!holding) progress -= dt / 500;
+        progress = Math.max(0, Math.min(1, progress));
+        if (progress >= 1 && !done){
+          done = true;
+          cur.classList.add("is-done");
+          if (hoverBtn){
+            hoverBtn.classList.add("is-confirmed");
+            hoverBtn.querySelector(".hold-label").textContent = "확정 완료 ✓";
+          }
+        }
+        if (done && progress <= 0.02){
+          done = false;
+          cur.classList.remove("is-done");
+        }
+        fill.style.strokeDashoffset = (C * (1 - progress)).toFixed(1);
+        cx = lerp(cx, mx, 0.2);
+        cy = lerp(cy, my, 0.2);
+        cur.style.transform = "translate(" + cx.toFixed(1) + "px," + cy.toFixed(1) + "px)";
+        requestAnimationFrame(frame);
+      }
+      frame();
+    })();
+  </script>
+</body>
+</html>

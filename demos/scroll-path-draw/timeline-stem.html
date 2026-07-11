@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05. 타임라인 줄기 — Scroll Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #000; color: #fff;
+      font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .demo-controls {
+      position: fixed; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      z-index: 20;
+    }
+    .demo-reset {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.72);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 8px 14px; cursor: pointer;
+      transition: color 160ms, background 160ms, border-color 160ms;
+    }
+    .demo-reset:hover {
+      color: #fff; background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.32);
+    }
+    .demo-label {
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .demo-hint {
+      position: fixed; right: 16px; bottom: 24px;
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      z-index: 20;
+      animation: demo-hint-bounce 1.6s ease-in-out infinite;
+    }
+    @keyframes demo-hint-bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.45; }
+      50%       { transform: translateY(4px); opacity: 0.8; }
+    }
+    .demo-progress {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 2px; background: rgba(255,255,255,0.06);
+      z-index: 20;
+    }
+    .demo-progress > div {
+      height: 100%; background: #fff; width: 0;
+      transition: width 60ms linear;
+    }
+    .scroll-track { min-height: 240vh; position: relative; }
+    .sticky-stage {
+      position: sticky; top: 0;
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 8vw 60px;
+      overflow: hidden;
+    }
+    /* 패턴별 CSS */
+    .tl-svg { width: min(640px, 88vw); height: auto; display: block; }
+    .tl-stem-bg { stroke: rgba(255,255,255,0.1); stroke-width: 3; }
+    .tl-stem { stroke: #fff; stroke-width: 3; stroke-linecap: round; }
+    .tl-item { opacity: 0; }
+    .tl-dot { fill: #000; stroke: #fff; stroke-width: 3; }
+    .tl-year { font: 700 20px "Pretendard Variable","Pretendard",system-ui,sans-serif; fill: #fff; }
+    .tl-desc { font: 500 15px "Pretendard Variable","Pretendard",system-ui,sans-serif; fill: rgba(255,255,255,0.55); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">05 · 타임라인 줄기</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <svg class="tl-svg" viewBox="0 0 640 430" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line class="tl-stem-bg" x1="120" y1="24" x2="120" y2="410"/>
+        <line class="tl-stem" x1="120" y1="24" x2="120" y2="410"/>
+        <g class="tl-item" data-at="0.12">
+          <circle class="tl-dot" cx="120" cy="72" r="7"/>
+          <text class="tl-year" x="152" y="66">2023</text>
+          <text class="tl-desc" x="152" y="90">첫 프로토타입 공개</text>
+        </g>
+        <g class="tl-item" data-at="0.37">
+          <circle class="tl-dot" cx="120" cy="168" r="7"/>
+          <text class="tl-year" x="152" y="162">2024</text>
+          <text class="tl-desc" x="152" y="186">정식 서비스 런칭</text>
+        </g>
+        <g class="tl-item" data-at="0.62">
+          <circle class="tl-dot" cx="120" cy="264" r="7"/>
+          <text class="tl-year" x="152" y="258">2025</text>
+          <text class="tl-desc" x="152" y="282">월 사용자 100만 달성</text>
+        </g>
+        <g class="tl-item" data-at="0.87">
+          <circle class="tl-dot" cx="120" cy="360" r="7"/>
+          <text class="tl-year" x="152" y="354">2026</text>
+          <text class="tl-desc" x="152" y="378">글로벌 12개국 진출</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var track = document.querySelector(".scroll-track");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+
+      // 패턴별 init + applyReveal 정의
+      var stem = document.querySelector(".tl-stem");
+      var items = document.querySelectorAll(".tl-item");
+      var L = stem.getTotalLength();
+      stem.style.strokeDasharray = L + " " + L;
+      stem.style.strokeDashoffset = L;
+      function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+      function applyReveal(p){
+        var drawP = clamp01((p - 0.05) / 0.85);
+        stem.style.strokeDashoffset = L * (1 - drawP);
+        items.forEach(function(g){
+          var at = parseFloat(g.getAttribute("data-at"));
+          var t = clamp01((drawP - at) / 0.1);
+          g.style.opacity = t;
+          g.setAttribute("transform", "translate(" + (14 * (1 - t)).toFixed(2) + " 0)");
+        });
+      }
+
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

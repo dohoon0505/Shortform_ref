@@ -1,0 +1,1383 @@
+{
+  "id": "custom-cursor",
+  "title": "커스텀 커서",
+  "type": "category",
+  "url": "https://cuberto.com/",
+  "date": "2026-06-10",
+  "summary": "네이티브 커서를 숨기고 rAF lerp 보간으로 따라오는 커스텀 커서가 hover 대상에 따라 모양·크기·라벨로 변신하는 10가지 패턴. Cuberto·Awwwards 수상작의 시그니처 — 사이트 전체 무드를 한 번에 바꾸는 커서 축의 본진.",
+  "patternCount": 10,
+  "sections": {
+    "overview": {
+      "title": "00. 카테고리 개요",
+      "blocks": [
+        {
+          "type": "heading",
+          "value": "커스텀 커서 — Cuberto 시그니처 기반 10종 패턴"
+        },
+        {
+          "type": "text",
+          "value": "네이티브 커서를 숨기고 rAF lerp 보간으로 따라오는 커스텀 커서가 hover 대상에 따라 모양·크기·라벨로 변신하는 10가지 패턴. Cuberto·Awwwards 수상작의 시그니처 — 사이트 전체 무드를 한 번에 바꾸는 커서 축의 본진."
+        },
+        {
+          "type": "heading",
+          "value": "10 패턴 인덱스"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "01. 도트 + 링 듀오 (시그니처)",
+              "tag": "Vanilla JS (rAF lerp)",
+              "desc": "본체 도트는 마우스를 즉시 추적하고, 외곽 링은 lerp 0.15로 한 박자 늦게 따라오는 커스텀 커서의 가장 표준적인 형태. 링크·버튼 hover 시 링이 1.9배로 확대되어 클릭 가능 영역을 안내한다."
+            },
+            {
+              "label": "02. 블렌드 인버트",
+              "tag": "Vanilla JS + CSS mix-blend-mode",
+              "desc": "mix-blend-mode: difference를 적용한 흰 원이 지나는 자리의 색을 반전시킨다. 다크 배경에서는 흰 원으로, 흰 텍스트·밝은 패널 위에서는 검정으로 뒤집혀 배경색 분기 로직 없이 모든 톤에 자동 대응."
+            },
+            {
+              "label": "03. 라벨 커서",
+              "tag": "Vanilla JS (rAF lerp + 클래스 토글)",
+              "desc": "기본 14px 점이 작업물 카드 위에서 78×34px 캡슐로 확장되며 VIEW 라벨이 떠오른다. 커서 자체가 \"클릭하면 볼 수 있다\"는 CTA 역할을 수행하는 Awwwards 갤러리의 단골 패턴."
+            },
+            {
+              "label": "04. 마그네틱 스냅",
+              "tag": "Vanilla JS (거리 계산 + rAF lerp)",
+              "desc": "버튼 중심 반경 110px에 들어서면 커서가 버튼 중심으로 흡착되고, 버튼도 커서 쪽으로 살짝 끌려온다. 거리 기반 연속 강도(1 − d/R)로 가까울수록 세게 당기는 상호 자석 인터랙션."
+            },
+            {
+              "label": "05. 젤리 블롭",
+              "tag": "Vanilla JS (속도 벡터 계산)",
+              "desc": "이동 속도와 방향을 매 프레임 측정해 진행축으로 늘어나고(scaleX) 수직축으로 눌리는(scaleY) squash & stretch를 적용. 빠르게 움직이면 길쭉해지고 멈추면 동그랗게 복원되는 젤리 질감의 커서."
+            },
+            {
+              "label": "06. 고스트 딜레이",
+              "tag": "Vanilla JS (rAF 다중 lerp)",
+              "desc": "잔상 원 5개가 같은 마우스 좌표를 서로 다른 lerp 계수(0.35→0.07)로 쫓아 시차 트레일을 만든다. 이동 중에는 곡선으로 늘어서고 멈추면 한 점으로 수렴 — 위치 히스토리 없이 계수 차이만으로 구현."
+            },
+            {
+              "label": "07. 아이콘 스왑",
+              "tag": "Vanilla JS + inline SVG 3종",
+              "desc": "영역마다 data-cursor 속성(arrow/plus/drag)을 선언하면 커서가 그 위에서 화살표·플러스·드래그 아이콘으로 교체된다. 커서가 \"이 영역에서 무엇을 할 수 있는지\"를 설명하는 어포던스 패턴."
+            },
+            {
+              "label": "08. 프리뷰 썸네일",
+              "tag": "Vanilla JS (rAF lerp + 레이어 토글)",
+              "desc": "프로젝트 리스트 행에 hover하면 커서 옆에 미니 아트워크 카드가 살짝 기울어진 채 팝업된다. 아트워크 레이어 3장을 미리 쌓아두고 opacity로만 전환해 이미지 교체 깜빡임이 없는 구조."
+            },
+            {
+              "label": "09. 이미지 트레일",
+              "tag": "Vanilla JS + CSS @keyframes",
+              "desc": "마우스가 80px 이동할 때마다 커서 위치에 아트워크 카드가 스폰되어 떠오르며 사라진다. 요소 10개를 풀(pool)로 순환 재사용해 DOM 생성·삭제 없이 무한 트레일을 유지하는 패션 룩북형 패턴."
+            },
+            {
+              "label": "10. 홀드 프로그레스",
+              "tag": "Vanilla JS + inline SVG 링",
+              "desc": "pointerdown을 900ms 유지하면 커서의 SVG 링 게이지가 차오르고 완료 시 버튼이 확정 상태로 바뀐다. 도중에 손을 떼면 되감기 — 실수 클릭을 막는 의도적 마찰(intentional friction) 패턴."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "공통 디자인 토큰"
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "폰트",
+              "value": "Pretendard Variable"
+            },
+            {
+              "label": "배경",
+              "value": "#0a0a0a (다크) + cursor: none 스테이지"
+            },
+            {
+              "label": "추적 모델",
+              "value": "mousemove 좌표 → rAF lerp(0.07~0.35) 보간"
+            },
+            {
+              "label": "커서 레이어",
+              "value": "absolute + translate + pointer-events: none + z-index 60"
+            },
+            {
+              "label": "상태 전환",
+              "value": "data-* 속성 + closest() 감지 → 클래스 토글"
+            },
+            {
+              "label": "등장/퇴장",
+              "value": "스테이지 진입 시 .is-on — opacity 0→1 (250ms)"
+            },
+            {
+              "label": "터치 폴백",
+              "value": "@media (hover: none) 안내 문구 + 네이티브 커서 복원"
+            },
+            {
+              "label": "참고",
+              "value": "Cuberto (https://cuberto.com/) 시그니처 커서 무드"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "읽기 가이드"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "라이브 데모",
+              "tag": "IFRAME",
+              "desc": "demos/custom-cursor/{pattern}.html — cursor:none 스테이지 + hover 대상 2~3개"
+            },
+            {
+              "label": "작동 원리",
+              "tag": "HOW",
+              "desc": "mousemove → rAF lerp 보간 + 상태 클래스 토글"
+            },
+            {
+              "label": "정량 메타",
+              "tag": "KV",
+              "desc": "의존성 / 트리거 / lerp 계수 / 커서 구성 / 핵심"
+            },
+            {
+              "label": "코드 스니펫",
+              "tag": "CODE",
+              "desc": "HTML / CSS / JS — boilerplate 제외 핵심만"
+            },
+            {
+              "label": "사용 가이드",
+              "tag": "GUIDE",
+              "desc": "계수 튜닝·접근성·터치 폴백"
+            },
+            {
+              "label": "활용 추천",
+              "tag": "PLACES",
+              "desc": "히어로 / 랜딩 / 제품 / 포트폴리오 4건"
+            },
+            {
+              "label": "트레이드오프",
+              "tag": "NOTE",
+              "desc": "성능·접근성·권장 사용처"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "Cuberto를 비롯한 Awwwards 수상작들의 시그니처인 rAF lerp 커스텀 커서를 10가지 패턴으로 분해. 모든 데모는 다크 배경(#0a0a0a) + Pretendard Variable + 한국어 본문이며, cursor:none 스테이지 안에서 마우스를 움직이면 동작하고 터치 환경에서는 안내 문구로 폴백한다."
+        }
+      ]
+    },
+    "dot-ring": {
+      "title": "01. 도트 + 링 듀오 (시그니처)",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "본체 도트는 마우스를 즉시 추적하고, 외곽 링은 lerp 0.15로 한 박자 늦게 따라오는 커스텀 커서의 가장 표준적인 형태. 링크·버튼 hover 시 링이 1.9배로 확대되어 클릭 가능 영역을 안내한다."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/custom-cursor/dot-ring.html",
+          "embedHeight": 480,
+          "embedLabel": "01 · 도트 + 링 듀오 (시그니처)",
+          "title": "도트 + 링 듀오 (시그니처) 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "본체 도트는 mousemove 좌표를 그대로 받아 즉시 이동하고, 외곽 링은 rAF 루프에서 lerp(현재, 목표, 0.15)로 매 프레임 15%씩만 따라와 한 박자 늦은 탄성 추적이 생긴다. hover 대상([data-hover]) 위에서는 링의 목표 scale이 1→1.9로 커지고, scale 역시 lerp 0.18로 보간되어 부드럽게 확대·축소된다. 도트(즉시)와 링(지연)의 속도 차가 이 패턴의 시그니처 — 정밀한 포인팅감과 유려한 모션감을 동시에 얻는다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (rAF lerp)"
+            },
+            {
+              "label": "트리거",
+              "value": "mousemove → 도트 즉시 / 링 lerp 추적"
+            },
+            {
+              "label": "lerp 계수",
+              "value": "링 위치 0.15 + 링 scale 0.18"
+            },
+            {
+              "label": "커서 구성",
+              "value": "8px 도트 + 40px 링 (1.5px 보더)"
+            },
+            {
+              "label": "핵심",
+              "value": "이중 추적 속도 차 + hover 시 링 scale 1.9"
+            },
+            {
+              "label": "참고",
+              "value": "Cuberto / Awwwards 수상작 시그니처"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"cursor-dot\"></div>\n<div class=\"cursor-ring\"></div>\n\n<a class=\"tgt-link\" data-hover href=\"#\">프로젝트</a>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": "body { cursor: none; }\n.cursor-dot, .cursor-ring { position: fixed; top: 0; left: 0;\n  border-radius: 50%; pointer-events: none; z-index: 9999; }\n.cursor-dot { width: 8px; height: 8px; margin: -4px 0 0 -4px; background: #fff; }\n.cursor-ring { width: 40px; height: 40px; margin: -20px 0 0 -20px;\n  border: 1.5px solid rgba(255,255,255,0.6); }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var mx = 0, my = 0, rx = 0, ry = 0, scale = 1, target = 1;\ndocument.addEventListener(\"mousemove\", function(e){\n  mx = e.clientX; my = e.clientY;\n  target = e.target.closest(\"[data-hover]\") ? 1.9 : 1;\n});\n(function frame(){\n  rx += (mx - rx) * 0.15;            // 링만 lerp 0.15 지연\n  ry += (my - ry) * 0.15;\n  scale += (target - scale) * 0.18;\n  dot.style.transform = \"translate(\" + mx + \"px,\" + my + \"px)\";\n  ring.style.transform = \"translate(\" + rx + \"px,\" + ry + \"px) scale(\" + scale + \")\";\n  requestAnimationFrame(frame);\n})();"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "lerp 계수는 0.12~0.2가 적정 — 낮을수록 링이 더 게으르게 따라온다. 도트와 링의 transform은 반드시 같은 rAF 루프에서 갱신해 프레임 어긋남을 방지한다. 클릭 가능한 요소에 data-hover 속성을 일괄 부여하면 mousemove의 closest() 한 번으로 상태 감지가 끝난다. 터치 환경에서는 cursor:none을 해제하고 커서 요소를 숨기는 @media (hover: none) 폴백이 필수."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "사이트 전체 커서 시스템의 기본값 — 첫 화면부터 무드 전환"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "CTA·내비 링크에서 링 확대 — 클릭 가능 영역을 직관적으로 안내"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "제품 카드 hover 시 링 확대로 탐색 피드백 강화"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "Cuberto류 에이전시 무드 연출 — 가장 안전한 시그니처 선택"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — rAF 루프가 항상 돌므로 유휴 시에도 미세한 CPU 사용. 터치 기기에서는 무의미하므로 (hover: none) 분기 필수. 네이티브 커서 대비 포인팅 정밀도가 떨어져 보일 수 있어 도트만은 즉시 추적으로 유지하는 것이 안전."
+        }
+      ]
+    },
+    "blend-invert": {
+      "title": "02. 블렌드 인버트",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "mix-blend-mode: difference를 적용한 흰 원이 지나는 자리의 색을 반전시킨다. 다크 배경에서는 흰 원으로, 흰 텍스트·밝은 패널 위에서는 검정으로 뒤집혀 배경색 분기 로직 없이 모든 톤에 자동 대응."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/custom-cursor/blend-invert.html",
+          "embedHeight": 480,
+          "embedLabel": "02 · 블렌드 인버트",
+          "title": "블렌드 인버트 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "흰색 원에 mix-blend-mode: difference를 적용하면 원이 지나는 픽셀마다 RGB 채널이 255에서 감산되어 색이 반전된다 — 검정 배경 위에서는 흰 원으로 보이고, 흰 텍스트·밝은 패널 위에서는 검정으로 뒤집힌다. 위치는 lerp 0.18로 추적하고, hover 대상 위에서는 scale 2.4로 확대되어 반전 영역이 넓어진다. 부모에 isolation: isolate를 주면 블렌딩 범위가 스테이지 내부로 한정된다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS + CSS mix-blend-mode"
+            },
+            {
+              "label": "트리거",
+              "value": "mousemove → lerp 0.18 추적 + hover scale 2.4"
+            },
+            {
+              "label": "블렌드",
+              "value": "mix-blend-mode: difference (순수 #fff 원)"
+            },
+            {
+              "label": "커서 구성",
+              "value": "44px 단일 원"
+            },
+            {
+              "label": "핵심",
+              "value": "배경색과 무관한 자동 반전 — 다크/라이트 모두 대응"
+            },
+            {
+              "label": "참고",
+              "value": "Cuberto / Dennis Snellenberg 포트폴리오"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"cursor-blend\"></div>\n\n<h1 data-hover>지나는 자리의 색이 반전됩니다</h1>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": "body { cursor: none; isolation: isolate; }\n.cursor-blend { position: fixed; top: 0; left: 0;\n  width: 44px; height: 44px; margin: -22px 0 0 -22px;\n  border-radius: 50%; background: #fff;\n  mix-blend-mode: difference;\n  pointer-events: none; z-index: 9999; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var mx = 0, my = 0, cx = 0, cy = 0, s = 1, ts = 1;\ndocument.addEventListener(\"mousemove\", function(e){\n  mx = e.clientX; my = e.clientY;\n  ts = e.target.closest(\"[data-hover]\") ? 2.4 : 1;   // hover 시 반전 영역 확대\n});\n(function frame(){\n  cx += (mx - cx) * 0.18;\n  cy += (my - cy) * 0.18;\n  s += (ts - s) * 0.15;\n  cur.style.transform = \"translate(\" + cx + \"px,\" + cy + \"px) scale(\" + s + \")\";\n  requestAnimationFrame(frame);\n})();"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "커서 원은 반드시 순수한 흰색(#fff)이어야 완전 반전이 일어난다 — 회색이면 반전이 흐릿해진다. isolation: isolate를 블렌드 경계 컨테이너에 지정해 의도치 않은 합성 누출을 방지. 사진 위에서는 보색 반전이 일어나 산만할 수 있으므로 타이포그래피·플랫 컬러 중심 레이아웃에서 가장 효과적이다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "대형 타이포 히어로 — 글자 위를 지날 때 반전되는 드라마틱 연출"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "다크/라이트 섹션이 섞인 페이지 — 커서 색 분기 로직 없이 자동 대응"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "흑백 대비가 강한 미니멀 제품 소개 — 시선 포인트 생성"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "타이포 중심 포트폴리오 — 커서 하나로 인터랙티브 무드 완성"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — mix-blend-mode는 GPU 합성 비용이 있어 저사양 기기에서 프레임 저하 가능. Safari 일부 버전에서 fixed 요소 + blend 조합 버그 이력. 사진·일러스트 위에서는 반전 결과가 지저분해 보일 수 있음."
+        }
+      ]
+    },
+    "label-cursor": {
+      "title": "03. 라벨 커서",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "기본 14px 점이 작업물 카드 위에서 78×34px 캡슐로 확장되며 VIEW 라벨이 떠오른다. 커서 자체가 \"클릭하면 볼 수 있다\"는 CTA 역할을 수행하는 Awwwards 갤러리의 단골 패턴."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/custom-cursor/label-cursor.html",
+          "embedHeight": 520,
+          "embedLabel": "03 · 라벨 커서",
+          "title": "라벨 커서 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "기본 상태는 14px 흰 점이지만, data-cursor=view 대상 위에서 .is-view 클래스가 토글되어 캡슐(78×34px)로 확장되고 안의 VIEW 라벨이 scale 0.6→1 + opacity로 떠오른다. 모양 전환은 width/height transition(250ms)으로, 위치 추적은 rAF lerp 0.16으로 분리되어 변신과 이동이 서로 간섭하지 않는다. 라벨 문구는 대상마다 바꿔치기할 수 있어 PLAY·DRAG·OPEN 등으로 확장 가능."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (rAF lerp + 클래스 토글)"
+            },
+            {
+              "label": "트리거",
+              "value": "data-cursor=view hover → .is-view 토글"
+            },
+            {
+              "label": "lerp 계수",
+              "value": "위치 0.16"
+            },
+            {
+              "label": "확장",
+              "value": "14px 점 → 78×34px 캡슐 (250ms cubic-bezier)"
+            },
+            {
+              "label": "핵심",
+              "value": "모양 전환(CSS transition)과 추적(rAF)의 역할 분리"
+            },
+            {
+              "label": "참고",
+              "value": "Awwwards 갤러리 / Obys Agency"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<figure class=\"work-card\" data-cursor=\"view\">…</figure>\n\n<div class=\"cursor-view\">\n  <span class=\"view-core\"><span class=\"view-label\">VIEW</span></span>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".view-core { display: flex; align-items: center; justify-content: center;\n  transform: translate(-50%, -50%);\n  width: 14px; height: 14px; border-radius: 999px; background: #fff;\n  overflow: hidden;\n  transition: width 0.25s cubic-bezier(0.2,0,0,1),\n    height 0.25s cubic-bezier(0.2,0,0,1); }\n.view-label { opacity: 0; transform: scale(0.6);\n  transition: opacity 0.2s ease, transform 0.25s ease; }\n.cursor-view.is-view .view-core { width: 78px; height: 34px; }\n.cursor-view.is-view .view-label { opacity: 1; transform: scale(1); }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "document.addEventListener(\"mousemove\", function(e){\n  mx = e.clientX; my = e.clientY;\n  cur.classList.toggle(\"is-view\", !!e.target.closest(\"[data-cursor=view]\"));\n});\n(function frame(){\n  cx += (mx - cx) * 0.16;\n  cy += (my - cy) * 0.16;\n  cur.style.transform = \"translate(\" + cx + \"px,\" + cy + \"px)\";\n  requestAnimationFrame(frame);\n})();"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "캡슐 크기는 라벨 글자 수에 맞춰 width만 조절 — height 34px 고정이 안정적이다. 라벨을 동적으로 바꾸려면 대상의 data-cursor-label 값을 읽어 textContent를 갱신하는 식으로 확장한다. 캡슐이 커져도 실제 클릭을 막지 않도록 pointer-events: none을 반드시 유지. 라벨은 2~6자(VIEW, OPEN, 보기)가 적정."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "히어로 비주얼 위 VIEW 라벨 — 첫 화면에서 탐색 가능성 암시"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "케이스 스터디 카드 — 커서 라벨로 \"자세히 보기\" 버튼 대체"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "제품 갤러리 — 이미지 위 ZOOM 라벨로 확대 가능함을 안내"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "작업물 썸네일 그리드 — VIEW 커서가 CTA 역할까지 수행"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 라벨이 커서를 따라다니므로 빠른 이동 시 라벨 가독성 저하. 보조 기술 사용자는 커서 라벨을 인지할 수 없으므로 실제 버튼·링크 텍스트는 별도로 존재해야 함(접근성)."
+        }
+      ]
+    },
+    "magnetic-snap": {
+      "title": "04. 마그네틱 스냅",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "버튼 중심 반경 110px에 들어서면 커서가 버튼 중심으로 흡착되고, 버튼도 커서 쪽으로 살짝 끌려온다. 거리 기반 연속 강도(1 − d/R)로 가까울수록 세게 당기는 상호 자석 인터랙션."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/custom-cursor/magnetic-snap.html",
+          "embedHeight": 480,
+          "embedLabel": "04 · 마그네틱 스냅",
+          "title": "마그네틱 스냅 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "버튼의 base 중심 좌표를 미리 측정해두고, 매 프레임 커서와의 거리 d를 계산한다. d가 반경 R(110px) 안이면 강도 s = 1 − d/R이 0→1로 연속 증가 — 커서 목표점은 버튼 중심 방향으로 s × 0.72만큼 당겨지고, 버튼은 반대로 커서 방향으로 s × 0.3만큼 끌려온다. 양쪽 모두 lerp(0.2 / 0.18)로 보간되어 자석이 서서히 붙는 질감이 난다. 반경을 벗어나면 목표가 0으로 풀려 자연 복귀."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (거리 계산 + rAF lerp)"
+            },
+            {
+              "label": "트리거",
+              "value": "버튼 중심 반경 110px 진입 → 흡착 시작"
+            },
+            {
+              "label": "흡착 계수",
+              "value": "커서 0.72 / 버튼 0.3 (강도 비례)"
+            },
+            {
+              "label": "lerp 계수",
+              "value": "커서 0.2 + 버튼 0.18"
+            },
+            {
+              "label": "핵심",
+              "value": "strength = 1 − d/R — 거리 기반 연속 강도"
+            },
+            {
+              "label": "참고",
+              "value": "Cuberto CTA / Studio Freight"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<button class=\"mag-btn\" type=\"button\">지금 시작하기</button>\n<div class=\"cursor-snap\"></div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".mag-btn { will-change: transform; }\n.cursor-snap { position: fixed; top: 0; left: 0;\n  width: 12px; height: 12px; margin: -6px 0 0 -6px;\n  border-radius: 50%; background: #fff;\n  pointer-events: none; z-index: 9999; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var R = 110;                                  // 흡착 반경\nfunction frame(){\n  var dx = mx - center.x, dy = my - center.y;\n  var d = Math.sqrt(dx * dx + dy * dy);\n  var tx = mx, ty = my, gx = 0, gy = 0;\n  if (d < R){\n    var s = 1 - d / R;                        // 거리 기반 강도\n    gx = dx * 0.3 * s; gy = dy * 0.3 * s;     // 버튼이 커서 쪽으로\n    tx = mx - dx * 0.72 * s;                  // 커서가 버튼 중심으로\n    ty = my - dy * 0.72 * s;\n  }\n  bx += (gx - bx) * 0.18; by += (gy - by) * 0.18;\n  btn.style.transform = \"translate(\" + bx + \"px,\" + by + \"px)\";\n  cx += (tx - cx) * 0.2; cy += (ty - cy) * 0.2;\n  cur.style.transform = \"translate(\" + cx + \"px,\" + cy + \"px)\";\n  requestAnimationFrame(frame);\n}"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "반경 R은 버튼 크기의 1.5~2배가 적정(여기선 110px). 흡착 계수를 1.0으로 두면 커서가 버튼 중심에 완전히 붙어 조작감이 답답해진다 — 0.6~0.8 권장. 버튼 base 중심은 transform을 제외한 레이아웃 기준으로 1회만 측정하고 resize 때 재측정한다. 버튼이 많은 페이지에서는 가장 가까운 1개만 계산해 비용을 줄인다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "메인 CTA 1개에 집중 적용 — 시선과 커서를 모두 끌어당김"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "가격표의 추천 플랜 버튼 — 의도적 유도 장치"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "데모 신청·구매 버튼 — 마이크로 인터랙션으로 전환율 보조"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "Contact 버튼 — 에이전시 무드의 마침표"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 버튼과 커서가 동시에 움직여 과하면 멀미감을 줌. 흡착 반경이 겹치면 커서가 두 버튼 사이에서 떨릴 수 있어 배치 간격 확보 필요. 터치 환경에서는 무의미."
+        }
+      ]
+    },
+    "jelly-blob": {
+      "title": "05. 젤리 블롭",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "이동 속도와 방향을 매 프레임 측정해 진행축으로 늘어나고(scaleX) 수직축으로 눌리는(scaleY) squash & stretch를 적용. 빠르게 움직이면 길쭉해지고 멈추면 동그랗게 복원되는 젤리 질감의 커서."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/custom-cursor/jelly-blob.html",
+          "embedHeight": 480,
+          "embedLabel": "05 · 젤리 블롭",
+          "title": "젤리 블롭 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "매 프레임 lerp 이동량(vx, vy)을 속도로 삼아, 진행 방향각 atan2(vy, vx)로 rotate한 뒤 진행축으로 scaleX(1+stretch), 수직축으로 scaleY(1−stretch×0.55)를 적용한다. stretch는 min(speed/26, 0.5)로 클램프되어 빠르게 움직일수록 길쭉해지고, 멈추면 lerp 잔량이 0으로 수렴하면서 별도의 복원 애니메이션 없이 원형으로 돌아온다. hover 대상 위에서는 전체 scale 1.5 곱이 추가된다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (속도 벡터 계산)"
+            },
+            {
+              "label": "트리거",
+              "value": "이동 속도 → stretch = min(speed/26, 0.5)"
+            },
+            {
+              "label": "변형",
+              "value": "rotate(방향각) + scale(1+s, 1−0.55s)"
+            },
+            {
+              "label": "lerp 계수",
+              "value": "위치 0.16 / hover scale 0.15"
+            },
+            {
+              "label": "핵심",
+              "value": "프레임 간 이동량을 그대로 squash & stretch로 변환"
+            },
+            {
+              "label": "참고",
+              "value": "Codrops 젤리 커서 / 14islands"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"cursor-blob\"></div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".cursor-blob { position: fixed; top: 0; left: 0;\n  width: 44px; height: 44px; margin: -22px 0 0 -22px;\n  border-radius: 50%;\n  background: radial-gradient(circle at 32% 32%, #c4b5fd, #7c3aed 72%);\n  pointer-events: none; z-index: 9999; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "(function frame(){\n  var nx = bx + (mx - bx) * 0.16;\n  var ny = by + (my - by) * 0.16;\n  var vx = nx - bx, vy = ny - by;          // 프레임 간 이동량 = 속도\n  bx = nx; by = ny;\n  var speed = Math.sqrt(vx * vx + vy * vy);\n  if (speed > 0.3) angle = Math.atan2(vy, vx) * 180 / Math.PI;\n  var s = Math.min(speed / 26, 0.5);       // stretch 클램프\n  blob.style.transform = \"translate(\" + bx + \"px,\" + by + \"px)\"\n    + \" rotate(\" + angle + \"deg)\"\n    + \" scale(\" + (1 + s) + \",\" + (1 - s * 0.55) + \")\";\n  requestAnimationFrame(frame);\n})();"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "나누는 상수(26)가 민감도를 결정 — 작을수록 조금만 움직여도 길쭉해진다. stretch 상한 0.5를 넘기면 원이 소시지처럼 보여 권장하지 않음. 멈췄을 때 마지막 방향이 유지되도록 속도 임계(0.3px) 아래에서는 각도를 갱신하지 않는 것이 떨림 방지 포인트. 그라디언트·그림자는 transform과 분리해 GPU 합성을 유지한다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "플레이풀한 브랜드 첫인상 — 마우스를 흔들수록 살아있는 느낌"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "크리에이티브 툴·키즈·게임 등 유연한 톤의 제품"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "드로잉·모션 관련 기능 소개 — 커서 자체가 데모"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "모션 디자이너 포트폴리오 — 보간 감각 과시 포인트"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 차분한 기업 사이트에는 톤이 과함. 속도 기반이라 저프레임 환경에서 stretch가 튀어 보일 수 있음(dt 보정 고려). 커서 정밀도 체감 저하."
+        }
+      ]
+    },
+    "ghost-trail": {
+      "title": "06. 고스트 딜레이",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "잔상 원 5개가 같은 마우스 좌표를 서로 다른 lerp 계수(0.35→0.07)로 쫓아 시차 트레일을 만든다. 이동 중에는 곡선으로 늘어서고 멈추면 한 점으로 수렴 — 위치 히스토리 없이 계수 차이만으로 구현."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/custom-cursor/ghost-trail.html",
+          "embedHeight": 480,
+          "embedLabel": "06 · 고스트 딜레이",
+          "title": "고스트 딜레이 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "잔상 원 5개가 동일한 마우스 좌표를 서로 다른 lerp 계수(0.35 → 0.24 → 0.16 → 0.105 → 0.07)로 쫓는다. 계수가 클수록 민첩하고 작을수록 게을러서, 이동 중에는 5개가 속도순으로 늘어서 곡선 트레일이 되고 멈추면 한 점으로 수렴한다. 크기(24→9px)와 불투명도(1→0.22)를 뒤로 갈수록 줄여 머리–꼬리 위계를 만들고, hover 대상 위에서는 전체 색만 액센트로 전환한다. 위치 히스토리 배열 없이 계수 차이만으로 시차를 얻는 것이 포인트."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (rAF 다중 lerp)"
+            },
+            {
+              "label": "트리거",
+              "value": "mousemove → 원 5개 동시 추적"
+            },
+            {
+              "label": "lerp 계수",
+              "value": "0.35 / 0.24 / 0.16 / 0.105 / 0.07"
+            },
+            {
+              "label": "커서 구성",
+              "value": "24→9px 원 5개, opacity 1→0.22"
+            },
+            {
+              "label": "핵심",
+              "value": "계수 차이만으로 만드는 시차 트레일 (히스토리 불필요)"
+            },
+            {
+              "label": "참고",
+              "value": "Cuberto / 게임·이벤트형 인터랙션 사이트"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"ghost g0\"></div>\n<div class=\"ghost g1\"></div>\n<div class=\"ghost g2\"></div>\n<div class=\"ghost g3\"></div>\n<div class=\"ghost g4\"></div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".ghost { position: fixed; top: 0; left: 0; border-radius: 50%;\n  background: #fff; pointer-events: none; z-index: 9999; }\n.g0 { width: 24px; height: 24px; margin: -12px 0 0 -12px; opacity: 1; }\n.g1 { width: 19px; height: 19px; margin: -10px 0 0 -10px; opacity: 0.7; }\n/* …g2~g4 점점 작고 옅게 */"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var ks = [0.35, 0.24, 0.16, 0.105, 0.07];  // 머리→꼬리 lerp 계수\nvar pos = ghosts.map(function(){ return { x: 0, y: 0 }; });\n(function frame(){\n  for (var i = 0; i < ghosts.length; i++){\n    pos[i].x += (mx - pos[i].x) * ks[i];\n    pos[i].y += (my - pos[i].y) * ks[i];\n    ghosts[i].style.transform =\n      \"translate(\" + pos[i].x + \"px,\" + pos[i].y + \"px)\";\n  }\n  requestAnimationFrame(frame);\n})();"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "원 개수는 4~6개가 적정 — 그 이상은 뱀처럼 보여 산만하다. 계수 간격을 등비(×0.68 내외)로 줄이면 자연스러운 감속 곡선이 나온다. 잔상이 머리 위에 그려지지 않도록 DOM 순서는 꼬리를 먼저, 머리를 마지막에 둔다. hover 시에는 전체 색상만 바꾸는 절제된 상태 전환이 어울린다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "인트로 무드 연출 — 커서 움직임 자체가 그래픽 요소"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "이벤트·캠페인 페이지 — 화려한 트레일로 축제감"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "모션 그래픽 툴 소개 — 부드러운 보간 품질 시연"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "인터랙션 디자이너 포트폴리오 — lerp 감각 증명"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — DOM 5개를 매 프레임 갱신 — 개수를 늘리면 비용이 선형 증가. 작은 화면에서 트레일이 공간을 많이 차지해 본문 가독성 방해 가능. 절전 모드에서 rAF 간격이 늘어나면 트레일이 끊겨 보임."
+        }
+      ]
+    },
+    "icon-swap": {
+      "title": "07. 아이콘 스왑",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "영역마다 data-cursor 속성(arrow/plus/drag)을 선언하면 커서가 그 위에서 화살표·플러스·드래그 아이콘으로 교체된다. 커서가 \"이 영역에서 무엇을 할 수 있는지\"를 설명하는 어포던스 패턴."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/custom-cursor/icon-swap.html",
+          "embedHeight": 520,
+          "embedLabel": "07 · 아이콘 스왑",
+          "title": "아이콘 스왑 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "커서 안에 화살표·플러스·드래그 inline SVG 3종을 미리 쌓아두고 opacity/scale로 숨겨둔다. mousemove마다 e.target.closest(\"[data-cursor]\")로 현재 영역의 모드를 읽고, 바뀐 경우에만 커서 루트의 클래스를 mode-{name}으로 통째로 교체 — 해당 아이콘만 scale 0.4→1로 팝업되고 코어 원도 14→42px로 확장된다. 영역에 data-cursor 속성만 선언하면 JS 수정 없이 확장되는 선언적 구조."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS + inline SVG 3종"
+            },
+            {
+              "label": "트리거",
+              "value": "data-cursor 속성 감지 → mode-{name} 클래스 스왑"
+            },
+            {
+              "label": "아이콘",
+              "value": "화살표(링크) / 플러스(추가) / 드래그(캐러셀)"
+            },
+            {
+              "label": "lerp 계수",
+              "value": "위치 0.18"
+            },
+            {
+              "label": "핵심",
+              "value": "영역 선언(data-cursor)만으로 커서 의미 교체"
+            },
+            {
+              "label": "참고",
+              "value": "디자인 툴 UI / 에디토리얼 사이트"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<section data-cursor=\"drag\">캐러셀 영역</section>\n\n<div class=\"cursor-icon\">\n  <span class=\"cur-core\">\n    <svg class=\"cur-ic ic-arrow\">…</svg>\n    <svg class=\"cur-ic ic-plus\">…</svg>\n    <svg class=\"cur-ic ic-drag\">…</svg>\n  </span>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".cur-core { display: flex; align-items: center; justify-content: center;\n  transform: translate(-50%, -50%);\n  width: 14px; height: 14px; border-radius: 50%; background: #fff;\n  transition: width 0.2s ease, height 0.2s ease; }\n.cur-ic { position: absolute; opacity: 0; transform: scale(0.4);\n  transition: opacity 0.16s ease, transform 0.2s ease; }\n.cursor-icon.has-mode .cur-core { width: 42px; height: 42px; }\n.cursor-icon.mode-drag .ic-drag { opacity: 1; transform: scale(1); }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var mode = \"\";\ndocument.addEventListener(\"mousemove\", function(e){\n  mx = e.clientX; my = e.clientY;\n  var z = e.target.closest(\"[data-cursor]\");\n  var m = z ? z.getAttribute(\"data-cursor\") : \"\";\n  if (m !== mode){                            // 변경 시에만 클래스 스왑\n    mode = m;\n    cur.className = \"cursor-icon\" + (m ? \" has-mode mode-\" + m : \"\");\n  }\n});"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "아이콘은 16px 내외 inline SVG로 커서 안에 모두 미리 넣고 opacity/scale만 토글 — 이미지 로딩 지연이 없다. 모드 변경 시에만 className을 교체해 불필요한 스타일 재계산을 막는다. 아이콘 의미는 실제 동작과 일치해야 한다(드래그 아이콘인데 클릭만 가능하면 혼란). 동시에 1개 모드만 활성화되도록 클래스 전체 교체 방식이 안전."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "히어로 우측 캐러셀 영역 — 드래그 가능함을 커서로 안내"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "외부 링크·문서 링크 영역 — 이동 전 행동 예고"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "갤러리·비교 슬라이더 — 영역별 조작법을 커서가 설명"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "작업물 캐러셀 + 외부 링크 혼합 레이아웃"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 모드가 많아지면 SVG가 커서 DOM에 누적 — 5~6종 이내 권장. 커서가 조작 안내를 대신하므로 터치 사용자를 위한 별도 UI 힌트 병행 필요."
+        }
+      ]
+    },
+    "preview-thumb": {
+      "title": "08. 프리뷰 썸네일",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "프로젝트 리스트 행에 hover하면 커서 옆에 미니 아트워크 카드가 살짝 기울어진 채 팝업된다. 아트워크 레이어 3장을 미리 쌓아두고 opacity로만 전환해 이미지 교체 깜빡임이 없는 구조."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/custom-cursor/preview-thumb.html",
+          "embedHeight": 540,
+          "embedLabel": "08 · 프리뷰 썸네일",
+          "title": "프리뷰 썸네일 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "리스트 행에 data-thumb 인덱스를 부여하고, hover 시 커서 루트에 .is-show를 토글해 도트 옆 카드(124×88px)가 spring 이징으로 scale 0→1 팝업된다. 카드 안에는 아트워크 레이어 3장이 미리 쌓여 있어 인덱스에 맞는 레이어만 opacity로 전환 — 이미지 교체 깜빡임이 없다. 위치는 lerp 0.14의 느긋한 추적에 수평 속도 기반 tilt(±8°)를 더해 종이가 끌려오는 듯한 질감을 만든다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS (rAF lerp + 레이어 토글)"
+            },
+            {
+              "label": "트리거",
+              "value": "data-thumb 행 hover → .is-show + 레이어 전환"
+            },
+            {
+              "label": "lerp 계수",
+              "value": "위치 0.14 + 수평 속도 tilt ±8°"
+            },
+            {
+              "label": "썸네일",
+              "value": "124×88px 카드, 커서 우상단 오프셋(22px, -44px)"
+            },
+            {
+              "label": "핵심",
+              "value": "레이어 사전 적재 + opacity 스왑 (로딩 깜빡임 0)"
+            },
+            {
+              "label": "참고",
+              "value": "Awwwards 리스트 hover / Locomotive"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<li class=\"work-row\" data-thumb=\"0\">네온 시티 브랜딩</li>\n\n<div class=\"cursor-thumb\">\n  <span class=\"thumb-dot\"></span>\n  <div class=\"thumb-card\">\n    <div class=\"thumb-art art-0\"></div>\n    <div class=\"thumb-art art-1\"></div>\n  </div>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".thumb-card { position: absolute; left: 22px; top: -44px;\n  width: 124px; height: 88px; border-radius: 10px; overflow: hidden;\n  transform: scale(0) rotate(-8deg); transform-origin: 0 70%;\n  transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1); }\n.cursor-thumb.is-show .thumb-card { transform: scale(1) rotate(-6deg); }\n.thumb-art { position: absolute; inset: 0; opacity: 0;\n  transition: opacity 0.2s ease; }\n.thumb-art.on { opacity: 1; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "document.addEventListener(\"mousemove\", function(e){\n  mx = e.clientX; my = e.clientY;\n  var row = e.target.closest(\"[data-thumb]\");\n  if (row){\n    var idx = parseInt(row.getAttribute(\"data-thumb\"), 10);\n    cur.classList.add(\"is-show\");\n    arts.forEach(function(a, i){ a.classList.toggle(\"on\", i === idx); });\n  } else {\n    cur.classList.remove(\"is-show\");\n  }\n});\n// rAF: lerp 0.14 + 수평 속도 기반 tilt(±8°)"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "실서비스에서는 gradient 대신 실제 썸네일 이미지를 동일한 레이어 구조로 미리 로드해두면 hover 순간 깜빡임이 없다. 오프셋(left 22px, top -44px)은 커서가 썸네일을 가리지 않는 우상단 배치가 기본. 행이 8개를 넘으면 레이어 사전 적재 대신 이미지 1장의 src 교체 + preload로 전환. transform-origin을 좌하단(0 70%)에 두면 카드가 커서에서 자라나는 느낌이 난다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "히어로 하단 주요 메뉴 리스트 — hover 미리보기로 탐색 유도"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "고객 사례 리스트 — 로고·스크린샷 미리보기"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "템플릿·테마 목록 — 클릭 전 시각 확인으로 이탈 감소"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "프로젝트 리스트의 표준 패턴 — 텍스트 리스트 + 커서 썸네일"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 썸네일이 커서를 따라다녀 텍스트를 가릴 수 있음 — 오프셋 튜닝 필수. 이미지가 많으면 사전 적재 메모리 비용 증가. 키보드 포커스 사용자는 미리보기를 볼 수 없으므로 보조 수단 고려."
+        }
+      ]
+    },
+    "image-trail": {
+      "title": "09. 이미지 트레일",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "마우스가 80px 이동할 때마다 커서 위치에 아트워크 카드가 스폰되어 떠오르며 사라진다. 요소 10개를 풀(pool)로 순환 재사용해 DOM 생성·삭제 없이 무한 트레일을 유지하는 패션 룩북형 패턴."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/custom-cursor/image-trail.html",
+          "embedHeight": 520,
+          "embedLabel": "09 · 이미지 트레일",
+          "title": "이미지 트레일 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "mousemove마다 직전 스폰 지점과의 누적 이동 거리를 재고 80px를 넘으면 풀(10개)에서 다음 요소를 꺼내 커서 위치에 스폰한다. 스폰은 left/top으로 위치를 고정하고 className 재설정 → 강제 리플로우(void offsetWidth) → .live 재부착으로 CSS 키프레임(scale 0.5→1.08 + 26px 떠오르며 opacity 소멸, 0.9s)을 다시 재생한다. 그라디언트 4종과 랜덤 tilt(±8°)를 섞어 카드마다 표정을 달리하며, DOM을 생성·삭제하지 않는 풀 재사용 구조라 GC 부담이 없다."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS + CSS @keyframes"
+            },
+            {
+              "label": "트리거",
+              "value": "누적 이동 거리 80px마다 스폰"
+            },
+            {
+              "label": "풀",
+              "value": "요소 10개 순환 재사용 (생성/삭제 0회)"
+            },
+            {
+              "label": "수명",
+              "value": "0.9s — scale 0.5→1.08 + translateY(-26px) 소멸"
+            },
+            {
+              "label": "핵심",
+              "value": "거리 기반 스폰 + 풀링 + 리플로우 애니메이션 리셋"
+            },
+            {
+              "label": "참고",
+              "value": "Codrops Image Trail / 패션 룩북 사이트"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<div class=\"trail-pool\">\n  <div class=\"trail-item\"></div>\n  <!-- × 10개 풀 -->\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".trail-item { position: absolute; top: 0; left: 0;\n  width: 84px; height: 112px; margin: -56px 0 0 -42px;\n  border-radius: 12px; opacity: 0; }\n.trail-item.live {\n  animation: trail-pop 0.9s cubic-bezier(0.22,0.61,0.36,1) forwards; }\n@keyframes trail-pop {\n  0% { opacity: 0; transform: scale(0.5) rotate(var(--tilt)); }\n  18% { opacity: 1; }\n  100% { opacity: 0; transform: scale(1.08) translateY(-26px) rotate(var(--tilt)); }\n}"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var acc = 0, spawnCount = 0;\ndocument.addEventListener(\"mousemove\", function(e){\n  acc += Math.sqrt(Math.pow(e.clientX - lastX, 2) + Math.pow(e.clientY - lastY, 2));\n  lastX = e.clientX; lastY = e.clientY;\n  if (acc >= 80){                              // 80px마다 스폰\n    acc = 0;\n    var el = items[spawnCount % items.length]; // 풀 순환 재사용\n    el.className = \"trail-item trail-g\" + (spawnCount % 4);\n    el.style.left = lastX + \"px\";\n    el.style.top = lastY + \"px\";\n    void el.offsetWidth;                       // 애니메이션 리셋\n    el.classList.add(\"live\");\n    spawnCount++;\n  }\n});"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "스폰 간격 80px이 밀도를 결정 — 줄이면 화려하지만 산만해진다. 풀 크기는 (수명 0.9s ÷ 평균 스폰 간격) × 1.5 이상으로 잡아야 재사용 시 잘림이 없다(여기선 10개). 실사 이미지를 쓸 경우 모든 이미지를 미리 로드한 뒤 배경으로만 교체한다. 아트워크 z-index는 본문 텍스트보다 위, 커서 도트보다 아래에 둔다."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "패션·뷰티 룩북 히어로 — 움직임마다 화보가 흩날리는 연출"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "시즌 캠페인 — 브랜드 비주얼을 커서로 뿌리기"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "컬렉션 미리보기 — 제품컷 트레일"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "비주얼 아카이브 인트로 — 작업물 슬라이드쇼 대체"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 시각적 소음이 큰 패턴 — 본문 읽기 영역에는 부적합하고 인트로·히어로 한정 권장. 큰 이미지 다수 합성 시 GPU 메모리 사용 증가. prefers-reduced-motion 사용자에게는 비활성화 필요."
+        }
+      ]
+    },
+    "hold-progress": {
+      "title": "10. 홀드 프로그레스",
+      "blocks": [
+        {
+          "type": "text",
+          "value": "pointerdown을 900ms 유지하면 커서의 SVG 링 게이지가 차오르고 완료 시 버튼이 확정 상태로 바뀐다. 도중에 손을 떼면 되감기 — 실수 클릭을 막는 의도적 마찰(intentional friction) 패턴."
+        },
+        {
+          "type": "heading",
+          "value": "라이브 데모"
+        },
+        {
+          "type": "component",
+          "embed": "demos/custom-cursor/hold-progress.html",
+          "embedHeight": 520,
+          "embedLabel": "10 · 홀드 프로그레스",
+          "title": "홀드 프로그레스 라이브 데모"
+        },
+        {
+          "type": "heading",
+          "value": "작동 원리"
+        },
+        {
+          "type": "text",
+          "value": "pointerdown 동안 rAF에서 dt(Date.now 차분)를 누적해 progress(0~1)를 900ms 기준으로 올리고, 손을 떼면 500ms 기준으로 되감는다. progress는 SVG 원(r 24, 둘레 150.8)의 stroke-dashoffset = 둘레 × (1 − progress)에 1:1 매핑되어 링 게이지가 12시 방향부터 차오른다. 1.0 도달 시 .is-done으로 중심 점이 2.4배 팝되고, 커서가 올라가 있던 [data-hold] 버튼에 .is-confirmed + 라벨 교체로 액션 확정을 피드백한다 — 실수 클릭을 막는 의도적 마찰 장치."
+        },
+        {
+          "type": "kv",
+          "columns": 2,
+          "items": [
+            {
+              "label": "의존성",
+              "value": "Vanilla JS + inline SVG 링"
+            },
+            {
+              "label": "트리거",
+              "value": "pointerdown 홀드 900ms → 확정 / 도중 해제 시 되감기"
+            },
+            {
+              "label": "게이지",
+              "value": "stroke-dasharray 150.8 + dashoffset 1:1 매핑"
+            },
+            {
+              "label": "피드백",
+              "value": ".is-done (커서 팝) + .is-confirmed (버튼 확정)"
+            },
+            {
+              "label": "핵심",
+              "value": "dt 누적 progress — 홀드/해제 양방향 보간"
+            },
+            {
+              "label": "참고",
+              "value": "스토리 UI 홀드 / 삭제 확인 패턴"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "value": "코드 스니펫"
+        },
+        {
+          "type": "code",
+          "lang": "HTML",
+          "title": "HTML",
+          "value": "<button class=\"hold-btn\" data-hold>길게 눌러 삭제</button>\n\n<div class=\"cursor-hold\">\n  <svg width=\"56\" height=\"56\" viewBox=\"0 0 56 56\">\n    <circle cx=\"28\" cy=\"28\" r=\"24\" fill=\"none\"\n      stroke=\"rgba(255,255,255,0.16)\" stroke-width=\"3\"/>\n    <circle class=\"hold-fill\" cx=\"28\" cy=\"28\" r=\"24\" fill=\"none\"\n      stroke=\"#34d399\" stroke-width=\"3\" stroke-linecap=\"round\"\n      stroke-dasharray=\"150.8\" stroke-dashoffset=\"150.8\"\n      transform=\"rotate(-90 28 28)\"/>\n  </svg>\n</div>"
+        },
+        {
+          "type": "code",
+          "lang": "CSS",
+          "title": "CSS",
+          "value": ".hold-svg { position: absolute; left: -28px; top: -28px; }\n.hold-core { transition: transform 0.2s ease, background 0.2s ease; }\n.cursor-hold.is-done .hold-core {\n  transform: scale(2.4); background: #34d399; }\n.hold-btn.is-confirmed {\n  background: #34d399; border-color: #34d399; color: #052e1b; }"
+        },
+        {
+          "type": "code",
+          "lang": "JS",
+          "title": "JavaScript",
+          "value": "var C = 150.8;                                // 2πr (r=24)\nvar holding = false, progress = 0, last = Date.now();\nstage.addEventListener(\"pointerdown\", function(){ holding = true; });\nwindow.addEventListener(\"pointerup\", function(){ holding = false; });\n(function frame(){\n  var now = Date.now(), dt = Math.min(64, now - last);\n  last = now;\n  progress += holding ? dt / 900 : -dt / 500;  // 홀드 900ms / 되감기 500ms\n  progress = Math.max(0, Math.min(1, progress));\n  fill.style.strokeDashoffset = C * (1 - progress);\n  if (progress >= 1) confirmAction();          // 게이지 완주 → 확정\n  requestAnimationFrame(frame);\n})();"
+        },
+        {
+          "type": "heading",
+          "value": "사용 가이드"
+        },
+        {
+          "type": "text",
+          "value": "홀드 시간은 700~1200ms가 적정 — 짧으면 실수 방지 효과가 없고 길면 짜증을 유발한다. 해제 시 즉시 0으로 리셋하지 말고 되감기(500ms)를 줘야 \"조금만 더 누르면 됐는데\"가 시각적으로 전달된다. pointerdown/up은 마우스·터치를 모두 커버하지만 터치에선 커서가 없으므로 버튼 자체에 게이지를 그리는 변형을 병행 권장. 삭제·해지 같은 파괴적 액션에 특히 적합."
+        },
+        {
+          "type": "heading",
+          "value": "활용 추천"
+        },
+        {
+          "type": "structure",
+          "items": [
+            {
+              "label": "히어로 헤더",
+              "tag": "",
+              "desc": "이벤트 응모·구독 확정 — 홀드 제스처로 참여감 부여"
+            },
+            {
+              "label": "랜딩 페이지",
+              "tag": "",
+              "desc": "웨이팅 리스트 등록 — 가벼운 의식(ritual)으로 기억점 생성"
+            },
+            {
+              "label": "제품 섹션",
+              "tag": "",
+              "desc": "장바구니 비우기·플랜 해지 등 파괴적 액션 확인"
+            },
+            {
+              "label": "포트폴리오 소개",
+              "tag": "",
+              "desc": "이스터에그 — 길게 누르면 비하인드 공개"
+            }
+          ]
+        },
+        {
+          "type": "note",
+          "value": "트레이드오프 — 홀드 패턴은 학습 비용이 있어 시각 안내 문구 필수. 보조 기술·키보드 사용자를 위한 대체 확인 수단(다이얼로그) 병행 필요. rAF 기반이라 백그라운드 탭 전환 시 홀드가 끊김."
+        }
+      ]
+    }
+  }
+}

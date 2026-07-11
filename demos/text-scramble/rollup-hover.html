@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05. 글자 롤업 호버 — Text Scramble Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .roll-box { text-align: center; }
+    .roll-stack { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .roll-item { font: 800 clamp(36px,6vw,68px)/1.05 "Pretendard Variable",sans-serif; color: #fff; cursor: pointer; opacity: 0; }
+    .roll-char { display: inline-block; height: 1.05em; overflow: hidden; vertical-align: top; }
+    .roll-top, .roll-bot { display: block; height: 1.05em; transition: transform 360ms cubic-bezier(0.76, 0, 0.24, 1); }
+    .roll-bot { color: #8ab4ff; }
+    .roll-item.is-hover .roll-top, .roll-item.is-hover .roll-bot { transform: translateY(-100%); }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">05 · 글자 롤업 호버</span>
+  </div>
+  <div class="demo-hint">메뉴에 마우스를 올려보세요</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="roll-box">
+      <p class="cap">ROLL-UP — HOVER ME</p>
+      <nav class="roll-stack">
+        <a class="roll-item" data-text="프로젝트"></a>
+        <a class="roll-item" data-text="스튜디오"></a>
+        <a class="roll-item" data-text="컨택트"></a>
+      </nav>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 1200;
+      var LOOP = false;
+      var startTime = Date.now();
+      var running = true;
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+      var items = document.querySelectorAll(".roll-item");
+      Array.prototype.forEach.call(items, function(item) {
+        var text = item.dataset.text;
+        text.split("").forEach(function(ch, i) {
+          var c = document.createElement("span");
+          c.className = "roll-char";
+          var top = document.createElement("span");
+          top.className = "roll-top";
+          top.innerHTML = ch === " " ? "&nbsp;" : ch;
+          var bot = document.createElement("span");
+          bot.className = "roll-bot";
+          bot.innerHTML = ch === " " ? "&nbsp;" : ch;
+          top.style.transitionDelay = (i * 24) + "ms";
+          bot.style.transitionDelay = (i * 24) + "ms";
+          c.appendChild(top);
+          c.appendChild(bot);
+          item.appendChild(c);
+        });
+        item.addEventListener("mouseenter", function() { item.classList.add("is-hover"); });
+        item.addEventListener("mouseleave", function() { item.classList.remove("is-hover"); });
+      });
+      function applyReveal(p) {
+        Array.prototype.forEach.call(items, function(item, i) {
+          var local = Math.max(0, Math.min(1, (p - i * 0.15) / 0.5));
+          item.style.opacity = local;
+          item.style.transform = "translateY(" + (14 * (1 - local)) + "px)";
+        });
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else if (LOOP) { startTime = Date.now(); setTimeout(tick, 16); }
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

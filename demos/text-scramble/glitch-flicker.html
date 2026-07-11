@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06. 글리치 플리커 — Text Scramble Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .gl-box { text-align: center; }
+    .gl-stage { position: relative; display: inline-block; }
+    .gl-stage h1 { margin: 0; font: 800 clamp(38px,6.4vw,80px)/1.2 "Pretendard Variable",sans-serif; color: #fff; white-space: nowrap; }
+    .gl-layer { position: absolute; inset: 0; opacity: 0; pointer-events: none; mix-blend-mode: screen; will-change: clip-path, transform; }
+    .gl-r { color: #ff3b5c; }
+    .gl-c { color: #22d3ee; }
+    .gl-stage.is-glitch .gl-base { transform: translateX(2px); }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">06 · 글리치 플리커</span>
+  </div>
+  <div class="demo-hint">자동 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="gl-box">
+      <p class="cap">GLITCH — SIGNAL RESTORED</p>
+      <div class="gl-stage">
+        <h1 class="gl-base">신호를 복원했다</h1>
+        <h1 class="gl-layer gl-r" aria-hidden="true">신호를 복원했다</h1>
+        <h1 class="gl-layer gl-c" aria-hidden="true">신호를 복원했다</h1>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 3000;
+      var LOOP = false;
+      var startTime = Date.now();
+      var running = true;
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+      var stage = document.querySelector(".gl-stage");
+      var layers = document.querySelectorAll(".gl-layer");
+      var BURSTS = [[0.08, 0.2], [0.36, 0.48], [0.66, 0.8]];
+      function rnd(seed) { var x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+      function applyReveal(p) {
+        var frame = Math.floor(p * 90);
+        var active = false;
+        for (var b = 0; b < BURSTS.length; b++) {
+          if (p >= BURSTS[b][0] && p <= BURSTS[b][1]) active = true;
+        }
+        Array.prototype.forEach.call(layers, function(layer, li) {
+          if (!active) {
+            layer.style.opacity = 0;
+            layer.style.clipPath = "inset(0 0 100% 0)";
+            layer.style.transform = "none";
+            return;
+          }
+          var top = Math.floor(rnd(frame * 3.7 + li * 57) * 80);
+          var h = 6 + Math.floor(rnd(frame * 7.3 + li * 91) * 22);
+          var dx = (rnd(frame * 5.1 + li * 13) - 0.5) * 18;
+          layer.style.opacity = 1;
+          layer.style.clipPath = "inset(" + top + "% 0 " + Math.max(0, 100 - top - h) + "% 0)";
+          layer.style.transform = "translateX(" + dx + "px)";
+        });
+        stage.classList.toggle("is-glitch", active);
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else if (LOOP) { startTime = Date.now(); setTimeout(tick, 16); }
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

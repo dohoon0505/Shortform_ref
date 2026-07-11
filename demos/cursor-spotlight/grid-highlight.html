@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05. 그리드 하이라이트 (GitHub) — Cursor Spotlight Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #050505; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; pointer-events: none; }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 11px/1.4 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.04em; z-index: 100; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; pointer-events: none; animation: hint-pulse 2.4s ease-in-out infinite; }
+    @keyframes hint-pulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
+    .stage {
+      position: relative; width: 100%; height: 100vh; overflow: hidden;
+      cursor: crosshair;
+      --x: 50%; --y: 50%;
+    }
+    
+    .grid-base, .grid-glow { position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px);
+      background-size: 44px 44px;
+    }
+    .grid-glow {
+      background-image:
+        linear-gradient(rgba(76,201,240,0.75) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(76,201,240,0.75) 1px, transparent 1px);
+      -webkit-mask-image: radial-gradient(circle 210px at var(--x) var(--y), #000 12%, transparent 70%);
+      mask-image: radial-gradient(circle 210px at var(--x) var(--y), #000 12%, transparent 70%);
+    }
+    .grid-tint { position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(circle 250px at var(--x) var(--y), rgba(76,201,240,0.1), transparent 72%);
+    }
+    .grid-copy { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 0 8vw; pointer-events: none; }
+    .grid-title { margin: 0; font-size: clamp(24px, 5vw, 40px); font-weight: 800; letter-spacing: -0.02em; }
+    .grid-sub { margin: 0; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.5); word-break: keep-all; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">05 · 그리드 하이라이트 (GitHub)</span>
+  </div>
+  <div class="demo-hint">마우스를 움직여보세요 ✦</div>
+
+  <div class="stage">
+    <div class="grid-base"></div>
+    <div class="grid-glow" aria-hidden="true"></div>
+    <div class="grid-tint"></div>
+    <div class="grid-copy">
+      <h2 class="grid-title">격자가 커서를 기억합니다</h2>
+      <p class="grid-sub">베이스 격자 위에 밝은 격자를 겹치고, radial mask가 커서 주변만 켭니다</p>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      function setPoint(x, y){
+        stage.style.setProperty("--x", x + "px");
+        stage.style.setProperty("--y", y + "px");
+      }
+      function toCenter(){
+        setPoint(stage.clientWidth / 2, stage.clientHeight / 2);
+      }
+      stage.addEventListener("mousemove", function(e){
+        var r = stage.getBoundingClientRect();
+        setPoint(e.clientX - r.left, e.clientY - r.top);
+      });
+      window.addEventListener("resize", toCenter);
+      toCenter();
+    })();
+  </script>
+</body>
+</html>

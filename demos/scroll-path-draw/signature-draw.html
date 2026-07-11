@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02. 시그니처 드로잉 — Scroll Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: #000; color: #fff;
+      font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .demo-controls {
+      position: fixed; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      z-index: 20;
+    }
+    .demo-reset {
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.72);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      padding: 8px 14px; cursor: pointer;
+      transition: color 160ms, background 160ms, border-color 160ms;
+    }
+    .demo-reset:hover {
+      color: #fff; background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.32);
+    }
+    .demo-label {
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .demo-hint {
+      position: fixed; right: 16px; bottom: 24px;
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      z-index: 20;
+      animation: demo-hint-bounce 1.6s ease-in-out infinite;
+    }
+    @keyframes demo-hint-bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.45; }
+      50%       { transform: translateY(4px); opacity: 0.8; }
+    }
+    .demo-progress {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 2px; background: rgba(255,255,255,0.06);
+      z-index: 20;
+    }
+    .demo-progress > div {
+      height: 100%; background: #fff; width: 0;
+      transition: width 60ms linear;
+    }
+    .scroll-track { min-height: 240vh; position: relative; }
+    .sticky-stage {
+      position: sticky; top: 0;
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 8vw 60px;
+      overflow: hidden;
+    }
+    /* 패턴별 CSS */
+    .sig-wrap { width: min(720px, 88vw); display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .sig-svg { width: 100%; height: auto; display: block; }
+    .sig-path { stroke: #fff; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .sig-caption { font: 500 15px/1.6 "Pretendard Variable","Pretendard",system-ui,sans-serif; color: rgba(255,255,255,0.45); margin: 0; letter-spacing: 0.02em; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">02 · 시그니처 드로잉</span>
+  </div>
+  <div class="demo-hint">SCROLL ↓</div>
+  <div class="demo-progress"><div></div></div>
+
+  <div class="scroll-track">
+    <div class="sticky-stage">
+      <div class="sig-wrap">
+        <svg class="sig-svg" viewBox="0 0 720 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="sig-path" d="M 90 248 C 70 168 132 92 182 118 C 232 144 176 252 124 276 C 96 288 98 264 134 248 C 196 220 268 196 330 184"/>
+          <path class="sig-path" d="M 352 128 C 326 184 314 244 344 250 C 372 256 402 204 398 172 C 395 150 376 158 380 184 C 386 220 422 238 466 208"/>
+          <path class="sig-path" d="M 498 116 C 486 168 478 218 488 246 C 496 268 528 248 556 202"/>
+          <path class="sig-path" d="M 96 318 C 240 344 460 336 636 296"/>
+        </svg>
+        <p class="sig-caption">스크롤이 곧 펜 끝의 속도가 됩니다</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      var track = document.querySelector(".scroll-track");
+      var progressFill = document.querySelector(".demo-progress > div");
+      function calc(){
+        var rect = track.getBoundingClientRect();
+        var max = Math.max(1, rect.height - window.innerHeight);
+        return Math.max(0, Math.min(1, -rect.top / max));
+      }
+
+      // 패턴별 init + applyReveal 정의
+      var paths = Array.prototype.slice.call(document.querySelectorAll(".sig-path"));
+      var lens = paths.map(function(el){ return el.getTotalLength(); });
+      var total = 0;
+      lens.forEach(function(l){ total += l; });
+      var starts = [];
+      var acc = 0;
+      lens.forEach(function(l){ starts.push(acc / total); acc += l; });
+      paths.forEach(function(el, i){
+        el.style.strokeDasharray = lens[i] + " " + lens[i];
+        el.style.strokeDashoffset = lens[i];
+      });
+      function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+      function applyReveal(p){
+        var drawP = clamp01((p - 0.05) / 0.8);
+        paths.forEach(function(el, i){
+          var segLen = lens[i] / total;
+          var localT = clamp01((drawP - starts[i]) / segLen);
+          el.style.strokeDashoffset = lens[i] * (1 - localT);
+        });
+      }
+
+      function tick(){
+        var p = calc();
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+      }
+      window.addEventListener("scroll", tick, { passive: true });
+      window.addEventListener("resize", tick, { passive: true });
+      window.__reset = function(){ window.scrollTo({ top: 0, behavior: "smooth" }); };
+      tick();
+    })();
+  </script>
+</body>
+</html>

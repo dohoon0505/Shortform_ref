@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06-B. 호버 포커스 풀밴드 — 가로 아코디언 확장</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.72); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.14); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.4); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); letter-spacing: 0.18em; text-transform: uppercase; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; transition: width 60ms linear; }
+    .stage { min-height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .iw-eyebrow { font: 600 12px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent,#8ab4ff); margin: 0; }
+    .iw-head { font: 800 clamp(28px,4.4vw,56px)/1.12 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: -0.02em; color: #fff; margin: 0; }
+    .iw-sub { font: 700 clamp(20px,2.6vw,30px)/1.3 "Pretendard Variable","Pretendard",sans-serif; color: #fff; margin: 0; }
+    .iw-body { font: 400 clamp(14px,1.4vw,17px)/1.7 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.62); margin: 0; }
+    .iw-cta { display: inline-flex; align-items: center; gap: 8px; font: 600 13px/1 "Pretendard Variable","Pretendard",sans-serif; color: #fff; border: 1px solid rgba(255,255,255,0.32); border-radius: 999px; padding: 14px 24px; text-decoration: none; }
+    .iw-tag { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+    .wa-wrap { width: min(1040px, 92vw); }
+    .wa-head { margin-bottom: 22px; }
+    .wa-wrap .iw-eyebrow { --accent: #7fe7d4; margin-bottom: 12px; }
+    .wa-panels { display: flex; gap: 10px; height: 52vh; }
+    .wa-panel { position: relative; flex: 1 1 0; min-width: 0; border-radius: 16px; overflow: hidden; cursor: pointer; background: var(--g); display: flex; flex-direction: column; justify-content: flex-end; padding: 22px; transition: flex-grow 200ms ease; }
+    .wa-panels.has-active .wa-panel { flex-grow: 0.7; }
+    .wa-panels.has-active .wa-panel.is-on { flex-grow: 3; }
+    .wa-panel::before { content: ""; position: absolute; inset: 0; background: rgba(0,0,0,0.45); transition: background 200ms ease; }
+    .wa-panel.is-on::before { background: rgba(0,0,0,0.16); }
+    .wa-label { position: relative; z-index: 2; font: 700 clamp(15px,1.7vw,20px)/1.2 "Pretendard Variable",sans-serif; color: #fff; writing-mode: vertical-rl; }
+    .wa-panel.is-on .wa-label { writing-mode: horizontal-tb; }
+    .wa-desc { position: relative; z-index: 2; margin-top: 10px; max-height: 0; opacity: 0; overflow: hidden; white-space: nowrap; font: 400 14px/1.5 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.82); transition: max-height 200ms ease, opacity 200ms ease; }
+    .wa-panel.is-on .wa-desc { max-height: 40px; opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">06-B · 호버 포커스 풀밴드</span>
+  </div>
+  <div class="demo-hint">HOVER</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="stage">
+    <section class="wa-wrap">
+      <div class="wa-head"><p class="iw-eyebrow">BRAND LINEUP</p><h2 class="iw-head">다온케어 브랜드</h2></div>
+      <div class="wa-panels">
+        <div class="wa-panel" data-i="0" style="--g:linear-gradient(160deg,#1f5a4e,#0a2019)"><div class="wa-label">다온비타</div><div class="wa-desc">일상 면역 케어 라인</div></div>
+        <div class="wa-panel" data-i="1" style="--g:linear-gradient(160deg,#1a3a5a,#0a1620)"><div class="wa-label">다온슬립</div><div class="wa-desc">수면 건강 솔루션</div></div>
+        <div class="wa-panel" data-i="2" style="--g:linear-gradient(160deg,#4a2a5a,#160a1e)"><div class="wa-label">다온본</div><div class="wa-desc">관절·뼈 영양 케어</div></div>
+        <div class="wa-panel" data-i="3" style="--g:linear-gradient(160deg,#5a3a1f,#1e120a)"><div class="wa-label">다온키즈</div><div class="wa-desc">어린이 성장 영양</div></div>
+        <div class="wa-panel" data-i="4" style="--g:linear-gradient(160deg,#1f3a5a,#0a1420)"><div class="wa-label">다온웰</div><div class="wa-desc">시니어 종합 케어</div></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function(){
+      var stage = document.querySelector(".stage");
+      var progressFill = document.querySelector(".demo-progress > div");
+      var panels = stage.querySelectorAll(".wa-panel");
+      var wrap = stage.querySelector(".wa-panels");
+      function focus(n){
+        wrap.classList.add("has-active");
+        for (var i = 0; i < panels.length; i++) panels[i].classList.toggle("is-on", i === n);
+        if (progressFill) progressFill.style.width = ((n + 1) / panels.length * 100) + "%";
+      }
+      for (var i = 0; i < panels.length; i++){
+        (function(k){
+          panels[k].addEventListener("mouseenter", function(){ focus(k); });
+          panels[k].addEventListener("click", function(){ focus(k); });
+        })(i);
+      }
+      focus(0);
+      window.__reset = function(){ wrap.classList.remove("has-active"); for (var i = 0; i < panels.length; i++) panels[i].classList.remove("is-on"); focus(0); };
+    })();
+  </script>
+</body>
+</html>

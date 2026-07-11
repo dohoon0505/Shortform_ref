@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04. 플립보드 — Text Scramble Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .flap-box { text-align: center; }
+    .flap-row { display: flex; justify-content: center; gap: 8px; perspective: 800px; font: 800 clamp(30px,5vw,58px)/1 "Pretendard Variable",sans-serif; }
+    .flap-cell { width: 1.35em; height: 1.5em; display: flex; align-items: center; justify-content: center; background: #161616; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; color: rgba(255,255,255,0.6); position: relative; will-change: transform; }
+    .flap-cell::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: rgba(0,0,0,0.6); }
+    .flap-cell.on { color: #ffd23f; }
+    .flap-gap { width: 0.5em; }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">04 · 플립보드</span>
+  </div>
+  <div class="demo-hint">자동 재생 · ↻ 다시 보기</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="flap-box">
+      <p class="cap">SPLIT-FLAP — IL 2026 / GATE 04</p>
+      <div class="flap-row" aria-label="지금 출발합니다"></div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 3000;
+      var LOOP = false;
+      var startTime = Date.now();
+      var running = true;
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+      var TEXT = "지금 출발합니다";
+      var POOL = "가나다라마바사아자차카타파하ABKXYZ0247";
+      var row = document.querySelector(".flap-row");
+      var cells = [];
+      function rnd(seed) { var x = Math.sin(seed * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); }
+      var F = 4; // 글자당 플립 횟수
+      TEXT.split("").forEach(function(ch, i) {
+        if (ch === " ") {
+          var g = document.createElement("span");
+          g.className = "flap-gap";
+          row.appendChild(g);
+          return;
+        }
+        var c = document.createElement("span");
+        c.className = "flap-cell";
+        row.appendChild(c);
+        var seq = [];
+        for (var k = 0; k < F; k++) seq.push(POOL.charAt(Math.floor(rnd(i * 71 + k * 13) * POOL.length)));
+        seq.push(ch);
+        cells.push({ el: c, seq: seq });
+      });
+      function applyReveal(p) {
+        cells.forEach(function(cell, i) {
+          var local = Math.max(0, Math.min(1, (p - i * 0.06) / 0.5));
+          var t = local * F;
+          var k = Math.min(F - 1, Math.floor(t));
+          var frac = local >= 1 ? 1 : t - k;
+          var angle, glyph;
+          if (frac < 0.5) { angle = frac * 180; glyph = cell.seq[k]; }
+          else { angle = (1 - frac) * 180; glyph = cell.seq[k + 1]; }
+          cell.el.textContent = glyph;
+          cell.el.style.transform = "rotateX(" + angle + "deg)";
+          cell.el.classList.toggle("on", local >= 1);
+        });
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else if (LOOP) { startTime = Date.now(); setTimeout(tick, 16); }
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

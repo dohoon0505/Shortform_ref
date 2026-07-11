@@ -1,0 +1,107 @@
+/* ============================================================
+   Miracell — Mirror Mode 100% Clone
+   라이브 https://miracell.co.kr/kr/ 의 :root CSS Variables 24개 실측
+   ============================================================ */
+
+/* Font Imports (Pretendard + Outfit) */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ===== Brand Color ===== */
+  --main-color: #dd0031;
+
+  /* ===== Layout Containers (실측) ===== */
+  --area-box-width: 1760px;
+  --area-wide-width: 1700px;
+  --area-width: 1400px;
+  --area-padding: 30px;
+
+  /* ===== Header Layout ===== */
+  --header-top: 55px;
+  --header-height: 80px;
+
+  /* ===== Sub Page (참고용) ===== */
+  --sub-visual-height: 100vh;
+  --sub-menu-height: 36px;
+  --full-height: 100vh;
+
+  /* ===== Transitions ===== */
+  --transition-custom: all 0.4s ease-in-out;
+  --transition-custom2: all 0.8s ease-in-out;
+
+  /* ===== Font Families ===== */
+  --font-family1: 'Pretendard', "나눔고딕", NanumGothic, "Nanum Gothic", "돋움", Dotum, Arial, sans-serif;
+  --font-family2: 'Outfit', "나눔고딕", NanumGothic, "Nanum Gothic", "돋움", Dotum, Arial, sans-serif;
+
+  /* ===== Spot / Marquee (실측) ===== */
+  --spot-r: 240px;
+  --shiftY: -21%;
+
+  /* ===== Board / List ===== */
+  --board-main-color: var(--main-color);
+  --board-list-height: 90px;
+  --board-list-font-size: 1.7rem;
+  --board-list-font-color: #111;
+  --board-list-icon-width: 60px;
+  --board-view-font-size: 14px;
+
+  /* ===== Swiper ===== */
+  --swiper-theme-color: #007aff;
+  --swiper-navigation-size: 44px;
+}
+
+/* ============================================================
+   Base Reset
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+html { font-size: 10px; }
+body {
+  margin: 0;
+  font-family: var(--font-family1);
+  color: #000;
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
+img { display: block; max-width: 100%; }
+button { background: none; border: 0; cursor: pointer; padding: 0; font: inherit; color: inherit; }
+
+/* ============================================================
+   Utility — Section Containers
+   ============================================================ */
+.area {
+  max-width: var(--area-width);
+  margin: 0 auto;
+  padding: 0 var(--area-padding);
+  position: relative;
+}
+.area-wide { max-width: var(--area-wide-width); }
+.area-box { max-width: var(--area-box-width); }
+.full-height { height: 100vh; min-height: 700px; }
+.clearfix::after { content: ''; display: block; clear: both; }
+.blind {
+  position: absolute; overflow: hidden;
+  width: 1px; height: 1px; margin: -1px; clip: rect(0,0,0,0);
+}
+.font-outfit { font-family: var(--font-family2); }
+
+/* ============================================================
+   Animations
+   ============================================================ */
+@keyframes mr-text-active { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes mr-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes mr-spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+@keyframes mr-roller-up { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+@keyframes mr-roller-down { 0% { transform: translateY(-50%); } 100% { transform: translateY(0); } }
+@keyframes mr-dotfade { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+@keyframes mr-fab-spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+  }
+}

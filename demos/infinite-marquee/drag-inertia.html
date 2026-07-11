@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>09. 드래그 관성 — Infinite Marquee Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; animation: demo-loop 22s linear infinite; }
+    @keyframes demo-loop { from { width: 0; } to { width: 100%; } }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .dg-wrap { width: 100%; text-align: center; }
+    .dg-band { overflow: hidden; width: 100%; padding: 12px 0; cursor: grab; user-select: none; -webkit-user-select: none; touch-action: pan-y; }
+    .dg-band.is-drag { cursor: grabbing; }
+    .dg-track { display: flex; width: max-content; will-change: transform; }
+    .dg-group { display: flex; align-items: center; flex: 0 0 auto; }
+    .dg-group span { font: 800 clamp(34px,5.6vw,68px)/1.2 "Pretendard Variable",sans-serif; color: #fff; white-space: nowrap; padding: 0 26px; }
+    .dg-group i { font-style: normal; color: #8ab4ff; font-size: clamp(16px,2.2vw,28px); }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 24px; text-align: center; }
+    .note-sub { font: 400 12px/1.5 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.35); text-align: center; margin: 26px 0 0; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">09 · 드래그 관성</span>
+  </div>
+  <div class="demo-hint">밴드를 잡고 끌어보세요</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="dg-wrap">
+      <p class="cap">DRAG INERTIA — GRAB THE BAND</p>
+      <div class="dg-band">
+        <div class="dg-track">
+          <div class="dg-group">
+            <span>잡아서 끌어보세요</span><i>✦</i>
+            <span>관성으로 미끄러진다</span><i>✦</i>
+            <span>그리고 다시 흐른다</span><i>✦</i>
+          </div>
+        </div>
+      </div>
+      <p class="note-sub">릴리즈 속도 ±2400px/s 클램프 → 기본 80px/s로 수렴</p>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      // ↻ 다시 보기 = CSS 애니메이션 재시작 (animation:none → reflow → 재부여)
+      function restartCssAnims() {
+        var els = document.querySelectorAll(".js-anim, .demo-progress > div");
+        Array.prototype.forEach.call(els, function(el) {
+          el.style.animation = "none";
+          void el.offsetWidth; // reflow 강제
+          el.style.animation = "";
+        });
+      }
+      window.__reset = restartCssAnims;
+      var band = document.querySelector(".dg-band");
+      var track = document.querySelector(".dg-track");
+      var group = track.querySelector(".dg-group");
+      var clone = group.cloneNode(true);
+      clone.setAttribute("aria-hidden", "true");
+      track.appendChild(clone);
+      var BASE = 80;
+      var offset = 0, vel = BASE, dragging = false;
+      var lastX = 0, lastT = 0;
+      band.addEventListener("pointerdown", function(e) {
+        dragging = true;
+        band.classList.add("is-drag");
+        lastX = e.clientX; lastT = Date.now(); vel = 0;
+        band.setPointerCapture(e.pointerId);
+      });
+      band.addEventListener("pointermove", function(e) {
+        if (!dragging) return;
+        var now = Date.now();
+        var dx = e.clientX - lastX;
+        var mdt = Math.max(1, now - lastT);
+        offset -= dx; // 드래그는 1:1 직결
+        vel = Math.max(-2400, Math.min(2400, -dx / mdt * 1000)); // 릴리즈 속도
+        lastX = e.clientX; lastT = now;
+      });
+      function endDrag() { dragging = false; band.classList.remove("is-drag"); }
+      band.addEventListener("pointerup", endDrag);
+      band.addEventListener("pointercancel", endDrag);
+      var last = Date.now();
+      function tick() {
+        var now = Date.now();
+        var dt = Math.min(64, now - last);
+        last = now;
+        if (!dragging) {
+          offset += vel * dt / 1000;
+          vel += (BASE - vel) * Math.min(1, dt * 0.002); // 관성 감쇠 + 기본 복귀
+        }
+        var half = group.offsetWidth;
+        if (half > 0) { offset = offset % half; if (offset < 0) offset += half; }
+        track.style.transform = "translateX(" + (-offset) + "px)";
+        setTimeout(tick, 16);
+      }
+      setTimeout(tick, 16);
+      var baseReset = window.__reset;
+      window.__reset = function() { baseReset(); offset = 0; vel = BASE; last = Date.now(); };
+    })();
+  </script>
+</body>
+</html>

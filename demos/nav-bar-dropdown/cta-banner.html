@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10. 메가 메뉴 + CTA 배너 — Nav Dropdown Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #000; color: #fff;
+      font-family: "Pretendard Variable", "Pretendard", -apple-system, system-ui, sans-serif;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+    .demo-controls {
+      position: fixed; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
+      z-index: 100;
+    }
+    .demo-label {
+      font: 500 10px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.14em; text-transform: uppercase;
+    }
+    .demo-hint {
+      position: fixed; right: 16px; bottom: 24px;
+      font: 500 11px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.04em;
+      z-index: 100;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 8px 14px;
+      animation: hint-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes hint-pulse {
+      0%, 100% { opacity: 0.6; transform: translateY(0); }
+      50%       { opacity: 1; transform: translateY(-3px); }
+    }
+    /* 표준 nav bar (sticky 상단) */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 32px;
+      padding: 14px 40px;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-brand { font: 700 16px/1 inherit; color: #fff; letter-spacing: -0.01em; }
+    .nav-menu { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; }
+    .nav-menu > li { position: relative; }
+    .nav-menu > li > a, .nav-menu > li > .trigger {
+      display: inline-block; padding: 8px 14px;
+      font: 500 14px/1.2 inherit; color: rgba(255,255,255,0.78);
+      text-decoration: none; border-radius: 8px;
+      cursor: pointer; transition: background 160ms, color 160ms;
+    }
+    .nav-menu > li > a:hover, .nav-menu > li > .trigger:hover,
+    .has-dropdown.is-open > .trigger { background: rgba(255,255,255,0.08); color: #fff; }
+    .nav-cta {
+      font: 600 13px/1 inherit; color: #000; background: #fff;
+      border: 0; border-radius: 999px; padding: 9px 18px; cursor: pointer;
+      transition: opacity 160ms, transform 160ms;
+    }
+    .nav-cta:hover { transform: translateY(-1px); }
+    /* dropdown 컨테이너 (밝은 톤) */
+    .has-dropdown .dropdown {
+      position: absolute; top: calc(100% + 12px); left: 50%;
+      transform: translate(-50%, -6px);
+      background: #fff; color: #171717;
+      border-radius: 16px;
+      box-shadow: 0 18px 48px -12px rgba(0,0,0,0.4), 0 0 0 1px rgba(0,0,0,0.04);
+      opacity: 0; visibility: hidden;
+      transition: opacity 200ms cubic-bezier(0.2,0,0,1), transform 200ms cubic-bezier(0.2,0,0,1), visibility 200ms;
+      font-family: inherit;
+    }
+    .has-dropdown.is-open .dropdown {
+      opacity: 1; visibility: visible; transform: translate(-50%, 0);
+    }
+    /* dropdown 안의 a 기본 색 (밝은 톤) */
+    .dropdown a { color: #171717; }
+    /* 본문 빈 영역 (페이지 placeholder) */
+    .page-content {
+      min-height: calc(100vh - 70px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 80px 40px;
+      color: rgba(255,255,255,0.18);
+      font: 700 56px/1.2 inherit; letter-spacing: -0.02em; text-align: center;
+    }
+    /* 패턴별 dropdown CSS */
+    .dd-cta { min-width: 680px; padding: 0; overflow: hidden; }
+    .dd-cta-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding: 22px 24px 18px; }
+    .dd-cta-col { display: flex; flex-direction: column; gap: 4px; }
+    .dd-cta-col h5 { font: 700 11px/1 inherit; color: #71717a; letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 8px; padding: 0 6px; }
+    .dd-cta-col a { padding: 6px; font: 500 13.5px/1.4 inherit; color: #171717; text-decoration: none; border-radius: 6px; transition: background 140ms; }
+    .dd-cta-col a:hover { background: #f4f4f5; }
+    .dd-cta-banner { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; background: linear-gradient(135deg, #171717 0%, #404040 100%); color: #fff; }
+    .dd-cta-text h4 { font: 700 14px/1.3 inherit; margin: 0 0 4px; color: #fff; }
+    .dd-cta-text p { font: 400 12.5px/1.4 inherit; margin: 0; color: #d4d4d4; }
+    .dd-cta-btn { font: 700 13px/1 inherit; color: #171717; background: #fff; border: 0; border-radius: 8px; padding: 10px 18px; cursor: pointer; transition: transform 140ms; }
+    .dd-cta-btn:hover { transform: translateX(2px); }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <span class="demo-label">10 · 메가 메뉴 + CTA 배너</span>
+  </div>
+  <div class="demo-hint">↓ &quot;시작하기&quot; 메뉴에 호버해보세요</div>
+
+  <nav class="nav">
+    <div class="nav-brand">스튜디오</div>
+    <ul class="nav-menu">
+      <li><a href="#">홈</a></li>
+      <li class="has-dropdown">
+        <a class="trigger" href="#">시작하기</a>
+        <div class="dropdown">
+          <div class="dd-cta">
+            <div class="dd-cta-grid">
+              <div class="dd-cta-col">
+                <h5>제품</h5>
+                <a>분석 도구</a>
+                <a>대시보드</a>
+                <a>리포트</a>
+              </div>
+              <div class="dd-cta-col">
+                <h5>사용 사례</h5>
+                <a>SaaS</a>
+                <a>e-commerce</a>
+                <a>핀테크</a>
+              </div>
+              <div class="dd-cta-col">
+                <h5>리소스</h5>
+                <a>문서</a>
+                <a>블로그</a>
+                <a>커뮤니티</a>
+              </div>
+            </div>
+            <div class="dd-cta-banner">
+              <div class="dd-cta-text">
+                <h4>30일 무료 체험을 시작해보세요</h4>
+                <p>신용카드 없이 모든 기능을 사용해볼 수 있습니다</p>
+              </div>
+              <button class="dd-cta-btn">무료로 시작 →</button>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li><a href="#">고객사</a></li>
+      <li><a href="#">가격</a></li>
+    </ul>
+    <button class="nav-cta" type="button">시작하기</button>
+  </nav>
+
+  <main class="page-content">디자인 스튜디오</main>
+
+  <script>
+    (function(){
+      var trigger = document.querySelector(".has-dropdown");
+      if (!trigger) return;
+      var closeTimer = null;
+      function open(){ clearTimeout(closeTimer); trigger.classList.add("is-open"); }
+      function close(){ closeTimer = setTimeout(function(){ trigger.classList.remove("is-open"); }, 120); }
+      trigger.addEventListener("mouseenter", open);
+      trigger.addEventListener("mouseleave", close);
+      // dropdown 내부 호버 시에도 닫히지 않게
+      var dd = trigger.querySelector(".dropdown");
+      if (dd) {
+        dd.addEventListener("mouseenter", open);
+        dd.addEventListener("mouseleave", close);
+      }
+      // 패턴별 JS
+      
+    })();
+  </script>
+</body>
+</html>

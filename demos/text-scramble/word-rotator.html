@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>08. 단어 로테이터 — Text Scramble Demo</title>
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body { background: #000; color: #fff; font-family: "Pretendard Variable","Pretendard",sans-serif; -webkit-font-smoothing: antialiased; }
+    .demo-controls { position: fixed; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 10px; z-index: 100; }
+    .demo-reset { font: 600 11px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.45); background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 8px 14px; cursor: pointer; transition: color 160ms, background 160ms; }
+    .demo-reset:hover { color: #fff; background: rgba(255,255,255,0.15); }
+    .demo-label { font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.35); letter-spacing: 0.14em; text-transform: uppercase; }
+    .demo-hint { position: fixed; right: 16px; bottom: 24px; font: 500 10px/1 "Pretendard Variable","Pretendard",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.12em; z-index: 100; }
+    .demo-progress { position: fixed; bottom: 0; left: 0; right: 0; height: 2px; background: rgba(255,255,255,0.06); z-index: 100; }
+    .demo-progress > div { height: 100%; background: #fff; width: 0; }
+    .showcase { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; }
+    .rot-box { text-align: center; }
+    .rot-line { margin: 0; font: 800 clamp(30px,5vw,60px)/1.3 "Pretendard Variable",sans-serif; color: #fff; white-space: nowrap; }
+    .rot-mask { display: inline-block; height: 1.15em; overflow: hidden; vertical-align: bottom; text-align: left; }
+    .rot-inner { display: block; will-change: transform; }
+    .rot-word { display: block; height: 1.15em; line-height: 1.15; color: #8ab4ff; }
+    .cap { font: 500 11px/1 "Pretendard Variable",sans-serif; color: rgba(255,255,255,0.3); letter-spacing: 0.18em; text-transform: uppercase; margin: 0 0 20px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="demo-controls">
+    <button class="demo-reset" type="button" onclick="window.__reset && window.__reset()">↻ 다시 보기</button>
+    <span class="demo-label">08 · 단어 로테이터</span>
+  </div>
+  <div class="demo-hint">자동 루프 재생</div>
+  <div class="demo-progress"><div></div></div>
+
+  <main class="showcase">
+    <div class="rot-box">
+      <p class="cap">WORD ROTATOR — LOOP</p>
+      <h1 class="rot-line">우리는 <span class="rot-mask"><span class="rot-inner"></span></span>을 설계합니다</h1>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      var progressFill = document.querySelector(".demo-progress > div");
+      var DURATION = 6400;
+      var LOOP = true;
+      var startTime = Date.now();
+      var running = true;
+      function clamp01(t) { return Math.max(0, Math.min(1, t)); }
+      var WORDS = ["경험", "모션", "감동", "흐름"];
+      var mask = document.querySelector(".rot-mask");
+      var inner = document.querySelector(".rot-inner");
+      WORDS.concat([WORDS[0]]).forEach(function(w) {
+        var s = document.createElement("span");
+        s.className = "rot-word";
+        s.textContent = w;
+        inner.appendChild(s);
+      });
+      // 마스크 폭 = 가장 긴 단어 폭으로 고정 (문장 들썩임 방지)
+      var maxW = 0;
+      Array.prototype.forEach.call(inner.children, function(c) { maxW = Math.max(maxW, c.offsetWidth); });
+      mask.style.width = maxW + "px";
+      var N = WORDS.length;
+      function easeInOutCubic(t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+      function applyReveal(p) {
+        var seg = Math.min(N - 0.0001, p * N);
+        var idx = Math.floor(seg);
+        var segP = seg - idx;
+        var slide = segP < 0.7 ? 0 : easeInOutCubic((segP - 0.7) / 0.3);
+        inner.style.transform = "translateY(" + (-(idx + slide) * 1.15) + "em)";
+      }
+      function tick() {
+        var elapsed = Date.now() - startTime;
+        var p = Math.min(1, elapsed / DURATION);
+        progressFill.style.width = (p * 100) + "%";
+        applyReveal(p);
+        if (p < 1) setTimeout(tick, 16);
+        else if (LOOP) { startTime = Date.now(); setTimeout(tick, 16); }
+        else running = false;
+      }
+      setTimeout(tick, 16);
+      window.__reset = function(){
+        startTime = Date.now();
+        applyReveal(0);
+        if (!running) { running = true; setTimeout(tick, 16); }
+      };
+    })();
+  </script>
+</body>
+</html>

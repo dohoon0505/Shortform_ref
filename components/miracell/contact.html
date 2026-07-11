@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Miracell — Contact (실측 451px · Particle Network + 회전 SVG)</title>
+<link rel="stylesheet" href="../../miracell-app/styles/globals.css">
+<style>
+/* Contact 섹션 — 라이브 실측 451px (padding 150 0) */
+#mainContact {
+  position: relative;
+  width: 100%;
+  height: 451px;
+  padding: 150px 0;
+  background: #000 url('https://miracell.co.kr/images/main/main_contact_bg.jpg') center/cover no-repeat;
+  overflow: hidden;
+}
+
+/* Particle Network 오버레이 */
+.contact-network {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 50%, rgba(221,0,49,.5) 0%, rgba(221,0,49,.1) 30%, transparent 65%),
+    radial-gradient(circle at 90% 80%, rgba(221,0,49,.4), transparent 30%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.contact-inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--area-width);
+  margin: 0 auto;
+  padding: 0 var(--area-padding);
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 60px;
+}
+
+.contact-text {
+  color: #fff;
+}
+
+.contact-text .main-tit {
+  font-family: var(--font-family2);
+  font-weight: 600;
+  font-size: 65px;
+  line-height: 1.1;
+  color: #fff;
+  margin: 0 0 24px;
+  letter-spacing: -.02em;
+}
+
+.contact-text .main-sub-txt {
+  font-family: var(--font-family1);
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(255,255,255,.85);
+  margin: 0;
+}
+
+/* 우측 VIEW MORE 회전 SVG + 가운데 화살표 */
+.contact-arrow-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.contact-line {
+  width: 280px;
+  height: 1px;
+  background: #fff;
+  position: relative;
+}
+
+.contact-line::after {
+  content: '';
+  position: absolute;
+  right: -2px;
+  top: -5px;
+  width: 0; height: 0;
+  border-left: 10px solid #fff;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+.main-contact-btn {
+  position: relative;
+  width: 151px;
+  height: 151px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.4);
+  flex-shrink: 0;
+  text-decoration: none;
+  margin-left: -1px;
+}
+
+.contact-spin-text {
+  position: absolute;
+  inset: 0;
+  animation: mr-spin 14s linear infinite;
+}
+
+.contact-arrow-icon {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
+</head>
+<body>
+<article id="mainContact">
+  <div class="contact-network"></div>
+  <div class="contact-inner">
+    <div class="contact-text">
+      <h4 class="main-tit font-outfit">Contact Us</h4>
+      <p class="main-sub-txt">미라셀은 언제나 열린 마음으로 고객님의 문의를 기다립니다.</p>
+    </div>
+
+    <div class="contact-arrow-wrap">
+      <div class="contact-line"></div>
+      <a href="#" class="main-contact-btn">
+        <svg class="contact-spin-text" width="151" height="151" viewBox="0 0 151 151">
+          <defs>
+            <path id="contact-circle-path" d="M 75.5,75.5 m -64,0 a 64,64 0 1,1 128,0 a 64,64 0 1,1 -128,0"/>
+          </defs>
+          <text font-family="Outfit, sans-serif" font-size="14" font-weight="600" fill="#fff" letter-spacing="8">
+            <textPath href="#contact-circle-path">VIEW MORE · VIEW MORE · VIEW MORE · </textPath>
+          </text>
+        </svg>
+        <svg class="contact-arrow-icon" width="36" height="36" viewBox="0 0 40 40" fill="none" stroke="#fff" stroke-width="1.5">
+          <path d="M8 20h24M22 10l10 10-10 10"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>
+</body>
+</html>
