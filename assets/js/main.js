@@ -111,7 +111,6 @@ function buildSidebar() {
     `<a class="nav-child" href="#/templates/${esc(item.slug)}" data-template-nav="${esc(item.slug)}">${esc(item.navLabel || item.title)}</a>`
   ).join('');
   document.getElementById('template-total').textContent = STORE.templates.length;
-  document.getElementById('home-template-count').textContent = STORE.templates.length;
   document.getElementById('library-count').textContent = STORE.templates.length;
 }
 

@@ -178,10 +178,6 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .hero-goal { padding: 18px 22px; margin-top: 22px; max-width: none; border-left: 3px solid var(--brand); border-radius: 0 12px 12px 0; background: var(--brand-soft); }
 .hero-goal p { color: var(--content-secondary); font-size: 15px; line-height: 1.75; }
 .hero-actions { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
-.hero-stats { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--border); display: flex; gap: 48px; flex-wrap: wrap; }
-.hero-stats div { display: flex; flex-direction: column; }
-.hero-stats b { font-size: 26px; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
-.hero-stats span { margin-top: 3px; color: var(--content-tertiary); font-size: 13px; }
 .section-heading { margin: 72px 0 24px; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; }
 .section-kicker { color: var(--content-tertiary); font-size: 13px; font-weight: 700; letter-spacing: .01em; }
 .section-heading h2 { margin-top: 7px; font-size: 30px; letter-spacing: -.01em; }
