@@ -509,7 +509,7 @@ function parsedRoute() {
 }
 
 function breadcrumbHTML(section, leaf) {
-  const parts = [`<a href="#/home">숏폼 연구소</a>`];
+  const parts = [`<a href="#/home">숏폼광고 영상제작 연구소</a>`];
   if (section === 'trends') parts.push(`<a href="#/trends">트렌드</a>`);
   if (section === 'templates') parts.push(`<a href="#/templates">템플릿</a>`);
   if (section === 'guide') parts.push('<b>사용법</b>');
@@ -535,37 +535,37 @@ function showView(id) {
 function route() {
   const { section, slug } = parsedRoute();
   let leaf = '';
-  let title = '숏폼 연구소';
+  let title = '숏폼광고 영상제작 연구소';
   let validSection = section;
 
   if (section === 'home') {
     showView('view-home');
   } else if (section === 'trends' && !slug) {
     showView('view-trends');
-    title = '트렌드 · 숏폼 연구소';
+    title = '트렌드 · 숏폼광고 영상제작 연구소';
   } else if (section === 'trends' && STORE.trendBySlug[slug]) {
     const item = STORE.trendBySlug[slug];
     renderTrendDetail(item);
     showView('view-trend-detail');
     leaf = item.name;
-    title = `${item.name} 트렌드 · 숏폼 연구소`;
+    title = `${item.name} 트렌드 · 숏폼광고 영상제작 연구소`;
   } else if (section === 'templates' && !slug) {
     renderTemplateLibrary();
     showView('view-templates');
-    title = '템플릿 · 숏폼 연구소';
+    title = '템플릿 · 숏폼광고 영상제작 연구소';
   } else if (section === 'templates' && STORE.templateBySlug[slug]) {
     const item = STORE.templateBySlug[slug];
     renderTemplateDetail(item);
     showView('view-template-detail');
     leaf = item.title;
-    title = `${item.title} · 숏폼 연구소`;
+    title = `${item.title} · 숏폼광고 영상제작 연구소`;
   } else if (section === 'guide') {
     showView('view-guide');
-    title = '사용법 · 숏폼 연구소';
+    title = '사용법 · 숏폼광고 영상제작 연구소';
   } else {
     showView('view-not-found');
     validSection = '';
-    title = '페이지를 찾지 못했습니다 · 숏폼 연구소';
+    title = '페이지를 찾지 못했습니다 · 숏폼광고 영상제작 연구소';
   }
 
   document.getElementById('breadcrumb').innerHTML = breadcrumbHTML(validSection, leaf);
@@ -690,7 +690,7 @@ async function init() {
     renderTemplateLibrary();
     route();
   } catch (error) {
-    console.error('[숏폼 연구소]', error);
+    console.error('[숏폼광고 영상제작 연구소]', error);
     document.querySelector('.main').innerHTML = `
       <section class="view is-active"><div class="empty-state"><span>LOAD ERROR</span><h1>콘텐츠를 불러오지 못했어요</h1><p>로컬 서버로 열었는지 확인해 주세요.</p></div></section>`;
   }
