@@ -1,5 +1,5 @@
 :root {
-  /* v1.7.0 — 뷰티와 어울리는 부드러운 로즈 파스텔 팔레트 */
+  /* v1.7.1 — 뷰티와 어울리는 부드러운 로즈 파스텔 팔레트 */
   --p-white: #fff;
   --p-ink: #191418;
   --p-slate: #6b6068;
@@ -83,14 +83,9 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
   overflow-y: auto; overscroll-behavior: contain;
 }
 .sidebar-brand {
-  display: flex; align-items: center; gap: 12px; padding: 5px 7px 20px;
+  display: flex; align-items: center; padding: 5px 7px 20px;
   text-decoration: none; border-bottom: 1px solid var(--border);
 }
-.brand-mark {
-  width: 44px; height: 44px; border-radius: 13px; flex: none;
-  display: grid; place-items: center; background: #fff; box-shadow: var(--shadow-border);
-}
-.brand-mark img { width: 28px; height: 28px; display: block; }
 .brand-copy { display: flex; flex-direction: column; min-width: 0; }
 .brand-copy b { font-size: 16px; line-height: 1.3; letter-spacing: -.01em; }
 .brand-copy small { color: var(--content-tertiary); font-size: 13px; letter-spacing: 0; margin-top: 2px; }
