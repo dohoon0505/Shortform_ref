@@ -2,7 +2,7 @@
   "meta": {
     "name": "숏폼광고 영상제작 연구소",
     "description": "매체별·상품별·유형별 VA를 분석해 연구일지를 작성하는 연구소. 유튜브 숏츠·인스타 릴스·틱톡 모바일 피드형 동영상을 매개체로 KPI 달성과 높은 ROAS 확보를 연구한다.",
-    "version": "1.8.0",
+    "version": "1.8.1",
     "updated": "2026-07-13",
     "promptItems": [
       {
@@ -197,7 +197,6 @@
         "length": "0:44",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/d0bf4ab4-a66c-415d-869c-3c7814264f93.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/d0bf4ab4-a66c-415d-869c-3c7814264f93-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "개인적 페인포인트를 첫 2초에 고백해 스크롤을 멈추게 하는 문제 공감형 후킹의 표본"
       },
@@ -403,7 +402,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/370147f8-f6b4-4af6-81e0-9323b6f4a000.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/370147f8-f6b4-4af6-81e0-9323b6f4a000-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "스펙 대신 무드 스토리(이런 사람 있잖아요…)로 감정선을 만들고 마지막에 정보를 주는 감성 서사의 표본"
       },
@@ -609,7 +607,6 @@
         "length": "0:32",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/83134adf-85ab-4795-816f-c3e29ea6bfaf.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/83134adf-85ab-4795-816f-c3e29ea6bfaf-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "권위 후킹 + 텍스처 증명 + 단계별 시연 + 비포·애프터가 교과서처럼 배열된 하우투 표본"
       },
@@ -815,7 +812,6 @@
         "length": "0:39",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/65b143e9-6a33-4a63-b327-095626618e01.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/65b143e9-6a33-4a63-b327-095626618e01-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "질문 후킹 → 실패 사례 공감 → 셀링포인트 4연타 → CTA. 광고 티 없이 사게 만드는 UGC 리뷰의 정석"
       },
@@ -1021,7 +1017,6 @@
         "length": "0:36",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9e8d3a53-ff01-4843-b502-ba9fb4566657.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9e8d3a53-ff01-4843-b502-ba9fb4566657-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "질문형 후킹과 텍스처 증명·롱테이크 블렌딩이 특징. ※ 밈·트렌드 아키타입과는 성격이 달라, 트렌드 영상으로 교체를 권장"
       },
@@ -1227,7 +1222,6 @@
         "length": "0:47",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/28fb34ff-b26b-4bf2-8a87-dd9f093dc94d.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/28fb34ff-b26b-4bf2-8a87-dd9f093dc94d-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 23장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 향수/디퓨저/스프레이 광고 표본"
       },
@@ -1459,7 +1453,6 @@
         "length": "0:29",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/56728829-07be-4dcb-9e04-ee734ac3eb6c.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/56728829-07be-4dcb-9e04-ee734ac3eb6c-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 클렌징 광고 표본"
       },
@@ -1676,7 +1669,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a8858a20-1132-45a7-9ab5-ced602177f97.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a8858a20-1132-45a7-9ab5-ced602177f97-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 17장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 식품 광고 표본"
       },
@@ -1883,7 +1875,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/456b9aee-2999-4ce4-99a7-ffd8ebaf26cd.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/456b9aee-2999-4ce4-99a7-ffd8ebaf26cd-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 12장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 마스크팩 광고 표본"
       },
@@ -2090,7 +2081,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9fde4519-ffad-4280-8bd4-d3813455783b.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9fde4519-ffad-4280-8bd4-d3813455783b-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 16장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -2307,7 +2297,6 @@
         "length": "1:13",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/481982c3-2a83-4974-8bae-d43c286941cc.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/481982c3-2a83-4974-8bae-d43c286941cc-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 20장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -2549,7 +2538,6 @@
         "length": "0:29",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3801cb25-c772-4602-9b69-df75d441a03e.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3801cb25-c772-4602-9b69-df75d441a03e-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명] 패키지를 손에 들거나 화면 중앙에 배치 + [제품명]을 섭취하는 일상 동작을 보여줌. 이후 13장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 향수/디퓨저/스프레이 광고 표본"
       },
@@ -2771,7 +2759,6 @@
         "length": "0:41",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/362c72e7-8348-45ac-961d-71f3920ac61a.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/362c72e7-8348-45ac-961d-71f3920ac61a-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 22장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -3003,7 +2990,6 @@
         "length": "0:40",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/74ecd857-4429-494e-91fd-98ee8bae02d7.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/74ecd857-4429-494e-91fd-98ee8bae02d7-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 15장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 식품 광고 표본"
       },
@@ -3220,7 +3206,6 @@
         "length": "0:33",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/2e6a3dbe-520d-4996-a6a5-47afb0d66a92.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/2e6a3dbe-520d-4996-a6a5-47afb0d66a92-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 17장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 메이크업 - 립 광고 표본"
       },
@@ -3467,7 +3452,6 @@
         "length": "0:31",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/4d26a3df-1aa1-4be6-b5c3-1ffbc3c1d336.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/4d26a3df-1aa1-4be6-b5c3-1ffbc3c1d336-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 14장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 네일/페디 광고 표본"
       },
@@ -3689,7 +3673,6 @@
         "length": "0:30",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/d425940a-f9f9-4db2-899e-5b073f6b8d8b.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/d425940a-f9f9-4db2-899e-5b073f6b8d8b-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [제품명]을 섭취하는 일상 동작을 보여줌. 이후 19장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 향수/디퓨저/스프레이 광고 표본"
       },
@@ -3886,7 +3869,6 @@
         "length": "0:29",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/72bd43a3-a658-4d4b-af0a-970c2d8ae00d.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/72bd43a3-a658-4d4b-af0a-970c2d8ae00d-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [사용 부위]에 제품을 직접 쓰는 손동작을 시연 + 용기에서 제형을 덜어 양과 사용감을 보여줌. 이후 12장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 바디 광고 표본"
       },
@@ -4088,7 +4070,6 @@
         "length": "0:53",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3e76ac21-ed2a-45ae-9498-6832c8fc63d3.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3e76ac21-ed2a-45ae-9498-6832c8fc63d3-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 22장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 식품 광고 표본"
       },
@@ -4305,7 +4286,6 @@
         "length": "0:19",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/87846f04-2b9e-4d21-9300-e12de4553c54.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/87846f04-2b9e-4d21-9300-e12de4553c54-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 17장면의 핵심 리듬(단계별 시연과 구체적인 정보)으로 제품 효익을 회수하는 향수/디퓨저/스프레이 광고 표본"
       },
@@ -4507,7 +4487,6 @@
         "length": "0:29",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/f1ad9847-98d9-4441-b72c-a9aba68ac1d6.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/f1ad9847-98d9-4441-b72c-a9aba68ac1d6-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [문제 부위]의 상태를 가까이에서 증명 + [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 19장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -4749,7 +4728,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/6385b27e-f255-4e92-b5a9-f3984c030a5a.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/6385b27e-f255-4e92-b5a9-f3984c030a5a-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 17장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 향수/디퓨저/스프레이 광고 표본"
       },
@@ -4961,7 +4939,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3f0b12e1-0f3e-49e3-8155-6e1c83dbc0ff.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3f0b12e1-0f3e-49e3-8155-6e1c83dbc0ff-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 모발·두피의 사용 전후 상태를 강조. 이후 16장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 헤어 광고 표본"
       },
@@ -5193,7 +5170,6 @@
         "length": "0:28",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a4385a88-b0ee-4f39-94a0-ea75eecebef6.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a4385a88-b0ee-4f39-94a0-ea75eecebef6-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 12장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -5415,7 +5391,6 @@
         "length": "0:46",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/ff8f5749-c242-4eca-a22f-2d350f3f89bc.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/ff8f5749-c242-4eca-a22f-2d350f3f89bc-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 24장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -5662,7 +5637,6 @@
         "length": "0:31",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/8160fbc6-7b3a-439c-be1c-422f926191d7.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/8160fbc6-7b3a-439c-be1c-422f926191d7-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 눈가·속눈썹·눈썹의 변화를 확대 + [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 13장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 아이 광고 표본"
       },
@@ -5874,7 +5848,6 @@
         "length": "1:09",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/2961c9b6-4756-4108-907c-788cf36157bd.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/2961c9b6-4756-4108-907c-788cf36157bd-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 20장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -6121,7 +6094,6 @@
         "length": "0:24",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/c1c6109a-3393-40ce-9a98-ca286d0d29b7.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/c1c6109a-3393-40ce-9a98-ca286d0d29b7-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 12장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -6338,7 +6310,6 @@
         "length": "0:32",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a8242dd7-0748-4e66-9039-fb9d700dfe4d.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a8242dd7-0748-4e66-9039-fb9d700dfe4d-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교. 이후 11장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -6540,7 +6511,6 @@
         "length": "0:36",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/16656b53-d57c-4db9-8c79-fcb3b4f3a263.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/16656b53-d57c-4db9-8c79-fcb3b4f3a263-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 모발·두피의 사용 전후 상태를 강조 + [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 헤어 광고 표본"
       },
@@ -6747,7 +6717,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/4e9e56e5-c5c7-4ba5-b3f4-a7358d75f328.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/4e9e56e5-c5c7-4ba5-b3f4-a7358d75f328-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 마스크팩 광고 표본"
       },
@@ -6969,7 +6938,6 @@
         "length": "0:40",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/eab878ca-b345-4b5a-b898-6b69f86ba8d1.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/eab878ca-b345-4b5a-b898-6b69f86ba8d1-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 19장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 바디 광고 표본"
       },
@@ -7211,7 +7179,6 @@
         "length": "0:30",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9ca51c90-0c64-4464-a129-f15959b616c2.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9ca51c90-0c64-4464-a129-f15959b616c2-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 15장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 마스크팩 광고 표본"
       },
@@ -7418,7 +7385,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/1e8cccd2-6aaf-4a54-bd22-b7d0e40abb8c.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/1e8cccd2-6aaf-4a54-bd22-b7d0e40abb8c-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 18장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -7650,7 +7616,6 @@
         "length": "0:31",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/28dd0f8a-b912-4121-847a-e2913110e79a.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/28dd0f8a-b912-4121-847a-e2913110e79a-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [문제 부위]의 상태를 가까이에서 증명. 이후 15장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -7847,7 +7812,6 @@
         "length": "0:42",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/8ecf4d23-c844-458b-bdcf-8b206e951530.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/8ecf4d23-c844-458b-bdcf-8b206e951530-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [문제 부위]의 상태를 가까이에서 증명 + [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 27장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -8089,7 +8053,6 @@
         "length": "0:33",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/bd9aa114-fd90-4866-8828-8e2215a11b0e.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/bd9aa114-fd90-4866-8828-8e2215a11b0e-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 23장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -8341,7 +8304,6 @@
         "length": "0:38",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/4077ea55-4227-4b1a-a5e7-6ef4e95ef575.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/4077ea55-4227-4b1a-a5e7-6ef4e95ef575-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 마스크팩 광고 표본"
       },
@@ -8563,7 +8525,6 @@
         "length": "0:36",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/bff52bc7-0c00-44e8-9bb3-94bf986de27b.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/bff52bc7-0c00-44e8-9bb3-94bf986de27b-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 24장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 식품 광고 표본"
       },
@@ -8815,7 +8776,6 @@
         "length": "0:41",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/ce42aaa4-583f-4f3b-935f-63c9df4333cc.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/ce42aaa4-583f-4f3b-935f-63c9df4333cc-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 13장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 식품 광고 표본"
       },
@@ -9037,7 +8997,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/e6ddad4f-4755-4a0f-86e7-2dbbb7e9e57d.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/e6ddad4f-4755-4a0f-86e7-2dbbb7e9e57d-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 10장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 선케어 광고 표본"
       },
@@ -9249,7 +9208,6 @@
         "length": "0:37",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/49e85334-abb8-41b1-a3c7-6a5baa61881b.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/49e85334-abb8-41b1-a3c7-6a5baa61881b-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 모발·두피의 사용 전후 상태를 강조 + [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 19장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 헤어 광고 표본"
       },
@@ -9471,7 +9429,6 @@
         "length": "0:29",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/2fd7eb4e-66a6-466d-be1f-0743203e31b5.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/2fd7eb4e-66a6-466d-be1f-0743203e31b5-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [사용 부위]에 제품을 직접 쓰는 손동작을 시연. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -9703,7 +9660,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/65d52439-7138-4217-a5b3-273379228719.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/65d52439-7138-4217-a5b3-273379228719-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 15장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -9930,7 +9886,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/d312ed8c-71e4-4405-9417-ffa0c7990be9.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/d312ed8c-71e4-4405-9417-ffa0c7990be9-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [사용 부위]에 제품을 직접 쓰는 손동작을 시연. 이후 9장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 클렌징 광고 표본"
       },
@@ -10132,7 +10087,6 @@
         "length": "0:30",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/6466ab0f-9d47-4df6-9a7c-1e9aa5c16a53.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/6466ab0f-9d47-4df6-9a7c-1e9aa5c16a53-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 18장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -10364,7 +10318,6 @@
         "length": "0:41",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a9211531-0c75-4aba-8e55-4de589b35ac8.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a9211531-0c75-4aba-8e55-4de589b35ac8-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교 + [문제 부위]의 상태를 가까이에서 증명. 이후 18장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -10581,7 +10534,6 @@
         "length": "0:29",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/f39a9bd1-8265-4caa-b8f2-3139d199d126.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/f39a9bd1-8265-4caa-b8f2-3139d199d126-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 22장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -10818,7 +10770,6 @@
         "length": "0:30",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/2eeec33d-f3e0-410f-8545-1c40f38862ae.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/2eeec33d-f3e0-410f-8545-1c40f38862ae-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 17장면의 핵심 리듬(단계별 시연과 구체적인 정보)으로 제품 효익을 회수하는 향수/디퓨저/스프레이 광고 표본"
       },
@@ -11045,7 +10996,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/59df5cf8-86bd-4a68-8191-1d69de998da3.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/59df5cf8-86bd-4a68-8191-1d69de998da3-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [사용 부위]에 제품을 직접 쓰는 손동작을 시연. 이후 20장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -11247,7 +11197,6 @@
         "length": "0:42",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/cb656743-4571-4976-9878-bde07f8f94d3.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/cb656743-4571-4976-9878-bde07f8f94d3-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [문제 부위]의 상태를 가까이에서 증명 + [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 15장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 선케어 광고 표본"
       },
@@ -11454,7 +11403,6 @@
         "length": "1:00",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/0bd51c79-78cb-499f-9cf8-4d1cc6b68a4d.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/0bd51c79-78cb-499f-9cf8-4d1cc6b68a4d-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 21장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -11666,7 +11614,6 @@
         "length": "0:42",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/27ce1117-a245-49a0-bad2-f637b1ff50da.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/27ce1117-a245-49a0-bad2-f637b1ff50da-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 모발·두피의 사용 전후 상태를 강조. 이후 22장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 헤어 광고 표본"
       },
@@ -11878,7 +11825,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/ed4ed801-ddb8-4530-b7d0-154ca3813950.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/ed4ed801-ddb8-4530-b7d0-154ca3813950-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교 + [문제 부위]의 상태를 가까이에서 증명. 이후 13장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 클렌징 광고 표본"
       },
@@ -12085,7 +12031,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/164a745d-4e64-423a-a120-b638c05f9c9c.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/164a745d-4e64-423a-a120-b638c05f9c9c-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [문제 부위]의 상태를 가까이에서 증명 + [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 20장면의 핵심 리듬(단계별 시연과 구체적인 정보)으로 제품 효익을 회수하는 메이크업 - 아이 광고 표본"
       },
@@ -12297,7 +12242,6 @@
         "length": "0:29",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/62d2c419-37cd-4286-bbbd-3d714157fe46.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/62d2c419-37cd-4286-bbbd-3d714157fe46-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 19장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 바디 광고 표본"
       },
@@ -12519,7 +12463,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/35af8442-5024-4b5c-bbbe-42dc207893e5.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/35af8442-5024-4b5c-bbbe-42dc207893e5-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 14장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -12726,7 +12669,6 @@
         "length": "0:59",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/75b4f05d-24c0-48d7-ba5b-244fb710a831.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/75b4f05d-24c0-48d7-ba5b-244fb710a831-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 위생 광고 표본"
       },
@@ -12953,7 +12895,6 @@
         "length": "0:48",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/00af56af-a7d1-408a-9cf2-df87aadf730d.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/00af56af-a7d1-408a-9cf2-df87aadf730d-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 16장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 아이 광고 표본"
       },
@@ -13150,7 +13091,6 @@
         "length": "0:36",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/0910469c-87c9-49f0-a703-a94a8bee70b9.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/0910469c-87c9-49f0-a703-a94a8bee70b9-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교. 이후 19장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -13372,7 +13312,6 @@
         "length": "0:41",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/31e4519d-fb9f-4fb8-b984-2e59b9d75a92.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/31e4519d-fb9f-4fb8-b984-2e59b9d75a92-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 12장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -13589,7 +13528,6 @@
         "length": "0:50",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/0701596e-32ca-4953-9abf-064e01d45cff.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/0701596e-32ca-4953-9abf-064e01d45cff-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 거울을 보며 결과를 확인하는 리액션. 이후 29장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 메이크업 - 아이 광고 표본"
       },
@@ -13801,7 +13739,6 @@
         "length": "0:57",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/f339cd2d-a74e-4c57-b40d-2427f18e8c68.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/f339cd2d-a74e-4c57-b40d-2427f18e8c68-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명] 패키지를 손에 들거나 화면 중앙에 배치 + 생활 공간 배경으로 UGC 분위기를 유지. 이후 27장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -14033,7 +13970,6 @@
         "length": "0:55",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/35bb3dc9-cec0-49de-a792-7498aae9d2fd.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/35bb3dc9-cec0-49de-a792-7498aae9d2fd-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [문제]의 비포·애프터를 즉시 비교 + [문제 부위]의 상태를 가까이에서 증명. 이후 17장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -14240,7 +14176,6 @@
         "length": "0:33",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/0aa0cbe8-8c2e-46f2-9fec-d22758fd6d23.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/0aa0cbe8-8c2e-46f2-9fec-d22758fd6d23-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교 + [문제 부위]의 상태를 가까이에서 증명. 이후 13장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -14457,7 +14392,6 @@
         "length": "0:36",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/7e67acce-0f64-4d32-b5f5-3b0de0bc152f.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/7e67acce-0f64-4d32-b5f5-3b0de0bc152f-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 16장면의 핵심 리듬(단계별 시연과 구체적인 정보)으로 제품 효익을 회수하는 바디 광고 표본"
       },
@@ -14679,7 +14613,6 @@
         "length": "0:30",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/c85d3d2e-b154-463d-a6ef-e87405efb04b.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/c85d3d2e-b154-463d-a6ef-e87405efb04b-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 입술의 색·광택·발림 결과를 확대 + [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 18장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 메이크업 - 립 광고 표본"
       },
@@ -14886,7 +14819,6 @@
         "length": "0:36",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/dc4c18fb-bb44-4574-9a3d-74f146cd1599.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/dc4c18fb-bb44-4574-9a3d-74f146cd1599-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 선케어 광고 표본"
       },
@@ -15103,7 +15035,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/afa69268-d816-4348-aff8-0c492c19f172.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/afa69268-d816-4348-aff8-0c492c19f172-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 모발·두피의 사용 전후 상태를 강조. 이후 15장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 헤어 광고 표본"
       },
@@ -15315,7 +15246,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/58e40069-9e96-4c44-bed2-feb9c4ade48d.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/58e40069-9e96-4c44-bed2-feb9c4ade48d-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 눈가·속눈썹·눈썹의 변화를 확대. 이후 19장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 아이 광고 표본"
       },
@@ -15542,7 +15472,6 @@
         "length": "0:47",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/5abed27d-5491-4dc8-b136-45af67b08eef.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/5abed27d-5491-4dc8-b136-45af67b08eef-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 19장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 렌즈 광고 표본"
       },
@@ -15764,7 +15693,6 @@
         "length": "0:28",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/12b0979e-88a6-40ce-894c-aa0d45b7ec9c.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/12b0979e-88a6-40ce-894c-aa0d45b7ec9c-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 11장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 선케어 광고 표본"
       },
@@ -15976,7 +15904,6 @@
         "length": "0:31",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/aecff2c1-9a6c-4378-9726-659575f8e663.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/aecff2c1-9a6c-4378-9726-659575f8e663-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]을 섭취하는 일상 동작을 보여줌. 이후 17장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 선케어 광고 표본"
       },
@@ -16208,7 +16135,6 @@
         "length": "0:37",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9bc1bf53-d4bc-43cf-a2eb-27796deaae01.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9bc1bf53-d4bc-43cf-a2eb-27796deaae01-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 모발·두피의 사용 전후 상태를 강조. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 헤어 광고 표본"
       },
@@ -16430,7 +16356,6 @@
         "length": "0:31",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/48a5fcf5-1aff-40f8-aee2-eba56ad6d19f.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/48a5fcf5-1aff-40f8-aee2-eba56ad6d19f-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교 + [문제 부위]의 상태를 가까이에서 증명. 이후 15장면의 핵심 리듬(빠른 문제 제기와 즉시 확인 가능한 결과)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -16652,7 +16577,6 @@
         "length": "0:41",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3a720575-86c7-4787-a157-7d7848f85708.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3a720575-86c7-4787-a157-7d7848f85708-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [사용 부위]에 제품을 직접 쓰는 손동작을 시연 + [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 9장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 향수/디퓨저/스프레이 광고 표본"
       },
@@ -16859,7 +16783,6 @@
         "length": "0:48",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3e83b223-e4be-4a55-8ebe-657c9338c3c7.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3e83b223-e4be-4a55-8ebe-657c9338c3c7-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [문제 부위]의 상태를 가까이에서 증명 + [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 17장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -17086,7 +17009,6 @@
         "length": "0:38",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/fec0a0ee-4f85-413e-8165-7a5155dc27ad.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/fec0a0ee-4f85-413e-8165-7a5155dc27ad-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -17298,7 +17220,6 @@
         "length": "0:48",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9f686090-1b20-4ef5-9c4a-c17870a2557f.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9f686090-1b20-4ef5-9c4a-c17870a2557f-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 20장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 베이스 광고 표본"
       },
@@ -17555,7 +17476,6 @@
         "length": "0:34",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/06c86b88-7e22-4f11-907b-8ed0c69edfef.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/06c86b88-7e22-4f11-907b-8ed0c69edfef-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 20장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 클렌징 광고 표본"
       },
@@ -17777,7 +17697,6 @@
         "length": "0:31",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/88d10d42-f751-4efb-83c1-d5b3f6cbe033.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/88d10d42-f751-4efb-83c1-d5b3f6cbe033-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교 + [문제 부위]의 상태를 가까이에서 증명. 이후 12장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -17989,7 +17908,6 @@
         "length": "0:37",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/6a4b0976-64b3-4969-b3ba-15de72f04661.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/6a4b0976-64b3-4969-b3ba-15de72f04661-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 17장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 소품 - 아이 광고 표본"
       },
@@ -18216,7 +18134,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/332a2ad3-5023-4763-942c-9889ca46a1df.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/332a2ad3-5023-4763-942c-9889ca46a1df-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교 + [문제 부위]의 상태를 가까이에서 증명. 이후 17장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 식품 광고 표본"
       },
@@ -18438,7 +18355,6 @@
         "length": "0:37",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/eb0b9545-ea7b-48ca-97a1-f500d31944c5.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/eb0b9545-ea7b-48ca-97a1-f500d31944c5-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명] 패키지를 손에 들거나 화면 중앙에 배치 + [제품명]을 섭취하는 일상 동작을 보여줌. 이후 26장면의 핵심 리듬(단계별 시연과 구체적인 정보)으로 제품 효익을 회수하는 소품 - 바디 광고 표본"
       },
@@ -18675,7 +18591,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/d2ec6113-bbf5-4d44-b42b-57cd79959f4c.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/d2ec6113-bbf5-4d44-b42b-57cd79959f4c-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -18897,7 +18812,6 @@
         "length": "0:41",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9753740f-a19e-491e-90c1-91189a2eeb72.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9753740f-a19e-491e-90c1-91189a2eeb72-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 모발·두피의 사용 전후 상태를 강조. 이후 10장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 헤어 광고 표본"
       },
@@ -19109,7 +19023,6 @@
         "length": "0:44",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/c8a9159c-9ef5-4884-8a53-f28996098750.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/c8a9159c-9ef5-4884-8a53-f28996098750-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + 용기에서 제형을 덜어 양과 사용감을 보여줌. 이후 22장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -19341,7 +19254,6 @@
         "length": "0:30",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/cbd26a92-83ca-4ace-bc63-5b74d7e281e9.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/cbd26a92-83ca-4ace-bc63-5b74d7e281e9-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교 + 모발·두피의 사용 전후 상태를 강조. 이후 12장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 헤어 광고 표본"
       },
@@ -19563,7 +19475,6 @@
         "length": "0:29",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9acc3b29-59d0-4cb5-890b-6d1caec87b74.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/9acc3b29-59d0-4cb5-890b-6d1caec87b74-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 19장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -19790,7 +19701,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/e09533f7-7b53-4c6e-b996-cf6344e33eec.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/e09533f7-7b53-4c6e-b996-cf6344e33eec-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 18장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 마스크팩 광고 표본"
       },
@@ -20017,7 +19927,6 @@
         "length": "0:32",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3a0d9587-7407-47b1-96f7-48ecb61bdeb1.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/3a0d9587-7407-47b1-96f7-48ecb61bdeb1-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [제품명] 패키지를 손에 들거나 화면 중앙에 배치. 이후 21장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 바디 광고 표본"
       },
@@ -20244,7 +20153,6 @@
         "length": "0:43",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a3e73135-b9e6-4e1a-a927-14f5d2d1cebd.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a3e73135-b9e6-4e1a-a927-14f5d2d1cebd-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 14장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 식품 광고 표본"
       },
@@ -20451,7 +20359,6 @@
         "length": "0:41",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/b4cb2acb-4254-4a3e-aef8-194c5db3d1e5.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/b4cb2acb-4254-4a3e-aef8-194c5db3d1e5-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시 + [사용 부위]에 제품을 직접 쓰는 손동작을 시연. 이후 23장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 클렌징 광고 표본"
       },
@@ -20668,7 +20575,6 @@
         "length": "0:36",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/1fa2a397-318e-4098-bff8-96a6775538c1.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/1fa2a397-318e-4098-bff8-96a6775538c1-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교 + [문제 부위]의 상태를 가까이에서 증명. 이후 23장면의 핵심 리듬(빠른 문제 제기와 즉시 확인 가능한 결과)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -20890,7 +20796,6 @@
         "length": "0:36",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/40571865-c2fe-495a-a0f0-94a81e7a10fa.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/40571865-c2fe-495a-a0f0-94a81e7a10fa-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 11장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 마스크팩 광고 표본"
       },
@@ -21107,7 +21012,6 @@
         "length": "0:35",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a86adc12-a066-4ca2-9c04-89497a04d313.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/a86adc12-a066-4ca2-9c04-89497a04d313-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 16장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 마스크팩 광고 표본"
       },
@@ -21319,7 +21223,6 @@
         "length": "0:31",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/e4a44540-c67c-4e00-80cf-e7751ef7be86.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/e4a44540-c67c-4e00-80cf-e7751ef7be86-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 거울을 보며 결과를 확인하는 리액션. 이후 13장면의 핵심 리듬(음악 중심의 빠른 비주얼 리듬)으로 제품 효익을 회수하는 향수/디퓨저/스프레이 광고 표본"
       },
@@ -21526,7 +21429,6 @@
         "length": "0:45",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/bca669b3-f798-4b6f-aa9d-7c90179a8552.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/bca669b3-f798-4b6f-aa9d-7c90179a8552-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: 두 화면을 분할해 변화나 사용 상황을 비교 + 눈가·속눈썹·눈썹의 변화를 확대. 이후 12장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 메이크업 - 아이 광고 표본"
       },
@@ -21748,7 +21650,6 @@
         "length": "0:41",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/e6b671ee-6edf-471c-8149-3f491f283dc6.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/e6b671ee-6edf-471c-8149-3f491f283dc6-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [제품명]의 제형·거품·발림성을 디테일로 제시. 이후 27장면의 핵심 리듬(빠른 문제 제기와 즉시 확인 가능한 결과)으로 제품 효익을 회수하는 스킨케어 광고 표본"
       },
@@ -21940,7 +21841,6 @@
         "length": "0:43",
         "url": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/7167dd54-6735-4c3f-a54f-56c4e260e385.mp4",
         "thumbnail": "https://cdn.nmodelin.com/glovv_homepage/reference_collection/videos/7167dd54-6735-4c3f-a54f-56c4e260e385-thumbnail.webp",
-        "embed": "iframe",
         "sourcePage": "https://glovv.co.kr/meta/reference",
         "why": "첫 장면의 핵심 장치: [타깃 고민] 또는 원하는 결과를 첫 프레임에 크게 제시. 이후 14장면의 핵심 리듬(자연스러운 실사용 후기와 시각 증거)으로 제품 효익을 회수하는 선케어 광고 표본"
       },

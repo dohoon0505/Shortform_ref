@@ -259,11 +259,9 @@ function renderTemplateLibrary() {
 function refEmbed(reference) {
   const url = String(reference?.url || '').trim();
   if (!url) return `<div class="video-placeholder"><span>${icon('play')}</span></div>`;
-  if (reference?.embed === 'iframe') {
-    return `<iframe src="${esc(url)}" title="${esc(reference?.title || '기준 영상')}" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
-  }
   if (/\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(url)) {
-    return `<video src="${esc(url)}" controls preload="metadata" playsinline></video>`;
+    const poster = String(reference?.thumbnail || '').trim();
+    return `<video src="${esc(url)}"${poster ? ` poster="${esc(poster)}"` : ''} controls preload="metadata" playsinline></video>`;
   }
   return `<iframe src="${esc(url)}" title="${esc(reference?.title || '기준 영상')}" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
 }
