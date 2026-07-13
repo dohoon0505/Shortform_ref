@@ -213,11 +213,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .trend-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
 .trend-card { min-height: 320px; padding: 26px; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); text-decoration: none; transition: border-color .18s, box-shadow .18s; }
 .trend-card:hover { border-color: color-mix(in srgb, var(--brand) 30%, var(--border)); box-shadow: var(--shadow-sm); }
-.platform-mark { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; color: #fff; font-size: 14px; font-weight: 800; letter-spacing: -.01em; }
-.platform-youtube { background: #ff3b30; }
-.platform-instagram { background: linear-gradient(135deg, #f9ce34, #ee2a7b 50%, #6228d7); }
-.platform-tiktok { background: #14151b; box-shadow: inset 3px 0 #25f4ee, inset -3px 0 #fe2c55; }
-.trend-card h2 { margin: 22px 0 7px; font-size: 21px; letter-spacing: -.01em; }
+.trend-card h2 { margin: 0 0 7px; font-size: 21px; letter-spacing: -.01em; }
 .trend-card .platform-tagline { color: var(--brand); font-size: 14px; font-weight: 650; }
 .trend-card p { margin-top: 13px; color: var(--content-secondary); font-size: 14px; }
 .trend-card > span:last-child { margin-top: auto; padding-top: 22px; display: flex; align-items: center; justify-content: space-between; font-size: 14px; font-weight: 650; }
@@ -230,10 +226,9 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .compare-strip small { color: var(--content-secondary); font-size: 13px; margin-top: 2px; }
 
 /* Trend detail — 어두운 히어로 대신 차분한 카드 */
-.trend-detail-hero { padding: 38px 42px; display: grid; grid-template-columns: 1fr auto; gap: 30px; align-items: flex-start; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); }
+.trend-detail-hero { padding: 38px 42px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); }
 .trend-detail-hero h1 { margin: 0 0 12px; font-size: clamp(28px, 3.5vw, 38px); line-height: 1.2; letter-spacing: -.01em; }
 .trend-detail-hero p { max-width: 680px; color: var(--content-secondary); font-size: 15px; line-height: 1.75; }
-.trend-detail-hero .platform-mark { width: 56px; height: 56px; border-radius: 16px; font-size: 17px; }
 .trend-summary { margin: 22px 0 28px; padding: 20px 23px; display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
 .trend-summary div { padding-right: 18px; border-right: 1px solid var(--border); }
 .trend-summary div:last-child { border-right: 0; }
@@ -449,8 +444,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
   .search-field { width: 100%; }
   .filter-row { justify-content: flex-start; overflow-x: auto; flex-wrap: nowrap; padding-bottom: 5px; }
   .filter-chip { white-space: nowrap; }
-  .trend-detail-hero { padding: 32px 27px; grid-template-columns: 1fr; }
-  .trend-detail-hero .platform-mark { display: none; }
+  .trend-detail-hero { padding: 32px 27px; }
   .trend-summary { grid-template-columns: 1fr; }
   .trend-summary div { border-right: 0; border-bottom: 1px solid var(--border); padding-bottom: 14px; }
   .trend-summary div:last-child { border-bottom: 0; padding-bottom: 0; }

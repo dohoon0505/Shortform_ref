@@ -36,12 +36,6 @@ function templateSlug(template, index) {
   return template.slug || ['hook', 'story', 'tutorial', 'ugc', 'trend'][index] || `item-${index + 1}`;
 }
 
-function platformClass(slug) {
-  if (slug.includes('youtube')) return 'platform-youtube';
-  if (slug.includes('instagram')) return 'platform-instagram';
-  return 'platform-tiktok';
-}
-
 async function loadData() {
   const response = await fetch('templates.json', { cache: 'no-store' });
   if (!response.ok) throw new Error(`데이터 로드 실패: ${response.status}`);
@@ -149,7 +143,6 @@ function renderTrendCards() {
   const target = document.getElementById('trend-grid');
   target.innerHTML = STORE.trends.map(item => `
     <a class="trend-card" href="#/trends/${esc(item.slug)}">
-      <span class="platform-mark ${platformClass(item.slug)}">${esc(item.shortName)}</span>
       <h2>${esc(item.name)}</h2>
       <span class="platform-tagline">${esc(item.tagline)}</span>
       <p>${esc(item.summary)}</p>
@@ -177,7 +170,6 @@ function renderTrendDetail(item) {
         <h1>${esc(item.name)}</h1>
         <p>${esc(item.summary)}</p>
       </div>
-      <span class="platform-mark ${platformClass(item.slug)}">${esc(item.shortName)}</span>
     </div>
     <div class="trend-summary">
       <div><span>플랫폼 핵심</span><b>${esc(item.focus)}</b></div>
