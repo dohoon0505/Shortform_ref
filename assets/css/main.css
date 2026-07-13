@@ -105,14 +105,16 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .nav-parent { font-weight: 680; color: var(--content); }
 .nav-pill { margin-left: auto; min-width: 25px; height: 24px; padding: 0 8px; display: grid; place-items: center; border-radius: 999px; background: var(--surface-soft); color: var(--content-tertiary); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
 .nav-link.is-active .nav-pill { background: var(--surface); color: var(--brand); }
-.nav-children { margin: 3px 0 4px 19px; padding-left: 15px; border-left: 1px solid var(--border); }
+.nav-children { margin: 5px 0 6px 14px; padding: 3px 0 3px 12px; border-left: 1px solid var(--border); }
 .nav-child {
-  position: relative; display: block; padding: 7px 9px; border-radius: 8px;
+  position: relative; min-height: 40px; padding: 9px 12px; border-radius: 9px;
+  display: flex; align-items: center;
   color: var(--content-tertiary); text-decoration: none; font-size: 14px; line-height: 1.45;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   transition: color .15s, background .15s;
 }
-.nav-child::before { content: ""; position: absolute; left: -16px; top: 50%; width: 8px; border-top: 1px solid var(--border); }
+.nav-child + .nav-child { margin-top: 4px; }
+.nav-child::before { content: ""; position: absolute; left: -13px; top: 50%; width: 8px; border-top: 1px solid var(--border); }
 .nav-child:hover { color: var(--content); background: var(--surface-soft); }
 .nav-child.is-active { color: var(--brand); font-weight: 650; background: var(--brand-soft); }
 .sidebar-footer { border-top: 1px solid var(--border); padding: 16px 7px 0; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
