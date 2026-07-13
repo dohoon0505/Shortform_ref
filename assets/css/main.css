@@ -172,10 +172,10 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .home-badges span { padding: 7px 13px; border-radius: 999px; background: var(--surface-soft); border: 1px solid var(--border); color: var(--content-secondary); font-size: 13px; font-weight: 650; }
 .hero-copy h1 { margin: 0 0 18px; font-size: clamp(30px, 3.8vw, 42px); line-height: 1.25; letter-spacing: -.01em; }
 .hero-copy h1 em { color: var(--brand); font-style: normal; }
-.hero-copy p { max-width: 720px; color: var(--content-secondary); font-size: 16px; line-height: 1.8; }
+.hero-copy p { max-width: none; color: var(--content-secondary); font-size: 16px; line-height: 1.8; }
 .hero-copy p + p { margin-top: 14px; }
 .hero-copy p b { color: var(--content); font-weight: 650; }
-.hero-goal { padding: 18px 22px; margin-top: 22px; max-width: 720px; border-left: 3px solid var(--brand); border-radius: 0 12px 12px 0; background: var(--brand-soft); }
+.hero-goal { padding: 18px 22px; margin-top: 22px; max-width: none; border-left: 3px solid var(--brand); border-radius: 0 12px 12px 0; background: var(--brand-soft); }
 .hero-goal p { color: var(--content-secondary); font-size: 15px; line-height: 1.75; }
 .hero-actions { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
 .hero-stats { margin-top: 34px; padding-top: 26px; border-top: 1px solid var(--border); display: flex; gap: 48px; flex-wrap: wrap; }
