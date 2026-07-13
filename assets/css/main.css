@@ -181,7 +181,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .hero-goal p { color: var(--content-secondary); font-size: 15px; line-height: 1.75; }
 .hero-actions { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
 .home-template-strip {
-  margin-top: 34px; padding-top: 28px; border-top: 1px solid var(--border);
+  margin-top: 56px;
   display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x proximity;
   scrollbar-width: thin; scrollbar-color: var(--border) transparent;
 }
@@ -203,22 +203,6 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .home-platform.is-youtube { background: #ff3448; }
 .home-platform.is-instagram { background: linear-gradient(120deg, #f58529, #dd2a7b 54%, #8134af); }
 .home-platform.is-tiktok { background: #17171c; box-shadow: inset 2px 0 #25f4ee, inset -2px 0 #fe2c55; }
-.section-heading { margin: 72px 0 24px; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; }
-.section-kicker { color: var(--content-tertiary); font-size: 13px; font-weight: 700; letter-spacing: .01em; }
-.section-heading h2 { margin-top: 7px; font-size: 30px; letter-spacing: -.01em; }
-.section-heading > p { max-width: 410px; color: var(--content-secondary); font-size: 14px; text-align: right; }
-.entry-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-.entry-card { min-height: 240px; padding: 28px; position: relative; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); text-decoration: none; transition: border-color .18s, box-shadow .18s; }
-.entry-card:hover { border-color: color-mix(in srgb, var(--brand) 35%, var(--border)); box-shadow: var(--shadow-sm); }
-.entry-icon { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; }
-.entry-icon svg { width: 20px; height: 20px; }
-.entry-trend .entry-icon { background: #fdf1ec; color: var(--p-coral); }
-.entry-template .entry-icon { background: var(--brand-soft); color: var(--brand); }
-.entry-card h3 { margin: 20px 0 8px; font-size: 20px; letter-spacing: -.01em; }
-.entry-card p { max-width: 460px; color: var(--content-secondary); font-size: 14px; }
-.entry-card > span { position: absolute; left: 28px; bottom: 26px; display: flex; align-items: center; gap: 7px; color: var(--brand); font-size: 14px; font-weight: 650; }
-.entry-card > span svg { width: 15px; height: 15px; transition: transform .2s; }
-.entry-card:hover > span svg { transform: translateX(4px); }
 
 /* Trend library */
 .trend-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -444,11 +428,8 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
   .home-hero { min-height: auto; padding: 36px 25px; border-radius: 22px; }
   .hero-copy h1 { font-size: 40px; }
   .hero-copy p { font-size: 15px; }
-  .home-template-strip { margin-right: -25px; padding-right: 25px; }
   .home-template-embed { flex-basis: 210px; }
-  .section-heading { align-items: flex-start; flex-direction: column; }
-  .section-heading > p { text-align: left; }
-  .entry-grid, .trend-grid, .template-grid, .trend-doc-grid { grid-template-columns: 1fr; }
+  .trend-grid, .template-grid, .trend-doc-grid { grid-template-columns: 1fr; }
   .trend-card:last-child, .trend-doc-card.is-wide { grid-column: auto; }
   .compare-strip { grid-template-columns: 1fr; }
   .compare-strip > div { border-left: 0; border-top: 1px solid var(--border); padding: 10px 0 0; }
@@ -486,9 +467,8 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 @media (max-width: 450px) {
   .hero-copy h1 { font-size: 34px; }
   .hero-actions { flex-direction: column; }
-  .home-template-strip { margin-top: 28px; padding-top: 24px; }
+  .home-template-strip { margin-top: 40px; }
   .button { width: 100%; }
-  .entry-card { min-height: 320px; }
   .ad-formula { grid-template-columns: 1fr; }
   .profile-facts { grid-template-columns: 1fr; }
   .profile-fact:nth-child(even) { padding-left: 0; border-left: 0; }
