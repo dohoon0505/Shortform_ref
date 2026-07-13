@@ -178,6 +178,29 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .hero-goal { padding: 18px 22px; margin-top: 22px; max-width: none; border-left: 3px solid var(--brand); border-radius: 0 12px 12px 0; background: var(--brand-soft); }
 .hero-goal p { color: var(--content-secondary); font-size: 15px; line-height: 1.75; }
 .hero-actions { margin-top: 28px; display: flex; gap: 10px; flex-wrap: wrap; }
+.home-template-strip {
+  margin-top: 34px; padding-top: 28px; border-top: 1px solid var(--border);
+  display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x proximity;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.home-template-embed {
+  flex: 1 0 190px; min-width: 0; overflow: hidden; scroll-snap-align: start;
+  border: 1px solid var(--border); border-radius: 14px; background: var(--surface-raised);
+  color: var(--content); text-decoration: none; box-shadow: var(--shadow-border);
+  transition: transform .2s var(--ease), box-shadow .2s, border-color .2s;
+}
+.home-template-embed:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--brand) 34%, var(--border)); box-shadow: var(--shadow-border-hover); }
+.home-template-embed:active { transform: translateY(-1px) scale(.99); }
+.home-template-media { display: block; aspect-ratio: 16 / 9; overflow: hidden; background: var(--surface-soft); }
+.home-template-media video { width: 100%; height: 100%; display: block; object-fit: cover; pointer-events: none; }
+.home-template-fallback { width: 100%; height: 100%; display: grid; place-items: center; color: var(--content-tertiary); }
+.home-template-fallback svg { width: 24px; height: 24px; }
+.home-template-meta { min-height: 44px; padding: 10px 10px 11px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.home-template-meta b { min-width: 0; overflow: hidden; color: var(--content); font-size: 13px; font-weight: 600; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+.home-platform { flex: none; padding: 4px 7px; border-radius: 999px; color: #fff; font-size: 10px; font-weight: 800; line-height: 1; letter-spacing: .01em; }
+.home-platform.is-youtube { background: #ff3448; }
+.home-platform.is-instagram { background: linear-gradient(120deg, #f58529, #dd2a7b 54%, #8134af); }
+.home-platform.is-tiktok { background: #17171c; box-shadow: inset 2px 0 #25f4ee, inset -2px 0 #fe2c55; }
 .section-heading { margin: 72px 0 24px; display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; }
 .section-kicker { color: var(--content-tertiary); font-size: 13px; font-weight: 700; letter-spacing: .01em; }
 .section-heading h2 { margin-top: 7px; font-size: 30px; letter-spacing: -.01em; }
@@ -419,6 +442,8 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
   .home-hero { min-height: auto; padding: 36px 25px; border-radius: 22px; }
   .hero-copy h1 { font-size: 40px; }
   .hero-copy p { font-size: 15px; }
+  .home-template-strip { margin-right: -25px; padding-right: 25px; }
+  .home-template-embed { flex-basis: 210px; }
   .section-heading { align-items: flex-start; flex-direction: column; }
   .section-heading > p { text-align: left; }
   .entry-grid, .trend-grid, .template-grid, .trend-doc-grid { grid-template-columns: 1fr; }
@@ -459,6 +484,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 @media (max-width: 450px) {
   .hero-copy h1 { font-size: 34px; }
   .hero-actions { flex-direction: column; }
+  .home-template-strip { margin-top: 28px; padding-top: 24px; }
   .button { width: 100%; }
   .entry-card { min-height: 320px; }
   .ad-formula { grid-template-columns: 1fr; }

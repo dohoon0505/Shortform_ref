@@ -114,6 +114,36 @@ function buildSidebar() {
   document.getElementById('library-count').textContent = STORE.templates.length;
 }
 
+function homePlatformMeta(platform = '') {
+  const value = platform.toLowerCase();
+  if (value.includes('youtube')) return { label: 'YOUTUBE', className: 'is-youtube' };
+  if (value.includes('instagram')) return { label: 'INSTAGRAM', className: 'is-instagram' };
+  return { label: 'TIKTOK', className: 'is-tiktok' };
+}
+
+function renderHomeTemplateStrip() {
+  const target = document.getElementById('home-template-strip');
+  if (!target) return;
+
+  target.innerHTML = STORE.templates.map(item => {
+    const reference = item.reference || {};
+    const platform = homePlatformMeta(reference.platform);
+    const url = String(reference.url || '').trim();
+    const preview = url
+      ? `<video src="${esc(url)}#t=0.1" muted playsinline preload="metadata" aria-hidden="true"></video>`
+      : `<span class="home-template-fallback">${icon('play')}</span>`;
+    return `
+      <a class="home-template-embed" href="#/templates/${esc(item.slug)}" aria-label="${esc(item.title)} 템플릿 보기">
+        <span class="home-template-media">${preview}</span>
+        <span class="home-template-meta">
+          <b>${esc(item.navLabel || item.title)}</b>
+          <small class="home-platform ${platform.className}">${platform.label}</small>
+        </span>
+      </a>
+    `;
+  }).join('');
+}
+
 /* Trend pages */
 function renderTrendCards() {
   const target = document.getElementById('trend-grid');
@@ -685,6 +715,7 @@ async function init() {
   try {
     await loadData();
     buildSidebar();
+    renderHomeTemplateStrip();
     renderTrendCards();
     renderTemplateLibrary();
     route();
