@@ -119,12 +119,15 @@ function renderHomeTemplateStrip() {
   const target = document.getElementById('home-template-strip');
   if (!target) return;
 
-  target.innerHTML = STORE.templates.map(item => {
+  target.innerHTML = STORE.templates.map((item, index) => {
     const reference = item.reference || {};
     const platform = homePlatformMeta(reference.platform);
     const url = String(reference.url || '').trim();
-    const preview = url
-      ? `<video src="${esc(url)}#t=0.1" muted playsinline preload="metadata" aria-hidden="true"></video>`
+    const thumbnail = String(reference.thumbnail || '').trim();
+    const preview = thumbnail
+      ? `<img src="${esc(thumbnail)}" alt="" loading="${index < 4 ? 'eager' : 'lazy'}" decoding="async">`
+      : url
+        ? `<video src="${esc(url)}#t=0.1" muted playsinline preload="metadata" aria-hidden="true"></video>`
       : `<span class="home-template-fallback">${icon('play')}</span>`;
     return `
       <a class="home-template-embed" href="#/templates/${esc(item.slug)}" aria-label="${esc(item.title)} 템플릿 보기">
@@ -216,7 +219,7 @@ function buildFilters() {
 function templateMatches(item) {
   if (activeFilter !== '전체' && item.archetype !== activeFilter) return false;
   if (!searchQuery) return true;
-  const text = [item.title, item.archetype, item.summary, item.reference?.platform, item.reference?.title].join(' ').toLowerCase();
+  const text = [item.title, item.navLabel, item.product, item.archetype, item.summary, item.reference?.platform, item.reference?.title].join(' ').toLowerCase();
   return text.includes(searchQuery.toLowerCase());
 }
 
@@ -233,7 +236,7 @@ function renderTemplateGrid() {
     return `
       <a class="template-card" href="#/templates/${esc(item.slug)}" style="--card-color:${style.soft};--card-accent:${style.color}">
         <div class="template-topline">
-          <span class="template-number">0${originalIndex + 1}</span>
+          <span class="template-number">${String(originalIndex + 1).padStart(3, '0')}</span>
           <span class="template-type">${esc(item.archetype)}</span>
         </div>
         <h2>${esc(item.title)}</h2>
@@ -256,10 +259,13 @@ function renderTemplateLibrary() {
 function refEmbed(reference) {
   const url = String(reference?.url || '').trim();
   if (!url) return `<div class="video-placeholder"><span>${icon('play')}</span></div>`;
+  if (reference?.embed === 'iframe') {
+    return `<iframe src="${esc(url)}" title="${esc(reference?.title || '기준 영상')}" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+  }
   if (/\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(url)) {
     return `<video src="${esc(url)}" controls preload="metadata" playsinline></video>`;
   }
-  return `<iframe src="${esc(url)}" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+  return `<iframe src="${esc(url)}" title="${esc(reference?.title || '기준 영상')}" loading="lazy" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
 }
 
 function profileList(items) {

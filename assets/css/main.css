@@ -193,12 +193,13 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
   min-width: 0; overflow: hidden;
   border: 1px solid var(--border); border-radius: 14px; background: var(--surface-raised);
   color: var(--content); text-decoration: none; box-shadow: var(--shadow-border);
+  content-visibility: auto; contain-intrinsic-size: auto 210px;
   transition: transform .2s var(--ease), box-shadow .2s, border-color .2s;
 }
 .home-template-embed:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--brand) 34%, var(--border)); box-shadow: var(--shadow-border-hover); }
 .home-template-embed:active { transform: translateY(-1px) scale(.99); }
 .home-template-media { display: block; aspect-ratio: 16 / 9; overflow: hidden; background: var(--surface-soft); }
-.home-template-media video { width: 100%; height: 100%; display: block; object-fit: cover; pointer-events: none; }
+.home-template-media img, .home-template-media video { width: 100%; height: 100%; display: block; object-fit: cover; pointer-events: none; }
 .home-template-fallback { width: 100%; height: 100%; display: grid; place-items: center; color: var(--content-tertiary); }
 .home-template-fallback svg { width: 24px; height: 24px; }
 .home-template-meta { min-height: 44px; padding: 10px 10px 11px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -269,7 +270,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .filter-chip:hover { color: var(--brand); border-color: color-mix(in srgb, var(--brand) 40%, var(--border)); }
 .filter-chip.is-active { color: var(--brand); background: var(--brand-soft); border-color: color-mix(in srgb, var(--brand) 45%, transparent); }
 .template-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
-.template-card { min-height: 250px; padding: 26px; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); text-decoration: none; transition: border-color .18s, box-shadow .18s; }
+.template-card { min-height: 250px; padding: 26px; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); text-decoration: none; content-visibility: auto; contain-intrinsic-size: auto 250px; transition: border-color .18s, box-shadow .18s; }
 .template-card:hover { border-color: color-mix(in srgb, var(--brand) 30%, var(--border)); box-shadow: var(--shadow-sm); }
 .template-topline { display: flex; align-items: center; gap: 9px; }
 .template-number { color: var(--content-tertiary); font: 650 13px/1 var(--font); font-variant-numeric: tabular-nums; }
