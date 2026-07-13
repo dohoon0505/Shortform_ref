@@ -187,11 +187,10 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
 .home-template-heading > p { max-width: 460px; color: var(--content-secondary); font-size: 14px; line-height: 1.7; text-align: right; }
 .home-template-strip {
   margin-top: 24px;
-  display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x proximity;
-  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
 }
 .home-template-embed {
-  flex: 1 0 190px; min-width: 0; overflow: hidden; scroll-snap-align: start;
+  min-width: 0; overflow: hidden;
   border: 1px solid var(--border); border-radius: 14px; background: var(--surface-raised);
   color: var(--content); text-decoration: none; box-shadow: var(--shadow-border);
   transition: transform .2s var(--ease), box-shadow .2s, border-color .2s;
@@ -419,6 +418,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
   .profile-video-column { padding: 20px; }
   .profile-dossier { padding: 26px; }
   .dossier-columns { grid-template-columns: 1fr; }
+  .home-template-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
 @media (max-width: 720px) {
@@ -430,7 +430,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
   .hero-copy p { font-size: 15px; }
   .home-template-heading { align-items: flex-start; flex-direction: column; gap: 10px; }
   .home-template-heading > p { max-width: 560px; text-align: left; }
-  .home-template-embed { flex-basis: 210px; }
+  .home-template-strip { grid-template-columns: 1fr 1fr; }
   .trend-grid, .template-grid, .trend-doc-grid { grid-template-columns: 1fr; }
   .trend-card:last-child, .trend-doc-card.is-wide { grid-column: auto; }
   .compare-strip { grid-template-columns: 1fr; }
@@ -469,6 +469,7 @@ svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; strok
   .hero-copy h1 { font-size: 34px; }
   .hero-actions { flex-direction: column; }
   .home-template-section { margin-top: 40px; }
+  .home-template-strip { grid-template-columns: 1fr; }
   .home-template-heading h2 { font-size: 26px; }
   .button { width: 100%; }
   .ad-formula { grid-template-columns: 1fr; }
